@@ -1,38 +1,55 @@
 package io.riggo.data.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 
-import org.json.JSONObject;
-
 import javax.persistence.Column;
-
 import javax.persistence.Transient;
 import java.nio.charset.StandardCharsets;
 
 
 public class RiggoBaseEntity {
 
-    static String source = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    static String target = "@5A8ZWS0XEDC6RFVT9GBY4HNU3J2MI1KO7L~";
+    @JsonIgnore
+    @Transient
+    private static String source = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    @JsonIgnore
+    @Transient
+    private static String target = "@5A8ZWS0XEDC6RFVT9GBY4HNU3J2MI1KO7L~";
+    @JsonIgnore
+    @Transient
+    private final String DELIMITER = ".";
 
 
+    @JsonIgnore
+    @Transient
+    public final Integer FORWARD = 0;
+
+    @JsonIgnore
+    @Transient
+    public final Integer REVERSE = 1;
+
+    @JsonIgnore
     @Column(name = "hash")
     private String hash;
 
+    @JsonIgnore
     @Transient
-    String prefix = "tbl";
+    private String prefix = "tbl";
 
     public String getPrefix() {
         return prefix;
     }
 
-    public void setPrefix(String prefix) {
+    void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
-    public String getHash(String s) {
+    public String getHash() {
         return hash;
     }
 
@@ -50,19 +67,19 @@ public class RiggoBaseEntity {
             return mapper.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(this);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return "";
     }
 
 
     /**
-     * dictionary based decode
+     * Dictionary based decode
      * This allows for decoding without storing.
      *
-     * @param s
-     * @param direction
-     * @return
+     * @param s soruce for encoding
+     * @param direction direction of encoding
+     * @return encoded string
      */
 
     public String encode(String s, int direction) {
@@ -71,32 +88,35 @@ public class RiggoBaseEntity {
         String src, tgt;
         String workableValue = s;
 
-        if (direction == 0) {
+        if (direction == FORWARD) {
             //encode
             src = source;
             tgt = target;
         } else {
             //decode
-            if (workableValue.contains("-")) {
-                workableValue = workableValue.substring(workableValue.indexOf("-") - 1);
+            if (workableValue.contains(DELIMITER)) {
+                workableValue = workableValue.substring(workableValue.lastIndexOf(DELIMITER) + 1);
             }
             src = target;
             tgt = source;
         }
-        char[] result = new char[10];
-        for (int i = 0; i < s.length(); i++) {
+        char[] result = new char[workableValue.length()];
+        for (int i = 0; i < workableValue.length(); i++) {
             char c = workableValue.charAt(i);
             int index = src.indexOf(c);
             result[i] = tgt.charAt(index);
         }
         String sha = "";
         if (direction == 0)
-            sha = getHashCode(prefix) + "-";// add - ignore to the left of this ;
+            sha = "ey" + getHashCode(prefix) + DELIMITER;// add - ignore to the left of this ;
 
-        return sha + result;
+        if (direction == REVERSE)
+            return new String(result);
+        else
+            return sha + new String(result);
     }
 
-    public String getHashCode(String value) {
+    String getHashCode(String value) {
 
         return Hashing.sha256()
                 .hashString(prefix + value, StandardCharsets.UTF_8)
@@ -105,9 +125,8 @@ public class RiggoBaseEntity {
     }
 
     public String getHashAsJsonString(String id) {
-        return new JSONObject()
-                .put("mpid", getHashCode(prefix + id))
-                .toString();
+        return getHashCode(prefix) + encode(id, 0);
+
 
     }
 }

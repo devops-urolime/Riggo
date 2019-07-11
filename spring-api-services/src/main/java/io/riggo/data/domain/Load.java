@@ -62,13 +62,14 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private String pickupDevlieryNumber;
     private String stopReferenceNumber;
     private String loadUrl;
-    private Shipper shipperByShipperId;
+    private Long shipperByShipperId;
 
 
     public Load() {
 
         this.setPrefix("load");
     }
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -569,13 +570,13 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "shipper_id")
-    public Shipper getShipperByShipperId() {
+    //@ManyToOne
+    @Column(name = "shipper_id", nullable = true)
+    public Long getShipperByShipperId() {
         return shipperByShipperId;
     }
 
-    public void setShipperByShipperId(Shipper shipperByShipperId) {
+    public void setShipperByShipperId(Long shipperByShipperId) {
         this.shipperByShipperId = shipperByShipperId;
     }
 
