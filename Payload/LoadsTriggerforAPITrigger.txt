@@ -1,0 +1,38 @@
+trigger LoadsTriggerforAPI on rtms__Load__c (after insert,after update,before delete) {
+    // Checking recursion trigger calling
+    if(RecursionTriggerStop.isLoadsTriggerforAPI){
+        // Trigger is on After insert event 
+        if(trigger.isafter && trigger.isInsert){
+            for(rtms__Load__c ld : trigger.new){ 
+                system.debug('---insert---');
+                // Calling webservice callout passing parameters as Load Id and event name
+                 if(ld.Marketplace_Exposed_Id__c == null){
+            		LoadAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Insert');
+            	}
+            }
+        }
+        // Trigger is on After update event 
+        if(trigger.isafter && trigger.isUpdate){
+            system.debug('---load trigger update---');
+            for(rtms__Load__c ld : trigger.new){ 
+                // Calling webservice callout passing parameters as Load Id and event name
+                 system.debug('--ld.Marketplace_Exposed_Id__c---'+ld.Marketplace_Exposed_Id__c);
+                 system.debug('--ld.Marketplace_Exposed_Id__c- old--'+trigger.oldmap.get(ld.Id).Marketplace_Exposed_Id__c);
+            	 if(ld.Marketplace_Exposed_Id__c != null && trigger.oldmap.get(ld.Id).Marketplace_Exposed_Id__c != null){
+                		LoadAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Update');
+                 }
+            }
+        }
+        // Trigger is on before update event 
+        if(trigger.isbefore && trigger.isdelete){
+            for(rtms__Load__c ld : trigger.old){ 
+                // Calling webservice callout passing parameters as Load Id and event name
+				LoadAPICalloutCtrl.makePostCallout(trigger.old[0].id,'Delete');
+            }
+        } 
+        // Once trigger called we are this flage will be false, So it will prevent to call trigger again in same execute.
+        RecursionTriggerStop.isLoadsTriggerforAPI = false;
+    }
+           
+   
+}

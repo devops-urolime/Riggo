@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "ea945ea2-b6f4-41f3-adc2-1a62c825af8d",
+		"name": "Riggo-Stage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Obtain a load by ID from Api Gateway",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://a25tn3d5w9.execute-api.us-west-2.amazonaws.com/stage/load/1",
+					"protocol": "https",
+					"host": [
+						"a25tn3d5w9",
+						"execute-api",
+						"us-west-2",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"stage",
+						"load",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save a Load to Api Gateway ",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"12345678\"\n}"
+				},
+				"url": {
+					"raw": "https://a25tn3d5w9.execute-api.us-west-2.amazonaws.com/stage/load/",
+					"protocol": "https",
+					"host": [
+						"a25tn3d5w9",
+						"execute-api",
+						"us-west-2",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"stage",
+						"load",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,70 @@
+/**************************************************************************
+-----------------------------------------------
+Purpose:
+This class contains the methods to call HTTP Rest web service and error handler 
+-----------------------------------------------------------------------
+**************************************************************************/
+
+//========================
+/*
+	Class Name  : LoadAPICalloutCtrl
+	Note		: We are using this class for the calling webserive api to post Load object to market place using rest api.
+*/
+public class LoadAPICalloutCtrl {
+    /*********************************************************************
+    Purpose     : To initiate the the HTTP request 
+    Parameters  : LoadID- Load Ojbect Id to generate payload
+                  triggerAction  - To identify the event of the load object either Insert update or Delete
+    **********************************************************************/
+     
+    @future(callout=true)
+    public static void makePostCallout(Id LoadId,String triggerAction) { 
+        responeClass resResult=null;
+        ServiceProxy prox = new ServiceProxy(); 
+        LoadPayload palyloadCls = new LoadPayload();
+        // Get the load payload by json formate.
+        string LoadPayloadBody=palyloadCls.getSavePayload(LoadId,triggerAction); 
+        system.debug('--requestBody---'+LoadPayloadBody);
+        String methodDefine = 'POST';
+        if(triggerAction == 'Update'){
+            //methodDefine = 'PUT';
+            methodDefine = 'POST';
+        }
+        // Calling webserive to push the load object 
+        // Passing parameters like end pint url, Method Name and Load payload
+          HttpResponse httpResponse=null;
+         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody);
+        String response =  httpResponse.getBody();
+        system.debug('--response'+response);
+         
+        // string c = (responeClass)JSON.deserializeStrict(response);
+        resResult = (responeClass)JSON.deserialize(response, LoadAPICalloutCtrl.responeClass.class);
+        system.debug('---resResult----'+resResult.id);
+        system.debug('---resResult----'+resResult.message);
+        string StatusCode = string.valueof(httpResponse.getStatusCode());
+        if(resResult != null && resResult.id != null){
+            rtms__Load__c ldUpdate = [select id,Marketplace_Exposed_Id__c from rtms__Load__c where Id =:LoadId];
+            if(ldUpdate.Marketplace_Exposed_Id__c == null){
+               ldUpdate.Marketplace_Exposed_Id__c =  resResult.id;
+                system.debug('--ldUpdate--'+ldUpdate);
+               update ldUpdate;
+            }
+        }
+        // if there is any exception we are creating exception record in Error Log object
+        if(response!= null && StatusCode != '200'){
+            if (response.contains('201')) {
+                system.debug('--response'+response);
+                Error_Log__c errorlog = new Error_Log__c();
+                errorlog.Error__c = response;
+                errorlog.Description__c = response;
+                //errorlog.Load__c = LoadId;
+                insert errorlog; 
+                system.debug('errorlog--'+errorlog);
+            } 
+        }
+    }    
+    public class responeClass{
+        public string id{get;set;}
+        public string message{get;set;}
+    }
+}

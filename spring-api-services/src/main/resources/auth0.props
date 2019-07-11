@@ -1,0 +1,3 @@
+# More info how to fill these properties here: https://github.com/auth0-samples/auth0-spring-security-api-sample
+auth0.issuer:https://riggo-qa.auth0.com/
+auth0.apiAudience:load-resource-api

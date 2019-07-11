@@ -1,0 +1,24 @@
+@import 'base.scss';
+@import 'color.scss';
+
+.CardSummary{
+    width: 105px;
+    height: 84px;
+    background: $card-background;
+    box-shadow: 0 3px 10px $card-shadow;
+    border-radius: 2px;
+    text-align: center;
+    margin: 10px;
+    display: inline-block;
+    .number {
+        font-size: 20px;
+        line-height: 27px;
+        padding-top: 15px;
+        font-weight: bolder;
+    }
+    .label{
+        font-size: 14px;
+        line-height: 19px;
+    }
+}
+

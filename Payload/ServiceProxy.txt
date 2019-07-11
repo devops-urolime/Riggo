@@ -1,0 +1,160 @@
+/**************************************************************************
+-----------------------------------------------
+Purpose:
+This class contains the methods for HTTP Rest web service Callouts 
+-----------------------------------------------------------------------
+**************************************************************************/
+public with sharing class ServiceProxy{
+	/*********************************************************************
+    Purpose     : To initiate the the HTTP request 
+    Parameters  : endPoint- Target endpoint of the service
+                  methodName- HTTP method to be used 
+                  requestBody - JSON Body to be sent in request
+    Returns     : String in JSON format containing the response from
+                  the HTTP service**
+    **********************************************************************/
+ /* public string clientKey = 'tBI1EU8rbwZrUZ27giNcW1ecG2CLe0N7';
+    public string clientSecret ='Ucs3BK6GbhvQ4ALpYL5k_tz-8TGvYAwHrcFsL6COXi2b1ekz1jK0lXPxvui4BR1m';
+   	public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
+ */
+    
+	public HttpResponse callRestService(String endPointURL, String methodName, String requestBody){
+        
+		String response=null;
+        string accessToken = null;
+         HttpResponse httpResponse=null;
+        List<Auth0_API_Token__c> authAPIToken=null;
+        try { 
+            system.debug('--requestBody---'+requestBody);
+        	authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+			if(requestBody!=null && methodName!=null){
+                if(authAPIToken.size() > 0){
+                    if(authAPIToken[0].Token__c == null){
+                        accessToken =  getAccesstoken(authAPIToken[0].Client_Key__c,authAPIToken[0].Client_Secret__c,authAPIToken[0].End_Point__c);
+                        authAPIToken[0].Token__c = accessToken;
+                    }else{
+                    	accessToken = authAPIToken[0].Token__c;
+                    }
+                }
+                system.debug('---accessToken-'+accessToken);
+                httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken); 
+                
+                response = httpResponse.getBody();
+                string errorcode = string.valueof(httpResponse.getStatusCode());
+                system.debug('token erro '+errorcode);
+                system.debug('accessToken '+accessToken);
+                if(errorcode == '401'){
+                     system.debug('accessToken '+accessToken);
+                    system.debug('--inside errorcode');
+                    if(authAPIToken.size() > 0){
+                        system.debug('--inside errorcode 2');
+                    	accessToken =  getAccesstoken(authAPIToken[0].Client_Key__c,authAPIToken[0].Client_Secret__c,authAPIToken[0].End_Point__c);
+                        system.debug('NEW accessToken'+accessToken);
+                        authAPIToken[0].Token__c = accessToken;
+                        
+                        try{
+                        	// Again calling end point url with valid token
+                            httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken); 
+                            response = httpResponse.getBody();
+                            authTokenUpdate(authAPIToken[0]);
+                        }catch(Exception e){
+                            Error_Log__c errorlog = new Error_Log__c();
+                            errorlog.Error__c = e.getMessage();
+                            errorlog.Description__c = e.getMessage();
+                            insert errorlog; 
+                            system.debug('--errorlog---'+errorlog);
+                        }
+                    }
+	      		 }
+                authTokenUpdate(authAPIToken[0]);
+			}       		
+		}catch(Exception e) {
+            system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in callRestService():'+e.getMessage());
+        }
+        system.debug(LoggingLevel.DEBUG,'ServiceProxy:callRestService'+response);
+        return httpResponse;    
+	}
+    private Auth0_API_Token__c authTokenUpdate(Auth0_API_Token__c authUpdate){
+        update authUpdate;
+        return authUpdate;
+    }
+    private string getAccesstoken(String clientKey,String clientSecret,String setEndpoint){
+        String body = '{"client_id": "'+clientKey+'",'+
+            '"client_secret": "'+clientSecret+'",'+
+            '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
+        HttpRequest req = new HttpRequest(); 
+        req.setMethod('POST');
+        req.setEndpoint(setEndpoint);
+        req.setheader('content-type', 'application/json');
+        req.setBody(body);
+        
+        Http http = new Http();        
+        HTTPResponse res = http.send(req);
+        
+        Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+        system.debug('res.getBody---'+res.getBody());
+        String token  = string.valueof(cObjMap.get('access_token'));
+        return token;
+    }
+    
+	private HttpResponse initiateHTTPCall(String endPointURL, String methodName, String requestBody,string accessToken){
+		String response=null;
+		Http httpConnection=null;
+        HttpRequest httpRequest=null; 
+        HttpResponse httpResponse=null;
+        List<Riggo_API_Configuration__c> riggoConfigList=null;
+        Integer timeOut;
+        String endPoint;
+        String contentType;
+        String authorizationHeader;
+		try { 
+			 
+			if(endPointURL!=null && methodName!=null){
+                Riggo_API_Configuration__c riggoApipostCall = Riggo_API_Configuration__c.getValues('Riggo post');
+                   
+                timeOut=Integer.valueOf(riggoApipostCall.Time_Out__c);
+                contentType=riggoApipostCall.Content_Type__c; 
+                endPoint=riggoApipostCall.End_Point_URL__c;
+                authorizationHeader=riggoApipostCall.Authorization_Header__c;
+                  
+				httpConnection=new Http();
+			    httpResponse = new HttpResponse();
+			    httpRequest= new HttpRequest();
+			    //httpRequest.setEndpoint(endPoint+endPointURL);
+                httpRequest.setEndpoint(endPoint+endPointURL);
+                //GW
+                //httpRequest.setEndpoint('https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa/load');
+                //LB
+                httpRequest.setEndpoint('http://riggo-ecs-qa-1478706502.us-west-2.elb.amazonaws.com/api/v1/load');
+                
+                system.debug('--methodName--'+methodName);
+			    httpRequest.setMethod(methodName);
+			    httpRequest.setTimeout(timeOut);
+                httpRequest.setHeader('Content-Type',contentType);
+               	httpRequest.setHeader('Authorization', 'Bearer '+ accessToken); 
+                if(requestBody !='' && requestBody!=null){
+			    	httpRequest.setBody(requestBody);
+			    }
+			            		
+	      		httpResponse = httpConnection.send(httpRequest);
+				system.debug('--httpResponse--'+httpResponse);
+	      		if(httpResponse!=null){            		
+	       		    response=httpResponse.getBody();
+                    integer codeft = httpResponse.getStatusCode();
+	       		    System.debug('web service response: '+response);
+                    System.debug('codeft---: '+codeft);
+	      		}	      		
+			}       		
+		}catch(Exception e) {
+            system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in initiateHTTPCall():'+e.getMessage());
+            Error_Log__c errorlog = new Error_Log__c();
+            errorlog.Error__c = e.getMessage();
+            errorlog.Description__c = e.getMessage();
+            errorlog.Error_Code__c = string.valueof(httpResponse.getStatusCode());
+            insert errorlog; 
+            system.debug('--errorlog--'+errorlog);
+        }
+        system.debug(LoggingLevel.DEBUG,'ServiceProxy:initiateHTTPCall'+response);
+        return HttpResponse;    
+	} 
+}

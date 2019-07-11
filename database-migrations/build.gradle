@@ -1,0 +1,13 @@
+buildscript {
+    dependencies {
+        classpath 'org.postgresql:postgresql:42.2.5'
+    }
+}
+
+plugins {
+    id "org.flywaydb.flyway" version "5.2.4"
+}
+
+flyway {
+    /** Uses environment variables FLYWAY_URL, FLYWAY_USER, FLYWAY_PASSWORD **/
+}

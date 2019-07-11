@@ -1,0 +1,344 @@
+{
+	"info": {
+		"_postman_id": "cc71442e-ac2e-4638-931f-6bdf057d1a26",
+		"name": "Riggo Dev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Save SF  Load JSON POST",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFqSXlSa1k1TWtNNU5qVXpRemt6UkRreVEwRkVRa0pEUWtReE5UVkdSRFpGT1VFMVFqTXpRZyJ9.eyJpc3MiOiJodHRwczovL3JpZ2dvLmF1dGgwLmNvbS8iLCJzdWIiOiJTSDNwOTE1TW5oQUZ0SkYxQnpCYml6dTkzVFk5ekc4dkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9jb2ZmZWUtYXV0aDAtYXBpLmhlcm9rdWFwcC5jb20iLCJpYXQiOjE1NTk3MTY2MzMsImV4cCI6MTU1OTgwMzAzMywiYXpwIjoiU0gzcDkxNU1uaEFGdEpGMUJ6QmJpenU5M1RZOXpHOHYiLCJzY29wZSI6InJlYWQ6Y29mZmVlIHJlYWQ6bWVzc2FnZXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.hG9L1jaURvBJfaQMlcMv3U2UwnyRHsDjZLNf0tKsRQiLgo3e-DCS1X4uRilEjTLMmZ5iky9Ez28_ZM7y7SE8vzt2NwKS_Fm7lC7T2_iNdJoFFbMGwXzvcCFA0HpUGRt2Hi56PgtLAbXIPx9Z4Ib7K3daUGyEYt-8KSJ6KeSJ08aSaSi6-4hplo4iDM2F-TNG9ajjLNUWXpsJ6HMNt9TBfAyCgxP6DhJkFm92Jnlsayv8UX5MoBpCKznGVA6qI5gSmaGLzGvxZjmSzegi60I-5_WnGDaaqG11o6Q71MGiqKXSyIk_66zMpRu-4PIHSpbMRrfyg7x3JS4yeVuukAz8Bg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8088/api/v1/load/sf1/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"load",
+						"sf1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"test@best.com\",\"password\":\"password\"}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "test@test.com",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Riggo V1 Login",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":\"test@best.com\",\"password\":\"password\"}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/v1/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \n  \"firstName\": \"first\",\n \n  \"lastName\": \"last\",\n  \"password\": \"password\",\n  \"confirmPassword\": \"password\",\n  \"username\": \"test@best.com\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8088/api/v1/users/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Loads",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFqSXlSa1k1TWtNNU5qVXpRemt6UkRreVEwRkVRa0pEUWtReE5UVkdSRFpGT1VFMVFqTXpRZyJ9.eyJpc3MiOiJodHRwczovL3JpZ2dvLmF1dGgwLmNvbS8iLCJzdWIiOiJTSDNwOTE1TW5oQUZ0SkYxQnpCYml6dTkzVFk5ekc4dkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9jb2ZmZWUtYXV0aDAtYXBpLmhlcm9rdWFwcC5jb20iLCJpYXQiOjE1NTk1MzkzNDksImV4cCI6MTU1OTYyNTc0OSwiYXpwIjoiU0gzcDkxNU1uaEFGdEpGMUJ6QmJpenU5M1RZOXpHOHYiLCJzY29wZSI6InJlYWQ6Y29mZmVlIHJlYWQ6bWVzc2FnZXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.HlsngVj0pAEe2HaJ7TFUuo3L8KF4QTn6nOBJaRLTeSqJ9bwedSB92HCraVY6oDLwqRS-6PIult-y_VSYEYlbY2aSN8ZsKoZu7K4tFq2KfrkZ9_DgQ_qjD8t81ySRiewhThwu21f4V5qD0LCUSFn-bTCEgiHjiB8Yzv8JkPgSyF1drpFxHw3kIktjKjLTkputoIpQB8UtVtEW2fNeM70VGQrg_zMTaPRRkRvDTktDOSEK9cAH8byS73xqqK57MyXIMj4EfBgWOL6H-jXBCe4sB-4xeRdvzBWO8hJb__MNhF9DuUNnIkcMuubzqd9DYg7UFBGMc6gM3pKoolBccIhA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8088/api/v1/load/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"load",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Loads Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFqSXlSa1k1TWtNNU5qVXpRemt6UkRreVEwRkVRa0pEUWtReE5UVkdSRFpGT1VFMVFqTXpRZyJ9.eyJpc3MiOiJodHRwczovL3JpZ2dvLmF1dGgwLmNvbS8iLCJzdWIiOiJTSDNwOTE1TW5oQUZ0SkYxQnpCYml6dTkzVFk5ekc4dkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9jb2ZmZWUtYXV0aDAtYXBpLmhlcm9rdWFwcC5jb20iLCJpYXQiOjE1NTk1MzkzNDksImV4cCI6MTU1OTYyNTc0OSwiYXpwIjoiU0gzcDkxNU1uaEFGdEpGMUJ6QmJpenU5M1RZOXpHOHYiLCJzY29wZSI6InJlYWQ6Y29mZmVlIHJlYWQ6bWVzc2FnZXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.HlsngVj0pAEe2HaJ7TFUuo3L8KF4QTn6nOBJaRLTeSqJ9bwedSB92HCraVY6oDLwqRS-6PIult-y_VSYEYlbY2aSN8ZsKoZu7K4tFq2KfrkZ9_DgQ_qjD8t81ySRiewhThwu21f4V5qD0LCUSFn-bTCEgiHjiB8Yzv8JkPgSyF1drpFxHw3kIktjKjLTkputoIpQB8UtVtEW2fNeM70VGQrg_zMTaPRRkRvDTktDOSEK9cAH8byS73xqqK57MyXIMj4EfBgWOL6H-jXBCe4sB-4xeRdvzBWO8hJb__MNhF9DuUNnIkcMuubzqd9DYg7UFBGMc6gM3pKoolBccIhA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8088/api/v1/load/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"load",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Loads Ext Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFqSXlSa1k1TWtNNU5qVXpRemt6UkRreVEwRkVRa0pEUWtReE5UVkdSRFpGT1VFMVFqTXpRZyJ9.eyJpc3MiOiJodHRwczovL3JpZ2dvLmF1dGgwLmNvbS8iLCJzdWIiOiJTSDNwOTE1TW5oQUZ0SkYxQnpCYml6dTkzVFk5ekc4dkBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9jb2ZmZWUtYXV0aDAtYXBpLmhlcm9rdWFwcC5jb20iLCJpYXQiOjE1NTk4NDY2MjcsImV4cCI6MTU1OTkzMzAyNywiYXpwIjoiU0gzcDkxNU1uaEFGdEpGMUJ6QmJpenU5M1RZOXpHOHYiLCJzY29wZSI6InJlYWQ6Y29mZmVlIHJlYWQ6bWVzc2FnZXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.JiVI3YbsdhUTnfJHsF4LKSrFYrn77_U1uVaEpqk4uQg7gLb_s_PUP2yrU_quAfFHc2eoT2uNrA0VJpQGbfnyajUjmRQyYTPmcd1dbj9cjuxH6Jx5fmvzsnSZAMevXBnh35GnBz75d5YJqLDjwO20wgGKH3Y5rSL0VkPpvdKWJCoEuUq3tCT0fm7lXkLVlG_Hjz66m19KKzIgKl9UIE0OzMs5g0PI3Ee8785ydY0GXuANeEA9OnDl6yHSGKGKQmEvxSQKNUpEJVblD-3GTjbCVbxstotzun16LCfMABjQzdLKDE8sncHg7R-FBZOmz0NNGzZGhh4yDS6EF6zEVUA93g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8088/api/v1/load/sf1/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8088",
+					"path": [
+						"api",
+						"v1",
+						"load",
+						"sf1",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Load on staging",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFqSXlSa1k1TWtNNU5qVXpRemt6UkRreVEwRkVRa0pEUWtReE5UVkdSRFpGT1VFMVFqTXpRZyJ9.eyJpc3MiOiJodHRwczovL3JpZ2dvLmF1dGgwLmNvbS8iLCJzdWIiOiJGY1FFWDUxb2F3T0VsbnZMdjdKdkdUbHNSc3JkcWRmOUBjbGllbnRzIiwiYXVkIjoiaHR0cHM6Ly9jb2ZmZWUtYXV0aDAtYXBpLmhlcm9rdWFwcC5jb20iLCJpYXQiOjE1NjA1MTIxOTksImV4cCI6MTU2MDU5ODU5OSwiYXpwIjoiRmNRRVg1MW9hd09FbG52THY3SnZHVGxzUnNyZHFkZjkiLCJzY29wZSI6InJlYWQ6Y29mZmVlIHJlYWQ6bWVzc2FnZXMgbG9hZDpyZWFkIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.Hstj3-qOPwqJP5rYADDOEls6aKJj_W1MkbmsWLNQxV2e0Yv-B8UFmycDH7QaNJfX5Xx3esDH4nulOgYDfsSKMkCZ7SEjh0lcp4JD1XYG39tZ_5M4MzmpywpRdUSd70lRmSMOaoLQiejmPxJDfmhNLYqVqgdx-T5UgucQxufv4Sydvgsm9sxXwwl0VFEnOVk-7V9LXHPQLj9IEj2j41qRaGXIaKSS78GzmftdsOsaxzNFrfmF_1dd8mfb4qHSVwqtOszWcZHFBElRiuK_aNBoC0emqFD-rq3_-MtVvd7Nobbwdx1X9GhuD2WBetzaW0l4QG5FmsbnWhQvb0ltEyn37Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "http://riggo-ecs-staging-ELB-711932755.us-west-2.elb.amazonaws.com/api/v1/load/1",
+					"protocol": "http",
+					"host": [
+						"riggo-ecs-staging-ELB-711932755",
+						"us-west-2",
+						"elb",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"api",
+						"v1",
+						"load",
+						"1"
+					]
+				},
+				"description": "Laod on Staging"
+			},
+			"response": []
+		}
+	]
+}

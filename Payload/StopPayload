@@ -1,0 +1,56 @@
+public class StopPayload {
+    public string getSavePayload(ID StopId,String triggerAction){ 
+        system.debug('StopId'+StopId);   
+        
+        String payload  = '';
+        if(triggerAction == 'Insert' || triggerAction == 'Update' ){
+            List<rtms__Stop__c> ListOfLoead =[Select Id FROM rtms__Stop__c  
+                                              where Id =: StopId]; 
+            
+            
+            payload = '{"LoadDetails":';
+            for(rtms__Stop__c st : ListOfLoead){  
+                payload = payload + '{'+ 
+                    '"Id": "'+st.Id+'",'+
+                    '"Stop": {'+
+							'"Id": "'+st.Id+'",'+
+                        	'"StopName": "'+st.Name+ '",'+
+                        	'"Stoprtms__P_D__c": "'+st.rtms__P_D__c+ '",'+
+                            '"Stoprig_Load_Customer_Name__c": "'+st.rig_Load_Customer_Name__c+ '",'+
+                            '"Stoprtms__Number__c": "'+st.rtms__Number__c+ '",'+
+                        	'"Stoprtms__City__c": "'+st.rtms__City__c+ '",'+
+                        	'"Stoprtms__State_Province__c": "'+st.rtms__State_Province__c+ '",'+
+                        	'"Stoprtms__Postal_Code__c": "'+st.rtms__Postal_Code__c+ '",'+
+                        	'"Stoprtms__Country__c": "'+st.rtms__Country__c+ '",'+
+                            '"Stoprtms__Address2__c": "'+st.rtms__Address2__c+ '",'+
+                            '"Stoprtms__Shipping_Receiving_Hours__c": "'+st.rtms__Shipping_Receiving_Hours__c+ '",'+
+                            '"Stoprtms__Expected_Date__c": "'+st.rtms__Expected_Date__c+ '",'+
+                            '"Stoprtms__Expected_Day__c": "'+st.rtms__Expected_Day__c+ '",'+
+                            '"Stoprtms__Appointment_Required__c": "'+st.rtms__Appointment_Required__c+ '",'+
+                            '"Stoprtms__Appointment_Time__c": "'+st.rtms__Appointment_Time__c+ '",'+
+                            '"Stoprtms__Stop_Status__c": "'+st.rtms__Stop_Status__c+ '",'+
+                            '"Stoprtms__Carrier_Status2__c": "'+st.rtms__Carrier_Status2__c+'"'+
+                        '},'+ 
+                  '}}';
+            }
+        }
+        if(triggerAction == 'Delete'){
+            payload = '{"LoadDetails":';
+            payload = payload + '{'+ 
+                '"Id": "'+StopId+'"'+ 
+                '}}';
+            
+        }
+        return payload;
+    }
+    private string convertedString(String LoadFildName){
+        if(LoadFildName != null){
+            LoadFildName = LoadFildName.replace('\\n\\r', ' ');	// remove CRLF
+            LoadFildName = LoadFildName.replace('\\n', ' ');		// remove LF	
+            LoadFildName = LoadFildName.replace('\\r', ' ');		// remove CR
+            LoadFildName = LoadFildName.replace('\\', ' ');		// remove slashes		
+            LoadFildName = LoadFildName.normalizeSpace();	// Remove all repeating white space
+        }
+        return LoadFildName;
+    }
+}
