@@ -68,7 +68,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  auth: PropTypes.number,
+  auth: PropTypes.object,
 };
 
 export default App;

@@ -10,7 +10,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PropTypes from 'prop-types';
-import Callback from './Callback';
 
 const drawerWidth = 240;
 
@@ -101,8 +100,7 @@ const SideBar = ({isOpen, handleClose}) => {
   );
 };
 
-
-Callback.propTypes = {
+SideBar.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
 };
