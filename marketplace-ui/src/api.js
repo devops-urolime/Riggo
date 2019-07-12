@@ -25,7 +25,7 @@ export const findLoadByIdApi = async (idLoad) => {
         requestData
     );
     const json = await response.json();
-    return (json) ? json : {};
+    return (json && json.load) ? json.load : {};
 };
 
 export const loadPipeLineSummaryApi = async () => {
