@@ -11,3 +11,9 @@ export const AUTH_CONFIG = {
   responseType: 'token id_token',
   scope: 'openid profile read:load'
 };
+
+export const APP_PATH_ROOT = "/";
+export const APP_PATH_HOME = "/home";
+export const APP_PATH_LOAD = "/load";
+export const APP_PATH_LOAD_ID = APP_PATH_LOAD + "/:id*";
+export const APP_PATH_AUTH0_CALLBACK = "/callback";

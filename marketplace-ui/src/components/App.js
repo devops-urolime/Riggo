@@ -12,6 +12,7 @@ import TopBar from './TopBar';
 import MainContent from './MainContent';
 import SideBar from './SideBar';
 import Grid from '@material-ui/core/Grid';
+import { APP_PATH_AUTH0_CALLBACK, APP_PATH_HOME, APP_PATH_LOAD_ID, APP_PATH_ROOT } from '../config';
 
 const store = configureStore();
 
@@ -49,10 +50,12 @@ class App extends Component {
               <MainContent>
                 <BrowserRouter>
                   <Switch>
-                      <Route exact path="/" render={() => (<HomePage auth={auth}/>)} />
-                      <Route exact path="/home" render={() => (<HomePage auth={auth}/>)} />
-                      <Route path="/load/:id*" component={(props) =>( <LoadPage auth={auth} loadId={props.match.params.id} {...props} />)} />
-                      <Route path="/callback" render={(props) => {
+                      <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
+                      <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
+                      <Route path={APP_PATH_LOAD_ID} component={(props) => (
+                        <LoadPage auth={auth} loadId={props.match.params.id} {...props} />
+                      )} />
+                      <Route path={APP_PATH_AUTH0_CALLBACK} render={(props) => {
                         auth.handleAuthentication();
                         return <Callback auth={auth} {...props} />;
                       }}/>
