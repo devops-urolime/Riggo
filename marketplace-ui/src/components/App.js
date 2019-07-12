@@ -37,6 +37,7 @@ class App extends Component {
     const {auth} = this.props;
     const {openMenu} = this.state;
     return (
+      <BrowserRouter>
       <div className="App-layout">
         <Provider store={store}>
           <Grid container spacing={0}>
@@ -48,7 +49,6 @@ class App extends Component {
             </Grid>
             <Grid item xs={12}>
               <MainContent>
-                <BrowserRouter>
                   <Switch>
                       <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
                       <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
@@ -60,12 +60,12 @@ class App extends Component {
                         return <Callback auth={auth} {...props} />;
                       }}/>
                   </Switch>
-                </BrowserRouter>
               </MainContent>
             </Grid>
           </Grid>
         </Provider>
       </div>
+      </BrowserRouter>
     );
   };
 }

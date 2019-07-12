@@ -8,9 +8,3 @@ export function loadMenu() {
   };
 }
 
-export function getMenuSuccess(menu) {
-  return {
-    type: GET_MENU_SUCCESS,
-    menu
-  };
-}
