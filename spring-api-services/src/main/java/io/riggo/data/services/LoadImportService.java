@@ -109,7 +109,7 @@ public class LoadImportService {
             return getLoadExistsResposne();
         }
 
-        Load rl = null;
+        Load rl = new Load();
 
         if (action > 0 && key.startsWith("ey")) {// get by maketplace id
             RiggoBaseEntity re = new RiggoBaseEntity();
@@ -172,7 +172,7 @@ public class LoadImportService {
                     rl.setEquipmentTypeId(et.getType());
                 }
             }
-            //rl.setLocationBasedSvcsReq(typeBridger.getBool((String)all.get("location_based_svcs_req")));
+            rl.setLocationBasedSvcsReq(typeBridger.getBool((String)all.get("location_based_svcs_req")));
             rl.setTransportMode(typeBridger.cleanQotes((String) all.get("transport_mode")));
             rl.setPostedRate(typeBridger.getBig((String) all.get("posted_rate")));
             rl.setPostedCurrency(Short.valueOf("1"));//USD - Will change when app is internationalized
