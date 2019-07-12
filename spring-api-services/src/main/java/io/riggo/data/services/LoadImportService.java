@@ -8,6 +8,7 @@ import io.riggo.data.domain.*;
 import io.riggo.data.exception.LoadObjectConfilictExeception;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.LoadRepository;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,10 +74,10 @@ public class LoadImportService {
      * @param objectMapper - mapper object so it gets reused
      * @param all          - All json keys we need
      * @param key          - the primary object id
-     * @param isUpdate    - create , or update/patch
+     * @param isUpdate     - create , or update/patch
      * @return Response to request based on success or failure
      * @throws LoadObjectConfilictExeception Conflict on create
-     * @throws RiggoDataAccessException Data related failures
+     * @throws RiggoDataAccessException      Data related failures
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
@@ -107,24 +108,30 @@ public class LoadImportService {
 
         Load rl = null;
 
-        if (isUpdate) {// get by maketplace id
+        if (isUpdate && key.startsWith("ey")) {// get by maketplace id
             RiggoBaseEntity re = new RiggoBaseEntity();
             String extid = re.encode(key, re.REVERSE);
             Long id = Long.parseLong(extid);
             ld = loadService.findById(id);
             if (ld.isPresent())
                 rl = ld.get();
+        } else if (!isUpdate) {
+            rl = new Load();//create
+            rl.setExtSysId(key);
         } else {
-            rl = new Load();
-            rl.setExtSysId(key);
+            //update sans market place id
+            ld = loadService.findByExtSysId(key);
+            if (ld.isPresent())
+                rl = ld.get();
         }
 
+        if (key.equals(""))
 
-        if (rl == null) {
-            rl = new Load();
+            if (rl == null) {
+                rl = new Load();
 
-            rl.setExtSysId(key);
-        }
+                rl.setExtSysId(key);
+            }
 
         String objStr = (String) all.get("shipper");
         if (!Strings.isNullOrEmpty(key)) {
@@ -226,12 +233,49 @@ public class LoadImportService {
         if (objStr != null)
             saveStop(objStr, 2);
 
+        objStr = (String) all.get("stops");
+        if (!Strings.isNullOrEmpty(objStr)  && isUpdate) {
+
+            handlePatch(objStr);
+        }
 
         return new ResponseEntity<>(new JSONObject()
                 .put(message, "Saved")
                 .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
                 HttpStatus.CREATED);
 
+    }
+
+    /**
+     * Save Load stops
+     *
+     * @param objStr All stops
+     * @return
+     */
+    private String[] handlePatch(String objStr) {
+
+        JSONArray jsonArray = new JSONArray(objStr);
+        String addIds[];
+        if (jsonArray != null && jsonArray.length() > 0)
+            addIds = new String[jsonArray.length()];
+        else
+            return null;
+
+
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jObject = jsonArray.getJSONObject(i);
+                if(jObject!=null) {
+                    logger.debug(jObject.toString());
+                    LoadStop st = saveStop(jObject.toString(), -1);
+                    addIds[i] = st.getId().toString();
+                }
+            }
+        } catch (Exception e) {
+            logger.debug(Arrays.toString(e.getStackTrace()));
+        }
+
+        return addIds;
     }
 
     /**
@@ -301,6 +345,7 @@ public class LoadImportService {
 
     /**
      * Save an equipment tupe
+     *
      * @param etStr equipment data from parsing
      * @return EquipmentType (vehicle) or null on failure
      */
@@ -342,6 +387,7 @@ public class LoadImportService {
 
     /**
      * Save the carrier
+     *
      * @param carStr incoming data for carrier
      * @return Carrier object from parsing or null on failure
      */
@@ -381,8 +427,9 @@ public class LoadImportService {
 
     /**
      * This methods the maste control that splits data in to stops locations and address
+     *
      * @param stopStr the sql from json
-     * @param number the stopnumber
+     * @param number  the stopnumber
      * @return saved stop or null on failure
      */
     LoadStop saveStop(String stopStr, int number) {
@@ -406,8 +453,11 @@ public class LoadImportService {
 
             ls = l2 != null ? l2 : loadStop;
 
-            ls.setStopNumber(number);
-            ls.setType(number);//for now - until we have grater clarity
+
+            if (number != -1 && ls.getStopNumber() == -1)
+                ls.setStopNumber(number);
+
+            ls.setType(ls.getStopNumber());//for now - until we have grater clarity
 
             if (!Strings.isNullOrEmpty(ls.getExtSysId()))
                 ls = loadStopService.save(ls);
@@ -546,6 +596,7 @@ public class LoadImportService {
             return null;
         if (checkKey != null) {
 
+            checkKey = checkKey.replaceAll("\"","");
             if (typeBridger.isNumeric(checkKey)) {
                 Long id = Long.parseLong(checkKey);
                 chk = rs.findById(id);

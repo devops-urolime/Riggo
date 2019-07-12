@@ -24,26 +24,26 @@ public class Address implements Serializable {
     @Column(name = "ext_sys_tenant_id")
     private String extSysTenantId;
 
-    @JsonAlias({"CustomerShippingStreet", "FirstStoprtms__Address2__c", "LastStoprtms__Address2__c", "billToShippingStreet", "CarrierRemitToShippingStreet"})
+    @JsonAlias({"CustomerShippingStreet","Stoprtms__Address2__c" ,"FirstStoprtms__Address2__c", "LastStoprtms__Address2__c", "billToShippingStreet", "CarrierRemitToShippingStreet"})
     @Column(name = "address_1")
     private String address1;
 
     @Column(name = "address_2")
     private String address2 = "";
-    @JsonAlias({"CustomerShippingCity", "FirstStoprtms__City__c", "LastStoprtms__City__c", "LastStoprtms__City__c", "billToShippingCity", "CarrierRemitToShippingCity"})
+    @JsonAlias({"CustomerShippingCity","Stoprtms__City__c", "FirstStoprtms__City__c", "LastStoprtms__City__c", "LastStoprtms__City__c", "billToShippingCity", "CarrierRemitToShippingCity"})
     @Column(name = "city")
     private String city;
 
-    @JsonAlias({"CustomerShippingState", "LastStoprtms__State_Province__c", "FirstStoprtms__State_Province__c", "LastStoprtms__State_Province__c", "billToShippingState"})
+    @JsonAlias({"CustomerShippingState", "Stoprtms__State_Province__c","LastStoprtms__State_Province__c", "FirstStoprtms__State_Province__c", "LastStoprtms__State_Province__c", "billToShippingState"})
     @Column(name = "state")
     private String state;
 
     @Column(name = "country")
-    @JsonAlias({"CustomerShippingCountry", "FirstStoprtms__Country__c", "LastStoprtms__Country__c", "CarrierRemitToShippingCountry"})
+    @JsonAlias({"CustomerShippingCountry","Stoprtms__Country__c", "FirstStoprtms__Country__c", "LastStoprtms__Country__c", "CarrierRemitToShippingCountry"})
     private String country;
 
     @Column(name = "postal_code")
-    @JsonAlias({"CustomerShippingPostalCode", "FirstStoprtms__Postal_Code__c", "LastStoprtms__Postal_Code__c", "billToShippingPostalCode", "CarrierRemitToShippingPostalCode"})
+    @JsonAlias({"CustomerShippingPostalCode", "Stoprtms__Postal_Code__c","FirstStoprtms__Postal_Code__c", "LastStoprtms__Postal_Code__c", "billToShippingPostalCode", "CarrierRemitToShippingPostalCode"})
     private String postalCode;
 
     @Column(name = "is_primary")

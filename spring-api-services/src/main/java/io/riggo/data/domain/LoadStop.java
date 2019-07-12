@@ -19,7 +19,7 @@ public class LoadStop implements Serializable {
     private Long id;
 
     @Column(name = "ext_sys_id")
-    @JsonAlias({"LastStopId", "FirstStopId"})
+    @JsonAlias({"LastStopId", "FirstStopId","StopId"})
     private String extSysId;
 
     @Column(name = "ext_sys_tenant_id")
@@ -27,7 +27,8 @@ public class LoadStop implements Serializable {
 
 
     @Column(name = "stop_number")
-    private Integer stopNumber = 1;
+    @JsonAlias({"Stoprtms__Number__c","FirstStoprtms__Number__c","LastStoprtms__Number__c"})
+    private Integer stopNumber = -1;
 
 
     @Column(name = "type")

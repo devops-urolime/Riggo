@@ -132,16 +132,17 @@ public class LoadController extends BaseController {
 
         Map<String, Object> all = initJSON(json);
 
-        if (isUpdate)
-            key = (String) all.get("mp_id"); // PUT and PATCH
-        else
-            key = (String) all.get("ext_sys_id");
+        key = (String) all.get("ext_sys_id");
+
+        if (isUpdate && Strings.isNullOrEmpty(key))
+            key = (String) all.get("mp_id"); // PUT and PATCH - can be by mp_id or ext_sys_id
 
 
-        if (Strings.isNullOrEmpty(key) && !isUpdate) {
+        if (Strings.isNullOrEmpty(key)) {
+            //RIG-154 comment by ed - return 404 if it can not found (11/7/2019)
             return new ResponseEntity<>(new JSONObject()
-                    .put("message", "Incomplete request").toString(),
-                    HttpStatus.BAD_REQUEST);
+                    .put("message", "Not found.").toString(),
+                    HttpStatus.NOT_FOUND);
         }
 
         externalLoadService = new LoadImportService();
