@@ -9,6 +9,7 @@
 
     }
     &__label{
+        text-transform: capitalize;
     }
     @media (min-width: $md-min-width) {
         width: 200px;

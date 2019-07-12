@@ -5,7 +5,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import configureStore from "../redux/store/configureStore";
 import 'reset-css';
 import './App.css';
-import HomePage from "./HomePage";
+import HomePage from "../containers/HomePageContainer";
 import LoadPage from "../containers/LoadPageContainer";
 import Callback from '../containers/CallbackContainer';
 import TopBar from './TopBar';
