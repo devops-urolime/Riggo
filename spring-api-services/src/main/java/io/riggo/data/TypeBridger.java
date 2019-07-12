@@ -69,7 +69,8 @@ public class TypeBridger {
 
     }
 
-    public synchronized Boolean getBool(String bool) {
+    public synchronized Boolean getBool(Object bool) {
+
         String n = bool;
         if (Strings.isNullOrEmpty(bool)) {
             n = "false";

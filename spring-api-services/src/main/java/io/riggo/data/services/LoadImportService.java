@@ -172,7 +172,7 @@ public class LoadImportService {
                     rl.setEquipmentTypeId(et.getType());
                 }
             }
-            rl.setLocationBasedSvcsReq((Boolean) all.get("location_based_svcs_req"));
+            // MITUL Yet to send this rl.setLocationBasedSvcsReq(typeBridger.getBool((String)all.get("location_based_svcs_req")));
             rl.setTransportMode(typeBridger.cleanQotes((String) all.get("transport_mode")));
             rl.setPostedRate(typeBridger.getBig((String) all.get("posted_rate")));
             rl.setPostedCurrency(Short.valueOf("1"));//USD - Will change when app is internationalized
