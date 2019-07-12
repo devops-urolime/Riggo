@@ -33,6 +33,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleDataException(BadLoadJsonException ex, WebRequest request) {
+        BadDataResponse exceptionResponse = new BadDataResponse(ex.getMessage());
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler
     public final ResponseEntity<Object> handleLoadNotFoundException(LoadNotFoundException ex, WebRequest request) {

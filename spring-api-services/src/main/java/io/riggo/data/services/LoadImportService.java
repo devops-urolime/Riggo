@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import io.riggo.data.TypeBridger;
 import io.riggo.data.domain.*;
+import io.riggo.data.exception.BadLoadJsonException;
 import io.riggo.data.exception.LoadObjectConfilictExeception;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.LoadRepository;
@@ -13,6 +14,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -68,13 +70,13 @@ public class LoadImportService {
     private final String message = "message";
 
     /**
-     * The core process of saving happens here
+     * The core process of saving a load happens here
      *
      * @param logger       logger for logging - will move to aws
      * @param objectMapper - mapper object so it gets reused
      * @param all          - All json keys we need
      * @param key          - the primary object id
-     * @param isUpdate     - create , or update/patch
+     * @param action       - create (0), or update(1), patch(2)
      * @return Response to request based on success or failure
      * @throws LoadObjectConfilictExeception Conflict on create
      * @throws RiggoDataAccessException      Data related failures
@@ -83,16 +85,17 @@ public class LoadImportService {
 
     public ResponseEntity importLoad(Logger logger, ObjectMapper objectMapper,
                                      Map<String, Object> all,
-                                     String key, boolean isUpdate) throws LoadObjectConfilictExeception, RiggoDataAccessException {
+                                     String key, int action) throws LoadObjectConfilictExeception, RiggoDataAccessException {
         this.objectMapper = objectMapper;
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.logger = logger;
         typeBridger = TypeBridger.getInstance();
 
+
         if (key == null) {
 
             return new ResponseEntity<>(
-                    new JSONObject().put(message, "Ensure your id is properly specifed")
+                    new JSONObject().put(message, "Ensure your id is properly specified")
                             .toString()
                     , HttpStatus.BAD_REQUEST);
 
@@ -102,20 +105,20 @@ public class LoadImportService {
         key = key.replaceAll("\"", "");//Clean up junk from mapper.
 
         valChk = chkLoadEntityExists(loadService, key);
-        if (valChk && !isUpdate) {
+        if (valChk && action == 0) {
             return getLoadExistsResposne();
         }
 
         Load rl = null;
 
-        if (isUpdate && key.startsWith("ey")) {// get by maketplace id
+        if (action > 0 && key.startsWith("ey")) {// get by maketplace id
             RiggoBaseEntity re = new RiggoBaseEntity();
             String extid = re.encode(key, re.REVERSE);
             Long id = Long.parseLong(extid);
             ld = loadService.findById(id);
             if (ld.isPresent())
                 rl = ld.get();
-        } else if (!isUpdate) {
+        } else if (action <= 0) {
             rl = new Load();//create
             rl.setExtSysId(key);
         } else {
@@ -132,111 +135,113 @@ public class LoadImportService {
 
                 rl.setExtSysId(key);
             }
-
-        String objStr = (String) all.get("shipper");
-        if (!Strings.isNullOrEmpty(key)) {
-            Shipper shp = saveSaveShipper(objStr);
-            if (shp != null && !Strings.isNullOrEmpty(shp.getExtSysId()))
-                rl.setShipperByShipperId(shp.getId());
-        }
-
-        objStr = (String) all.get("carrier~carrier");
-        Carrier carrier;
-        if (!Strings.isNullOrEmpty(objStr)) {
-            carrier = saveCarrier(objStr);
-            if (carrier != null && (!Strings.isNullOrEmpty(carrier.getExtSysId())))
-                rl.setCarrier(carrier.getId().intValue());
-        }
-
-        objStr = (String) all.get("driver");
-        Trucker trk;
-        if (!Strings.isNullOrEmpty(objStr)) {
-            trk = saveTrucker(objStr);
-            if (trk != null && (!Strings.isNullOrEmpty(trk.getExtSysId()))) {
-                rl.setDriver(trk.getId().intValue());
+        String objStr ;
+        if (action < 2) {
+            objStr = (String) all.get("shipper");
+            if (!Strings.isNullOrEmpty(objStr)) {
+                Shipper shp = saveSaveShipper(objStr);
+                if (shp != null && !Strings.isNullOrEmpty(shp.getExtSysId()))
+                    rl.setShipperByShipperId(shp.getId());
             }
-        }
-        objStr = (String) all.get("load~equipment_type"); // convert to enum - figure out how you can have nested enum
-        objStr = objStr.replaceAll(":\"Van\"", ":1");
-        objStr = objStr.replaceAll(":\"FlatBed\"", ":2");
-        objStr = objStr.replaceAll(":\"Reefer\"", ":3");
 
-        EquipmentType et; // for null check
-        if (objStr != null) {
-            et = saveEquipment(objStr);
-            if (et != null && (!Strings.isNullOrEmpty(et.getExtSysId()))) {
-                rl.setEquipmentTypeId(et.getType());
+            objStr = (String) all.get("carrier~carrier");
+            Carrier carrier;
+            if (!Strings.isNullOrEmpty(objStr)) {
+                carrier = saveCarrier(objStr);
+                if (carrier != null && (!Strings.isNullOrEmpty(carrier.getExtSysId())))
+                    rl.setCarrier(carrier.getId().intValue());
             }
+
+            objStr = (String) all.get("driver");
+            Trucker trk;
+            if (!Strings.isNullOrEmpty(objStr)) {
+                trk = saveTrucker(objStr);
+                if (trk != null && (!Strings.isNullOrEmpty(trk.getExtSysId()))) {
+                    rl.setDriver(trk.getId().intValue());
+                }
+            }
+            objStr = (String) all.get("load~equipment_type"); // convert to enum - figure out how you can have nested enum
+            objStr = objStr.replaceAll(":\"Van\"", ":1");
+            objStr = objStr.replaceAll(":\"FlatBed\"", ":2");
+            objStr = objStr.replaceAll(":\"Reefer\"", ":3");
+
+            EquipmentType et; // for null check
+            if (objStr != null) {
+                et = saveEquipment(objStr);
+                if (et != null && (!Strings.isNullOrEmpty(et.getExtSysId()))) {
+                    rl.setEquipmentTypeId(et.getType());
+                }
+            }
+            rl.setLocationBasedSvcsReq((Boolean) all.get("location_based_svcs_req"));
+            rl.setTransportMode(typeBridger.cleanQotes((String) all.get("transport_mode")));
+            rl.setPostedRate(typeBridger.getBig((String) all.get("posted_rate")));
+            rl.setPostedCurrency(Short.valueOf("1"));//USD - Will change when app is internationalized
+            rl.setInsuranceAmt(typeBridger.getBig((String) all.get("insurance_amt")));
+            rl.setInsurnaceCurrency(Short.valueOf("1"));
+            rl.setTotalWeight(typeBridger.getBig((String) all.get("total_weight")));
+            rl.setWeightUom(Short.valueOf("1"));//LBS - Will change when app is internationalized
+
+            String loadStatus = typeBridger.cleanQotes((String) all.get("load_status"));
+            Integer stat = typeBridger.getLoadStatusIdByName(loadStatus);
+            if (action <= 1) {// not patch
+                if (stat == -1) {
+
+                    return new ResponseEntity<>(new JSONObject()
+                            .put(message, "Incorrect Load status").toString(),
+
+                            HttpStatus.BAD_REQUEST);
+                }
+            }
+
+
+            rl.setLoadStatus(stat);
+            rl.setTeamReq(typeBridger.getBool((String) all.get("team_req")));
+            rl.setFoodGradeTrailerReq(typeBridger.getBool((String) all.get("food_grade_trailer_req")));
+            rl.setTempControlReq(typeBridger.getBool((String) all.get("temp_control_req")));
+            rl.setName(typeBridger.cleanQotes((String) all.get("name")));
+            rl.setInvoiceTotal(typeBridger.getBig((String) all.get("invoice_total")));
+            rl.setCarrierQuoteTotal(typeBridger.getBig((String) all.get("carrier_quote_total")));
+            rl.setCarrierInvoiceTotal(typeBridger.getBig((String) all.get("carrier_invoice_total")));
+            rl.setCustomerQuoteTotal(typeBridger.getBig((String) all.get("customer_quote_total")));
+            rl.setCustomerTransportTotal(typeBridger.getBig((String) all.get("customer_transport_total")));
+            rl.setDeliveryStatus(typeBridger.cleanQotes((String) all.get("delivery_status")));
+            rl.setDistanceKilometers(typeBridger.getBig((String) all.get("distance_kilometers")));
+            rl.setHazMat(typeBridger.getBool((String) all.get("haz_mat")));
+            rl.setLoadStatusReq(typeBridger.getBool((String) all.get("load_status_req")));
+            rl.setMarginInvoiced(typeBridger.getBig((String) all.get("margin_invoiced")));
+            rl.setMarginPiad(typeBridger.getBig((String) all.get("margin_piad")));
+            rl.setMarginPctInvoiced(typeBridger.getBig((String) all.get("margin_pct_invoiced")));
+            rl.setModeName(typeBridger.cleanQotes((String) all.get("mode_name")));
+            rl.setOnTimeDeliveryCounter((String) all.get("on_time_delivery_counter"));
+            rl.setOrderDate(typeBridger.getDate((String) all.get("order_date")));
+            rl.setExpectedDeliveryDate(typeBridger.getDate((String) all.get("expected_delivery_date")));
+            rl.setExpectedShipDate(typeBridger.getDate((String) all.get("expected_ship_date")));
+            rl.setSalesStatus(typeBridger.cleanQotes((String) all.get("sales_status")));
+            rl.setSalesScheduleStatus((typeBridger.cleanQotes((String) all.get("sales_schedule_status"))));
+            rl.setLoadShippingStatus(typeBridger.cleanQotes((String) all.get("load_shipping_status")));
+            rl.setSiteUrl(typeBridger.cleanQotes((String) all.get("site_url")));
+            rl.setPickupDevlieryNumber(typeBridger.cleanQotes((String) all.get("pickup_devliery_number")));
+            rl.setStopReferenceNumber(typeBridger.cleanQotes((String) all.get("stop_reference_number")));
+            rl.setLoadUrl(typeBridger.cleanQotes((String) all.get("load_url")));
+            rl.setExtSysTenantId("0");
+
+
+            rl = loadService.save(rl);
         }
-
-
-        rl.setLocationBasedSvcsReq((Boolean) all.get("location_based_svcs_req"));
-        rl.setTransportMode(typeBridger.cleanQotes((String) all.get("transport_mode")));
-        rl.setPostedRate(typeBridger.getBig((String) all.get("posted_rate")));
-        rl.setPostedCurrency(Short.valueOf("1"));//USD - Will change when app is internationalized
-        rl.setInsuranceAmt(typeBridger.getBig((String) all.get("insurance_amt")));
-        rl.setInsurnaceCurrency(Short.valueOf("1"));
-        rl.setTotalWeight(typeBridger.getBig((String) all.get("total_weight")));
-        rl.setWeightUom(Short.valueOf("1"));//LBS - Will change when app is internationalized
-
-        String loadStatus = typeBridger.cleanQotes((String) all.get("load_status"));
-        Integer stat = typeBridger.getLoadStatusIdByName(loadStatus);
-
-        if (stat == -1) {
-            return new ResponseEntity<>(new JSONObject()
-                    .put(message, "Incorrect Load status").toString(),
-
-                    HttpStatus.BAD_REQUEST);
-        }
-
-
-        rl.setLoadStatus(stat);
-        rl.setTeamReq(typeBridger.getBool((String) all.get("team_req")));
-        rl.setFoodGradeTrailerReq(typeBridger.getBool((String) all.get("food_grade_trailer_req")));
-        rl.setTempControlReq(typeBridger.getBool((String) all.get("temp_control_req")));
-        rl.setName(typeBridger.cleanQotes((String) all.get("name")));
-        rl.setInvoiceTotal(typeBridger.getBig((String) all.get("invoice_total")));
-        rl.setCarrierQuoteTotal(typeBridger.getBig((String) all.get("carrier_quote_total")));
-        rl.setCarrierInvoiceTotal(typeBridger.getBig((String) all.get("carrier_invoice_total")));
-        rl.setCustomerQuoteTotal(typeBridger.getBig((String) all.get("customer_quote_total")));
-        rl.setCustomerTransportTotal(typeBridger.getBig((String) all.get("customer_transport_total")));
-        rl.setDeliveryStatus(typeBridger.cleanQotes((String) all.get("delivery_status")));
-        rl.setDistanceKilometers(typeBridger.getBig((String) all.get("distance_kilometers")));
-        rl.setHazMat(typeBridger.getBool((String) all.get("haz_mat")));
-        rl.setLoadStatusReq(typeBridger.getBool((String) all.get("load_status_req")));
-        rl.setMarginInvoiced(typeBridger.getBig((String) all.get("margin_invoiced")));
-        rl.setMarginPiad(typeBridger.getBig((String) all.get("margin_piad")));
-        rl.setMarginPctInvoiced(typeBridger.getBig((String) all.get("margin_pct_invoiced")));
-        rl.setModeName(typeBridger.cleanQotes((String) all.get("mode_name")));
-        rl.setOnTimeDeliveryCounter((String) all.get("on_time_delivery_counter"));
-        rl.setOrderDate(typeBridger.getDate((String) all.get("order_date")));
-        rl.setExpectedDeliveryDate(typeBridger.getDate((String) all.get("expected_delivery_date")));
-        rl.setExpectedShipDate(typeBridger.getDate((String) all.get("expected_ship_date")));
-        rl.setSalesStatus(typeBridger.cleanQotes((String) all.get("sales_status")));
-        rl.setSalesScheduleStatus((typeBridger.cleanQotes((String) all.get("sales_schedule_status"))));
-        rl.setLoadShippingStatus(typeBridger.cleanQotes((String) all.get("load_shipping_status")));
-        rl.setSiteUrl(typeBridger.cleanQotes((String) all.get("site_url")));
-        rl.setPickupDevlieryNumber(typeBridger.cleanQotes((String) all.get("pickup_devliery_number")));
-        rl.setStopReferenceNumber(typeBridger.cleanQotes((String) all.get("stop_reference_number")));
-        rl.setLoadUrl(typeBridger.cleanQotes((String) all.get("load_url")));
-        rl.setExtSysTenantId("0");
-
-
-        rl = loadService.save(rl);
 
         objStr = (String) all.get("$load_stop~1");
 
         if (objStr != null)
-            saveStop(objStr, 1);
+            saveStop(objStr, 1,rl);
 
         objStr = (String) all.get("$load_stop~2");
         if (objStr != null)
-            saveStop(objStr, 2);
+            saveStop(objStr, 2,rl);
 
         objStr = (String) all.get("stops");
-        if (!Strings.isNullOrEmpty(objStr)  && isUpdate) {
+        if (!Strings.isNullOrEmpty(objStr) && action == 2) {
 
-            handlePatch(objStr);
+            return handlePatch(objStr, rl);
         }
 
         return new ResponseEntity<>(new JSONObject()
@@ -252,30 +257,30 @@ public class LoadImportService {
      * @param objStr All stops
      * @return
      */
-    private String[] handlePatch(String objStr) {
+    private ResponseEntity handlePatch(String objStr, Load rl)  {
 
         JSONArray jsonArray = new JSONArray(objStr);
-        String addIds[];
-        if (jsonArray != null && jsonArray.length() > 0)
-            addIds = new String[jsonArray.length()];
-        else
-            return null;
+        if (jsonArray == null)
+            return new ResponseEntity<>(new JSONObject()
+                    .put(message, "Not Found")
+                    .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
+                    HttpStatus.NOT_FOUND);
 
 
-        try {
+            LoadStop st;
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jObject = jsonArray.getJSONObject(i);
-                if(jObject!=null) {
+                if (jObject != null) {
                     logger.debug(jObject.toString());
-                    LoadStop st = saveStop(jObject.toString(), -1);
-                    addIds[i] = st.getId().toString();
+                    st = saveStop(jObject.toString(), -1,rl);
+
                 }
             }
-        } catch (Exception e) {
-            logger.debug(Arrays.toString(e.getStackTrace()));
-        }
 
-        return addIds;
+        return new ResponseEntity<>(new JSONObject()
+                .put(message, "Update successful")
+                .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
+                HttpStatus.OK);
     }
 
     /**
@@ -432,7 +437,7 @@ public class LoadImportService {
      * @param number  the stopnumber
      * @return saved stop or null on failure
      */
-    LoadStop saveStop(String stopStr, int number) {
+    LoadStop saveStop(String stopStr, int number,Load ld) {
 
 
         Address addr = saveAddress(stopStr);
@@ -440,7 +445,7 @@ public class LoadImportService {
 
         LoadStop ls = null;
         try {
-            saveLocation(stopStr, addr);
+            Location loc = saveLocation(stopStr, addr);
 
             LoadStop loadStop = (LoadStop) getObject(stopStr, LoadStop.class);
             String key;
@@ -454,8 +459,11 @@ public class LoadImportService {
             ls = l2 != null ? l2 : loadStop;
 
 
-            if (number != -1 && ls.getStopNumber() == -1)
-                ls.setStopNumber(number);
+            if (number != -1)
+                ls.setStopNumber(number);// when not marked a patch.
+
+            ls.setLocationId(loc.getId());
+            ls.setLoadId(ld.getId());
 
             ls.setType(ls.getStopNumber());//for now - until we have grater clarity
 
@@ -596,7 +604,7 @@ public class LoadImportService {
             return null;
         if (checkKey != null) {
 
-            checkKey = checkKey.replaceAll("\"","");
+            checkKey = checkKey.replaceAll("\"", "");
             if (typeBridger.isNumeric(checkKey)) {
                 Long id = Long.parseLong(checkKey);
                 chk = rs.findById(id);

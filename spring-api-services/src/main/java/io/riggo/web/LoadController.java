@@ -79,7 +79,7 @@ public class LoadController extends BaseController {
      */
     @PostMapping(path = "/load", produces = "application/json")
     public ResponseEntity addLoad(@RequestBody String json) throws LoadObjectConfilictExeception {
-        return handleLoad(json, false);
+        return handleLoad(json, 0);
     }
 
 
@@ -92,15 +92,22 @@ public class LoadController extends BaseController {
      * @throws RiggoDataAccessException      on data related failure
      */
     @PutMapping(value = "/load", produces = "application/json")
-    @PatchMapping(value = "/load", produces = "application/json")
 
     public ResponseEntity updateLoad(@RequestBody final String json)
             throws LoadObjectConfilictExeception {
 
 
-        return handleLoad(json, true);
+        return handleLoad(json, 1);
     }
 
+    @PatchMapping(value = "/load", produces = "application/json")
+
+    public ResponseEntity patchLoad(@RequestBody final String json)
+            throws LoadObjectConfilictExeception {
+
+
+        return handleLoad(json, 2);
+    }
 
     /**
      * Get a json object for all requests when neded.
@@ -119,12 +126,12 @@ public class LoadController extends BaseController {
      * Comminicate with service to complete request
      *
      * @param json     The data
-     * @param isUpdate Weather the request is an update or create
+     * @param action Weather the request is an update or create
      * @return result of request
      * @throws LoadObjectConfilictExeception on creation attempt
      * @throws RiggoDataAccessException      on data realted failire
      */
-    private ResponseEntity handleLoad(String json, boolean isUpdate) throws LoadObjectConfilictExeception {
+    private ResponseEntity handleLoad(String json, int action) throws LoadObjectConfilictExeception {
         objectMapper = new ObjectMapper();
 
         String key;
@@ -134,8 +141,11 @@ public class LoadController extends BaseController {
 
         key = (String) all.get("ext_sys_id");
 
-        if (isUpdate && Strings.isNullOrEmpty(key))
+        if (action > 0 && Strings.isNullOrEmpty(key))
             key = (String) all.get("mp_id"); // PUT and PATCH - can be by mp_id or ext_sys_id
+
+        if (action > 0 && Strings.isNullOrEmpty(key))
+            key = (String) all.get("loadId"); // PUT and PATCH - can be by mp_id or ext_sys_id
 
 
         if (Strings.isNullOrEmpty(key)) {
@@ -149,7 +159,7 @@ public class LoadController extends BaseController {
 
         beanFactory.autowireBean(externalLoadService); // Wire On Demand.
 
-        return externalLoadService.importLoad(logger, objectMapper, all, key, isUpdate);
+        return externalLoadService.importLoad(logger, objectMapper, all, key, action);
     }
 
 
