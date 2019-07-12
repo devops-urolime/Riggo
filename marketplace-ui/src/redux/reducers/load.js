@@ -34,5 +34,5 @@ export const getCurrentLoad = createSelector(
 
 export const getPipeLineSummary = createSelector(
   pipeLineSummarySelector,
-  current => current
+  pipeLineSummary => pipeLineSummary
 );
