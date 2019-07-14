@@ -2,6 +2,7 @@ package io.riggo.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
+import io.riggo.data.TypeBridger;
 import io.riggo.data.domain.Load;
 import io.riggo.data.exception.LoadNotFoundException;
 import io.riggo.data.exception.LoadObjectConfilictExeception;
@@ -134,32 +135,36 @@ public class LoadController extends BaseController {
     private ResponseEntity handleLoad(String json, int action) throws LoadObjectConfilictExeception {
         objectMapper = new ObjectMapper();
 
-        String key;
+        String key=null;
 
 
         Map<String, Object> all = initJSON(json);
+        TypeBridger tb = TypeBridger.getInstance();
 
-        key = (String) all.get("ext_sys_id");
+        if(all.get("ext_sys_id")!=null)
+            key =  tb.cleanQotes ((String) all.get("ext_sys_id"));// create gets only ext sys id
 
-        if (action > 0 && Strings.isNullOrEmpty(key))
-            key = (String) all.get("mp_id"); // PUT and PATCH - can be by mp_id or ext_sys_id
+        if (action > 0 && Strings.isNullOrEmpty(key) && (all.get("mp_id")!=null) )
+            key = tb.cleanQotes ((String) all.get("mp_id")); // PUT and PATCH - can be by mp_id or ext_sys_id
 
-        if (action > 0 && Strings.isNullOrEmpty(key))
-            key = (String) all.get("loadId"); // PUT and PATCH - can be by mp_id or ext_sys_id
+        if (action > 0 && Strings.isNullOrEmpty(key) && all.get("loadId")!=null)
+            key = tb.cleanQotes ((String) all.get("loadId")); // PUT and PATCH - can be by mp_id or ext_sys_id
 
 
-        if (Strings.isNullOrEmpty(key)) {
+        if (!Strings.isNullOrEmpty(key) ) {
+
+            externalLoadService = new LoadImportService();
+
+            beanFactory.autowireBean(externalLoadService); // Wire On Demand.
+
+            return externalLoadService.importLoad(logger, objectMapper, all, key, action);
+        }else{
             //RIG-154 comment by ed - return 404 if it can not found (11/7/2019)
             return new ResponseEntity<>(new JSONObject()
-                    .put("message", "Not found.").toString(),
+                    .put("message", "Load Not Found.").toString(),
                     HttpStatus.NOT_FOUND);
         }
 
-        externalLoadService = new LoadImportService();
-
-        beanFactory.autowireBean(externalLoadService); // Wire On Demand.
-
-        return externalLoadService.importLoad(logger, objectMapper, all, key, action);
     }
 
 

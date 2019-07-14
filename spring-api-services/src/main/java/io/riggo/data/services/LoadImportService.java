@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import io.riggo.data.TypeBridger;
 import io.riggo.data.domain.*;
-import io.riggo.data.exception.BadLoadJsonException;
 import io.riggo.data.exception.LoadObjectConfilictExeception;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.LoadRepository;
@@ -14,7 +13,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -92,14 +90,15 @@ public class LoadImportService {
         typeBridger = TypeBridger.getInstance();
 
 
-        if (key == null) {
 
-            return new ResponseEntity<>(
-                    new JSONObject().put(message, "Ensure your id is properly specified")
-                            .toString()
-                    , HttpStatus.BAD_REQUEST);
+        if (Strings.isNullOrEmpty(key) )
+            return getBadRequestResponse("null");
 
-        }
+
+        if (key.equals("null"))
+            return getBadRequestResponse(key);
+
+
         Optional<Load> ld;
         boolean valChk;
         key = key.replaceAll("\"", "");//Clean up junk from mapper.
@@ -109,16 +108,21 @@ public class LoadImportService {
             return getLoadExistsResposne();
         }
 
-        Load rl = new Load();
+        Load rl = null;
 
-        if (action > 0 && key.startsWith("ey")) {// get by maketplace id
+
+        if (action > 0 && key.startsWith("ey")) {// get by maketplace id for PUT OR PATCH
             RiggoBaseEntity re = new RiggoBaseEntity();
             String extid = re.encode(key, re.REVERSE);
             Long id = Long.parseLong(extid);
             ld = loadService.findById(id);
+
             if (ld.isPresent())
                 rl = ld.get();
-        } else if (action <= 0) {
+            else
+                return getBadRequestResponse(key);
+
+        } else if (action == 0) { //POST
             rl = new Load();//create
             rl.setExtSysId(key);
         } else {
@@ -128,15 +132,16 @@ public class LoadImportService {
                 rl = ld.get();
         }
 
-        if (key.equals(""))
 
-            if (rl == null) {
-                rl = new Load();
 
-                rl.setExtSysId(key);
-            }
-        String objStr ;
-        if (action < 2) {
+        if (rl == null) {
+            rl = new Load();
+            rl.setExtSysId(key);
+        }
+
+        String objStr;
+        if (action < 2) {// POST(0) and PUT(1)
+
             objStr = (String) all.get("shipper");
             if (!Strings.isNullOrEmpty(objStr)) {
                 Shipper shp = saveSaveShipper(objStr);
@@ -172,7 +177,7 @@ public class LoadImportService {
                     rl.setEquipmentTypeId(et.getType());
                 }
             }
-            rl.setLocationBasedSvcsReq(typeBridger.getBool((String)all.get("location_based_svcs_req")));
+            rl.setLocationBasedSvcsReq(typeBridger.getBool((String) all.get("location_based_svcs_req")));
             rl.setTransportMode(typeBridger.cleanQotes((String) all.get("transport_mode")));
             rl.setPostedRate(typeBridger.getBig((String) all.get("posted_rate")));
             rl.setPostedCurrency(Short.valueOf("1"));//USD - Will change when app is internationalized
@@ -232,14 +237,14 @@ public class LoadImportService {
         objStr = (String) all.get("$load_stop~1");
 
         if (objStr != null)
-            saveStop(objStr, 1,rl);
+            saveStop(objStr, 1, rl);
 
         objStr = (String) all.get("$load_stop~2");
         if (objStr != null)
-            saveStop(objStr, 2,rl);
+            saveStop(objStr, 2, rl);
 
         objStr = (String) all.get("stops");
-        if (!Strings.isNullOrEmpty(objStr) && action == 2) {
+        if (action == 2 && !Strings.isNullOrEmpty(objStr)  ) {
 
             return handlePatch(objStr, rl);
         }
@@ -257,31 +262,34 @@ public class LoadImportService {
      * @param objStr All stops
      * @return
      */
-    private ResponseEntity handlePatch(String objStr, Load rl)  {
+    private ResponseEntity handlePatch(String objStr, Load rl) {
 
         JSONArray jsonArray = new JSONArray(objStr);
         if (jsonArray == null)
             return new ResponseEntity<>(new JSONObject()
-                    .put(message, "Not Found")
+                    .put(message, "Load Not Found")
                     .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
                     HttpStatus.NOT_FOUND);
 
 
-            LoadStop st;
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jObject = jsonArray.getJSONObject(i);
-                if (jObject != null) {
-                    logger.debug(jObject.toString());
-                    st = saveStop(jObject.toString(), -1,rl);
+        LoadStop st;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jObject = jsonArray.getJSONObject(i);
+            if (jObject != null) {
+                logger.debug(jObject.toString());
+                st = saveStop(jObject.toString(), -1, rl);
 
-                }
             }
+        }
 
         return new ResponseEntity<>(new JSONObject()
                 .put(message, "Update successful")
                 .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
                 HttpStatus.OK);
     }
+
+
+
 
     /**
      * Check if object is empty
@@ -437,7 +445,7 @@ public class LoadImportService {
      * @param number  the stopnumber
      * @return saved stop or null on failure
      */
-    LoadStop saveStop(String stopStr, int number,Load ld) {
+    LoadStop saveStop(String stopStr, int number, Load ld) {
 
 
         Address addr = saveAddress(stopStr);
@@ -661,6 +669,17 @@ public class LoadImportService {
         return new ResponseEntity<>(new JSONObject().put(message, "Load can not exist when trying to create")
                 .toString(),
                 HttpStatus.CONFLICT);
+    }
+
+
+    private ResponseEntity getBadRequestResponse(String key) {
+        if(key==null)
+            key="null";
+        return new ResponseEntity<>(
+                new JSONObject().put(message, String.format("Ensure your id is properly specified - %s ",
+                        key))
+                        .toString()
+                , HttpStatus.BAD_REQUEST);
     }
 
 

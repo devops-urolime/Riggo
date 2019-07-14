@@ -80,9 +80,16 @@ public class TypeBridger {
     }
 
     public synchronized String cleanQotes(String str) {
-        return str.replaceAll("\"", "");
+        if(str == null )
+            return  "";
+        String res =  str.replaceAll("\"", "");
+        if(res.toLowerCase().equals("null")){
+            return "";
+        }
+     return res;
 
     }
+
 
     public synchronized java.sql.Date getDate(String dt) {
 

@@ -16,7 +16,7 @@
       "entryPoint": null,
       "portMappings": [
         {
-          "hostPort": 8088,
+          "hostPort": 0,
           "protocol": "tcp",
           "containerPort": 8088
         }
@@ -24,7 +24,7 @@
       "command": null,
       "linuxParameters": null,
       "cpu": 0,
-      "environment": [   
+      "environment": [
         {
           "name": "SPRING_PROFILES_ACTIVE",
           "value": "qa"
@@ -37,8 +37,8 @@
       "workingDirectory": null,
       "secrets": null,
       "dockerSecurityOptions": null,
-      "memory": 512,
-      "memoryReservation": null,
+      "memory": null,
+      "memoryReservation": 256,
       "volumesFrom": [],
       "stopTimeout": null,
       "image": "<IMAGE1_NAME>",
@@ -66,7 +66,7 @@
   "compatibilities": [
     "EC2"
   ],
-  "taskDefinitionArn": "arn:aws:ecs:us-west-2:845657178663:task-definition/Riggo-test-devops:1",
+  "taskDefinitionArn": "arn:aws:ecs:us-west-2:845657178663:task-definition/Riggo-test-devops:14",
   "family": "Riggo-test-devops",
   "requiresAttributes": [
     {
@@ -85,6 +85,12 @@
       "targetId": null,
       "targetType": null,
       "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
     }
   ],
@@ -94,7 +100,7 @@
   ],
   "networkMode": null,
   "cpu": null,
-  "revision": 1,
+  "revision": 14,
   "status": "ACTIVE",
   "proxyConfiguration": null,
   "volumes": []
