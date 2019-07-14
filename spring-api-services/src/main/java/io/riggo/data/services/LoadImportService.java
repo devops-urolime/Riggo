@@ -81,7 +81,7 @@ public class LoadImportService {
      */
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 
-    public ResponseEntity importLoad(Logger logger, ObjectMapper objectMapper,
+    public  ResponseEntity importLoad(Logger logger, ObjectMapper objectMapper,
                                      Map<String, Object> all,
                                      String key, int action) throws LoadObjectConfilictExeception, RiggoDataAccessException {
         this.objectMapper = objectMapper;
@@ -265,7 +265,7 @@ public class LoadImportService {
     private ResponseEntity handlePatch(String objStr, Load rl) {
 
         JSONArray jsonArray = new JSONArray(objStr);
-        if (jsonArray == null)
+        if (jsonArray.length()==0)
             return new ResponseEntity<>(new JSONObject()
                     .put(message, "Load Not Found")
                     .put("id", rl.encode(rl.getId().toString(), 0)).toString(),
@@ -455,6 +455,7 @@ public class LoadImportService {
         try {
             Location loc = saveLocation(stopStr, addr);
 
+
             LoadStop loadStop = (LoadStop) getObject(stopStr, LoadStop.class);
             String key;
             if (loadStop != null && !objectHasNullExtId(loadStop))
@@ -470,7 +471,9 @@ public class LoadImportService {
             if (number != -1)
                 ls.setStopNumber(number);// when not marked a patch.
 
-            ls.setLocationId(loc.getId());
+            if(loc!=null && loc.getId()!=null)
+                ls.setLocationId(loc.getId());
+
             ls.setLoadId(ld.getId());
 
             ls.setType(ls.getStopNumber());//for now - until we have grater clarity
@@ -544,7 +547,11 @@ public class LoadImportService {
                 address.setCountry(addrParse.getCountry());
                 address.setPostalCode(addrParse.getPostalCode());
             }
-            address = addressService.save(address);
+            if (!Strings.isNullOrEmpty(address.getExtSysId()))
+                address = addressService.save(address);
+            else
+                return null;
+
 
         } catch (NullPointerException e) {
             logger.error(Arrays.toString(e.getStackTrace()));
@@ -583,7 +590,11 @@ public class LoadImportService {
                 return null;
             }
 
-            trucker = truckerService.save(trucker);
+            if (!Strings.isNullOrEmpty(trucker.getExtSysId()))
+                trucker = truckerService.save(trucker);
+            else
+                return null;
+
         } catch (NullPointerException e) {
             logger.error(Arrays.toString(e.getStackTrace()));
             trucker = null;
@@ -608,9 +619,10 @@ public class LoadImportService {
 
     private Object checkEntityExists(RiggoService rs, String checkKey) {
         Object chk = null;
-        if ((!Strings.isNullOrEmpty(checkKey)) && checkKey.equals("null"))
+        if ((Strings.isNullOrEmpty(checkKey)) )
             return null;
-        if (checkKey != null) {
+        if(checkKey.equalsIgnoreCase("null"))
+            return null;
 
             checkKey = checkKey.replaceAll("\"", "");
             if (typeBridger.isNumeric(checkKey)) {
@@ -623,19 +635,22 @@ public class LoadImportService {
 
 
             }
-        }
-        return chk;
+
+
     }
 
     private boolean chkLoadEntityExists(LoadService rs, String checkKey) {
         Optional<Load> ld;
-        if (checkKey != null) {
+        if ((Strings.isNullOrEmpty(checkKey)) )
+            return false;
+        if(checkKey.equalsIgnoreCase("null"))
+            return false;
+
             if (typeBridger.isNumeric(checkKey)) {
                 Long id = Long.parseLong(checkKey);
                 ld = rs.findById(id);
                 if (ld.isPresent()) {
                     return true;
-
                 }
             } else {
 
@@ -649,18 +664,19 @@ public class LoadImportService {
                     if (!rs.findById(id).isPresent())
                         return true;
                 }
-
                 try {
                     ld = rs.findByExtSysId(extid);
                     if (ld.isPresent()) {
                         return true;
-
                     }
-                } catch (Exception e) {
+                }catch (io.riggo.data.exception.RiggoDataAccessException re){
+                    return true;
+                }
+                catch (Exception e) {
                     logger.error(Arrays.toString(e.getStackTrace()));
+                    throw e;
                 }
             }
-        }
         return false;
     }
 

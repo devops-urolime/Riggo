@@ -137,6 +137,8 @@ public class LoadController extends BaseController {
 
         String key=null;
 
+        this.getLogger().error(String.format("Method: %d\n %s",action,json));
+
 
         Map<String, Object> all = initJSON(json);
         TypeBridger tb = TypeBridger.getInstance();
