@@ -1,0 +1,23 @@
+trigger StopTriggerForAPI on rtms__Stop__c (after insert,after update) {
+    
+   if(trigger.isInsert){
+        List<rtms__Stop__c> StopList = [select id,rtms__Load__c,rtms__Load__r.Marketplace_Exposed_Id__c from rtms__Stop__c where Id IN : trigger.newmap.keyset()];
+        for(rtms__Stop__c st : trigger.new){
+            if(st.rtms__Load__r.Marketplace_Exposed_Id__c != null){
+                //Call method for the webservice call
+                StopAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Insert');
+            }
+            
+        }
+    }
+    if(trigger.isUpdate){
+        List<rtms__Stop__c> StopList = [select id,rtms__Load__c,rtms__Load__r.Marketplace_Exposed_Id__c from rtms__Stop__c where Id IN : trigger.newmap.keyset()];
+        for(rtms__Stop__c st : trigger.new){
+            system.debug('----stop trigger call');
+            if(st.rtms__Load__r.Marketplace_Exposed_Id__c != null){
+                StopAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Update');
+            }
+        }
+    }
+	
+}
