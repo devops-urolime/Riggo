@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
 import load from './load';
 import auth from './auth';
+import menu from './menu';
 
 const rootReducer = combineReducers({
   load,
-  auth
+  auth,
+  menu
 });
 
 export default rootReducer;

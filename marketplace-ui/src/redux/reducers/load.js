@@ -1,9 +1,10 @@
-import { GET_LOAD_SUCCESS } from '../actions/load';
+import { GET_LOAD_PIPE_LINE_SUMMARY_SUCCESS, GET_LOAD_SUCCESS } from '../actions/load';
 import { createSelector } from 'reselect';
 
 const initState = {
   current: null,
-  list:[]
+  list:[],
+  pipeLineSummary:[]
 };
 
 export default function(state = initState, action) {
@@ -13,14 +14,25 @@ export default function(state = initState, action) {
           ...state,
           current: action.load
       };
+    case GET_LOAD_PIPE_LINE_SUMMARY_SUCCESS:
+          return {
+              ...state,
+            pipeLineSummary: action.pipeLineSummary
+          };
     default:
       return state;
   }
 }
 
 const currentLoadSelector = state => state.load.current;
+const pipeLineSummarySelector = state => state.load.pipeLineSummary;
 
 export const getCurrentLoad = createSelector(
   currentLoadSelector,
   current => current
+);
+
+export const getPipeLineSummary = createSelector(
+  pipeLineSummarySelector,
+  pipeLineSummary => pipeLineSummary
 );
