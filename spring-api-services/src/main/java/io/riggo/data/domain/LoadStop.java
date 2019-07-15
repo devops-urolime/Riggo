@@ -19,7 +19,7 @@ public class LoadStop implements Serializable {
     private Long id;
 
     @Column(name = "ext_sys_id")
-    @JsonAlias({"LastStopId", "FirstStopId"})
+    @JsonAlias({"LastStopId", "FirstStopId","StopId"})
     private String extSysId;
 
     @Column(name = "ext_sys_tenant_id")
@@ -27,7 +27,9 @@ public class LoadStop implements Serializable {
 
 
     @Column(name = "stop_number")
-    private Integer stopNumber = 1;
+    @JsonAlias({"Stoprtms__Number__c","FirstStoprtms__Number__c","LastStoprtms__Number__c"})
+    private Integer stopNumber = -1;
+
 
 
     @Column(name = "type")
@@ -44,6 +46,13 @@ public class LoadStop implements Serializable {
     @Transient
     @Column(name = "deleted")
     private java.util.Date deleted;
+
+    @Column(name = "load_id")
+    private Long loadId;
+
+    @Column(name = "location_id")
+    private Long locationId;
+
 
 
     public Long getId() {
@@ -110,4 +119,19 @@ public class LoadStop implements Serializable {
         this.type = type;
     }
 
+    public Long getLoadId() {
+        return loadId;
+    }
+
+    public void setLoadId(Long loadId) {
+        this.loadId = loadId;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
+    }
 }

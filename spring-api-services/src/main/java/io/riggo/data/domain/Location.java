@@ -18,14 +18,14 @@ public class Location implements Serializable {
     private Long id;
 
     @Column(name = "ext_sys_id")
-    @JsonAlias({"LastStopId", "FirstStopId"})
+    @JsonAlias({"LastStopId", "FirstStopId","StopId"})
     private String extSysId;
 
     @Column(name = "ext_sys_tenant_id")
     private String extSysTenantId = "0";
 
     @Column(name = "name")
-    @JsonAlias({"LastStopName", "FirstStopName"})
+    @JsonAlias({"LastStopName", "FirstStopName","StopName"})
     private String name;
 
     @Transient

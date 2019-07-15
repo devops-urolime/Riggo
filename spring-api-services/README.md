@@ -23,12 +23,11 @@ Do not forget to insert data for testing. The database starter is blank database
 
 #Docker 
 
-This project is docker-ized
-Base of Alpine is has no java runtime it pull the JVM over AZUL
+This project is docker-ized based off Alpine is has no java runtime it pull the JVM over AZUL
 
-It install bash for scripting and testing . 
+It installs bash for scripting and testing . 
 
-Inspect the image with the -exec on decker.
+Inspect the image with the -exec on docker.
 
 It takes lot of time to build. One time effort. 
 

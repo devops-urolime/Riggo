@@ -27,7 +27,7 @@ public class Shipper implements Serializable {
     /*@Column(name = "shipper_id")
     private Long shipperId;
 */
-    @JsonAlias({"CustomerName"})
+    @JsonAlias({"CustomerName","BillToName"})
     @Column(name = "name")
     private String name;
 
