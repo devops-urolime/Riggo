@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ListItem from '@material-ui/core/ListItem/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon/ListItemIcon';
@@ -7,29 +7,27 @@ import List from '@material-ui/core/List/List';
 import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
 
-class MenuContent extends Component {
-  render(){
-    const { menu, history } = this.props;
-    return (
-        <List>
-          {
-            menu &&
-            menu.map((menuItem, idx) => {
-              const {name, url } = menuItem;
-              return (
-                <ListItem onClick={()=> history.push(url)} key={`menu-item-custom-${idx}`} button>
-                  <ListItemIcon>
-                    <Icon name={name}/>
-                  </ListItemIcon>
-                  <ListItemText primary={name} />
-                </ListItem>
-              );
-            })
-          }
-        </List>
-      );
-  }
-}
+const MenuContent = () => {
+  const { menu, history } = this.props;
+  return (
+      <List>
+        {
+          menu &&
+          menu.map((menuItem, idx) => {
+            const {name, url } = menuItem;
+            return (
+              <ListItem onClick={()=> history.push(url)} key={`menu-item-custom-${idx}`} button>
+                <ListItemIcon>
+                  <Icon name={name}/>
+                </ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            );
+          })
+        }
+      </List>
+    );
+};
 
 MenuContent.propTypes = {
   menu: PropTypes.array,
