@@ -33,6 +33,9 @@ public class Menu implements Serializable {
     @Column(name = "rank")
     private Integer rank;
 
+    @Column(name = "icon")
+    private String icon;
+
     @Transient
     @Column(name = "created_at")
     private Date createdAt;
@@ -84,6 +87,14 @@ public class Menu implements Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public Integer getRank() {
