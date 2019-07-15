@@ -1,6 +1,5 @@
 public class LoadPayload {
-    public string getSavePayload(ID loadId,String triggerAction){ 
-        system.debug('loadId'+loadId);   
+    public string getSavePayload(ID loadId,String triggerAction,String methodName,String marketplaceExId){ 
         
         String payload  = '';
         if(triggerAction == 'Insert' || triggerAction == 'Update' ){
@@ -65,14 +64,16 @@ public class LoadPayload {
                                           Marketplace_Exposed_Id__c,rtms__Master_BOL_Option__c, rig_Expected_TTT__c, rig_Previous_Cost__c, riggoh_Required_Temperature__c, rig_Lead_Source__c, Pickup_Location__c, Delivery_Location__c, rigPostedRate__c, rig_Completed_Date__c, rig_Load_URL__c, rig_Team_Required__c, rtms__Pickup_Delivery_Status__c, rtms__Carrier_Portal__c, rtms__EDI_Provider__c, Send_Status_Updates__c, rig_Email_Automation__c, rig_Load_Board__c FROM rtms__Load__c  
                                           where Id =: loadId]; 
             
-            
+            system.debug('marketplaceExId'+marketplaceExId);
             payload = '{"LoadDetails":';
                 for(rtms__Load__c ld : ListOfLoead){  
                     payload = payload + '{'+ 
                         '"Id": "'+ld.Id+'",';
-                         if(triggerAction == 'Update' && ld.Marketplace_Exposed_Id__c != null){	
-                            payload = payload +'"MarketplaceExposedId": "'+ld.Marketplace_Exposed_Id__c+'",';
-                        }
+                         if(methodName == 'PUT' && marketplaceExId != '' && marketplaceExId != null){	
+                            payload = payload +'"MarketplaceExposedId": "'+marketplaceExId+'",';
+                         }else{
+                             payload = payload +'"MarketplaceExposedId": "null",';
+                         }
                         payload = payload +  '"OwnerDetails": {'+
 							'"OwnerId": "'+ld.OwnerId+'",'+
                         	'"OwnerName": "'+ld.Owner.Name+'"'+
