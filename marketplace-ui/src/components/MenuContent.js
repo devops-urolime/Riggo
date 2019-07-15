@@ -7,8 +7,7 @@ import List from '@material-ui/core/List/List';
 import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
 
-const MenuContent = () => {
-  const { menu, history } = this.props;
+const MenuContent = ({ menu, history }) => {
   return (
       <List>
         {
