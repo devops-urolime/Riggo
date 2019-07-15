@@ -1,0 +1,63 @@
+/**************************************************************************
+-----------------------------------------------
+Purpose:
+This class contains the methods to call HTTP Rest web service and error handler 
+-----------------------------------------------------------------------
+**************************************************************************/
+
+//========================
+/*
+	Class Name  : StopAPICalloutCtrl
+	Note		: We are using this class for the calling webserive api to post stop object to market place using rest api.
+*/
+public class StopAPICalloutCtrl {
+    /*********************************************************************
+    Purpose     : To initiate the the HTTP request 
+    Parameters  : StopID- Load Ojbect Id to generate payload
+                  triggerAction  - To identify the event of the stop object either Insert update or Delete
+    **********************************************************************/
+    
+    @future(callout=true)
+    public static void makePostCallout(Id StopId,String triggerAction) {  
+        ServiceProxy prox = new ServiceProxy(); 
+        StopPayload palyloadCls = new StopPayload();
+        // Get the load payload by json formate.
+        string LoadPayloadBody=palyloadCls.getSavePayload(StopId,triggerAction); 
+        system.debug('--requestBody--StopPayload-'+LoadPayloadBody);
+        String methodDefine = 'POST';
+        if(triggerAction == 'Update'){
+            //methodDefine = 'PUT';
+            methodDefine = 'POST';
+        }
+        // Calling webserive to push the load object 
+        // Passing parameters like end pint url, Method Name and Load payload
+          HttpResponse httpResponse=null;
+         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody);
+        String response =  httpResponse.getBody();
+        system.debug('--response'+response);
+        string StatusCode = string.valueof(httpResponse.getStatusCode());
+         
+        // if there is any exception we are creating exception record in Error Log object
+        if(response!= null && StatusCode != '200'){
+            if (response.contains('201')) {
+                system.debug('--response'+response);
+                Error_Log__c errorlog = new Error_Log__c();
+                errorlog.Error__c = response;
+                errorlog.Description__c = response;
+                //errorlog.Load__c = LoadId;
+                insert errorlog; 
+                system.debug('errorlog--'+errorlog);
+            } else {
+                system.debug('--response'+response);
+                Error_Log__c errorlog = new Error_Log__c();
+                errorlog.Error__c = response;
+                errorlog.Description__c = response;
+                if(triggerAction != 'Delete'){
+                    errorlog.Load__c = StopId;
+                }
+                insert errorlog;
+                system.debug('errorlog--'+errorlog);
+            }
+        }
+    }    
+}
