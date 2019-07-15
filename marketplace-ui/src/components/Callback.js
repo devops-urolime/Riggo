@@ -12,7 +12,7 @@ const Callback = ({auth, location:{hash}, loginSuccess, loginFail}) => {
     loginFail({message:"No access token in callback"});
   }
   return hasToken ? (
-    <Redirect to="/load/1"/>
+    <Redirect to="/"/>
   ) : (
     <div>
       <p>Loading...</p>

@@ -7,7 +7,15 @@ import {
   GET_LOAD_SUCCESS
 } from '../actions/load';
 import { findLoadByIdApi, getMenuApi, loadPipeLineSummaryApi } from '../../api';
-import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS } from '../actions/menu';
+import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
+
+const getDefaultMenu = (menuList) => {
+   if(menuList){
+     return menuList[0];
+   } else {
+     return null;
+   }
+};
 
 function* getLoadSaga(action) {
     try{
@@ -41,6 +49,7 @@ function* getMenuSaga() {
     try{
       const result = yield getMenuApi();
       yield put({type: GET_MENU_SUCCESS, menu: result});
+      yield put({type: SET_DEFAULT_MENU, menuItem: getDefaultMenu(result)});
     } catch (e) {
       yield put({type: GET_MENU_FAIL});
       yield put({

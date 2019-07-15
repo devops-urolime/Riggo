@@ -10,7 +10,7 @@ import LoadPage from "../containers/LoadPageContainer";
 import Callback from '../containers/CallbackContainer';
 import TopBar from './TopBar';
 import MainContent from './MainContent';
-import SideBar from './SideBar';
+import SideBar from '../containers/SideBarContainer';
 import Grid from '@material-ui/core/Grid';
 import { APP_PATH_AUTH0_CALLBACK, APP_PATH_HOME, APP_PATH_LOAD_ID, APP_PATH_ROOT } from '../config';
 

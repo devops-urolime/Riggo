@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import MenuContent from '../components/MenuContent';
+import SideBar from '../components/SideBar';
 import { loadMenu } from '../redux/actions/menu';
-import { getMenu } from '../redux/reducers/menu';
+import { getMenu, getDefaultMenu } from '../redux/reducers/menu';
 
 const mapStateToProps = state => {
   return {
     menu: getMenu(state),
+    defaultMenu: getDefaultMenu(state),
   }
 };
 
@@ -20,5 +21,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MenuContent);
+)(SideBar);
 
