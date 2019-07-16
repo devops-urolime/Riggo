@@ -7,17 +7,24 @@ resource "aws_security_group" "sec_grp_rds" {
     from_port = "${var.from_port}"
     to_port   = "${var.to_port}"
     protocol  = "tcp"
+    security_groups = ["sg-0aeba5c68bf373446"]
+  }
+
+  ingress {
+    from_port = "${var.from_port}"
+    to_port   = "${var.to_port}"
+    protocol  = "tcp"
     cidr_blocks = [
     "${var.vpc_cidr}"]
   }
 
-  /*   ingress {
+     ingress {
       from_port = 5432
       to_port = 5432
       protocol = "tcp"
-      cidr_blocks = [
-        "${var.vpc_cidr_block}"]
-    } */
+      description = ""
+      security_groups = ["${var.peer_security_group_id}"]
+    } 
 
   egress {
     from_port = "${var.from_port}"

@@ -4,9 +4,10 @@ data "template_file" "container-definition" {
   vars = {
     terraform-workspace = "${terraform.workspace}"
     container_port      = "${var.container_port}"
-    TD_Cpu_limit        = "${var.TD_Cpu_limit}"
-    TD_mem_hard_limit   = "${var.TD_mem_hard_limit}"
+    # TD_Cpu_limit        = "${var.TD_Cpu_limit}"
+    TD_mem_soft_limit   = "${var.TD_mem_soft_limit}"
     cloudwatch_logname  = "${var.cloudwatch_log}"
+    spring_profile_key  = "${var.spring_profile_key}"
 
   }
 }

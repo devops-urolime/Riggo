@@ -132,7 +132,7 @@ securityDefinitions:
     x-amazon-apigateway-authtype: "custom"
     x-amazon-apigateway-authorizer:
       authorizerUri: "${authorizerUri}"
-      authorizerCredentials: "${authorizerCredentials}"
+      authorizerCredentials: "${authorizerArn}"
       authorizerResultTtlInSeconds: 3600
       identityValidationExpression: "^Bearer [-0-9a-zA-z\\.]*$"
       type: "token"

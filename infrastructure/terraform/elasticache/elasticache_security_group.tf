@@ -11,6 +11,14 @@ resource "aws_security_group" "sec_elasticache" {
     "${var.vpc_cidr}"]
   }
 
+
+  ingress {
+    from_port = "${var.from_redisport}"
+    to_port   = "${var.to_redisport}"
+    protocol  = "tcp"
+    security_groups  = ["sg-0aeba5c68bf373446"]
+  }
+
   /*   ingress {
       from_port = 5432
       to_port = 5432

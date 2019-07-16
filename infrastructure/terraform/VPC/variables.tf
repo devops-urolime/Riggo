@@ -63,6 +63,15 @@ variable "to_port" {
   # default = "5432"
 }
 
+variable "peering_vpc_id" {
+  
+}
+
+variable "peer_security_group_id" {
+  
+}
+
+
 
 # variable "env" {
 # }
