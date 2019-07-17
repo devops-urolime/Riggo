@@ -1,6 +1,6 @@
 import App from './App';
 import TopBar from './TopBar';
-import SideBar from './SideBar';
+import SideBar from '../containers/SideBarContainer';
 import MainContent from './MainContent';
 
 describe('<App />', () => {

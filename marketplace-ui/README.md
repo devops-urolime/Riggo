@@ -41,6 +41,10 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run deploy` or `yarn deploy`
+
+Prepare the bundle and deploy to AWS S3 Bucket and CloudFront distribution update.
+
 ### `npm run eject` or `yarn build`
 
 **Note: this is a one-way operation. Once you `eject`, you can’t go back!**
@@ -60,8 +64,8 @@ Having the Prerequisites in place the only thing to do is just run one command:
 - if you use prefer npm tool you can use `npm run start`
 - if you use prefer yarn tool you can use `yarn start`
 ## How to make the Deployment
-### Test, Build, Deploy to AWS S3 and CloudFront:
+### Deploy to AWS S3 and CloudFront:
 Having the Prerequisites in place the only thing to do is just run one command:
-- if you use prefer npm tool you can use `npm run build`
-- if you use prefer yarn tool you can use `yarn build`
+- if you use prefer npm tool you can use `npm run deploy`
+- if you use prefer yarn tool you can use `yarn deploy`
 
