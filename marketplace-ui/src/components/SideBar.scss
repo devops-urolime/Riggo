@@ -1,0 +1,21 @@
+@import 'base.scss';
+
+.SideBar-menu{
+    background: $color-secondary !important;
+    &__IconButton-logo{
+       width: 100px;
+    }
+    &__IconButton-Back{
+       width: 62px;
+    }
+    .MuiPaper-root{
+        background: $color-secondary !important;
+    }
+    &__Header{
+       display: flex;
+        padding: 0 8px;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}
+

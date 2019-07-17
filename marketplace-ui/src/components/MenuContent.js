@@ -6,10 +6,11 @@ import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import List from '@material-ui/core/List/List';
 import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
+import './MenuContent.css';
 
 const MenuContent = ({ menu, history }) => {
   return (
-      <List>
+      <List className="MenuContent">
         {
           menu &&
           menu.map((menuItem, idx) => {

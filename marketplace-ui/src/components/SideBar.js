@@ -6,6 +6,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
 import { withRouter } from 'react-router-dom';
+import './SideBar.css';
+import Icon from './Icon';
 
 class SideBar extends Component {
   componentDidMount() {
@@ -22,10 +24,14 @@ class SideBar extends Component {
             variant="persistent"
             anchor="left"
             open={isOpen}
+            className="SideBar-menu"
           >
-            <IconButton onClick={handleClose}>
-              <ChevronLeftIcon />
-            </IconButton>
+            <nav className="SideBar-menu__Header">
+              <Icon name="Logo"/>
+              <IconButton className="SideBar-menu__IconButton-Back" onClick={handleClose}>
+                 <ChevronLeftIcon />
+              </IconButton>
+            </nav>
             <Divider />
             <MenuContent menu={menu} defaultMenu={defaultMenu}/>
           </Drawer>
