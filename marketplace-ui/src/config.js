@@ -9,13 +9,10 @@ export const LOAD_READ_PIPE_LINE_SCOPE = "read:loadPipeline";
 export const PROFILE_SCOPE = "profile";
 export const OPENID_SCOPE = "openid";
 export const AUTH_CONFIG = {
-  domain: 'riggo-qa.auth0.com',
-  clientId: '7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv',
-  audience:'load-resource-api',
-  // Comment or uncomment for local testing when get the JWT.
-  callbackUrl: 'http://localhost:3000/callback',
-  // Comment or uncomment to set the correct cloudfront when deploy.
-  // callbackUrl: 'http://dt2f4aj1no65b.cloudfront.net/callback',
+  domain: process.env.REACT_APP_DOMAIN_AUTH_CONFIG,
+  clientId: process.env.REACT_APP_CLIENT_ID_AUTH_CONFIG,
+  audience: process.env.REACT_APP_AUDIENCE_ID_AUTH_CONFIG,
+  callbackUrl: process.env.REACT_APP_CALL_BACK_URL_AUTH_CONFIG,
   responseType: 'token id_token',
   scope: `${OPENID_SCOPE} ${PROFILE_SCOPE} ${LOAD_READ_SCOPE} ${LOAD_READ_PIPE_LINE_SCOPE}`
 };
