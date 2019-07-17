@@ -40,7 +40,7 @@ module "RDS" {
   instance_class    = "${var.instance_class}"
   # db_username       = "${var.db_username}"
   # db_password       = "${var.db_password}"
-  iops    = "${var.iops}"
+  # iops    = "${var.iops}"
   subnet1 = "${module.VPC.private_subnet_id1}"
   subnet2 = "${module.VPC.private_subnet_id2}"
 }

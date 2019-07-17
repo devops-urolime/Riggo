@@ -143,6 +143,9 @@ resource "aws_lb_listener" "testing-listener" {
   
   }
 
+lifecycle {
+  ignore_changes = [default_action]
+}
   
 
 }

@@ -27,7 +27,7 @@ variable "identifier" {
 
 variable "storage_type" {
   description = "Type of the storage ssd or magnetic"
-  default     = "io1"
+  default     = "gp2"
 }
 
 variable "allocated_storage" {
@@ -48,9 +48,9 @@ variable "engine_version" {
   default     = "11.2"
 }
 
-variable "iops" {
-  default = "2000"
-}
+# variable "iops" {
+#   default = "2000"
+# }
 
 
 variable "instance_class" {
