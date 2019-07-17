@@ -36,12 +36,15 @@
     "react-test-renderer":"^16.8.6"
   },
   "scripts": {
+    "env": "export $(cat .env | xargs) && env",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "react-scripts build",
-    "build": "npm-run-all build-css build-js",
+    "aws-s3-push-qa":"aws s3 sync ./build s3://$AWS_S3_BUCKET_DEPLOY/ --region $AWS_S3_REGION_DEPLOY --delete",
+    "aws-cloudfront-invalidation" : "aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths /*",
+    "build": "npm-run-all build-css build-js aws-s3-push-qa aws-cloudfront-invalidation",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
