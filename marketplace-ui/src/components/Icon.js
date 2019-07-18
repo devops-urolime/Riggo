@@ -1,6 +1,6 @@
 import React  from 'react';
 import PropTypes from 'prop-types';
-import './Icon.css';
+import './Icon.scss';
 
 export const DASHBOARD_ICON = 'Dashboard';
 export const SHIPMENTS_ICON = 'Shipments';

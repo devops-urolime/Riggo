@@ -7,7 +7,7 @@ describe('<App />', () => {
 
   it('renders correctly', () => {
     const tree = renderer
-      .create(<App auth={{renewSession: () => {} }} />)
+      .create(<App auth={{renewSession: () => {} , isAuthenticated: () => {}}} />)
       .toJSON();
     expect(tree).toMatchSnapshot();
   });

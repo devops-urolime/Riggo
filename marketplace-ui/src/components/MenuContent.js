@@ -6,7 +6,7 @@ import ListItemText from '@material-ui/core/ListItemText/ListItemText';
 import List from '@material-ui/core/List/List';
 import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
-import './MenuContent.css';
+import './MenuContent.scss';
 
 const MenuContent = ({ menu, history }) => {
   return (
