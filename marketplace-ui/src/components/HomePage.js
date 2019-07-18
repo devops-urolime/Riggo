@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import './CardSummary.scss';
 import CardSummary from './CardSummary';
 import Grid from '@material-ui/core/Grid';
+import TitleSection from './TitleSection';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -15,6 +16,11 @@ class HomePage extends Component {
       return (
         <Grid container spacing={3}>
           <Grid item xs={12}>
+            <Grid container justify="left" spacing={0}>
+                <TitleSection label="Status"/>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
             <Grid container justify="center" spacing={3}>
               { pipeLineSummary && pipeLineSummary.map((item, index) => {
                 return (
@@ -23,6 +29,11 @@ class HomePage extends Component {
                   </Grid>
                 );
               })}
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container justify="left" spacing={0}>
+                <TitleSection label="Shipments"/>
             </Grid>
           </Grid>
         </Grid>
