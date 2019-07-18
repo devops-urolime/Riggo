@@ -35,7 +35,6 @@ public class LoadStop implements Serializable {
     @Column(name = "type")
     private Integer type = 1;
 
-
     @Transient
     @Column(name = "created_at")
     private java.util.Date createdAt;

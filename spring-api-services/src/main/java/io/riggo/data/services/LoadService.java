@@ -31,9 +31,9 @@ public class LoadService {
         }
     }
 
-    public Load save(Load Load) throws RiggoDataAccessException {
+    public Load save(Load load) {
         try {
-            return loadRepository.save(Load);
+            return loadRepository.save(load);
         } catch (Exception e) {
             throw new RiggoDataAccessException("Could not save Load data", e);
         }
