@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import './CardSummary.scss';
 import CardSummary from './CardSummary';
 import Grid from '@material-ui/core/Grid';
+import TitleSection from './TitleSection';
 
 class HomePage extends Component {
   componentDidMount() {
     this.props.loadPipeLineSummary();
   }
   render(){
-    const {auth:{login, logout}, pipeLineSummary} = this.props;
+    const {pipeLineSummary} = this.props;
       return (
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Grid container spacing={0}>
+                <TitleSection label="Status"/>
+            </Grid>
+          </Grid>
           <Grid item xs={12}>
             <Grid container justify="center" spacing={3}>
               { pipeLineSummary && pipeLineSummary.map((item, index) => {
@@ -26,17 +31,8 @@ class HomePage extends Component {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container justify="center" spacing={2}>
-              <Grid item>
-                <Button variant="contained" color="primary" onClick={() => login()}>
-                  Login
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" color="primary" onClick={() => logout() }>
-                  Logout
-                </Button>
-              </Grid>
+            <Grid container spacing={0}>
+                <TitleSection label="Shipments"/>
             </Grid>
           </Grid>
         </Grid>
@@ -45,7 +41,6 @@ class HomePage extends Component {
 }
 
 HomePage.propTypes = {
-  auth: PropTypes.object,
   pipeLineSummary: PropTypes.array,
   loadPipeLineSummary: PropTypes.func,
 };
