@@ -5,6 +5,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
+import Icon, { EXIT_ICON, MENU_ICON, USER_ACCOUNT_ICON } from './Icon';
+import './TopBar.css';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,35 +19,50 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
-const MenuAppBar = ({title, onMenuClick}) => {
+const MenuAppBar = ({isLogin, login, logout, title, onMenuClick}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className="TopBar" position="static">
         <Toolbar>
           <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton} color="inherit" aria-label="Menu">
-            <svg width="18" height="12" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" clipRule="evenodd" d="M0 12H18V10H0V12ZM0 7H11V5H0V7ZM0 0V2H18V0H0Z" fill="white"/>
-            </svg>
+            <Icon name={MENU_ICON}/>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
+          {isLogin &&
+            <IconButton onClick={()=>logout()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">
+              <Icon name={EXIT_ICON}/>
+            </IconButton>
+          }
+          {!isLogin &&
+            <IconButton onClick={()=>login()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">
+              <Icon name={USER_ACCOUNT_ICON}/>
+            </IconButton>
+          }
         </Toolbar>
       </AppBar>
     </div>
   );
 };
 
-const TopBar = ({title, onMenuClick}) => {
+const TopBar = ({title, onMenuClick, auth}) => {
   return (
-    <MenuAppBar title={title} onMenuClick={onMenuClick}/>
+    <MenuAppBar
+      title={title}
+      onMenuClick={onMenuClick}
+      logout={auth.logout}
+      login={auth.login}
+      isLogin={auth.isAuthenticated()}
+    />
   );
 };
 
 TopBar.propTypes = {
   title: PropTypes.string,
   onMenuClick: PropTypes.func,
+  auth: PropTypes.object,
 };
 
 export default TopBar;

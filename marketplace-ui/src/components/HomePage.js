@@ -11,7 +11,7 @@ class HomePage extends Component {
     this.props.loadPipeLineSummary();
   }
   render(){
-    const {auth:{login, logout}, pipeLineSummary} = this.props;
+    const {pipeLineSummary} = this.props;
       return (
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -25,27 +25,12 @@ class HomePage extends Component {
               })}
             </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Grid container justify="center" spacing={2}>
-              <Grid item>
-                <Button variant="contained" color="primary" onClick={() => login()}>
-                  Login
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="contained" color="primary" onClick={() => logout() }>
-                  Logout
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
         </Grid>
       );
   }
 }
 
 HomePage.propTypes = {
-  auth: PropTypes.object,
   pipeLineSummary: PropTypes.array,
   loadPipeLineSummary: PropTypes.func,
 };

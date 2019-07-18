@@ -42,16 +42,16 @@ class App extends Component {
         <Provider store={store}>
           <Grid container spacing={0}>
             <Grid item xs={12}>
-              <TopBar title="Dashboard" onMenuClick={() => this.openMenu()}/>
+              <TopBar title="Dashboard" onMenuClick={() => this.openMenu()} auth={auth}/>
             </Grid>
             <Grid item xs={12}>
-              <SideBar isOpen={openMenu} handleClose={()=> this.closeMenu()}/>
+              <SideBar isOpen={openMenu} handleClose={()=> this.closeMenu()} />
             </Grid>
             <Grid item xs={12}>
               <MainContent>
                   <Switch>
-                      <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
-                      <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
+                      <Route exact path={APP_PATH_ROOT} render={() => (<HomePage />)} />
+                      <Route exact path={APP_PATH_HOME} render={() => (<HomePage />)} />
                       <Route path={APP_PATH_LOAD_ID} component={(props) => (
                         <LoadPage auth={auth} loadId={props.match.params.id} {...props} />
                       )} />

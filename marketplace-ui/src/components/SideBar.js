@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
 import { withRouter } from 'react-router-dom';
 import './SideBar.css';
-import Icon from './Icon';
+import Icon, { LOGO_ICON } from './Icon';
 
 class SideBar extends Component {
   componentDidMount() {
@@ -26,11 +24,8 @@ class SideBar extends Component {
             open={isOpen}
             className="SideBar-menu"
           >
-            <nav className="SideBar-menu__Header">
-              <Icon name="Logo"/>
-              <IconButton className="SideBar-menu__IconButton-Back" onClick={handleClose}>
-                 <ChevronLeftIcon />
-              </IconButton>
+            <nav className="SideBar-menu__Header" onClick={handleClose}>
+              <Icon name={LOGO_ICON}/>
             </nav>
             <Divider />
             <MenuContent menu={menu} defaultMenu={defaultMenu}/>

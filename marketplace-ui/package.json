@@ -46,6 +46,7 @@
     "aws-cloudfront-invalidation" : "aws cloudfront create-invalidation --distribution-id $AWS_CLOUDFRONT_DISTRIBUTION_ID --paths /*",
     "build": "npm-run-all build-css build-js",
     "deploy": "npm-run-all aws-s3-push-qa aws-cloudfront-invalidation",
+    "build-deploy": "npm-run-all build deploy",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
