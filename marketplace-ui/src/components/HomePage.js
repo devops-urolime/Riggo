@@ -15,7 +15,7 @@ class HomePage extends Component {
       return (
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Grid container justify="left" spacing={0}>
+            <Grid container spacing={0}>
                 <TitleSection label="Status"/>
             </Grid>
           </Grid>
@@ -31,7 +31,7 @@ class HomePage extends Component {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container justify="left" spacing={0}>
+            <Grid container spacing={0}>
                 <TitleSection label="Shipments"/>
             </Grid>
           </Grid>
