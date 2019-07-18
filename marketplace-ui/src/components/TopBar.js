@@ -48,13 +48,14 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick}) => {
 };
 
 const TopBar = ({title, onMenuClick, auth}) => {
+  const isLogin =  auth.isAuthenticated();
   return (
     <MenuAppBar
       title={title}
       onMenuClick={onMenuClick}
       logout={auth.logout}
       login={auth.login}
-      isLogin={auth.isAuthenticated}
+      isLogin={isLogin}
     />
   );
 };
