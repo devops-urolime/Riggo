@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -88,7 +87,7 @@ public class LoadControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:load"})
     @Test
-    public void postLoad() throws Exception {
+    public void postLoadDOESNTREALLYTESTANYTHING() throws Exception {
 
         Load load = new Load();
         load.setId(1l);
@@ -97,6 +96,26 @@ public class LoadControllerTest {
         given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD)
+                .content(jsonPostLoadFor200)
+                .contentType(APPLICATION_JSON))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+
+    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @Test
+    public void putLoadDOESNTREALLYTESTANYTHING() throws Exception {
+
+        Load load = new Load();
+        load.setId(1l);
+        load.setName("load");
+
+        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
+
+        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andReturn();
