@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "load")
-public class Load extends RiggoBaseEntity implements Serializable {
+public class Load implements Serializable {
 
 
     private static final long serialVersionUID = -4133343645808769934L;
@@ -44,30 +44,14 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private BigDecimal carrierInvoiceTotal;
     private BigDecimal customerQuoteTotal;
     private BigDecimal customerTransportTotal;
-    private String deliveryStatus;
-    private BigDecimal distanceKilometers;
     private Boolean hazMat;
     private Boolean loadStatusReq;
-    private BigDecimal marginInvoiced;
-    private BigDecimal marginPiad;
-    private BigDecimal marginPctInvoiced;
     private String modeName;
-    private String onTimeDeliveryCounter;
     private LocalDateTime orderDate;
     private String salesStatus;
-    private String salesScheduleStatus;
-    private String loadShippingStatus;
-    private String siteUrl;
-    private String pickupDevlieryNumber;
-    private String stopReferenceNumber;
     private String loadUrl;
     private Long shipperId;
 
-
-    public Load() {
-
-        this.setPrefix("load");
-    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -347,27 +331,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "delivery_status"  )
-    public String getDeliveryStatus() {
-        return deliveryStatus;
-    }
-
-    public void setDeliveryStatus(String deliveryStatus) {
-        this.deliveryStatus = deliveryStatus;
-    }
-
-    @Basic
-    @Column(name = "distance_kilometers" )
-    @JsonAlias("distance_kilometers")
-    public BigDecimal getDistanceKilometers() {
-        return distanceKilometers;
-    }
-
-    public void setDistanceKilometers(BigDecimal distanceKilometers) {
-        this.distanceKilometers = distanceKilometers;
-    }
-
-    @Basic
     @Column(name = "haz_mat" )
     public Boolean getHazMat() {
         return hazMat;
@@ -388,36 +351,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "margin_invoiced" )
-    public BigDecimal getMarginInvoiced() {
-        return marginInvoiced;
-    }
-
-    public void setMarginInvoiced(BigDecimal marginInvoiced) {
-        this.marginInvoiced = marginInvoiced;
-    }
-
-    @Basic
-    @Column(name = "margin_piad"  )
-    public BigDecimal getMarginPiad() {
-        return marginPiad;
-    }
-
-    public void setMarginPiad(BigDecimal marginPiad) {
-        this.marginPiad = marginPiad;
-    }
-
-    @Basic
-    @Column(name = "margin_pct_invoiced"  )
-    public BigDecimal getMarginPctInvoiced() {
-        return marginPctInvoiced;
-    }
-
-    public void setMarginPctInvoiced(BigDecimal marginPctInvoiced) {
-        this.marginPctInvoiced = marginPctInvoiced;
-    }
-
-    @Basic
     @Column(name = "mode_name"  )
     public String getModeName() {
         return modeName;
@@ -425,16 +358,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
 
     public void setModeName(String modeName) {
         this.modeName = modeName;
-    }
-
-    @Basic
-    @Column(name = "on_time_delivery_counter")
-    public String getOnTimeDeliveryCounter() {
-        return onTimeDeliveryCounter;
-    }
-
-    public void setOnTimeDeliveryCounter(String onTimeDeliveryCounter) {
-        this.onTimeDeliveryCounter = onTimeDeliveryCounter;
     }
 
     @Basic
@@ -458,56 +381,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "sales_schedule_status" )
-    public String getSalesScheduleStatus() {
-        return salesScheduleStatus;
-    }
-
-    public void setSalesScheduleStatus(String salesScheduleStatus) {
-        this.salesScheduleStatus = salesScheduleStatus;
-    }
-
-    @Basic
-    @Column(name = "load_shipping_status"  )
-    public String getLoadShippingStatus() {
-        return loadShippingStatus;
-    }
-
-    public void setLoadShippingStatus(String loadShippingStatus) {
-        this.loadShippingStatus = loadShippingStatus;
-    }
-
-    @Basic
-    @Column(name = "site_url" )
-    public String getSiteUrl() {
-        return siteUrl;
-    }
-
-    public void setSiteUrl(String siteUrl) {
-        this.siteUrl = siteUrl;
-    }
-
-    @Basic
-    @Column(name = "pickup_devliery_number" )
-    public String getPickupDevlieryNumber() {
-        return pickupDevlieryNumber;
-    }
-
-    public void setPickupDevlieryNumber(String pickupDevlieryNumber) {
-        this.pickupDevlieryNumber = pickupDevlieryNumber;
-    }
-
-    @Basic
-    @Column(name = "stop_reference_number" )
-    public String getStopReferenceNumber() {
-        return stopReferenceNumber;
-    }
-
-    public void setStopReferenceNumber(String stopReferenceNumber) {
-        this.stopReferenceNumber = stopReferenceNumber;
-    }
-
-    @Basic
     @Column(name = "load_url")
     public String getLoadUrl() {
         return loadUrl;
@@ -518,7 +391,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
 
-    //    @ManyToOne
     @Basic
     @Column(name = "shipper_id")
     public Long getShipperId() {
@@ -528,6 +400,4 @@ public class Load extends RiggoBaseEntity implements Serializable {
     public void setShipperId(Long shipperId) {
         this.shipperId = shipperId;
     }
-
-
 }
