@@ -3,16 +3,19 @@ package io.riggo.web;
 import com.google.common.hash.Hashing;
 import io.riggo.data.domain.*;
 import io.riggo.data.exception.ResourceAlreadyExistsException;
+import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.EquipmentTypeService;
 import io.riggo.data.services.LoadService;
 import io.riggo.data.services.LoadStopService;
 import io.riggo.data.services.ShipperService;
+import io.riggo.web.integration.SalesforceRevenovaPostPutConstants;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParser;
 import io.riggo.web.response.LoadAPIResponse;
 import io.riggo.web.response.LoadResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -67,7 +70,7 @@ public class LoadController {
 
 
     @PostMapping(path = "/load", produces = "application/json")
-    public LoadAPIResponse postLoad(@RequestHeader Map<String, String> headers, @RequestBody Map<String, Object> dataHashMap) {
+    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) {
         //TODO: resolve parsers based on site and integration
         SalesforceRevenovaRequestBodyParser salesforceRevenovaRequestBodyParser = new SalesforceRevenovaRequestBodyParser(dataHashMap);
         Load load = salesforceRevenovaRequestBodyParser.resolveLoad();
@@ -126,8 +129,29 @@ public class LoadController {
 
 
     @PutMapping(value = "/load", produces = "application/json")
+    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) {
+        SalesforceRevenovaRequestBodyParser salesforceRevenovaRequestBodyParser = new SalesforceRevenovaRequestBodyParser(dataHashMap);
+        Load resolvedLoad = salesforceRevenovaRequestBodyParser.resolveLoad();
+        Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId());
+        if (!loadFromDb.isPresent()) {
+            throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
+        }
+        //
+        Load existingLoad = loadFromDb.get();
+        BeanUtils.copyProperties(resolvedLoad, existingLoad, SalesforceRevenovaPostPutConstants.IGNORE_PROPERTIES);
+        existingLoad = loadService.save(existingLoad);
+
+        LoadAPIResponse loadAPIResponse = new LoadAPIResponse();
+        loadAPIResponse.addData(resolvedLoad);
+        loadAPIResponse.setHashId(Hashing.sha256()
+                .hashString(existingLoad.getExtSysId() + existingLoad.getId(), StandardCharsets.UTF_8)
+                .toString());
+
+        return loadAPIResponse;
+    }
+
     @PatchMapping(value = "/load", produces = "application/json")
-    public ResponseEntity updateLoad(@RequestHeader Map<String, String> headers, @RequestBody String json) {
+    public ResponseEntity patchLoad(@RequestBody Map<String, Object> dataHashMap) {
         return null;
     }
 }
