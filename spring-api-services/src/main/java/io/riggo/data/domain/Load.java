@@ -17,7 +17,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private Long id;
     private String extSysId;
     private String extSysTenantId;
-    private BigDecimal distanceMiles;
 
     @Column(name = "expected_ship_date", columnDefinition = "DATE")
     private LocalDate expectedShipDate;
@@ -25,11 +24,7 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private Integer carrier;
     private String transportMode;
     private BigDecimal postedRate;
-    private Short postedCurrency;
     private BigDecimal insuranceAmt;
-    private Short insurnaceCurrency;
-    private BigDecimal totalWeight;
-    private Short weightUom;
     private Long equipmentTypeId;
     private Integer loadStatus;
     private Boolean teamReq;
@@ -106,17 +101,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
         this.extSysTenantId = extSysTenantId;
     }
 
-    @Basic
-    @Column(name = "distance_miles", precision = 3)
-    public BigDecimal getDistanceMiles() {
-        return distanceMiles;
-    }
-
-    public void setDistanceMiles(BigDecimal distanceMiles) {
-        this.distanceMiles = distanceMiles;
-    }
-
-
     public LocalDate getExpectedShipDate() {
         return expectedShipDate;
     }
@@ -157,16 +141,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "posted_currency")
-    public Short getPostedCurrency() {
-        return postedCurrency;
-    }
-
-    public void setPostedCurrency(Short postedCurrency) {
-        this.postedCurrency = postedCurrency;
-    }
-
-    @Basic
     @Column(name = "insurance_amt")
     public BigDecimal getInsuranceAmt() {
         return insuranceAmt;
@@ -176,35 +150,6 @@ public class Load extends RiggoBaseEntity implements Serializable {
         this.insuranceAmt = insuranceAmt;
     }
 
-    @Basic
-    @Column(name = "insurnace_currency")
-    public Short getInsurnaceCurrency() {
-        return insurnaceCurrency;
-    }
-
-    public void setInsurnaceCurrency(Short insurnaceCurrency) {
-        this.insurnaceCurrency = insurnaceCurrency;
-    }
-
-    @Basic
-    @Column(name = "total_weight")
-    public BigDecimal getTotalWeight() {
-        return totalWeight;
-    }
-
-    public void setTotalWeight(BigDecimal totalWeight) {
-        this.totalWeight = totalWeight;
-    }
-
-    @Basic
-    @Column(name = "weight_uom")
-    public Short getWeightUom() {
-        return weightUom;
-    }
-
-    public void setWeightUom(Short weightUom) {
-        this.weightUom = weightUom;
-    }
 
     @Basic
     @Column(name = "equipment_type_id")
