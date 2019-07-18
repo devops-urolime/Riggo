@@ -70,6 +70,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   enabled         = "true"
   is_ipv6_enabled = "true"
+  default_root_object = "index.html"
   price_class     = "${var.price_class}"
   #retain_on_delete    = "true"
   depends_on = [
@@ -110,6 +111,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   }
 
+ lifecycle {
+   ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
+  }
 
 }
 

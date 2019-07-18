@@ -27,7 +27,7 @@ variable "identifier" {
 
 variable "storage_type" {
   description = "Type of the storage ssd or magnetic"
-  default     = "io1"
+  default     = "gp2"
 }
 
 variable "allocated_storage" {
@@ -48,9 +48,9 @@ variable "engine_version" {
   default     = "11.2"
 }
 
-variable "iops" {
-  default = "2000"
-}
+# variable "iops" {
+#   default = "2000"
+# }
 
 
 variable "instance_class" {
@@ -230,6 +230,19 @@ variable "to_port" {
   default     = "5432"
 }
 
+variable "peering_vpc_id" {
+  description = "Perring VPC id of Riggo-VPC"
+  default = "vpc-0bd2666e449685359"
+  
+}
+
+variable "peer_security_group_id" {
+   description = "sG id of Riggo-VPC"
+   default = "sg-0e0c7b276070e72d8"
+  
+}
+
+
 
 # variable "env" {
 #   description = "staging environment name"
@@ -345,7 +358,7 @@ variable "container_port" {
 
   description = "container port defined to be port mapped to host network"
   type        = number
-  default     = 3010
+  default     = 8088
 }
 
 
@@ -355,15 +368,15 @@ variable "health_checkpath" {
   default     = "/favicon.ico"
 }
 
-variable "TD_Cpu_limit" {
-  description = "container definition CPu limit in cpu units"
-  default     = "512"
-}
+# variable "TD_Cpu_limit" {
+#   description = "container definition CPu limit in cpu units"
+#   default     = "512"
+# }
 
-variable "TD_mem_hard_limit" {
+variable "TD_mem_soft_limit" {
 
-  description = "Hard limit memory set for the container in MB"
-  default     = "512"
+  description = "Soft limit memory set for the container in MB"
+  default     = "256"
 
 }
 
@@ -372,6 +385,18 @@ variable "health_check_grace_period_seconds" {
   description = "health check grace period for each ECS instance"
   default     = "300"
 
+}
+
+variable "ec2_health_check_period" {
+  description = "ec2 health check period in austoscaling"
+  default = "30"
+  
+}
+
+variable "spring_profile_env" {
+  description = "java spring profile environment"
+  default = "qa"
+  
 }
 
 

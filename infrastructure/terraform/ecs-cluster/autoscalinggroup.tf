@@ -5,6 +5,7 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   max_size         = "${var.max_ecs_instance-size}"
   min_size         = "${var.min_ecs_instance-size}"
   desired_capacity = "${var.desired_ecs_instance-size}"
+  health_check_grace_period = 30
 
   # vpc_zone_identifier = ["subnet-41395d29"]
   vpc_zone_identifier = [

@@ -13,15 +13,20 @@
     "entryPoint": null,
     "portMappings": [
       {
-      "hostPort": ${container_port},
+      "hostPort": 0,
       "protocol":"tcp",
       "containerPort":${container_port}
     }
     ],
     "command": null,
     "linuxParameters": null,
-    "cpu": ${TD_Cpu_limit},
-    "environment": [],
+    "cpu": 0,
+    "environment": [  
+      {
+      "name": "SPRING_PROFILES_ACTIVE",
+      "value": "${spring_profile_key}"
+    }
+    ],
   "resourceRequirements":null,
   "ulimits":null,
   "dnsServers":null,
@@ -29,8 +34,8 @@
   "workingDirectory":null,
   "secrets":null,
   "dockerSecurityOptions":null,
-  "memory":${TD_mem_hard_limit},
-  "memoryReservation":null,
+  "memory":null,
+  "memoryReservation": ${TD_mem_soft_limit},
   "volumesFrom":[],
   "stopTimeout":null,
   "image":"845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-${terraform-workspace}:latest",

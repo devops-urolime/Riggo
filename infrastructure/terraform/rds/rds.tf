@@ -82,7 +82,7 @@ resource "aws_db_instance" "db" {
   name              = "${terraform.workspace}_postgress"
   username          = "${data.external.rds_db_credentials.result.username}"
   password          = "${data.external.rds_db_credentials.result.password}"
-  iops              = "${var.iops}"
+  # iops              = "${var.iops}"
 
   vpc_security_group_ids = [
     "${var.sec_grp1_rds}",

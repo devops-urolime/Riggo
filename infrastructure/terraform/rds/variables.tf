@@ -31,4 +31,4 @@ variable "sec_grp2_rds" {}
 variable "vpc_id" {}
 # variable "env" {}
 
-variable "iops" {}
+# variable "iops" {}

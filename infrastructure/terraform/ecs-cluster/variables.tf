@@ -77,11 +77,11 @@ variable "health_checkpath" {
 
 }
 
-variable "TD_Cpu_limit" {
+# variable "TD_Cpu_limit" {
 
-}
+# }
 
-variable "TD_mem_hard_limit" {
+variable "TD_mem_soft_limit" {
 
 }
 
@@ -100,4 +100,12 @@ variable "service_discovery_arn" {
 
 variable "health_check_grace_period_seconds" {
 
+}
+
+variable "ec2_health_check_period" {
+  
+}
+
+variable "spring_profile_key" {
+  
 }

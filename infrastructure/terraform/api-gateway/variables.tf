@@ -9,7 +9,7 @@ variable "cloudwatchlogs-globalarn" {
   
 }
 
-variable "authorizer_credentials" {
+variable "authorizerArn" {
   
 }
 

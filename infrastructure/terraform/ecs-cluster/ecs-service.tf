@@ -7,6 +7,10 @@ resource "aws_ecs_service" "riggo-ecs-service" {
   deployment_maximum_percent         = "${var.deployment_maximum_healh_percent}"
   health_check_grace_period_seconds  = "${var.health_check_grace_period_seconds}"
 
+  lifecycle {
+   ignore_changes = [task_definition]
+  }
+
   depends_on = [
     "aws_lb.ecs-lb",
     "aws_lb_listener.front_end",
@@ -17,6 +21,10 @@ resource "aws_ecs_service" "riggo-ecs-service" {
     type  = "spread"
     field = "attribute:ecs.availability-zone"
   }
+
+   deployment_controller {
+   type = "CODE_DEPLOY"
+ }
 
   ordered_placement_strategy {
     type  = "spread"

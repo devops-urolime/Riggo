@@ -7,9 +7,9 @@ resource "aws_api_gateway_rest_api" "riggo-api-gateway" {
     "REGIONAL"]
   }
   
-#   lifecycle {
-#    ignore_changes = [ body ]
-#   }
+  lifecycle {
+   ignore_changes = [ body,description ]
+  }
  }
 
 data "template_file" "riggo_api_swagger" {
@@ -19,7 +19,7 @@ data "template_file" "riggo_api_swagger" {
 
     name = "Riggo Platform ${terraform.workspace}"
     authorizerUri = "${var.authorize_uri}"
-    authorizerCredentials = "${var.authorizer_credentials}"
+    authorizerArn = "${var.authorizerArn}"
 
   }
 

@@ -12,7 +12,8 @@ module "VPC" {
   cidr_block = "${var.cidr_block}"
   from_port  = "${var.from_port}"
   to_port    = "${var.to_port}"
-
+  peering_vpc_id = "${var.peering_vpc_id}"
+  peer_security_group_id = "${var.peer_security_group_id}"
 }
 
 module "RDS" {
@@ -39,7 +40,7 @@ module "RDS" {
   instance_class    = "${var.instance_class}"
   # db_username       = "${var.db_username}"
   # db_password       = "${var.db_password}"
-  iops    = "${var.iops}"
+  # iops    = "${var.iops}"
   subnet1 = "${module.VPC.private_subnet_id1}"
   subnet2 = "${module.VPC.private_subnet_id2}"
 }
@@ -89,7 +90,7 @@ module "api-gateway" {
   # env    = "${terraform.workspace}"
   # name = "${var.name}"
   cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
-  authorizer_credentials = "${module.iam.lambda_invoke}"
+  authorizerArn = "${module.iam.lambda_invoke}"
   authorize_uri         = "${module.lambda.authorize_uri}"    
 
 }
@@ -141,12 +142,14 @@ module "ecs-cluster" {
   deployment_maximum_healh_percent  = "${var.deployment_maximum_healh_percent}"
   container_port                    = "${var.container_port}"
   health_checkpath                  = "${var.health_checkpath}"
-  TD_Cpu_limit                      = "${var.TD_Cpu_limit}"
-  TD_mem_hard_limit                 = "${var.TD_mem_hard_limit}"
+  # TD_Cpu_limit                      = "${var.TD_Cpu_limit}"
+  TD_mem_soft_limit                 = "${var.TD_mem_soft_limit}"
   workspace                         = "${terraform.workspace}"
   cloudwatch_log                    = "${module.CloudWatch.cloudwatch-log-GroupName}"
   service_discovery_arn             = "${module.Route53.service_discovery_arn}"
   health_check_grace_period_seconds = "${var.health_check_grace_period_seconds}"
+  ec2_health_check_period = "${var.ec2_health_check_period}"
+  spring_profile_key            =    "${var.spring_profile_env}"
 }
 
 

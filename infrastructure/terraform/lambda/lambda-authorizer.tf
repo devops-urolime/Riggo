@@ -25,6 +25,10 @@ resource "aws_lambda_function" "JWT-CustomAuthorizer" {
   tags = {
       env = "${terraform.workspace}"
   }
+
+  lifecycle {
+  ignore_changes = [environment,source_code_hash,last_modified]
+}
 }
 
 

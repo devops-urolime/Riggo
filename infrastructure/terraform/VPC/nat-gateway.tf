@@ -19,12 +19,26 @@ resource "aws_route_table" "private-rt" {
     cidr_block     = "${var.cidr_block}"
     nat_gateway_id = "${aws_nat_gateway.ngw.id}"
   }
-
+  
+  route {
+    cidr_block     = "${data.aws_vpc_peering_connection.Riggo-VPC.cidr_block}"
+    vpc_peering_connection_id = "${data.aws_vpc_peering_connection.Riggo-VPC.id}"
+  }
   tags = {
     Name = "${terraform.workspace} Private Subnet RT"
     env  = "${terraform.workspace}"
   }
 }
+
+ data "aws_vpc_peering_connection" "Riggo-VPC" {
+  vpc_id = "${var.peering_vpc_id}"
+}
+
+# resource "aws_route" "Peering-route" {
+#   route_table_id            = "${aws_route_table.private-rt.id}"
+#   destination_cidr_block    = "${data.aws_vpc_peering_connection.Riggo-VPC.cidr_block}"
+#   vpc_peering_connection_id = "${data.aws_vpc_peering_connection.Riggo-VPC.id}"
+# }
 
 # Assign the route table to the private Subnet
 resource "aws_route_table_association" "private-rt" {
