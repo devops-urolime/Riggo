@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
 import { withRouter } from 'react-router-dom';
-import './SideBar.css';
+import './SideBar.scss';
 import Icon, { LOGO_ICON } from './Icon';
 
 class SideBar extends Component {

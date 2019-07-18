@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import configureStore from "../redux/store/configureStore";
 import 'reset-css';
-import './App.css';
+import './App.scss';
 import HomePage from "../containers/HomePageContainer";
 import LoadPage from "../containers/LoadPageContainer";
 import Callback from '../containers/CallbackContainer';

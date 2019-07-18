@@ -6,7 +6,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon, { EXIT_ICON, MENU_ICON, USER_ACCOUNT_ICON } from './Icon';
-import './TopBar.css';
+import './TopBar.scss';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -47,14 +47,23 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick}) => {
   );
 };
 
+MenuAppBar.propTypes = {
+  isLogin: PropTypes.bool,
+  login: PropTypes.func,
+  logout: PropTypes.func,
+  title: PropTypes.string,
+  onMenuClick: PropTypes.func,
+};
+
 const TopBar = ({title, onMenuClick, auth}) => {
+  const isLogin =  auth.isAuthenticated();
   return (
     <MenuAppBar
       title={title}
       onMenuClick={onMenuClick}
       logout={auth.logout}
       login={auth.login}
-      isLogin={auth.isAuthenticated}
+      isLogin={isLogin}
     />
   );
 };
