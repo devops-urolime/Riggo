@@ -14,22 +14,6 @@ import java.util.Date;
 public class EquipmentType implements Serializable {
     private static final long serialVersionUID = 7156526077883281623L;
 
-
-    /*
-    "EquipmentTypeId": "a0V6A0000020EUsUAM",
-            "EquipmentTypeName": "Dry Van 48'",
-            "EquipmentType_rtms__Category__c": "Van",
-            "EquipmentType_rtms__Max_Volume__c": "3350",
-            "EquipmentType_rtms__Volume_Units__c": "Cubic Feet",
-            "EquipmentType_rtms__Max_Pallets__c": "26",
-            "EquipmentType_rtms__Enabled__c": "true",
-            "EquipmentType_rig_Truckstop_Type__c": "null",
-            "EquipmentType_rtms__ISO_Type_Group__c": "null",
-            "EquipmentType_rtms__ISO_Size_Type__c": "null",
-            "EquipmentType_rtms__Tare_Weight__c": "null",
-            "EquipmentType_rtms__Max_Weight__c": "45000",
-            "EquipmentType_rtms__Weight_Units__c": "lbs"
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -41,18 +25,18 @@ public class EquipmentType implements Serializable {
 
 
     @Column(name = "site_id")
-    private Long siteId = 100L;
+    private Long siteId;
 
     @Column(name = "type")
     @JsonAlias({"EquipmentType_rtms__Category__c"})
-    private Integer type = 1;
+    private Integer type;
 
     @JsonAlias({"EquipmentTypeName"})
     @Column(name = "name")
     private String name;
 
     @Column(name = "rank")
-    private Integer rank = 0;
+    private Integer rank;
 
     @Transient
     @Column(name = "created_at")
@@ -139,7 +123,3 @@ public class EquipmentType implements Serializable {
         this.deleted = deleted;
     }
 }
-
-/*enum EQ_TYPES {
-    VAN, FLATBED, REEFER
-}*/

@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "load")
@@ -17,7 +18,10 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private String extSysId;
     private String extSysTenantId;
     private BigDecimal distanceMiles;
-    private Date expectedShipDate;
+
+    @Column(name = "expected_ship_date", columnDefinition = "DATE")
+    private LocalDate expectedShipDate;
+
     private Integer carrier;
     private String transportMode;
     private BigDecimal postedRate;
@@ -26,12 +30,12 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private Short insurnaceCurrency;
     private BigDecimal totalWeight;
     private Short weightUom;
-    private Integer equipmentTypeId;
+    private Long equipmentTypeId;
     private Integer loadStatus;
     private Boolean teamReq;
     private Boolean foodGradeTrailerReq;
     private Boolean tempControlReq;
-    private Date expectedDeliveryDate;
+    private LocalDate expectedDeliveryDate;
     private Integer driver;
     private Boolean locationBasedSvcsReq;
     private java.util.Date createdAt;
@@ -54,7 +58,7 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private BigDecimal marginPctInvoiced;
     private String modeName;
     private String onTimeDeliveryCounter;
-    private Date orderDate;
+    private LocalDateTime orderDate;
     private String salesStatus;
     private String salesScheduleStatus;
     private String loadShippingStatus;
@@ -62,7 +66,7 @@ public class Load extends RiggoBaseEntity implements Serializable {
     private String pickupDevlieryNumber;
     private String stopReferenceNumber;
     private String loadUrl;
-    private Long shipperByShipperId;
+    private Long shipperId;
 
 
     public Load() {
@@ -112,13 +116,12 @@ public class Load extends RiggoBaseEntity implements Serializable {
         this.distanceMiles = distanceMiles;
     }
 
-    @Basic
-    @Column(name = "expected_ship_date")
-    public Date getExpectedShipDate() {
+
+    public LocalDate getExpectedShipDate() {
         return expectedShipDate;
     }
 
-    public void setExpectedShipDate(Date expectedShipDate) {
+    public void setExpectedShipDate(LocalDate expectedShipDate) {
         this.expectedShipDate = expectedShipDate;
     }
 
@@ -205,11 +208,11 @@ public class Load extends RiggoBaseEntity implements Serializable {
 
     @Basic
     @Column(name = "equipment_type_id")
-    public Integer getEquipmentTypeId() {
+    public Long getEquipmentTypeId() {
         return equipmentTypeId;
     }
 
-    public void setEquipmentTypeId(Integer equipmentTypeId) {
+    public void setEquipmentTypeId(Long equipmentTypeId) {
         this.equipmentTypeId = equipmentTypeId;
     }
 
@@ -255,11 +258,11 @@ public class Load extends RiggoBaseEntity implements Serializable {
 
     @Basic
     @Column(name = "expected_delivery_date")
-    public Date getExpectedDeliveryDate() {
+    public LocalDate getExpectedDeliveryDate() {
         return expectedDeliveryDate;
     }
 
-    public void setExpectedDeliveryDate(Date expectedDeliveryDate) {
+    public void setExpectedDeliveryDate(LocalDate expectedDeliveryDate) {
         this.expectedDeliveryDate = expectedDeliveryDate;
     }
 
@@ -491,11 +494,11 @@ public class Load extends RiggoBaseEntity implements Serializable {
 
     @Basic
     @Column(name = "order_date")
-    public Date getOrderDate() {
+    public LocalDateTime getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -570,14 +573,15 @@ public class Load extends RiggoBaseEntity implements Serializable {
     }
 
 
-    //@ManyToOne
-    @Column(name = "shipper_id", nullable = true)
-    public Long getShipperByShipperId() {
-        return shipperByShipperId;
+    //    @ManyToOne
+    @Basic
+    @Column(name = "shipper_id")
+    public Long getShipperId() {
+        return shipperId;
     }
 
-    public void setShipperByShipperId(Long shipperByShipperId) {
-        this.shipperByShipperId = shipperByShipperId;
+    public void setShipperId(Long shipperId) {
+        this.shipperId = shipperId;
     }
 
 

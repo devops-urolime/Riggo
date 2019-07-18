@@ -22,11 +22,8 @@ public class Shipper implements Serializable {
     private String extSysId;
 
     @Column(name = "ext_sys_tenant_id")
-    private String extSysTenantId = "0";
+    private String extSysTenantId;
 
-    /*@Column(name = "shipper_id")
-    private Long shipperId;
-*/
     @JsonAlias({"CustomerName","BillToName"})
     @Column(name = "name")
     private String name;
@@ -68,14 +65,6 @@ public class Shipper implements Serializable {
     public void setExtSysTenantId(String extSysTenantId) {
         this.extSysTenantId = extSysTenantId;
     }
-
-    /*public Long getShipperId() {
-        return shipperId;
-    }
-
-    public void setShipperId(Long shipperId) {
-        this.shipperId = shipperId;
-    }*/
 
     public String getName() {
         return name;

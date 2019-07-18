@@ -8,6 +8,8 @@ import io.riggo.data.repositories.LoadStopRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LoadStopService implements RiggoService {
 
@@ -15,16 +17,16 @@ public class LoadStopService implements RiggoService {
     private LoadStopRepository loadStopRepository;
 
 
-    public LoadStop save(LoadStop et) throws RiggoDataAccessException {
+    public LoadStop save(LoadStop et) {
         try {
             return loadStopRepository.save(et);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public LoadStop findById(Long eqId) throws ResourceNotFoundException, RiggoDataAccessException {
+    public LoadStop findById(Long eqId) throws ResourceNotFoundException {
         try {
             LoadStop eqt = loadStopRepository.findById(eqId).get();
             if (eqt == null) {
@@ -32,16 +34,16 @@ public class LoadStopService implements RiggoService {
             }
             return eqt;
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public LoadStop findByExtSysId(String extSysId) {
+    public Optional<LoadStop> findByExtSysId(String extSysId) {
         try {
             return loadStopRepository.findByExtSysId(extSysId);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 }

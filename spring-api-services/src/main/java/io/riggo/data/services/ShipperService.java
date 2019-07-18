@@ -1,12 +1,13 @@
 package io.riggo.data.services;
 
-import io.riggo.data.domain.ResourceType;
 import io.riggo.data.domain.Shipper;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ShipperService implements RiggoService {
@@ -15,33 +16,29 @@ public class ShipperService implements RiggoService {
     private ShipperRepository shipperRepository;
 
 
-    public Shipper save(Shipper shipper) throws RiggoDataAccessException {
+    public Shipper save(Shipper shipper) {
         try {
             return shipperRepository.save(shipper);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Shipper findById(Long shipperId) throws ResourceNotFoundException, RiggoDataAccessException {
+    public Optional<Shipper> findById(Long shipperId) throws ResourceNotFoundException {
         try {
-            Shipper shipper = shipperRepository.findById(shipperId).get();
-            if (shipper == null) {
-                throw new ResourceNotFoundException(ResourceType.SHIPPER, shipperId);
-            }
-            return shipper;
+            return shipperRepository.findById(shipperId);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Shipper findByExtSysId(String extSysId) {
+    public Optional<Shipper> findByExtSysId(String extSysId) {
         try {
             return shipperRepository.findByExtSysId(extSysId);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 }
