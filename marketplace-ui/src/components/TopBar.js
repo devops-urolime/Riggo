@@ -54,7 +54,7 @@ const TopBar = ({title, onMenuClick, auth}) => {
       onMenuClick={onMenuClick}
       logout={auth.logout}
       login={auth.login}
-      isLogin={auth.isAuthenticated()}
+      isLogin={auth.isAuthenticated}
     />
   );
 };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import './CardSummary.scss';
 import CardSummary from './CardSummary';
 import Grid from '@material-ui/core/Grid';
