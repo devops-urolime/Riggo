@@ -15,3 +15,8 @@ INSERT INTO load(id, ext_sys_id, carrier, driver, load_status) VALUES (5, 'extSy
 INSERT INTO load(id, ext_sys_id, carrier, driver, load_status) VALUES (6, 'extSysId6', 0, 0, 6);
 INSERT INTO load(id, ext_sys_id, carrier, driver, load_status) VALUES (7, 'extSysId7', 0, 0, 7);
 INSERT INTO load(id, ext_sys_id, carrier, driver, load_status) VALUES (8, 'extSysId8', 0, 0, 8);
+
+
+/* load_line_item */
+INSERT INTO load_line_item(id, load_id) VALUES (1, 1);
+INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
