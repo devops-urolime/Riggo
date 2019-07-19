@@ -30,7 +30,7 @@ public class RiggoConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT","PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -52,8 +52,8 @@ public class RiggoConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").hasAuthority("read:load")
                 .antMatchers(HttpMethod.POST, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
                 .antMatchers(HttpMethod.GET, Paths.API_VERSION_MENUS + "/menus").authenticated()
-                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").authenticated()
-                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
+//                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").authenticated()
+//                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
                 .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").authenticated()
                 .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load");
 
