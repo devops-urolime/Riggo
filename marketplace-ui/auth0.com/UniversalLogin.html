@@ -10,10 +10,78 @@
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-        <link rel="stylesheet" href="../src/components/UniversalLogin.css">
+        <style>
+            html, body, #root {
+              height: 100%;
+              font-family: Avenir; }
+
+            .LoginOverlay {
+              background: #1D1E2F;
+              font-family: Avenir !important;
+              color: #fff; }
+
+            .MainLogo {
+              display: block;
+              margin: 0 auto; }
+
+            .InputGroup {
+              width: 200px;
+              margin: 0 auto 45px; }
+
+            .InputGroup--last {
+              margin: 0 auto; }
+
+            .ButtonGroup {
+              margin: 0 auto;
+              width: 200px; }
+
+            .ForgotPassword {
+              width: 200px;
+              text-align: right;
+              font-family: Avenir;
+              font-size: 12px;
+              line-height: 19px;
+              margin: 14px auto 48px;
+              cursor: pointer; }
+
+            .mdc-button {
+              background-color: #266FF1 !important;
+              color: #fff !important;
+              width: 196px;
+              height: 52px;
+              font-size: 22px;
+              line-height: 30px;
+              text-transform: capitalize;
+              font-family: Avenir; }
+
+            .mdc-notched-outline__leading, .mdc-notched-outline__notch, .mdc-notched-outline__trailing {
+              border-color: #3F4664 !important; }
+
+            .mdc-floating-label {
+              color: #fff !important; }
+
+            .mdc-text-field__input {
+              color: #fff !important;
+              caret-color: #fff !important; }
+
+            .MainTitle {
+              font-size: 30px;
+              line-height: 41px;
+              font-family: Avenir;
+              text-align: center;
+              margin: 32px 0 0 0; }
+
+            .SubTitle {
+              font-size: 20px;
+              line-height: 27px;
+              font-family: Avenir;
+              text-align: center;
+              margin: 15px 0 45px 0; }
+
+        </style>
     </head>
     <body class="LoginOverlay">
-        <form>
+        <form id="universal-login-form">
             <div class="mdc-layout-grid">
                 <div class="mdc-layout-grid__inner">
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 mdc-layout-grid__cell--align-middle">
@@ -59,7 +127,7 @@
                     <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
                         <div class="InputGroup InputGroup--last">
                             <div class="mdc-text-field mdc-text-field--outlined">
-                              <input class="mdc-text-field__input" id="text-field-password-input" type="email">
+                              <input class="mdc-text-field__input" id="text-field-password-input" type="password">
                               <div class="mdc-notched-outline">
                                 <div class="mdc-notched-outline__leading"></div>
                                 <div class="mdc-notched-outline__notch">
@@ -97,7 +165,7 @@
             <script src="https://cdn.auth0.com/js/base64.js"></script>
             <script src="https://cdn.auth0.com/js/es5-shim.min.js"></script>
         <![endif]-->
-        <script src="https://cdn.auth0.com/js/lock/11.15/lock.min.js"></script>
+        <script src="https://cdn.auth0.com/js/auth0/9.10/auth0.min.js"></script>
         <script>
             // Material init.
             const selectToInitMDCRipple = (selectorToUse) => {
@@ -123,62 +191,40 @@
             selectToInitMDCFloatingLabel('.mdc-floating-label');
         </script>
         <script>
-            // Decode utf8 characters properly
-            var config = JSON.parse(decodeURIComponent(escape(window.atob('@@config@@'))));
-            config.extraParams = config.extraParams || {};
-            var connection = config.connection;
-            var prompt = config.prompt;
-            var languageDictionary;
-            var language;
-
-            if (config.dict && config.dict.signin && config.dict.signin.title) {
-              languageDictionary = { title: config.dict.signin.title };
-            } else if (typeof config.dict === 'string') {
-              language = config.dict;
-            }
-            var loginHint = config.extraParams.login_hint;
-            var colors = config.colors || {};
-
-            // Available Lock configuration options: https://auth0.com/docs/libraries/lock/v11/configuration
-            var lock = new Auth0Lock(config.clientID, config.auth0Domain, {
-              auth: {
-                redirectUrl: config.callbackURL,
-                responseType: (config.internalOptions || {}).response_type ||
-                  (config.callbackOnLocationHash ? 'token' : 'code'),
-                params: config.internalOptions
-              },
-              /* additional configuration needed for custom domains
-              configurationBaseUrl: config.clientConfigurationBaseUrl,
-              overrides: {
-                __tenant: config.auth0Tenant,
-                __token_issuer: 'YOUR_CUSTOM_DOMAIN'
-              }, */
-              assetsUrl:  config.assetsUrl,
-              allowedConnections: connection ? [connection] : null,
-              rememberLastLogin: !prompt,
-              language: language,
-              languageDictionary: languageDictionary,
-              theme: {
-                //logo:            'YOUR LOGO HERE',
-                primaryColor:    colors.primary ? colors.primary : 'green'
-              },
-              prefill: loginHint ? { email: loginHint, username: loginHint } : null,
-              closable: false,
-              defaultADUsernameFromEmailPrefix: false,
-              // uncomment if you want small buttons for social providers
-              // socialButtonStyle: 'small'
-            });
-
-            if(colors.page_background) {
-              var css = '.auth0-lock.auth0-lock .auth0-lock-overlay { background: ' +
-                          colors.page_background +
-                        ' }';
-              var style = document.createElement('style');
-
-              style.appendChild(document.createTextNode(css));
-
-              document.body.appendChild(style);
-            }
+            window.onload = () => {
+              const configAuth0 = {
+                  domain: 'riggo-qa.auth0.com',
+                  clientID: '7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv',
+                  redirectUri: 'https://riggo.riggoqa.net/callback',
+                  audience: 'load-resource-api',
+                  responseType: 'token id_token',
+                  scope: 'openid profile read:load read:loadPipeline'
+              };
+              const webAuth = new auth0.WebAuth(configAuth0);
+              const loginResult = (err) => {
+                  if (err && (err.code !== 400 )) {
+                      console.log(err);
+                  }
+                  else if ( err && (err.code === 400)
+                  ) {
+                    console.log({ description: "Please complete user and password." });
+                  }
+              };
+              const handleAuthentication = (email, password) => {
+                webAuth.login({
+                  realm: 'Username-Password-Authentication',
+                  username: email,
+                  password: password,
+                }, (err) => loginResult(err));
+              };
+              const loginFormAction = () => {
+                event.preventDefault();
+                const email = document.querySelector('#text-field-email-input').value;
+                const password = document.querySelector('#text-field-password-input').value;
+                handleAuthentication(email, password);
+              };
+              document.querySelector('#universal-login-form').addEventListener('submit',loginFormAction, true);
+            };
         </script>
     </body>
 </html>
