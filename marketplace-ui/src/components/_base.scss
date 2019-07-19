@@ -1,9 +1,11 @@
 @import 'color.scss';
 @import 'media-breakpoint.scss';
 
+$main-font-family: Avenir;
+
 html, body, #root {
     height: 100%;
-    font-family: Avenir;
+    font-family: $main-font-family;
 }
 
 
