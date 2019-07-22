@@ -5,7 +5,7 @@ import io.riggo.data.domain.Load;
 import io.riggo.data.domain.LoadStop;
 import io.riggo.data.domain.Shipper;
 
-public interface RequestBodyParser {
+public interface RequestBodyParserPostPutLoad {
 
     LoadStop resolveFirstStop();
 
