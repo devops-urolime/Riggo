@@ -1,0 +1,1 @@
+alter table load_line_item drop column name;

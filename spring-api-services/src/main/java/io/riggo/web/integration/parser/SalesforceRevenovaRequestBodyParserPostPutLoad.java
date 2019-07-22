@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SalesforceRevenovaRequestBodyParser implements RequestBodyParser {
+public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBodyParserPostPutLoad {
 
     private Map<String, Object> dataHashMap;
     private String loadExtSysId;
@@ -48,7 +48,7 @@ public class SalesforceRevenovaRequestBodyParser implements RequestBodyParser {
     private String firstStopExtSysId;
     private String lastStopExtSysId;
 
-    public SalesforceRevenovaRequestBodyParser(Map<String, Object> dataHashMap) {
+    public SalesforceRevenovaRequestBodyParserPostPutLoad(Map<String, Object> dataHashMap) {
         this.dataHashMap = dataHashMap;
     }
 

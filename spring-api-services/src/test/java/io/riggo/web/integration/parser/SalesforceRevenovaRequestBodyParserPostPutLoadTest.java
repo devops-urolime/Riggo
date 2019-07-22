@@ -2,7 +2,7 @@ package io.riggo.web.integration.parser;
 
 import org.junit.Test;
 
-public class SalesforceRevenovaRequestBodyParserTest {
+public class SalesforceRevenovaRequestBodyParserPostPutLoadTest {
 
     //TODO: before we can write a test, we need to intialize the HashMap of <String, Object>, easier from a JSON Payload.
 

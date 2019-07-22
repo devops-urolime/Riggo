@@ -17,8 +17,8 @@ public class LoadLineItem implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "ext_sys_id")
     private String extSysId;
@@ -55,6 +55,10 @@ public class LoadLineItem implements Serializable {
     @Column(name = "deleted")
     private Date deleted;
 
+    private String deliveryStopExtSysId;
+    private String pickupStopExtSysId;
+    private String loadExtSysId;
+
     public Long getId() {
         return id;
     }
@@ -63,12 +67,12 @@ public class LoadLineItem implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getExtSysId() {
@@ -157,5 +161,29 @@ public class LoadLineItem implements Serializable {
 
     public void setDeleted(Date deleted) {
         this.deleted = deleted;
+    }
+
+    public String getDeliveryStopExtSysId() {
+        return deliveryStopExtSysId;
+    }
+
+    public void setDeliveryStopExtSysId(String deliveryStopExtSysId) {
+        this.deliveryStopExtSysId = deliveryStopExtSysId;
+    }
+
+    public String getPickupStopExtSysId() {
+        return pickupStopExtSysId;
+    }
+
+    public void setPickupStopExtSysId(String pickupStopExtSysId) {
+        this.pickupStopExtSysId = pickupStopExtSysId;
+    }
+
+    public String getLoadExtSysId() {
+        return loadExtSysId;
+    }
+
+    public void setLoadExtSysId(String loadExtSysId) {
+        this.loadExtSysId = loadExtSysId;
     }
 }
