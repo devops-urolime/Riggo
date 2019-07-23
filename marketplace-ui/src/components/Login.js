@@ -64,7 +64,7 @@ class Login extends Component{
     });
   };
 
-  loginResult = (err) => {
+  loginErrResult = (err) => {
       if(err){
         if(err.description){
           this.showMessage(err.description);
@@ -79,7 +79,7 @@ class Login extends Component{
       realm: 'Username-Password-Authentication',
       username: email,
       password: password,
-    }, (err) => this.loginResult(err));
+    }, (err) => this.loginErrResult(err));
   };
 
   forgotPassword = () => {
