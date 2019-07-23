@@ -1,0 +1,80 @@
+@import 'base.scss';
+
+
+.MainLoginOverlay{
+    background: $login-overlay-color;
+    font-family: $main-font-family !important;
+    color: $general-text;
+    height: 100%;
+}
+.SecondaryLoginOverlay{
+
+}
+.MainLogo{
+    display: block;
+    margin: 0 auto;
+}
+.InputGroup{
+    width: 200px;
+    margin: 0 auto 45px;
+}
+.InputGroup--last{
+    margin: 0 auto;
+}
+.ButtonGroup{
+    margin: 0 auto;
+    width: 200px;
+}
+.ForgotPassword{
+    width: 200px;
+    text-align: right;
+    font-family: $main-font-family;
+    font-size: 12px;
+    line-height: 19px;
+    margin: 14px auto 48px;
+    cursor: pointer;
+}
+.mdc-button{
+
+}
+
+.MainTitle{
+    font-size: 27px;
+    line-height: 37px;
+    font-family: $main-font-family;
+    text-align: center;
+    margin: 32px 0 0 0;
+}
+
+.SubTitle{
+    font-size: 16px;
+    line-height: 22px;
+    font-family: $main-font-family;
+    text-align: center;
+    margin: 9px 0 45px 0;
+}
+
+.MuiOutlinedInput-root{
+    color: $general-text !important;
+    caret-color: $general-text !important;
+    background-color: $input-background-color !important;
+    fieldset {
+        border-color: $input-border-color !important;
+    }
+    &.Mui-focused fieldset {
+        border-color: $input-border-color !important;
+    }
+}
+.MuiInputLabel-root{
+    color: $general-text !important;
+}
+.MuiButtonBase-root{
+    background-color: $login-btn-color !important;
+    color: $general-text !important;
+    width: 196px;
+    height: 52px;
+    font-size: 22px !important;
+    line-height: 30px !important;
+    text-transform: capitalize;
+    font-family: $main-font-family;
+}

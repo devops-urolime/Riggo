@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import SideBar from '../components/SideBar';
+import AppPage from '../components/AppPage';
 import { loadMenu } from '../redux/actions/menu';
 import { getMenu, getDefaultMenu } from '../redux/reducers/menu';
 
@@ -21,5 +21,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SideBar);
+)(AppPage);
 
