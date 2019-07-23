@@ -6,6 +6,8 @@ import { AUTH_CONFIG } from '../config';
 import { LOGO_MAIN_LOGIN } from './Icon';
 import Icon from './Icon';
 import Grid from '@material-ui/core/Grid/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import Fade from '@material-ui/core/Fade';
 
 const webAuth = new WebAuth({
   domain: AUTH_CONFIG.domain,
@@ -16,60 +18,76 @@ const webAuth = new WebAuth({
   scope: AUTH_CONFIG.scope
 });
 
-const showMessage = (msg) => {
-    console.log({ description: msg });
-  };
-  const loginResult = (err) => {
-      if (err && (err.code !== 400 )) {
-          showMessage('Something went wrong: ' + err.message);
-      }
-      else if ( err && (err.code === 400)
-      ) {
-        showMessage("Please complete user and password.");
-      }
-  };
-  const handleAuthentication = (email, password) => {
-    webAuth.login({
-      realm: 'Username-Password-Authentication',
-      username: email,
-      password: password,
-    }, (err) => loginResult(err));
-  };
-
-const forgotPassword = () => {
-  showMessage("We've just sent you an email to reset your password.");
-};
-
 const gridWidth = 12;
 const gridConfig = {
   direction:"row",
   justify:"center",
   alignItems:"center",
 };
+
 class Login extends Component{
 
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password:""
+      password:"",
+      isOpenMessage: false,
+      message: "",
     };
   }
 
   onEmailChange = (evt) =>{
-     this.setState({email: evt.target.value})
+     this.setState({email: evt.target.value});
   };
 
   onPasswordChange = (evt) =>{
-     this.setState({password: evt.target.value})
+     this.setState({password: evt.target.value});
   };
 
   loginFormAction = (evt) => {
     evt.preventDefault();
-    handleAuthentication(this.state.email, this.state.password);
+    this.handleAuthentication(this.state.email, this.state.password);
+  };
+
+  showMessage = (message) => {
+    this.setState({
+      isOpenMessage: true,
+      message
+    });
+  };
+
+  closeMessage = () => {
+    this.setState({
+      isOpenMessage: false,
+      message:""
+    });
+  };
+
+  loginResult = (err) => {
+      if(err){
+        if(err.description){
+          this.showMessage(err.description);
+        } else {
+          this.showMessage("Something went wrong, try again later");
+        }
+      }
+  };
+
+  handleAuthentication = (email, password) => {
+    webAuth.login({
+      realm: 'Username-Password-Authentication',
+      username: email,
+      password: password,
+    }, (err) => this.loginResult(err));
+  };
+
+  forgotPassword = () => {
+    this.showMessage("We've just sent you an email to reset your password.");
   };
 
   render(){
+    const { isOpenMessage, message }= this.state;
     return(
       <div className="MainLoginOverlay">
         <Grid container spacing={0} {...gridConfig}>
@@ -114,17 +132,26 @@ class Login extends Component{
               </div>
             </Grid>
             <Grid item xs={gridWidth}>
-              <div onClick={forgotPassword}  className="ForgotPassword" role="link" id="forgot-password">
+              <div onClick={this.forgotPassword}  className="ForgotPassword" role="link" id="forgot-password">
                 Forgot Password ?
               </div>
             </Grid>
             <Grid item xs={gridWidth}>
               <div className="ButtonGroup">
-                <Button variant="contained" color="primary">
+                <Button className="Login-btn" type="submit" variant="contained" color="primary">
                   Sign In
                 </Button>
               </div>
             </Grid>
+            <Snackbar
+               open={isOpenMessage}
+               TransitionComponent={Fade}
+               onClose={this.closeMessage}
+               ContentProps={{
+                 'aria-describedby': 'message-id',
+               }}
+               message={<span id="message-id">{message}</span>}
+            />
           </form>
         </Grid>
       </div>
