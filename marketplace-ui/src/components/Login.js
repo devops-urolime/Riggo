@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './Login.scss';
 import { WebAuth } from "auth0-js";
 import { TextField, Button } from '@material-ui/core';
-import { AUTH_CONFIG } from '../config';
+import { AUTH_CONFIG, AUTH_CONFIG_REALM } from '../config';
 import { LOGO_MAIN_LOGIN } from './Icon';
 import Icon from './Icon';
 import Grid from '@material-ui/core/Grid/Grid';
@@ -75,19 +75,37 @@ class Login extends Component{
   };
 
   handleAuthentication = (email, password) => {
-    webAuth.login({
-      realm: 'Username-Password-Authentication',
-      username: email,
-      password: password,
-    }, (err) => this.loginErrResult(err));
+    if(email && password){
+      webAuth.login({
+        realm: AUTH_CONFIG_REALM,
+        username: email,
+        password: password,
+      }, (err) => this.loginErrResult(err));
+    } else {
+      this.showMessage("Please complete email and password for login.");
+    }
+
   };
 
-  forgotPassword = () => {
-    this.showMessage("We've just sent you an email to reset your password.");
+  forgotPassword = (email) => {
+    if(email){
+      webAuth.changePassword({
+        connection: AUTH_CONFIG_REALM,
+        email
+      }, (err) => {
+        if(err){
+          this.loginErrResult(err);
+        }else {
+          this.showMessage("We've just sent you an email to reset your password.");
+        }
+      });
+    } else {
+      this.showMessage("Please complete email to reset your password.");
+    }
   };
 
   render(){
-    const { isOpenMessage, message }= this.state;
+    const { isOpenMessage, message, email }= this.state;
     return(
       <div className="MainLoginOverlay">
         <Grid container spacing={0} {...gridConfig}>
@@ -115,6 +133,7 @@ class Login extends Component{
                   variant="outlined"
                   onChange={this.onEmailChange}
                   className="TextField"
+                  required
                 />
               </div>
             </Grid>
@@ -128,11 +147,12 @@ class Login extends Component{
                   margin="normal"
                   variant="outlined"
                   onChange={this.onPasswordChange}
+                  required
                 />
               </div>
             </Grid>
             <Grid item xs={gridWidth}>
-              <div onClick={this.forgotPassword}  className="ForgotPassword" role="link" id="forgot-password">
+              <div onClick={() => this.forgotPassword(email)}  className="ForgotPassword" role="link" id="forgot-password">
                 Forgot Password ?
               </div>
             </Grid>
