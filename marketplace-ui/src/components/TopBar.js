@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon, { EXIT_ICON, MENU_ICON, USER_ACCOUNT_ICON } from './Icon';
 import './TopBar.scss';
+import { withRouter } from 'react-router-dom';
+import { APP_PATH_LOGIN } from '../config';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -55,14 +57,17 @@ MenuAppBar.propTypes = {
   onMenuClick: PropTypes.func,
 };
 
-const TopBar = ({title, onMenuClick, auth}) => {
+const TopBar = ({title, onMenuClick, auth, history}) => {
   const isLogin =  auth.isAuthenticated();
+  const login = () => {
+    history.push(APP_PATH_LOGIN);
+  };
   return (
     <MenuAppBar
       title={title}
       onMenuClick={onMenuClick}
       logout={auth.logout}
-      login={auth.login}
+      login={login}
       isLogin={isLogin}
     />
   );
@@ -72,6 +77,7 @@ TopBar.propTypes = {
   title: PropTypes.string,
   onMenuClick: PropTypes.func,
   auth: PropTypes.object,
+  history: PropTypes.object,
 };
 
-export default TopBar;
+export default withRouter(TopBar);
