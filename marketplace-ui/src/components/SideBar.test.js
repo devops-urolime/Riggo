@@ -1,6 +1,7 @@
 import SideBar from './SideBar';
 import React from 'react';
 import MenuContent from './MenuContent';
+import Drawer from '@material-ui/core/Drawer';
 import { BrowserRouter } from 'react-router-dom';
 
 describe('<SideBar />', () => {
@@ -36,7 +37,9 @@ describe('<SideBar />', () => {
     expect_c(wrapper.find(MenuContent)).to.have.lengthOf(1);
   });
 
-
-
+  it('must contain one Drawer component to support show and hide menu', () => {
+    const wrapper = wrapperShallow(baseTestProps);
+    expect_c(wrapper.find(Drawer)).to.have.lengthOf(1);
+  });
 
 });
