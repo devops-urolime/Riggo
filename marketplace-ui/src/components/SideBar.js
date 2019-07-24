@@ -3,7 +3,6 @@ import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
-import { withRouter } from 'react-router-dom';
 import './SideBar.scss';
 import Icon, { LOGO_ICON } from './Icon';
 
@@ -34,7 +33,6 @@ SideBar.propTypes = {
   handleClose: PropTypes.func,
   menu: PropTypes.array,
   defaultMenu: PropTypes.object,
-  history: PropTypes.object,
 };
 
-export default withRouter(SideBar);
+export default SideBar;

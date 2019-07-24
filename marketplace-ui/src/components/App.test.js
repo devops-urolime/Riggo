@@ -1,7 +1,8 @@
 import App from './App';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import { APP_PATH_AUTH0_CALLBACK, APP_PATH_LOGIN, APP_PATH_ROOT } from '../config';
+import SideBar from './SideBar';
 
 describe('<App />', () => {
   const baseTestProps = {
@@ -11,6 +12,14 @@ describe('<App />', () => {
     }
   };
 
+  const wrapperBuilder = (testProps) => {
+    return renderer
+      .create(
+        <BrowserRouter>
+          <SideBar {...testProps} />
+        </BrowserRouter>
+      );
+  };
   const wrapperShallow = (testProps) => {
     return shallow(
       <App {...testProps} />
@@ -18,22 +27,22 @@ describe('<App />', () => {
   };
 
   it('renders correctly', () => {
-    const tree = wrapperShallow(baseTestProps);
+    const tree = wrapperBuilder(baseTestProps).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('must contain one Switch component for routes', () => {
-    const wrapper = shallow(<App {...baseTestProps} />);
+    const wrapper = wrapperShallow(baseTestProps);
     expect_c(wrapper.find(Switch)).to.have.lengthOf(1);
   });
 
   it('must contain 3 Route components for main navigation', () => {
-      const wrapper = shallow(<App {...baseTestProps} />);
+      const wrapper = wrapperShallow(baseTestProps);
       expect_c(wrapper.find(Route)).to.have.lengthOf(3);
   });
 
   it('should support root navigation', () => {
-      const wrapper = shallow(<App {...baseTestProps} />);
+      const wrapper = wrapperShallow(baseTestProps);
       const routeComponents = wrapper.find(Route).findWhere(
         n => n.props().path === APP_PATH_ROOT
       );
@@ -41,7 +50,7 @@ describe('<App />', () => {
   });
 
   it('should support login navigation', () => {
-      const wrapper = shallow(<App {...baseTestProps} />);
+      const wrapper = wrapperShallow(baseTestProps);
       const routeComponents = wrapper.find(Route).findWhere(
         n => n.props().path === APP_PATH_LOGIN
       );
@@ -49,7 +58,7 @@ describe('<App />', () => {
   });
 
   it('should support callback url to get JWT for Auth 2.0 protocol', () => {
-      const wrapper = shallow(<App {...baseTestProps} />);
+      const wrapper = wrapperShallow(baseTestProps);
       const routeComponents = wrapper.find(Route).findWhere(
         n => n.props().path === APP_PATH_AUTH0_CALLBACK
       );

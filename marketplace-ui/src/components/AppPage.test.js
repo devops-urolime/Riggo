@@ -1,10 +1,10 @@
-import App from './AppPage';
+import AppPage from './AppPage';
 import TopBar from './TopBar';
 import SideBar from '../components/SideBar';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-describe('<App />', () => {
+describe('<AppPage />', () => {
 
   const baseTestProps = {
     auth:{
@@ -18,7 +18,7 @@ describe('<App />', () => {
     return renderer
       .create(
         <BrowserRouter>
-          <App {...testProps} />
+          <AppPage {...testProps} />
         </BrowserRouter>
       );
   };
@@ -26,7 +26,7 @@ describe('<App />', () => {
   const wrapperMount = (testProps) => {
       return mount(
           <BrowserRouter>
-            <App {...testProps} />
+            <AppPage {...testProps} />
           </BrowserRouter>
         );
     };

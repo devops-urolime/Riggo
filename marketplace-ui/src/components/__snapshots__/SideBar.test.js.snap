@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<App /> renders correctly 1`] = `
+exports[`<SideBar /> renders correctly 1`] = `
 <div>
   <div
     className="MuiDrawer-root MuiDrawer-docked SideBar-menu"
@@ -15,6 +15,7 @@ exports[`<App /> renders correctly 1`] = `
     >
       <nav
         className="SideBar-menu__Header"
+        onClick={[Function]}
       >
         <svg
           fill="none"
