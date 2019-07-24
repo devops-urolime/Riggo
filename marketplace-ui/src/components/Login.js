@@ -135,7 +135,7 @@ class Login extends Component{
   };
 
   render(){
-    const { isOpenMessage, message, email, password, isSingUp }= this.state;
+    const { isOpenMessage, message, email, isSingUp }= this.state;
     return(
       <div className="MainLoginOverlay">
           <Grid container spacing={0} {...gridConfig}>
