@@ -3,6 +3,7 @@ import React from 'react';
 import MenuContent from './MenuContent';
 import Drawer from '@material-ui/core/Drawer';
 import { BrowserRouter } from 'react-router-dom';
+import Icon, { LOGO_ICON } from './Icon';
 
 describe('<SideBar />', () => {
   const baseTestProps = {
@@ -42,4 +43,14 @@ describe('<SideBar />', () => {
     expect_c(wrapper.find(Drawer)).to.have.lengthOf(1);
   });
 
+  it(`must contain the logo app`, () => {
+    const wrapper = wrapperShallow(baseTestProps);
+    expect_c(wrapper.find(Icon)).to.have.lengthOf(1);
+  });
+
+  it(`must contain the logo app type ${LOGO_ICON}`, () => {
+    const wrapper = wrapperShallow(baseTestProps);
+    const logoApp = wrapper.find(Icon);
+    expect_c(logoApp.props().name).to.equal(LOGO_ICON);
+  });
 });
