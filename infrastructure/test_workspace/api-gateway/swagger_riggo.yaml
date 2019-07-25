@@ -1,0 +1,355 @@
+---
+swagger: "2.0"
+info:
+  description: Riggo Loads API
+  version: 1.0.0
+  title: Riggo API
+  contact:
+    email: edward@riggo.io
+  license:
+    name: Riggo API License and Terms of Us
+    url: http://riggo.io/legal/api-terms
+host: virtserver.swaggerhub.com
+basePath: /riggo-io/api/1.0.0
+tags:
+  - name: administrator
+    description: administrator only functions
+  - name: sites
+    description: site documents
+  - name: loads
+    description: load documents
+  - name: customers
+    description: customer documents
+  - name: shippers
+    description: shipper documents
+schemes:
+  - https
+security:
+  - implicit:
+      - read
+      - write
+paths:
+  /customer:
+    get:
+      tags:
+        - customers
+      summary: find customer by id
+      description: returns a customer by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: customer document id
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+      responses:
+        200:
+          description: OK
+    post:
+      tags:
+        - customers
+      summary: adds a customer, which is an admin only function
+      description: Adds a customer to the system
+      operationId: addCustomer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: customer
+          description: customer to add
+          required: false
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        201:
+          description: customer created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing customer already exists
+  /shipper:
+    get:
+      tags:
+        - shippers
+      summary: find shipper by id
+      description: returns a shipper by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: shipper document id
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+      responses:
+        200:
+          description: OK
+    post:
+      tags:
+        - shippers
+      summary: adds a shipper, which is an admin only function
+      description: Adds a shipper to the system
+      operationId: addShipper
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: shipper
+          description: shipper to add
+          required: false
+          schema:
+            $ref: '#/definitions/Shipper'
+      responses:
+        201:
+          description: shipper created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing shipper already exists
+  /site:
+    get:
+      tags:
+        - sites
+      summary: find site by id
+      description: returns a site document by id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: load document id
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+      responses:
+        200:
+          description: OK
+    post:
+      tags:
+        - administrator
+      summary: adds a site, which is an admin only function
+      description: Adds a site to the system
+      operationId: addSite
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: site
+          description: site to add
+          required: false
+          schema:
+            $ref: '#/definitions/Site'
+      responses:
+        201:
+          description: site created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing site already exists
+  /loads:
+    get:
+      tags:
+        - loads
+      summary: searches loads
+      description: |
+        By passing in the appropriate options, you can search for
+        available loads in the system
+      operationId: searchLoads
+      produces:
+        - application/json
+      parameters:
+        - name: searchString
+          in: query
+          description: pass an optional search string for looking up inventory
+          required: false
+          type: string
+        - name: skip
+          in: query
+          description: number of records to skip for pagination
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+        - name: limit
+          in: query
+          description: maximum number of records to return
+          required: false
+          type: integer
+          maximum: 50
+          minimum: 0
+          format: int32
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Load'
+        400:
+          description: bad input parameter
+  /load:
+    get:
+      tags:
+        - loads
+      summary: find load by id.  The client must specify the internal id OR the client specified unique id.
+      description: returns a load document according to the parameters
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: load document internal id
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+        - name: externalid
+          in: query
+          description: loads document by the client specified unique id
+          required: false
+          type: integer
+          minimum: 0
+          format: int32
+      responses:
+        200:
+          description: OK
+      security:
+        - implicit:
+            - read:Load
+    post:
+      tags:
+        - loads
+      summary: adds a load
+      description: Adds a load to the system
+      operationId: addLoad
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: load
+          description: load to add
+          required: false
+          schema:
+            $ref: '#/definitions/Load'
+      responses:
+        201:
+          description: load created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing load already exists
+      security:
+        - implicit:
+            - write:Load
+securityDefinitions:
+  implicit:
+    type: oauth2
+    authorizationUrl: https://riggo.auth0.com/authorize
+    flow: implicit
+    scopes:
+      write: allow modifying resources
+      read: allows reading resources
+definitions:
+  Site:
+    type: object
+    required:
+      - apiKey
+      - createdDate
+      - domain
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      domain:
+        type: string
+      apiKey:
+        type: string
+      createdDate:
+        type: string
+        format: date-time
+  Customer:
+    type: object
+    required:
+      - apiKey
+      - createdDate
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      apiKey:
+        type: string
+      createdDate:
+        type: string
+        format: date-time
+  Shipper:
+    type: object
+    required:
+      - apiKey
+      - createdDate
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      apiKey:
+        type: string
+      createdDate:
+        type: string
+        format: date-time
+  Load:
+    type: object
+    required:
+      - expectedShipDate
+      - externalid
+      - id
+      - shipperid
+      - siteid
+    properties:
+      id:
+        type: string
+        format: uuid
+      externalid:
+        type: string
+      siteid:
+        type: string
+      shipperid:
+        type: string
+      metaData:
+        type: object
+        properties: {}
+      postedRate:
+        type: number
+      expectedShipDate:
+        type: string
+        format: date-time
+      excludeFromAutomation:
+        type: boolean
+        default: false
+      excludeFromLoadBoard:
+        type: boolean
+        default: false

@@ -1,0 +1,141 @@
+---
+swagger: "2.0"
+info:
+  version: "2019-06-12T22:13:54Z"
+  title: "${name}"
+  description: "Api gateway entry point to the ${name} where you can see many useful resources for Client Apps. Done for POC."
+host: "iwspihms22.execute-api.us-west-2.amazonaws.com"
+basePath: "/dev"
+schemes:
+  - "https"
+paths:
+  /:
+    get:
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Content-Type:
+              type: "string"
+      x-amazon-apigateway-integration:
+        uri: "http://riggo-saas-load-balancer-1137667330.us-west-2.elb.amazonaws.com/v1/public"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "GET"
+        type: "http"
+    options:
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+  /load:
+    get:
+      produces:
+        - "application/json"
+      parameters:
+        - name: "Authorization"
+          in: "header"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      security:
+        - load-riggo-jwt-rsa-custom-authorizer: []
+      x-amazon-apigateway-integration:
+        uri: "http://riggo-saas-load-balancer-1137667330.us-west-2.elb.amazonaws.com/v1/load"
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestParameters:
+          integration.request.header.Authorization: "method.request.header.Authorization"
+        passthroughBehavior: "when_no_match"
+        httpMethod: "GET"
+        cacheNamespace: "stjoe1"
+        cacheKeyParameters:
+          - "method.request.header.Authorization"
+          - "integration.request.header.Authorization"
+        type: "http"
+    options:
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "200 response"
+          schema:
+            $ref: "#/definitions/Empty"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
+securityDefinitions:
+  load-riggo-jwt-rsa-custom-authorizer:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+    x-amazon-apigateway-authtype: "custom"
+    x-amazon-apigateway-authorizer:
+      authorizerUri: "${authorizerUri}"
+      authorizerCredentials: "${authorizerArn}"
+      authorizerResultTtlInSeconds: 3600
+      identityValidationExpression: "^Bearer [-0-9a-zA-z\\.]*$"
+      type: "token"
+definitions:
+  Empty:
+    type: "object"
