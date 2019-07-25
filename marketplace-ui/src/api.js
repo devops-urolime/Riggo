@@ -54,7 +54,7 @@ export const loadPipeLineSummaryApi = async () => {
         responseData.push(summary);
       });
     }
-    if (MOCK_ALL_DATA) console.warn(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
+    if (MOCK_ALL_DATA) console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
     return (MOCK_ALL_DATA) ? mockDataPipeLineSummary : responseData;
 };
 

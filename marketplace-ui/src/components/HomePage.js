@@ -5,17 +5,33 @@ import CardSummary from './CardSummary';
 import './HomePage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
-import SankeyVisualization, { SAMPLE_DATA_SANDKEY } from './SankeyVisualization';
 import Paper from '@material-ui/core/Paper';
 import { DARK2, NIVO, SAMPLE_DATA_PIE_1, SAMPLE_DATA_PIE_2 } from './PieVisualization';
 import PieVisualization from './PieVisualization';
+import BarVisualization, { SAMPLE_DATA_BAR } from './BarVisualization';
 
 class HomePage extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isBarGroupMode: false,
+    };
+  }
+
   componentDidMount() {
     this.props.loadPipeLineSummary();
   }
+
+  toggleBarGroup = ()=> {
+    this.setState(prevState => ({
+      isBarGroupMode: !prevState.isBarGroupMode
+    }));
+  };
+
   render(){
-    const {pipeLineSummary} = this.props;
+    const { pipeLineSummary } = this.props;
+    const { isBarGroupMode } = this.state;
       return (
         <Grid
           container
@@ -56,13 +72,14 @@ class HomePage extends Component {
             spacing={0}
             direction="column"
             alignItems="center"
-            className="HomePage"
           >
             <Grid item xs={11}>
-              <Paper className="HomePage__MuiPaper-root">
-                <SankeyVisualization
-                  data={SAMPLE_DATA_SANDKEY}
+              <Paper className="HomePage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
+                <BarVisualization
+                  data={SAMPLE_DATA_BAR}
+                  colorsScheme={DARK2}
                   rootClass="StatusVisualization"
+                  groupMode={isBarGroupMode}
                 />
               </Paper>
             </Grid>

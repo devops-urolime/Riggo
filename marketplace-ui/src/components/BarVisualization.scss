@@ -1,19 +1,13 @@
 @import 'base.scss';
 
-.HomePage{
-    &__MuiPaper-root{
+.BarVisualization{
+    text{
+        fill: $general-text !important;
+    }
+    div > div > div {
         background-color: $paper-section !important;
         font-family: $main-font-family !important;
         color: $general-text !important;
     }
 }
 
-.StatusVisualization{
-    height: 250px;
-    width: 357px;
-}
-
-.PerformancePickUpVisualization{
-    height: 350px;
-    width: 357px;
-}
