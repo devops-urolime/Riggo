@@ -1,20 +1,12 @@
 @import 'base.scss';
 
 .App {
-  text-align: center;
-}
-
-.App-link {
-  color: $link;
+    text-align: center;
 }
 
 .App-layout{
-  background: $app-background;
-  height: 100%;
-  color: $general-text;
-}
-
-.MuiAppBar-colorPrimary {
-    color: #fff;
-    background-color: #2E3362;
+    background: $app-background;
+    height: 100%;
+    min-height: 1000px;
+    color: $general-text;
 }

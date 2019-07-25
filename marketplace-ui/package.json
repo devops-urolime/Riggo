@@ -35,7 +35,9 @@
     "reset-css": "^4.0.1",
     "sinon": "^7.3.2",
     "auth0-js": "^9.11.2",
-    "material-components-web": "^3.0.0"
+    "material-components-web": "^3.0.0",
+    "@nivo/sankey": "^0.59.1",
+    "@nivo/tooltip": "^0.59.1"
   },
   "scripts": {
     "env": "export $(cat .env | xargs) && env",

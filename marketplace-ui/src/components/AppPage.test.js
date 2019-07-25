@@ -24,7 +24,7 @@ describe('<AppPage />', () => {
   };
 
   const wrapperMount = (testProps) => {
-      return mount(
+      return shallow(
           <BrowserRouter>
             <AppPage {...testProps} />
           </BrowserRouter>
