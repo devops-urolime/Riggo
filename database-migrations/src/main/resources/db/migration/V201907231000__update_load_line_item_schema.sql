@@ -1,0 +1,11 @@
+alter table load_stop add column name VARCHAR(64);
+alter table load_stop add column shipping_receiving_hours VARCHAR(16);
+alter table load_stop add column expected_date_time TIME;
+alter table load_stop add column appointment_required BIT;
+alter table load_stop add column appointment_time VARCHAR(32);
+alter table load_stop add column stop_status INTEGER;
+alter table load_stop add column carrier_status INTEGER;
+alter table load_stop add column arrival_status INTEGER;
+alter table load_stop add column departure_status INTEGER;
+alter table load_stop add column arrival_date DATE;
+alter table load_stop add column departure_date_time TIME;

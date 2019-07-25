@@ -11,7 +11,7 @@ public class PayloadParseException extends RuntimeException {
         super(message, cause);
     }
 
-    public PayloadParseException(String message) {
-        super(message);
+    public PayloadParseException(String property) {
+        super(property + " was not found");
     }
 }

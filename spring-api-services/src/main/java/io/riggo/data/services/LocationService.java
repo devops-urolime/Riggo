@@ -8,6 +8,8 @@ import io.riggo.data.repositories.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class LocationService implements RiggoService {
 
@@ -15,16 +17,16 @@ public class LocationService implements RiggoService {
     private LocationRepository locationRepository;
 
 
-    public Location save(Location et) throws RiggoDataAccessException {
+    public Location save(Location et) {
         try {
             return locationRepository.save(et);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Location findById(Long eqId) throws ResourceNotFoundException, RiggoDataAccessException {
+    public Location findById(Long eqId) {
         try {
             Location eqt = locationRepository.findById(eqId).get();
             if (eqt == null) {
@@ -32,16 +34,16 @@ public class LocationService implements RiggoService {
             }
             return eqt;
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Location findByExtSysId(String extSysId) {
+    public Optional<Location> findByExtSysId(String extSysId) {
         try {
             return locationRepository.findByExtSysId(extSysId);
         } catch (Exception e) {
-            throw new RiggoDataAccessException("Data Access Exception occurred", e);
+            throw new RiggoDataAccessException(e);
         }
     }
 }
