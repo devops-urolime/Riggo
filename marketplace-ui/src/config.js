@@ -24,3 +24,4 @@ export const APP_PATH_LOAD = "/load";
 export const APP_PATH_LOGIN = "/login";
 export const APP_PATH_LOAD_ID = APP_PATH_LOAD + "/:id*";
 export const APP_PATH_AUTH0_CALLBACK = "/callback";
+export const MOCK_ALL_DATA= process.env.REACT_APP_MOCK_ALL_DATA;

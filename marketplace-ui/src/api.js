@@ -2,13 +2,19 @@ import {
   BASE_END_POINT,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
-  LOAD_PIPELINE_SUMMARY_END_POINT, MENU_END_POINT
+  LOAD_PIPELINE_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
 } from './config';
 
 const METHOD_GET = 'get';
 const validateEmptyJWT = (jwt) => {
   if (!jwt) { throw new Error(EMPTY_JWT_ERROR_MESSAGE); }
 };
+
+const mockDataPipeLineSummary = [
+  {label: "pending", number :58},
+  {label: "in transit", number :30},
+  {label: "Delivered", number :28}
+];
 
 const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
    return {
@@ -48,7 +54,8 @@ export const loadPipeLineSummaryApi = async () => {
         responseData.push(summary);
       });
     }
-    return responseData;
+    if (MOCK_ALL_DATA) console.warn(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
+    return (MOCK_ALL_DATA) ? mockDataPipeLineSummary : responseData;
 };
 
 export const getMenuApi = async () => {
