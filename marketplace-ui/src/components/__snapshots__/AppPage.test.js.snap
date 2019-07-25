@@ -168,57 +168,6 @@ exports[`<App /> renders correctly 1`] = `
         </div>
       </div>
     </div>
-    <div
-      className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
-    >
-      <div>
-        <div
-          className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3"
-        >
-          <div
-            className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
-          >
-            <div
-              className="MuiGrid-root MuiGrid-container"
-            >
-              <div
-                className="TitleSection"
-              >
-                <h6
-                  className="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
-                >
-                  Status
-                </h6>
-              </div>
-            </div>
-          </div>
-          <div
-            className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
-          >
-            <div
-              className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-3 MuiGrid-justify-xs-center"
-            />
-          </div>
-          <div
-            className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
-          >
-            <div
-              className="MuiGrid-root MuiGrid-container"
-            >
-              <div
-                className="TitleSection"
-              >
-                <h6
-                  className="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom"
-                >
-                  Shipments
-                </h6>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 `;

@@ -9,7 +9,8 @@ import io.riggo.data.services.LoadService;
 import io.riggo.data.services.LoadStopService;
 import io.riggo.data.services.ShipperService;
 import io.riggo.web.integration.SalesforceRevenovaPostPutConstants;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParser;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoad;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutLoad;
 import io.riggo.web.response.LoadAPIResponse;
 import io.riggo.web.response.LoadResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,15 +74,15 @@ public class LoadController {
     @PostMapping(path = "/load", produces = "application/json")
     public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) {
         //TODO: resolve parsers based on site and integration
-        SalesforceRevenovaRequestBodyParser salesforceRevenovaRequestBodyParser = new SalesforceRevenovaRequestBodyParser(dataHashMap);
-        Load load = salesforceRevenovaRequestBodyParser.resolveLoad();
+        SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserForPutPostLoad = new SalesforceRevenovaRequestBodyParserPostPutLoad(dataHashMap);
+        Load load = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveLoad();
 
         Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId());
         if (checkLoadExists.isPresent()) {
             throw new ResourceAlreadyExistsException(ResourceType.LOAD, checkLoadExists.get().getId());
         }
 
-        Shipper shipper = salesforceRevenovaRequestBodyParser.resolveShipper();
+        Shipper shipper = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveShipper();
         if (StringUtils.isNotBlank(shipper.getExtSysId())) {
             Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId());
             if (checkShipperExists.isPresent()) {
@@ -90,7 +92,7 @@ public class LoadController {
         }
         load.setShipperId(shipper.getId());
 
-        EquipmentType equipmentType = salesforceRevenovaRequestBodyParser.resolveEquipmentType();
+        EquipmentType equipmentType = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveEquipmentType();
         if (StringUtils.isNotBlank(equipmentType.getExtSysId())) {
             Optional<EquipmentType> checkEquipmentTypeExists = equipmentTypeService.findByExtSysId(equipmentType.getExtSysId());
             if (checkEquipmentTypeExists.isPresent()) {
@@ -99,8 +101,8 @@ public class LoadController {
         }
         load.setEquipmentTypeId(equipmentType.getId());
 
-        LoadStop firstStop = salesforceRevenovaRequestBodyParser.resolveFirstStop();
-        LoadStop lastStop = salesforceRevenovaRequestBodyParser.resolveLastStop();
+        LoadStop firstStop = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveFirstStop();
+        LoadStop lastStop = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveLastStop();
 
         if (StringUtils.isNotBlank(firstStop.getExtSysId())) {
             Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(firstStop.getExtSysId());
@@ -130,8 +132,8 @@ public class LoadController {
 
     @PutMapping(value = "/load", produces = "application/json")
     public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) {
-        SalesforceRevenovaRequestBodyParser salesforceRevenovaRequestBodyParser = new SalesforceRevenovaRequestBodyParser(dataHashMap);
-        Load resolvedLoad = salesforceRevenovaRequestBodyParser.resolveLoad();
+        SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserForPutPostLoad = new SalesforceRevenovaRequestBodyParserPostPutLoad(dataHashMap);
+        Load resolvedLoad = salesforceRevenovaRequestBodyParserForPutPostLoad.resolveLoad();
         Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId());
         if (!loadFromDb.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
@@ -142,7 +144,7 @@ public class LoadController {
         existingLoad = loadService.save(existingLoad);
 
         LoadAPIResponse loadAPIResponse = new LoadAPIResponse();
-        loadAPIResponse.addData(resolvedLoad);
+        loadAPIResponse.addData(existingLoad);
         loadAPIResponse.setHashId(Hashing.sha256()
                 .hashString(existingLoad.getExtSysId() + existingLoad.getId(), StandardCharsets.UTF_8)
                 .toString());
@@ -152,6 +154,21 @@ public class LoadController {
 
     @PatchMapping(value = "/load", produces = "application/json")
     public ResponseEntity patchLoad(@RequestBody Map<String, Object> dataHashMap) {
+        SalesforceRevenovaRequestBodyParserForPatchLoad salesforceRevenovaRequestBodyParserForPatchLoad = new SalesforceRevenovaRequestBodyParserForPatchLoad(dataHashMap);
+        List<LoadLineItem> loadLineItemList = salesforceRevenovaRequestBodyParserForPatchLoad.resolveLoadLineItemsList();
+        loadLineItemList.stream().map(loadLineItem -> {
+            if (loadLineItem.getLoadId() == null) {
+                if (StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
+                    Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getExtSysId());
+                    if (optionalLoad.isPresent()) {
+                        Load load = optionalLoad.get();
+                    } else {
+
+                    }
+                }
+            }
+            return loadLineItem;
+        });
         return null;
     }
 }

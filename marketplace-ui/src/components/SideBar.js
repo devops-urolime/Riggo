@@ -8,14 +8,8 @@ import './SideBar.scss';
 import Icon, { LOGO_ICON } from './Icon';
 
 class SideBar extends Component {
-  componentDidMount() {
-      this.props.loadMenu();
-  }
   render(){
-    const {isOpen, handleClose, menu, defaultMenu, history} = this.props;
-    if(defaultMenu && defaultMenu.url){
-      history.push(defaultMenu.url);
-    }
+    const {isOpen, handleClose, menu, defaultMenu} = this.props;
     return (
         <div>
           <Drawer
@@ -39,7 +33,6 @@ SideBar.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
   menu: PropTypes.array,
-  loadMenu: PropTypes.func,
   defaultMenu: PropTypes.object,
   history: PropTypes.object,
 };
