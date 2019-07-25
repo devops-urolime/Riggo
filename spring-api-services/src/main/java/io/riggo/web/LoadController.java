@@ -108,8 +108,10 @@ public class LoadController {
             Optional<EquipmentType> checkEquipmentTypeExists = equipmentTypeService.findByExtSysId(equipmentType.getExtSysId());
             if (checkEquipmentTypeExists.isPresent()) {
                 EquipmentType checkedEquipmentType = checkEquipmentTypeExists.get();
-                if(StringUtils.isnotEquals)checkedEquipmentType.
-                BeanUtils.copyProperties(checkEquipmentTypeExists.get(), equipmentType, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
+                if (StringUtils.isNotBlank(equipmentType.getName()) && !StringUtils.equals(checkedEquipmentType.getName(), equipmentType.getName())) {
+                    BeanUtils.copyProperties(checkEquipmentTypeExists.get(), equipmentType, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
+                    equipmentTypeService.save(equipmentType);
+                }
             }else{
                 equipmentTypeService.save(equipmentType);
             }
@@ -118,15 +120,12 @@ public class LoadController {
 
         LoadStop firstStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(dataHashMap);
         LoadStop lastStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(dataHashMap);
-
         if (StringUtils.isNotBlank(firstStop.getExtSysId())) {
             Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(firstStop.getExtSysId());
             if (!checkFirstStopExists.isPresent()) {
                 loadStopService.save(firstStop);
             }
         }
-
-
         if (StringUtils.isNotBlank(lastStop.getExtSysId())) {
             Optional<LoadStop> checkLastStopExists = loadStopService.findByExtSysId(lastStop.getExtSysId());
             if (checkLastStopExists.isPresent()) {
