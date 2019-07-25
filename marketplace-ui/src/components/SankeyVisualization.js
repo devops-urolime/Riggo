@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ResponsiveSankey } from '@nivo/sankey';
 import './SankeyVisualization.scss';
-export const SAMPLE_DATA = {
+
+export const SAMPLE_DATA_SANDKEY = {
   "nodes": [
     {
       "id": "Pending",

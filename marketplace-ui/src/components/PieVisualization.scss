@@ -1,0 +1,8 @@
+@import 'base.scss';
+
+.PieVisualization{
+    circle ~ text{
+        fill: $general-text !important;
+    }
+}
+
