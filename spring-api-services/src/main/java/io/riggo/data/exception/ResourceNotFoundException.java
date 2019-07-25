@@ -17,7 +17,7 @@ public class ResourceNotFoundException extends RuntimeException {
         super("ResourceNotFoundException type=" + resourceType.getDisplayName() + " with id=" + id);
     }
 
-    public ResourceNotFoundException(ResourceType resourceType, String name) {
-        super("ResourceNotFoundException type=" + resourceType.getDisplayName() + " with name=" + name);
+    public ResourceNotFoundException(ResourceType resourceType, String extSysId) {
+        super("ResourceNotFoundException type=" + resourceType.getDisplayName() + " with extSysId=" + extSysId);
     }
 }

@@ -41,4 +41,13 @@ public class LoadLineItemService {
             throw new RiggoDataAccessException(e);
         }
     }
+
+
+    public Optional<LoadLineItem> findByExtSysId(String extSysId) {
+        try {
+            return loadLineItemRepository.findByExtSysId(extSysId);
+        } catch (Exception e) {
+            throw new RiggoDataAccessException(e);
+        }
+    }
 }

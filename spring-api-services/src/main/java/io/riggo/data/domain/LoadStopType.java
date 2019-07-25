@@ -7,9 +7,8 @@ import java.util.Map;
 
 @SuppressWarnings("MagicNumber")
 public enum LoadStopType {
-    FIRST_STOP(1, "First Stop"),
-    STOP(2, "Stop"),
-    LAST_STOP(2, "Last Stop"),
+    PICKUP(1, "Pickup"),
+    DELIVERY(2, "Delivery"),
     ;
 
     private final String displayName;
@@ -29,16 +28,23 @@ public enum LoadStopType {
     }
 
     private static final Map<Integer, LoadStopType> loadStopTypeMap;
+    private static final Map<String, LoadStopType> loadStopTypeDisplayNameMap;
 
     public static LoadStopType fromColVal(int colVal) {
         return loadStopTypeMap.get(colVal);
     }
+    public static LoadStopType fromDisplayName(String displayName) {
+        return loadStopTypeDisplayNameMap.get(displayName);
+    }
 
     static {
         Map<Integer, LoadStopType> lsMap = new HashMap<>();
-        for (LoadStopType menuType : LoadStopType.values()) {
-            lsMap.put(menuType.getColVal(), menuType);
+        Map<String, LoadStopType> lsdnMap = new HashMap<>();
+        for (LoadStopType loadStopType : LoadStopType.values()) {
+            lsMap.put(loadStopType.getColVal(), loadStopType);
+            lsdnMap.put(loadStopType.getDisplayName(), loadStopType);
         }
         loadStopTypeMap = ImmutableMap.copyOf(lsMap);
+        loadStopTypeDisplayNameMap = ImmutableMap.copyOf(lsdnMap);
     }
 }

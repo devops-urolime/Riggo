@@ -5,15 +5,17 @@ import io.riggo.data.domain.Load;
 import io.riggo.data.domain.LoadStop;
 import io.riggo.data.domain.Shipper;
 
+import java.util.Map;
+
 public interface RequestBodyParserPostPutLoad {
 
-    LoadStop resolveFirstStop();
+    LoadStop resolveFirstStop(Map<String, Object> dataHashMap);
 
-    LoadStop resolveLastStop();
+    LoadStop resolveLastStop(Map<String, Object> dataHashMap);
 
-    Load resolveLoad();
+    Load resolveLoad(Map<String, Object> dataHashMap);
 
-    Shipper resolveShipper();
+    Shipper resolveShipper(Map<String, Object> dataHashMap);
 
-    EquipmentType resolveEquipmentType();
+    EquipmentType resolveEquipmentType(Map<String, Object> dataHashMap);
 }
