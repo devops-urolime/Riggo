@@ -16,17 +16,17 @@ export const SAMPLE_DATA_BAR = [
     "DispatchedColor": "hsl(9, 87%, 67%)",
     "At Pickup": 8,
     "At PickupColor": "hsl(9, 87%, 67%)",
-    "In Transit Pickup": 6,
-    "In Transit PickupColor": "hsl(9, 87%, 67%)",
-    "At Delivery Pickup": 7,
-    "At Delivery PickupColor": "hsl(9, 87%, 67%)"
+    "In Transit": 6,
+    "In TransitColor": "hsl(9, 87%, 67%)",
+    "At Delivery": 7,
+    "At DeliveryColor": "hsl(9, 87%, 67%)"
   },
   {
     "status": "Delivered",
-    "Pending Documents": 9,
-    "Pending DocumentsColor": "hsl(9, 87%, 67%)",
-    "Documents Received": 8,
-    "Documents ReceivedColor": "hsl(9, 87%, 67%)",
+    "Pending Docs": 9,
+    "Pending DocsColor": "hsl(9, 87%, 67%)",
+    "Docs Received": 8,
+    "Docs ReceivedColor": "hsl(9, 87%, 67%)",
     "Invoiced": 11,
     "InvoicedColor": "hsl(9, 87%, 67%)"
   }
@@ -36,6 +36,9 @@ export const NIVO = "nivo";
 export const DARK2 = "dark2";
 
 const BarVisualization = ({ data, rootClass, colorsScheme, groupMode}) => {
+  const customLabelFormat = (d)=>{
+    return (!groupMode) ? `${d.id}: ${d.value}` : `${d.value}`
+  };
   let configBar = {
     data: data,
     enableGridY: false,
@@ -44,15 +47,15 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode}) => {
           'Quoted',
           'Booked',
           'At Pickup',
-          'In Transit Pickup',
-          'At Delivery Pickup',
-          'Pending Documents',
-          'Documents Received',
+          'In Transit',
+          'At Delivery',
+          'Pending Docs',
+          'Docs Received',
           'Invoiced'
          ],
     indexBy: "status",
-    margin:{ top: 20, right: 30, bottom: 50, left: 5 },
-    padding:0.3,
+    margin:{ top: 20, right: 30, bottom: 50, left: 15 },
+    padding:0,
     colors:{ scheme: colorsScheme },
     defs:[
             {
@@ -82,6 +85,7 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode}) => {
     labelSkipHeight:12,
     borderColor:{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     labelTextColor:{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+    label: customLabelFormat,
     animate:true,
     motionStiffness:90,
     motionDamping:15,
