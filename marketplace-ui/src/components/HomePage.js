@@ -8,7 +8,7 @@ import TitleSection from './TitleSection';
 import Paper from '@material-ui/core/Paper';
 import { DARK2, NIVO, SAMPLE_DATA_PIE_1, SAMPLE_DATA_PIE_2 } from './PieVisualization';
 import PieVisualization from './PieVisualization';
-import BarVisualization, { SAMPLE_DATA_BAR } from './BarVisualization';
+import BarVisualization, { BAR_DARK2, SAMPLE_DATA_BAR } from './BarVisualization';
 
 class HomePage extends Component {
 
@@ -36,7 +36,7 @@ class HomePage extends Component {
         <Grid
           container
           spacing={0}
-          direction="column"
+          direction="row"
           alignItems="center"
           className="HomePage"
         >
@@ -51,22 +51,14 @@ class HomePage extends Component {
               <TitleSection label="Status"/>
             </Grid>
           </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="center"
-            alignItems="center"
-          >
-            { pipeLineSummary &&
-              pipeLineSummary.map((item, index) => {
-              return (
-                <Grid sm={3} xs={4} key={`card-summary-${index}`} item>
-                  <CardSummary number={item.number} label={item.label}/>
-                </Grid>
-              );
-            })}
-          </Grid>
+          { pipeLineSummary &&
+            pipeLineSummary.map((item, index) => {
+            return (
+              <Grid xs={4} key={`card-summary-${index}`} item>
+                <CardSummary number={item.number} label={item.label}/>
+              </Grid>
+            );
+          })}
           <Grid
             container
             spacing={0}
@@ -77,7 +69,7 @@ class HomePage extends Component {
               <Paper className="HomePage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
                 <BarVisualization
                   data={SAMPLE_DATA_BAR}
-                  colorsScheme={DARK2}
+                  colorsScheme={BAR_DARK2}
                   rootClass="StatusVisualization"
                   groupMode={isBarGroupMode}
                 />
