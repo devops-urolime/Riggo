@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
 import './MenuContent.scss';
 
-const MenuContent = ({ menu, history }) => {
+const MenuContent = ({ menu, history, onClick }) => {
   return (
       <List className="MenuContent">
         {
@@ -16,7 +16,10 @@ const MenuContent = ({ menu, history }) => {
           menu.map((menuItem, idx) => {
             const {name, url } = menuItem;
             return (
-              <ListItem onClick={()=> history.push(url)} key={`menu-item-custom-${idx}`} button>
+              <ListItem onClick={()=> {
+                history.push(url);
+                onClick();
+              }} key={`menu-item-custom-${idx}`} button>
                 <ListItemIcon>
                   <Icon name={name}/>
                 </ListItemIcon>
@@ -33,6 +36,7 @@ MenuContent.propTypes = {
   menu: PropTypes.array,
   history: PropTypes.object,
   defaultMenu: PropTypes.object,
+  onClick: PropTypes.func,
 };
 
 export default withRouter(MenuContent);
