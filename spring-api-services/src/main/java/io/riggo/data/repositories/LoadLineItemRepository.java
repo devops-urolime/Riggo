@@ -14,4 +14,7 @@ public interface LoadLineItemRepository extends CrudRepository<LoadLineItem, Lon
 
     @Query("select l from LoadLineItem l where l.loadId = :loadId")
     Optional<List<LoadLineItem>> findByLoadId(@Param("loadId") Integer loadId);
+
+    @Query("select l from LoadLineItem l where l.extSysId = :extSysId")
+    Optional<LoadLineItem> findByExtSysId(@Param("extSysId") String extSysId);
 }

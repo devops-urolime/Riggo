@@ -47,6 +47,7 @@ public class LoadLineItem implements Serializable {
     @Transient
     @Column(name = "created_at")
     private Date createdAt;
+
     @Transient
     @Column(name = "updated_at")
     private Date updatedAt;
@@ -55,8 +56,13 @@ public class LoadLineItem implements Serializable {
     @Column(name = "deleted")
     private Date deleted;
 
+    @Transient
     private String deliveryStopExtSysId;
+
+    @Transient
     private String pickupStopExtSysId;
+
+    @Transient
     private String loadExtSysId;
 
     public Long getId() {

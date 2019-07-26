@@ -1,4 +1,4 @@
-import { takeEvery, all, put } from 'redux-saga/effects';
+import { takeEvery, all, put, select } from 'redux-saga/effects';
 import {
   APP_API_CALL_FAIL,
   GET_LOAD, GET_LOAD_FAIL,
@@ -8,6 +8,7 @@ import {
 } from '../actions/load';
 import { findLoadByIdApi, getMenuApi, loadPipeLineSummaryApi } from '../../api';
 import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
+import { getToken } from '../reducers/auth';
 
 const getDefaultMenu = (menuList) => {
    if(menuList){
@@ -19,7 +20,8 @@ const getDefaultMenu = (menuList) => {
 
 function* getLoadSaga(action) {
     try{
-      const result = yield findLoadByIdApi(action.id);
+      const JWT = yield select(getToken);
+      const result = yield findLoadByIdApi(action.id, JWT);
       yield put({type: GET_LOAD_SUCCESS, load: result});
     } catch (e) {
       yield put({type: GET_LOAD_FAIL});
@@ -33,7 +35,8 @@ function* getLoadSaga(action) {
 
 function* getLoadPipeLineSummarySaga() {
     try{
-      const result = yield loadPipeLineSummaryApi();
+      const JWT = yield select(getToken);
+      const result = yield loadPipeLineSummaryApi(JWT);
       yield put({type: GET_LOAD_PIPE_LINE_SUMMARY_SUCCESS, pipeLineSummary: result});
     } catch (e) {
       yield put({type: GET_LOAD_PIPE_LINE_SUMMARY_FAIL});
@@ -47,7 +50,8 @@ function* getLoadPipeLineSummarySaga() {
 
 function* getMenuSaga() {
     try{
-      const result = yield getMenuApi();
+      const JWT = yield select(getToken);
+      const result = yield getMenuApi(JWT);
       yield put({type: GET_MENU_SUCCESS, menu: result});
       yield put({type: SET_DEFAULT_MENU, menuItem: getDefaultMenu(result)});
     } catch (e) {

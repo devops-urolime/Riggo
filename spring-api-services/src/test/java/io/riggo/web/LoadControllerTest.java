@@ -1,10 +1,10 @@
 package io.riggo.web;
 
 import io.riggo.data.domain.Load;
-import io.riggo.data.services.EquipmentTypeService;
-import io.riggo.data.services.LoadService;
-import io.riggo.data.services.LoadStopService;
-import io.riggo.data.services.ShipperService;
+import io.riggo.data.services.*;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutLoad;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -44,6 +44,18 @@ public class LoadControllerTest {
 
     @MockBean
     private LoadStopService loadStopService;
+
+    @MockBean
+    private LoadLineItemService loadLineItemService;
+
+    @MockBean
+    private SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserPostPutLoad;
+
+    @MockBean
+    private SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem salesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
+
+    @MockBean
+    private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
 
     @WithMockUser(value = "spring", authorities = {"read:load"})
@@ -117,6 +129,48 @@ public class LoadControllerTest {
 
         MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD)
                 .content(jsonPostLoadFor200)
+                .contentType(APPLICATION_JSON))
+                .andReturn();
+
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+
+    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @Test
+    public void patchLoadForLoadLineItemDOESNTREALLYTESTANYTHING() throws Exception {
+
+        Load load = new Load();
+        load.setId(1l);
+        load.setName("load");
+
+        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
+
+        MvcResult result = mvc.perform(patch(Paths.API_VERSION_LOAD)
+                .content("NEED TO DEFINE")
+                .contentType(APPLICATION_JSON))
+                .andReturn();
+
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+
+    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @Test
+    public void patchLoadForLoadStopDOESNTREALLYTESTANYTHING() throws Exception {
+
+        Load load = new Load();
+        load.setId(1l);
+        load.setName("load");
+
+        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
+
+        MvcResult result = mvc.perform(patch(Paths.API_VERSION_LOAD)
+                .content("NEED TO DEFINE")
                 .contentType(APPLICATION_JSON))
                 .andReturn();
 

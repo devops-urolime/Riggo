@@ -3,26 +3,29 @@ package io.riggo.web.integration.parser;
 import io.riggo.data.domain.*;
 import io.riggo.web.integration.exception.PayloadParseException;
 import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStatusResolver;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Component
+@Scope(value="prototype", proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBodyParserPostPutLoad {
 
-    private Map<String, Object> dataHashMap;
     private String loadExtSysId;
     private String loadName;
     private String shipperExtSysId;
     private String shipperName;
 
     private String equipmentTypeExtSysId;
+    private String equipmentTypeName;
     private String transportMode;
     private BigDecimal postedRate;
     private BigDecimal insuranceAmount;
@@ -46,363 +49,323 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
 
     private String loadUrl;
     private String firstStopExtSysId;
+    private String firstStopName;
     private String lastStopExtSysId;
+    private String lastStopName;
 
-    public SalesforceRevenovaRequestBodyParserPostPutLoad(Map<String, Object> dataHashMap) {
-        this.dataHashMap = dataHashMap;
-    }
+    @Autowired
+    private SalesforceRevenovaRequestBodyParserHelper salesforceRevenovaRequestBodyParserHelper;
+
 
     @Override
-    public LoadStop resolveFirstStop() {
+    public LoadStop resolveFirstStop(Map<String, Object> dataHashMap) {
+        Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
         LoadStop loadStop = new LoadStop();
-        loadStop.setExtSysId(getFirstStopExtSysId());
+        loadStop.setExtSysId(getFirstStopExtSysId(loadDetailsMap));
+        loadStop.setName(getFirstStopName(loadDetailsMap));
         loadStop.setStopNumber(1);
-        loadStop.setType(LoadStopType.FIRST_STOP.getColVal());
+        //   loadStop.setShippingReceivingHours(get)
+        loadStop.setType(LoadStopType.PICKUP.getColVal());
         return loadStop;
     }
 
     @Override
-    public LoadStop resolveLastStop() {
+    public LoadStop resolveLastStop(Map<String, Object> dataHashMap) {
+        Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
         LoadStop loadStop = new LoadStop();
-        loadStop.setExtSysId(getLastStopExtSysId());
+        loadStop.setExtSysId(getLastStopExtSysId(loadDetailsMap));
         loadStop.setStopNumber(2);
-        loadStop.setType(LoadStopType.LAST_STOP.getColVal());
+        loadStop.setName(getLastStopName(loadDetailsMap));
+        loadStop.setType(LoadStopType.DELIVERY.getColVal());
         return loadStop;
     }
 
     @Override
-    public Load resolveLoad() {
+    public Load resolveLoad(Map<String, Object> dataHashMap) {
+        Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
         Load load = new Load();
-        load.setExtSysId(getLoadExtSysId());
-        load.setTransportMode(getTransportMode());
-        load.setPostedRate(getPostedRate());
-        load.setInsuranceAmt(getInsuranceAmount());
+        load.setExtSysId(getLoadExtSysId(loadDetailsMap));
+        load.setTransportMode(getTransportMode(loadDetailsMap));
+        load.setPostedRate(getPostedRate(loadDetailsMap));
+        load.setInsuranceAmt(getInsuranceAmount(loadDetailsMap));
 
 
         HashMap<String, Object> loadStatusMaps = new HashMap<>();
-        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.LOAD_STATUS, getLoadStatusString());
-        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.SALES_STATUS, getSalesStatusString());
-        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.FIRST_STOP_STATUS, getFirstStopStatusString());
-        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.LAST_STOP_STATUS, getLastStopStatusString());
+        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.LOAD_STATUS, getLoadStatusString(loadDetailsMap));
+        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.SALES_STATUS, getSalesStatusString(loadDetailsMap));
+        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.FIRST_STOP_STATUS, getFirstStopStatusString(loadDetailsMap));
+        loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.LAST_STOP_STATUS, getLastStopStatusString(loadDetailsMap));
 
         SalesforceRevenovaLoadStatusResolver salesforceRevenovaLoadStatusResolver = new SalesforceRevenovaLoadStatusResolver();
         LoadSubStatus loadSubStatus = salesforceRevenovaLoadStatusResolver.resolveLoadStatus(loadStatusMaps);
         load.setLoadStatus(loadSubStatus.getColVal());
 
-        load.setTeamReq(getTeamRequired());
-        load.setFoodGradeTrailerReq(getFoodGradeTrailerRequired());
-        load.setTempControlReq(getTemperatureControlRequired());
-        load.setName(getLoadName());
-        load.setInvoiceTotal(getInvoiceTotal());
-        load.setHazMat(getHazMat());
-        load.setModeName(getModeName());
-        load.setOrderDate(getOrderDate());
-        load.setExpectedShipDate(getExpectedShipDate());
-        load.setExpectedDeliveryDate(getExpectedDeliveryDate());
-        load.setLoadUrl(getLoadUrl());
+        load.setTeamReq(getTeamRequired(loadDetailsMap));
+        load.setFoodGradeTrailerReq(getFoodGradeTrailerRequired(loadDetailsMap));
+        load.setTempControlReq(getTemperatureControlRequired(loadDetailsMap));
+        load.setName(getLoadName(loadDetailsMap));
+        load.setInvoiceTotal(getInvoiceTotal(loadDetailsMap));
+        load.setHazMat(getHazMat(loadDetailsMap));
+        load.setModeName(getModeName(loadDetailsMap));
+        load.setOrderDate(getOrderDate(loadDetailsMap));
+        load.setExpectedShipDate(getExpectedShipDate(loadDetailsMap));
+        load.setExpectedDeliveryDate(getExpectedDeliveryDate(loadDetailsMap));
+        load.setLoadUrl(getLoadUrl(loadDetailsMap));
 
         return load;
     }
 
 
     @Override
-    public Shipper resolveShipper() {
+    public Shipper resolveShipper(Map<String, Object> dataHashMap) {
+        Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
         Shipper shipper = new Shipper();
-        shipper.setExtSysId(getShipperExtSysId());
-        shipper.setName(getShipperName());
+        shipper.setExtSysId(getShipperExtSysId(loadDetailsMap));
+        shipper.setName(getShipperName(loadDetailsMap));
         return shipper;
     }
 
 
     @Override
-    public EquipmentType resolveEquipmentType() {
+    public EquipmentType resolveEquipmentType(Map<String, Object> dataHashMap) {
         EquipmentType equipmentType = new EquipmentType();
-        equipmentType.setExtSysId(getEquipmentTypeExtSysId());
+        equipmentType.setExtSysId(getEquipmentTypeExtSysId(getLoadDetailsMap(dataHashMap)));
+        equipmentType.setName(getEquipmentTypeName(getLoadDetailsMap(dataHashMap)));
         return equipmentType;
     }
 
 
-    private String getLoadExtSysId() {
+    private String getLoadExtSysId(Map<String, Object> loadDetailsMap) {
         if (loadExtSysId == null) {
-            String exceptionMessage = "load.extSysId was not found";
-            loadExtSysId = getMapValueAsString("Id", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            loadExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Id", loadDetailsMap);
         }
         return loadExtSysId;
     }
 
 
-    private String getShipperExtSysId() {
+    private String getShipperExtSysId(Map<String, Object> loadDetailsMap) {
         if (shipperExtSysId == null) {
-            String exceptionMessage = "shipper.extSysId was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> customerMap = getMapValueAsMap("Customer", loadDetailsMap, exceptionMessage);
-            shipperExtSysId = getMapValueAsString("CustomerId", customerMap, exceptionMessage);
+            Map<String, Object> customerMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("Customer", loadDetailsMap);
+            shipperExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("CustomerId", customerMap);
         }
         return shipperExtSysId;
     }
 
 
-    private String getEquipmentTypeExtSysId() {
+    private String getEquipmentTypeExtSysId(Map<String, Object> loadDetailsMap) {
         if (equipmentTypeExtSysId == null) {
-            String exceptionMessage = "equipmentType.extSysId was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> equipmentTypeMap = getMapValueAsMap("EquipmentType", loadDetailsMap, exceptionMessage);
-            equipmentTypeExtSysId = getMapValueAsString("EquipmentTypeId", equipmentTypeMap, exceptionMessage);
+            Map<String, Object> equipmentTypeMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("EquipmentType", loadDetailsMap);
+            equipmentTypeExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("EquipmentTypeId", equipmentTypeMap);
         }
         return equipmentTypeExtSysId;
     }
 
 
-    private String getTransportMode() {
+    private String getEquipmentTypeName(Map<String, Object> loadDetailsMap) {
+        if (equipmentTypeName == null) {
+            Map<String, Object> equipmentTypeMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("EquipmentType", loadDetailsMap);
+            equipmentTypeName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("EquipmentTypeName", equipmentTypeMap);
+        }
+        return equipmentTypeName;
+    }
+
+
+    private String getTransportMode(Map<String, Object> loadDetailsMap) {
         if (transportMode == null) {
-            String exceptionMessage = "load.transportMode was not found";
-            transportMode = getMapValueAsString("rtms__Mode_Name__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            transportMode = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Mode_Name__c", loadDetailsMap);
         }
         return transportMode;
     }
 
 
-    private BigDecimal getPostedRate() {
+    private BigDecimal getPostedRate(Map<String, Object> loadDetailsMap) {
         if (postedRate == null) {
-            String exceptionMessage = "load.postedRate was not found";
-            postedRate = getMapValueAsBigDecimal("rigPostedRate__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
-
+            postedRate = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rigPostedRate__c", loadDetailsMap);
         }
         return postedRate;
     }
 
 
-    private BigDecimal getInsuranceAmount() {
+    private BigDecimal getInsuranceAmount(Map<String, Object> loadDetailsMap) {
         if (insuranceAmount == null) {
-            String exceptionMessage = "load.insuranceAmount was not found";
-            insuranceAmount = getMapValueAsBigDecimal("rtms__Insurance_Amount__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            insuranceAmount = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Insurance_Amount__c", loadDetailsMap);
 
         }
         return insuranceAmount;
     }
 
 
-    private String getLoadStatusString() {
+    private String getLoadStatusString(Map<String, Object> loadDetailsMap) {
         if (loadStatusString == null) {
-            String exceptionMessage = "load.rtms__Load_Status__c was not found";
-            loadStatusString = getMapValueAsString("rtms__Load_Status__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            loadStatusString = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Load_Status__c", loadDetailsMap);
         }
         return loadStatusString;
     }
 
 
-    private String getSalesStatusString() {
+    private String getSalesStatusString(Map<String, Object> loadDetailsMap) {
         if (salesStatusString == null) {
-            String exceptionMessage = "load.rtms__Sales_Status__c was not found";
-            salesStatusString = getMapValueAsString("rtms__Sales_Status__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            salesStatusString = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Sales_Status__c", loadDetailsMap);
         }
         return salesStatusString;
     }
 
 
-    private String getFirstStopStatusString() {
+    private String getFirstStopStatusString(Map<String, Object> loadDetailsMap) {
         if (firstStopStatusString == null) {
-            String exceptionMessage = "firstStop.status was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> firstStopMap = getMapValueAsMap("FirstStop", loadDetailsMap, exceptionMessage);
-            firstStopStatusString = getMapValueAsString("FirstStoprtms__Stop_Status__c", firstStopMap, exceptionMessage);
+            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
+            firstStopStatusString = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Stop_Status__c", firstStopMap);
         }
         return firstStopStatusString;
     }
 
 
-    private String getLastStopStatusString() {
+    private String getLastStopStatusString(Map<String, Object> loadDetailsMap) {
         if (lastStopStatusString == null) {
-            String exceptionMessage = "lastStop.status was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> lastStopMap = getMapValueAsMap("LastStop", loadDetailsMap, exceptionMessage);
-            lastStopStatusString = getMapValueAsString("LastStoprtms__Stop_Status__c", lastStopMap, exceptionMessage);
+            Map<String, Object> lastStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
+            lastStopStatusString = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Stop_Status__c", lastStopMap);
         }
         return lastStopStatusString;
     }
 
 
-    private Boolean getTeamRequired() {
+    private Boolean getTeamRequired(Map<String, Object> loadDetailsMap) {
         if (teamRequired == null) {
-            String exceptionMessage = "load.teamRequired was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            teamRequired = (Boolean) loadDetailsMap.get("rig_Team_Required__c");
+            teamRequired = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rig_Team_Required__c", loadDetailsMap);
         }
         return teamRequired;
     }
 
 
-    private Boolean getFoodGradeTrailerRequired() {
+    private Boolean getFoodGradeTrailerRequired(Map<String, Object> loadDetailsMap) {
         if (foodTrailerRequired == null) {
-            String exceptionMessage = "load.foodTrailerRequired was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            foodTrailerRequired = (Boolean) loadDetailsMap.get("food_grade_trailer_required__c");
+            foodTrailerRequired = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("food_grade_trailer_required__c", loadDetailsMap);
         }
         return foodTrailerRequired;
     }
 
 
-    private Boolean getTemperatureControlRequired() {
+    private Boolean getTemperatureControlRequired(Map<String, Object> loadDetailsMap) {
         if (temperatureControlRequired == null) {
-            String exceptionMessage = "load.temperatureControlRequired was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            temperatureControlRequired = (Boolean) loadDetailsMap.get("rtms__Temperature_Controlled__c");
+            temperatureControlRequired = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rtms__Temperature_Controlled__c", loadDetailsMap);
         }
         return temperatureControlRequired;
     }
 
 
-    private Boolean getHazMat() {
+    private Boolean getHazMat(Map<String, Object> loadDetailsMap) {
         if (hazMat == null) {
-            String exceptionMessage = "load.temperatureControlRequired was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            hazMat = (Boolean) loadDetailsMap.get("rtms__Hazardous_Materials__c");
+            hazMat = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rtms__Hazardous_Materials__c", loadDetailsMap);
         }
         return hazMat;
     }
 
 
-    private String getLoadName() {
+    private String getLoadName(Map<String, Object> loadDetailsMap) {
         if (loadName == null) {
-            String exceptionMessage = "load.name was not found";
-            loadName = getMapValueAsString("Name", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            loadName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Name", loadDetailsMap);
         }
         return loadName;
     }
 
 
-    private String getLoadUrl() {
+    private String getLoadUrl(Map<String, Object> loadDetailsMap) {
         if (loadUrl == null) {
-            String exceptionMessage = "load.url was not found";
-            loadUrl = getMapValueAsString("rig_Load_URL__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            loadUrl = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rig_Load_URL__c", loadDetailsMap);
         }
         return loadUrl;
     }
 
 
-    private String getModeName() {
+    private String getModeName(Map<String, Object> loadDetailsMap) {
         if (modeName == null) {
-            String exceptionMessage = "load.modeName was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> modeMap = getMapValueAsMap("Mode", loadDetailsMap, exceptionMessage);
-            modeName = getMapValueAsString("ModeName", modeMap, exceptionMessage);
+            Map<String, Object> modeMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("Mode", loadDetailsMap);
+            modeName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("ModeName", modeMap);
         }
         return modeName;
     }
 
 
-    private BigDecimal getInvoiceTotal() {
+    private BigDecimal getInvoiceTotal(Map<String, Object> loadDetailsMap) {
         if (invoiceTotal == null) {
-            String exceptionMessage = "load.carrierInvoiceTotal was not found";
-            invoiceTotal = getMapValueAsBigDecimal("rtms__Carrier_Invoice_Total__c", getLoadDetailsMap(exceptionMessage), exceptionMessage);
+            invoiceTotal = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Carrier_Invoice_Total__c", loadDetailsMap);
         }
         return invoiceTotal;
     }
 
 
-    private String getShipperName() {
+    private String getShipperName(Map<String, Object> loadDetailsMap) {
         if (shipperName == null) {
-            String exceptionMessage = "shipper.name was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> customerMap = getMapValueAsMap("Customer", loadDetailsMap, exceptionMessage);
-            shipperName = getMapValueAsString("CustomerName", customerMap, exceptionMessage);
+            Map<String, Object> customerMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("Customer", loadDetailsMap);
+            shipperName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("CustomerName", customerMap);
         }
         return shipperName;
     }
 
 
-    private LocalDateTime getOrderDate() {
+    private LocalDateTime getOrderDate(Map<String, Object> loadDetailsMap) {
         if (orderDate == null) {
-            String exceptionMessage = "load.orderDate was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            orderDate = LocalDateTime.from(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                    .parse(getMapValueAsString("rtms__Order_Date__c", loadDetailsMap, exceptionMessage)));
+            orderDate = salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Order_Date__c", loadDetailsMap);
         }
         return orderDate;
     }
 
 
-    private LocalDate getExpectedShipDate() {
+    private LocalDate getExpectedShipDate(Map<String, Object> loadDetailsMap) {
         if (expectedShipDate == null) {
-            String exceptionMessage = "load.expectedShipDate was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            expectedShipDate = LocalDate.parse(getMapValueAsString("riggoh_Formatted_Expected_Ship_Date__c", loadDetailsMap, exceptionMessage), formatter);
+            expectedShipDate = salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("riggoh_Formatted_Expected_Ship_Date__c", loadDetailsMap);
         }
         return expectedShipDate;
     }
 
 
-    private LocalDate getExpectedDeliveryDate() {
+    private LocalDate getExpectedDeliveryDate(Map<String, Object> loadDetailsMap) {
         if (expectedDeliveryDate == null) {
-            String exceptionMessage = "load.expectedDeliveryDate was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            expectedDeliveryDate = LocalDate.parse(getMapValueAsString("riggoh_Formatted_Expected_Delivery_Date__c", loadDetailsMap, exceptionMessage), formatter);
+            expectedDeliveryDate = salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("riggoh_Formatted_Expected_Delivery_Date__c", loadDetailsMap );
         }
         return expectedDeliveryDate;
     }
 
 
-    private String getFirstStopExtSysId() {
+    private String getFirstStopExtSysId(Map<String, Object> loadDetailsMap) {
         if (firstStopExtSysId == null) {
-            String exceptionMessage = "loadStop.firstStop was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> firstStopMap = getMapValueAsMap("FirstStop", loadDetailsMap, exceptionMessage);
-            firstStopExtSysId = getMapValueAsString("FirstStopId", firstStopMap, exceptionMessage);
+            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
+            firstStopExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopId", firstStopMap);
         }
         return firstStopExtSysId;
     }
 
+    private String getFirstStopName(Map<String, Object> loadDetailsMap) {
+        if (firstStopName == null) {
+            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
+            firstStopName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopName", firstStopMap);
+        }
+        return firstStopName;
+    }
 
-    private String getLastStopExtSysId() {
+
+    private String getLastStopExtSysId(Map<String, Object> loadDetailsMap) {
         if (lastStopExtSysId == null) {
-            String exceptionMessage = "loadStop.lastStop was not found";
-            HashMap<String, Object> loadDetailsMap = getLoadDetailsMap(exceptionMessage);
-            HashMap<String, Object> firstStopMap = getMapValueAsMap("LastStop", loadDetailsMap, exceptionMessage);
-            lastStopExtSysId = getMapValueAsString("LastStopId", firstStopMap, exceptionMessage);
+            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
+            lastStopExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopId", firstStopMap);
         }
         return lastStopExtSysId;
     }
 
+    private String getLastStopName(Map<String, Object> loadDetailsMap) {
+        if (lastStopName == null) {
+            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
+            lastStopName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopName", firstStopMap);
+        }
+        return lastStopName;
+    }
 
-    private HashMap<String, Object> getLoadDetailsMap(String exceptionMessage) {
+
+    private Map<String, Object> getLoadDetailsMap(Map<String, Object> dataHashMap) {
         HashMap<String, Object> loadDetailsMap = (LinkedHashMap<String, Object>) dataHashMap.get("LoadDetails");
         if (loadDetailsMap != null) {
             return loadDetailsMap;
         }
-        throw new PayloadParseException(exceptionMessage);
-    }
-
-    private String getMapValueAsString(String key, HashMap<String, Object> map, String exceptionMessage) {
-        String value = (String) map.get(key);
-        if (StringUtils.isNotBlank(value)) {
-            return StringUtils.equals("null", value) ? null : value;
-        }
-        throw new PayloadParseException(exceptionMessage);
-    }
-
-    private BigDecimal getMapValueAsBigDecimal(String key, HashMap<String, Object> map, String exceptionMessage) {
-        String value = (String) map.get(key);
-        if (value == null) {
-            return null;
-        }
-        if (StringUtils.isNotBlank(value)) {
-            try {
-                return NumberUtils.parseNumber(value, BigDecimal.class);
-            } catch (IllegalArgumentException iae) {
-                throw new PayloadParseException(exceptionMessage, iae);
-            }
-        }
-        throw new PayloadParseException(exceptionMessage);
-    }
-
-
-    private HashMap<String, Object> getMapValueAsMap(String key, HashMap<String, Object> map, String exceptionMessage) {
-        HashMap<String, Object> returnMap = (HashMap<String, Object>) map.get(key);
-        if (returnMap.isEmpty()) {
-            throw new PayloadParseException(exceptionMessage);
-        }
-        return returnMap;
+        throw new PayloadParseException("LoadDetails");
     }
 }

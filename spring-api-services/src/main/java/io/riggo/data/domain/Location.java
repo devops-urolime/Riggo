@@ -36,13 +36,14 @@ public class Location implements Serializable {
     @Column(name = "updated_at")
     private java.util.Date updatedAt;
 
-
     @Transient
     @Column(name = "deleted")
     private java.util.Date deleted;
 
     @Column(name = "address_id")
     private Long addressId;
+
+    private Address address;
 
     public Long getAddressId() {
         return addressId;
@@ -51,7 +52,6 @@ public class Location implements Serializable {
     public void setAddressId(Long address_id) {
         this.addressId = address_id;
     }
-
 
     public Long getId() {
         return id;
@@ -107,5 +107,13 @@ public class Location implements Serializable {
 
     public void setDeleted(Date deleted) {
         this.deleted = deleted;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

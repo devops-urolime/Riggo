@@ -1,14 +1,13 @@
 package io.riggo.data.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name = "load_stop")
-
 public class LoadStop implements Serializable {
 
     private static final long serialVersionUID = 7156526077883281623L;
@@ -19,25 +18,57 @@ public class LoadStop implements Serializable {
     private Long id;
 
     @Column(name = "ext_sys_id")
-    @JsonAlias({"LastStopId", "FirstStopId","StopId"})
     private String extSysId;
 
     @Column(name = "ext_sys_tenant_id")
-    private String extSysTenantId = "0";
+    private String extSysTenantId;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "shipping_receiving_hours")
+    private String shippingReceivingHours;
+
+    @Column(name = "location_id")
+    private Integer locationId;
 
     @Column(name = "stop_number")
-    @JsonAlias({"Stoprtms__Number__c","FirstStoprtms__Number__c","LastStoprtms__Number__c"})
-    private Integer stopNumber = -1;
-
-
+    private Integer stopNumber;
 
     @Column(name = "type")
-    private Integer type = 1;
+    private Integer type;
+
+    @Column(name = "expected_date_time")
+    private LocalDateTime expectedDateTime;
+
+    @Column(name = "appointment_required")
+    private Boolean appointmentRequired;
+
+    @Column(name = "appointment_time")
+    private String appointmentTime;
+
+    @Column(name = "stop_status")
+    private Integer stopStatus;
+
+    @Column(name = "carrier_status")
+    private Integer carrierStatus;
+
+    @Column(name = "arrival_status")
+    private Integer arrivalStatus;
+
+    @Column(name = "departure_status")
+    private Integer departureStatus;
+
+    @Column(name = "arrival_date")
+    private LocalDate arrivalDate;
+
+    @Column(name = "departure_date_time")
+    private LocalDateTime departureDateTime;
 
     @Transient
     @Column(name = "created_at")
     private java.util.Date createdAt;
+
     @Transient
     @Column(name = "updated_at")
     private java.util.Date updatedAt;
@@ -49,9 +80,12 @@ public class LoadStop implements Serializable {
     @Column(name = "load_id")
     private Long loadId;
 
-    @Column(name = "location_id")
-    private Long locationId;
 
+    @Transient
+    private String loadExtSysId;
+
+    @Transient
+    private Location location;
 
 
     public Long getId() {
@@ -76,6 +110,22 @@ public class LoadStop implements Serializable {
 
     public void setExtSysTenantId(String extSysTenantId) {
         this.extSysTenantId = extSysTenantId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getShippingReceivingHours() {
+        return shippingReceivingHours;
+    }
+
+    public void setShippingReceivingHours(String shippingReceivingHours) {
+        this.shippingReceivingHours = shippingReceivingHours;
     }
 
     public Date getCreatedAt() {
@@ -118,6 +168,78 @@ public class LoadStop implements Serializable {
         this.type = type;
     }
 
+    public LocalDateTime getExpectedDateTime() {
+        return expectedDateTime;
+    }
+
+    public void setExpectedDateTime(LocalDateTime expectedDateTime) {
+        this.expectedDateTime = expectedDateTime;
+    }
+
+    public Boolean getAppointmentRequired() {
+        return appointmentRequired;
+    }
+
+    public void setAppointmentRequired(Boolean appointmentRequired) {
+        this.appointmentRequired = appointmentRequired;
+    }
+
+    public String getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(String appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public Integer getStopStatus() {
+        return stopStatus;
+    }
+
+    public void setStopStatus(Integer stopStatus) {
+        this.stopStatus = stopStatus;
+    }
+
+    public Integer getCarrierStatus() {
+        return carrierStatus;
+    }
+
+    public void setCarrierStatus(Integer carrierStatus) {
+        this.carrierStatus = carrierStatus;
+    }
+
+    public Integer getArrivalStatus() {
+        return arrivalStatus;
+    }
+
+    public void setArrivalStatus(Integer arrivalStatus) {
+        this.arrivalStatus = arrivalStatus;
+    }
+
+    public Integer getDepartureStatus() {
+        return departureStatus;
+    }
+
+    public void setDepartureStatus(Integer departureStatus) {
+        this.departureStatus = departureStatus;
+    }
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+
+    public LocalDateTime getDepartureDateTime() {
+        return departureDateTime;
+    }
+
+    public void setDepartureDateTime(LocalDateTime departureDateTime) {
+        this.departureDateTime = departureDateTime;
+    }
+
     public Long getLoadId() {
         return loadId;
     }
@@ -126,11 +248,27 @@ public class LoadStop implements Serializable {
         this.loadId = loadId;
     }
 
-    public Long getLocationId() {
+    public String getLoadExtSysId() {
+        return loadExtSysId;
+    }
+
+    public void setLoadExtSysId(String loadExtSysId) {
+        this.loadExtSysId = loadExtSysId;
+    }
+
+    public Integer getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(Long locationId) {
+    public void setLocationId(Integer locationId) {
         this.locationId = locationId;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
