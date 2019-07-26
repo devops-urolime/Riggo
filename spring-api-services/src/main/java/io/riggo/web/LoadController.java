@@ -117,22 +117,24 @@ public class LoadController {
             }
         }
         load.setEquipmentTypeId(equipmentType.getId());
+        load = loadService.save(load);
 
         LoadStop firstStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(dataHashMap);
         LoadStop lastStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(dataHashMap);
         if (StringUtils.isNotBlank(firstStop.getExtSysId())) {
             Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(firstStop.getExtSysId());
             if (!checkFirstStopExists.isPresent()) {
+                firstStop.setLoadId(load.getId());
                 loadStopService.save(firstStop);
             }
         }
         if (StringUtils.isNotBlank(lastStop.getExtSysId())) {
             Optional<LoadStop> checkLastStopExists = loadStopService.findByExtSysId(lastStop.getExtSysId());
-            if (checkLastStopExists.isPresent()) {
+            if (!checkLastStopExists.isPresent()) {
+                lastStop.setLoadId(load.getId());
                 loadStopService.save(lastStop);
             }
         }
-        load = loadService.save(load);
 
         LoadAPIResponse loadAPIResponse = new LoadAPIResponse();
         loadAPIResponse.addData(load);

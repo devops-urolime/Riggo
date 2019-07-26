@@ -29,6 +29,7 @@ class AppPage extends Component{
   }
   render(){
     const {auth, menu, defaultMenu} = this.props;
+    const isLogin = auth.isAuthenticated();
     const {openMenu} = this.state;
     return (
      <div className="App-layout">
@@ -46,10 +47,13 @@ class AppPage extends Component{
             </Grid>
             <Grid item xs={12}>
               <MainContent>
-                <Switch>
-                  <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
-                  <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
-                </Switch>
+                {
+                  isLogin &&
+                 <Switch>
+                   <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
+                   <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
+                 </Switch>
+                }
               </MainContent>
             </Grid>
          </Grid>
