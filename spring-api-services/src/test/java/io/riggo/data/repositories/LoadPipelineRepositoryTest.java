@@ -1,15 +1,16 @@
 package io.riggo.data.repositories;
 
-import java.util.Optional;
-
+import io.riggo.data.domain.LoadPipeline;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import io.riggo.data.domain.LoadPipeline;
+import java.util.List;
+import java.util.Optional;
+
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -26,7 +27,7 @@ public class LoadPipelineRepositoryTest {
         Long shipperId = 100l;
 
         //when
-        Optional<LoadPipeline> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteIdShipperId(siteId, shipperId);
+        Optional<List<LoadPipeline>> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteIdShipperId(siteId, shipperId);
 
         //then menusBySiteAndType isPresent
         assertTrue( loadPipeline.isPresent());
