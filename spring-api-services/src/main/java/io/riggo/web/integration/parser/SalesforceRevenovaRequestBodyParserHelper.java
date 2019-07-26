@@ -23,7 +23,8 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
 
     public String getMapValueAsString(String key, Map<String, Object> map) {
-        return MapUtils.getString(map, key);
+        String val = MapUtils.getString(map, key);
+        return StringUtils.equals(val, "null") ? null : val;
     }
 
 

@@ -64,6 +64,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         loadStop.setExtSysId(getFirstStopExtSysId(loadDetailsMap));
         loadStop.setName(getFirstStopName(loadDetailsMap));
         loadStop.setStopNumber(1);
+        //   loadStop.setShippingReceivingHours(get)
         loadStop.setType(LoadStopType.PICKUP.getColVal());
         return loadStop;
     }
