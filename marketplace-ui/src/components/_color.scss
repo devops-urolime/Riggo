@@ -1,9 +1,28 @@
 
-$link: #61dafb;
-$app-background: #181B2E;
-$general-text: #fff;
-$card-background: #2953A6;
-$card-shadow: rgba(0, 0, 0, 0.25);
-$color-secondary: #266FF1;
-$icon-fill-color: #fff;
-$top-bar-color: #272E4D;
+
+// Main Palette of Colors
+$primary: #272E4D;
+$primaryDark: #1D1E2F;
+$primaryLight: #2549AB;
+$secondaryDark: #000000;
+$secondaryLight: #266FF1;
+$secondaryLighter: #23263B;
+$neutralDark: #fff;
+$neutralDarker: transparent;
+$neutralLight: #3F4664;
+
+// Component Colors
+$app-background: $primaryDark;
+$general-text: $neutralDark;
+$general-text-tooltip: $secondaryDark;
+$card-background: $primaryLight;
+$icon-fill-color: $neutralDark;
+$top-bar-color: $primary;
+$login-overlay-color: $primaryDark;
+$login-btn-color: $secondaryLight;
+$input-border-color: $neutralLight;
+$input-background-color: $neutralDarker;
+$paper-section: $secondaryLighter;
+$menu-background-color: $secondaryLight;
+$side-bar-background-color: $secondaryLight;
+

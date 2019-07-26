@@ -1,5 +1,5 @@
 ALTER TABLE "public"."load"
-  DROP COLUMN "dispatcher",
+--  DROP COLUMN "dispatcher",
   DROP COLUMN "equipment_type_id";
 
 

@@ -12,7 +12,7 @@ ALTER TABLE load DROP COLUMN margin_piad;
 ALTER TABLE load DROP COLUMN margin_pct_invoiced;
 ALTER TABLE load DROP COLUMN sales_schedule_status;
 ALTER TABLE load DROP COLUMN load_shipping_status;
-ALTER TABLE load DROP COLUMN pickup_delivery_number;
+-- ALTER TABLE load DROP COLUMN pickup_delivery_number;
 ALTER TABLE load DROP COLUMN stop_reference_number;
 ALTER TABLE load DROP COLUMN site_url;
 

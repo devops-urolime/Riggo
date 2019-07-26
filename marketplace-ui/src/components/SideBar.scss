@@ -1,7 +1,7 @@
 @import 'base.scss';
 
 .SideBar-menu{
-    background: $color-secondary !important;
+    background: $side-bar-background-color !important;
     &__IconButton-logo{
        width: 100px;
     }
@@ -9,7 +9,7 @@
        width: 62px;
     }
     .MuiPaper-root{
-        background: $color-secondary !important;
+        background: $side-bar-background-color !important;
     }
     &__Header{
        display: flex;
