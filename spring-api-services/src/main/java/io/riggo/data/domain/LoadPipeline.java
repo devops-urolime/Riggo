@@ -3,32 +3,28 @@ package io.riggo.data.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "LOAD")
 public class LoadPipeline implements Serializable {
 
-
     @Id
-    private long id;
+    @Column(name = "load_status")
+    private int id;
 
-    @Column(name="PENDING")
-    private int pending;
+    @Column(name = "count")
+    private int count;
 
-    @Column(name="INTRANSIT")
-    private int inTransit;
-
-    @Column(name="DELIVERED")
-    private int delivered;
-
-
-    public int getPending() {
-        return pending;
+    public int getId() {
+        return id;
     }
 
-    public void setPending(int pending) {
-        this.pending = pending;
+    public void setId(int id) {
+        this.id = id;
     }
+
+    public int getCount() {
+        return count;
+    }
+
 }

@@ -10,7 +10,8 @@ public enum ResourceType
 {
     NORESOURCE( 0, "No Resource" ),
     LOAD( 1, "Load" ),
-    SHIPPER( 2, "Shipper" );
+    SHIPPER(2, "Shipper"),
+    LOAD_PIPELINE(3, "Load Pipline");
 
     private final String displayName;
     private final int colVal;
