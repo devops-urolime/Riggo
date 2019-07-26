@@ -34,25 +34,16 @@ export const SAMPLE_DATA_BAR = [
 
 export const BAR_DARK2 = "dark2";
 
-const BarVisualization = ({ data, rootClass, colorsScheme, groupMode}) => {
+const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, keys}) => {
   const customLabelFormat = (d)=>{
     return (!groupMode) ? `${d.id} ${d.value}` : `${d.value}`
   };
   let configBar = {
-    data: data,
+    data,
     enableGridY: false,
     enableGridX: false,
-    keys:[
-          'Quoted',
-          'Booked',
-          'At Pickup',
-          'In Transit',
-          'At Delivery',
-          'Pending Docs',
-          'Docs Received',
-          'Invoiced'
-         ],
-    indexBy: "status",
+    keys,
+    indexBy: indexBy,
     margin:{ top: 20, right: 30, bottom: 50, left: 15 },
     padding:0,
     colors:{ scheme: colorsScheme },
@@ -84,9 +75,11 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode}) => {
 
 BarVisualization.propTypes = {
   data: PropTypes.array,
+  keys: PropTypes.array,
   rootClass: PropTypes.string,
   colorsScheme: PropTypes.string,
   groupMode: PropTypes.bool,
+  indexBy: PropTypes.string,
 };
 
 export default BarVisualization;
