@@ -161,6 +161,55 @@ variable "allowed_methods" {
 
 }
 
+variable "cloudfront_root_object" {
+  description = "Landing page of the cloudfront"
+  default = "index.html"
+}
+
+
+variable "cloudfront_acm_arn" {
+
+  description = "ARN of the ACM certificate"
+  default = "arn:aws:acm:us-east-1:845657178663:certificate/155bca16-2b02-4a3e-bdec-f17da6f3b058"
+  
+  
+}
+
+variable "cloudfront_ssl_protocol_ver" {
+  description = "version of SSL for ACM"
+  default = "TLSv1.1_2016"
+  
+}
+
+variable "cname_alias" {
+  description = "Domain name to use as cname in cloudfront"
+  default = "*.riggoqa.net"
+}
+
+variable "error_caching_min_ttl" {
+  type = list(number)
+  default = [300,300]
+  
+}
+
+variable "error_code" {
+  type = list(number)
+  default = [404,403]
+  
+}
+
+variable "response_code" {
+   type = list(number)
+  default = [200,200]
+  
+}
+
+variable "response_page_path" {
+   type = list(string)
+  default = ["/index.html"]
+  
+}
+
 
 #Variables for VPC
 

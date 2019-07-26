@@ -102,7 +102,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   lifecycle {
     create_before_destroy = true
 
-    ignore_changes = [ user_data,image_id ]
+    # ignore_changes = [ user_data,image_id ]
   }
 
   associate_public_ip_address = "false"
