@@ -1,6 +1,6 @@
 import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from '../config';
-import { login, loginSuccess, loginFail, logOut } from '../redux/actions/auth';
+import { loginSuccess, loginFail, logOut } from '../redux/actions/auth';
 
 class Auth {
   accessToken;
@@ -18,19 +18,12 @@ class Auth {
   });
 
   constructor() {
-    this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
     this.getAccessToken = this.getAccessToken.bind(this);
     this.getIdToken = this.getIdToken.bind(this);
     this.renewSession = this.renewSession.bind(this);
-    this.getProfile = this.getProfile.bind(this);
-  }
-
-  login() {
-    login("Start authorize request in progress.");
-    this.auth0.authorize();
   }
 
   handleAuthentication() {
@@ -71,18 +64,8 @@ class Auth {
          this.setSession(authResult);
        } else if (err) {
          this.logout();
-         console.log(err);
-         alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+         console.log(`Could not get a new token (${err.error}: ${err.error_description}).`);
        }
-    });
-  }
-
-  getProfile(cb) {
-    this.auth0.client.userInfo(this.accessToken, (err, profile) => {
-      if (profile) {
-        this.userProfile = profile;
-      }
-      cb(err, profile);
     });
   }
 
