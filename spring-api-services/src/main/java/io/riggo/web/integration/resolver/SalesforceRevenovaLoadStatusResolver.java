@@ -3,9 +3,11 @@ package io.riggo.web.integration.resolver;
 import io.riggo.data.domain.LoadSubStatus;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class SalesforceRevenovaLoadStatusResolver implements LoadStatusResolver{
 
 

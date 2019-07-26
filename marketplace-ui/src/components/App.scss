@@ -1,20 +1,20 @@
 @import 'base.scss';
 
 .App {
-  text-align: center;
+    text-align: center;
 }
 
-.App-link {
-  color: $link;
-}
-
+$mobile-device-min-height: 1400px;
+$large-device-min-height: 1400px;
 .App-layout{
-  background: $app-background;
-  height: 100%;
-  color: $general-text;
-}
-
-.MuiAppBar-colorPrimary {
-    color: #fff;
-    background-color: #2E3362;
+    background: $app-background;
+    height: 100%;
+    color: $general-text;
+    min-height: $mobile-device-min-height;
+    @media (min-width: $md-min-width) {
+        min-height: $large-device-min-height;
+    }
+    @media (min-width: $xl-min-width) {
+        min-height: $large-device-min-height;
+    }
 }
