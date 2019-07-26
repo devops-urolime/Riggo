@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 const CardSummary = ({number, label}) => {
   return (
-    <Card className="CardSummary">
+    <Card className="CardSummary CardSummary__MuiPaper-root">
       <CardContent>
         <Typography className="CardSummary__number" variant="h5" component="h2">
           {number}

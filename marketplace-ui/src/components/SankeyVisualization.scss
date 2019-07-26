@@ -1,0 +1,8 @@
+@import 'base.scss';
+
+.SankeyVisualization{
+    div > div > div{
+      background-color: $paper-section !important;
+    }
+}
+

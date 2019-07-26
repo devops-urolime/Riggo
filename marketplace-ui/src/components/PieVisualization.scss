@@ -1,0 +1,13 @@
+@import 'base.scss';
+
+.PieVisualization{
+    text{
+        fill: $general-text !important;
+    }
+    div > div > div {
+        background-color: $paper-section !important;
+        font-family: $main-font-family !important;
+        color: $general-text !important;
+    }
+}
+

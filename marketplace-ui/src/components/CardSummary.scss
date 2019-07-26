@@ -1,10 +1,12 @@
 @import 'base.scss';
 
 .CardSummary{
-    width: 100px;
+    width: 105px;
+    height: 124px;
     background: $card-background !important;
     text-align: center;
     color: $general-text !important;
+    margin-bottom: 30px;
     &__number {
 
     }
@@ -17,5 +19,10 @@
     @media (min-width: $xl-min-width) {
         width: 300px;
     }
+    &__MuiPaper-root{
+        background-color: $card-background !important;
+    }
 }
+
+
 
