@@ -1,0 +1,36 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Sample Implicit Flow OAuth2 Project1"
+host: "rsrvg4x2xj.execute-api.us-west-2.amazonaws.com"
+basePath: "/eds-test"
+schemes:
+  - "https"
+paths:
+  /load:
+    get:
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "query"
+          required: false
+          type: "string"
+        - name: "externalid"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "200 response"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        passthroughBehavior: "when_no_match"
+        type: "mock"
