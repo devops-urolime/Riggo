@@ -27,11 +27,14 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick}) => {
     <div className={classes.root}>
       <AppBar className="TopBar" position="static">
         <Toolbar>
-          <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton} color="inherit" aria-label="Menu">
-            <Icon name={MENU_ICON}/>
-          </IconButton>
+          {isLogin &&
+           <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton}
+                       color="inherit" aria-label="Menu">
+             <Icon name={MENU_ICON}/>
+           </IconButton>
+          }
           <Typography variant="h6" className={classes.title}>
-            {title}
+            {isLogin && title}
           </Typography>
           {isLogin &&
             <IconButton onClick={()=>logout()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">

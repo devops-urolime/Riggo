@@ -94,14 +94,7 @@ public class LoadController {
         }
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
-        if (StringUtils.isNotBlank(shipper.getExtSysId())) {
-            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId());
-            if (checkShipperExists.isPresent()) {
-                BeanUtils.copyProperties(checkShipperExists.get(), shipper, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
-            }
-            shipperService.save(shipper);
-        }
-        load.setShipperId(shipper.getId());
+        persistShipper(shipper, load);
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
         if (StringUtils.isNotBlank(equipmentType.getExtSysId())) {
@@ -153,6 +146,10 @@ public class LoadController {
         if (!loadFromDb.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
         }
+
+        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
+        persistShipper(shipper, resolvedLoad);
+
         //
         Load existingLoad = loadFromDb.get();
         BeanUtils.copyProperties(resolvedLoad, existingLoad, SalesforceRevenovaConstants.POST_PUT_LOAD_IGNORE_PROPERTIES);
@@ -165,6 +162,17 @@ public class LoadController {
                 .toString());
 
         return loadAPIResponse;
+    }
+
+    private void persistShipper(Shipper shipper, Load load) {
+        if (StringUtils.isNotBlank(shipper.getExtSysId())) {
+            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId());
+            if (checkShipperExists.isPresent()) {
+                BeanUtils.copyProperties(checkShipperExists.get(), shipper, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
+            }
+            shipperService.save(shipper);
+            load.setShipperId(shipper.getId());
+        }
     }
 
     @PatchMapping(value = "/load", produces = "application/json")

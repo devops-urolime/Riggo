@@ -180,7 +180,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
 
     private BigDecimal getPostedRate(Map<String, Object> loadDetailsMap) {
         if (postedRate == null) {
-            postedRate = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rigPostedRate__c", loadDetailsMap);
+            postedRate = salesforceRevenovaRequestBodyParserHelper.getMapValueIntegerAsBigDecimal("rigPostedRate__c", loadDetailsMap);
         }
         return postedRate;
     }
