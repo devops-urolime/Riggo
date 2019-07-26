@@ -1,4 +1,5 @@
 import { LOGIN_SUCCESS, LOGIN_FAIL, LOGIN_REQUEST, LOGOUT_REQUEST } from "../actions/auth";
+import { createSelector } from 'reselect';
 
 const initState = {
   message:"",
@@ -35,3 +36,10 @@ export default function(state = initState, action) {
       return state;
   }
 }
+
+const currentTokenSelector = state => state.auth.token.token;
+
+export const getToken = createSelector(
+  currentTokenSelector,
+  defaultMenu => defaultMenu
+);
