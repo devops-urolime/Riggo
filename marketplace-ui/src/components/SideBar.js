@@ -17,11 +17,11 @@ class SideBar extends Component {
             open={isOpen}
             className="SideBar-menu"
           >
-            <nav className="SideBar-menu__Header" onClick={handleClose}>
+            <nav className="SideBar-menu__Header" >
               <Icon name={LOGO_ICON}/>
             </nav>
             <Divider />
-            <MenuContent menu={menu} defaultMenu={defaultMenu}/>
+            <MenuContent onClick={handleClose} menu={menu} defaultMenu={defaultMenu}/>
           </Drawer>
         </div>
       );

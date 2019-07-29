@@ -29,7 +29,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({LoadNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class, LoadNotFoundException.class})
     public final ResponseEntity<Object> notFoundExceptions(Exception ex, WebRequest request) {
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }

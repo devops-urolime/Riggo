@@ -6,9 +6,48 @@ import './HomePage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
 import Paper from '@material-ui/core/Paper';
-import { DARK2, NIVO, SAMPLE_DATA_PIE_1, SAMPLE_DATA_PIE_2 } from './PieVisualization';
-import PieVisualization from './PieVisualization';
-import BarVisualization, { BAR_DARK2, SAMPLE_DATA_BAR } from './BarVisualization';
+import PieVisualization, {
+  DARK2,
+  NIVO,
+  SAMPLE_DATA_PIE_1,
+  SAMPLE_DATA_PIE_2
+} from './PieVisualization';
+import BarVisualization, { BAR_DARK2 } from './BarVisualization';
+
+const ROOT_INDEX_BAR_VISUALIZATION = "status";
+const KEYS_DATA_BAR_VISUALIZATION= [
+    "Quoted",
+    "Booked",
+    "Dispatched",
+    "@Pickup",
+    "In transit",
+    "@Delivery",
+    "Pending Docs",
+    "Docs Received",
+    "Invoiced"
+];
+
+const digestDataToBarVisualization = (data) => {
+  const COLOR_SUB_FIX = "Color";
+  return data.map( item => {
+    const setOfData = { status: item.name.toString() };
+    item.subStatuses.forEach( (subItem) => {
+        setOfData[subItem.name.toString() ] = subItem.count;
+        setOfData[subItem.name.toString() + COLOR_SUB_FIX] = "hsl(9, 87%, 67%)";
+    });
+    return setOfData;
+  });
+};
+
+const digestDataToCardVisualization = (data) => {
+  return data.map((item) => {
+    const card = {
+      number: item.count,
+      label: item.name
+    };
+    return card;
+  });
+};
 
 class HomePage extends Component {
 
@@ -31,6 +70,8 @@ class HomePage extends Component {
 
   render(){
     const { pipeLineSummary } = this.props;
+    const pipeLineSummaryBar = digestDataToBarVisualization(pipeLineSummary);
+    const pipeLineSummaryCard = digestDataToCardVisualization(pipeLineSummary);
     const { isBarGroupMode } = this.state;
       return (
         <Grid
@@ -51,8 +92,8 @@ class HomePage extends Component {
               <TitleSection label="Status"/>
             </Grid>
           </Grid>
-          { pipeLineSummary &&
-            pipeLineSummary.map((item, index) => {
+          { pipeLineSummaryCard &&
+            pipeLineSummaryCard.map((item, index) => {
             return (
               <Grid xs={4} key={`card-summary-${index}`} item>
                 <CardSummary number={item.number} label={item.label}/>
@@ -68,10 +109,12 @@ class HomePage extends Component {
             <Grid item xs={11}>
               <Paper className="HomePage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
                 <BarVisualization
-                  data={SAMPLE_DATA_BAR}
+                  data={pipeLineSummaryBar}
                   colorsScheme={BAR_DARK2}
                   rootClass="StatusVisualization"
                   groupMode={isBarGroupMode}
+                  indexBy={ROOT_INDEX_BAR_VISUALIZATION}
+                  keys={KEYS_DATA_BAR_VISUALIZATION}
                 />
               </Paper>
             </Grid>

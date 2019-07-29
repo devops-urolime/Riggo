@@ -19,8 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(LoadPipelineController.class)
-public class LoadPipelineControllerTest {
+@WebMvcTest(LoadPipelineSummaryController.class)
+public class LoadPipelineSummaryControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -28,7 +28,7 @@ public class LoadPipelineControllerTest {
     @MockBean
     private LoadPipelineService loadPipelineService;
 
-    private static Logger logger = LoggerFactory.getLogger(LoadPipelineControllerTest.class);
+    private static Logger logger = LoggerFactory.getLogger(LoadPipelineSummaryControllerTest.class);
 
     @WithMockUser(value = "spring", authorities = {"read:loadPipeline"})
     @Test
