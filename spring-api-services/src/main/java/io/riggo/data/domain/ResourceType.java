@@ -11,7 +11,8 @@ public enum ResourceType
     NORESOURCE( 0, "No Resource" ),
     LOAD( 1, "Load" ),
     SHIPPER(2, "Shipper"),
-    LOAD_PIPELINE(3, "Load Pipline");
+    LOAD_PIPELINE(3, "Load Pipeline"),
+    LOAD_STOP_SUMMARY(4, "Load Stop Summary");
 
     private final String displayName;
     private final int colVal;

@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = Paths.API_VERSION)
-public class LoadPipelineController {
+public class LoadPipelineSummaryController {
 
     @Autowired
     private LoadPipelineService loadPipelineService;
