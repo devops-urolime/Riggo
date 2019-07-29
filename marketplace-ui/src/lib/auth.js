@@ -2,11 +2,13 @@ import auth0 from 'auth0-js';
 import { AUTH_CONFIG } from '../config';
 import { loginSuccess, loginFail, logOut } from '../redux/actions/auth';
 
+export const JWTLocalStorage = 'token';
+export const isLoggedInLocalStorage = 'isLoggedIn';
+
 class Auth {
   accessToken;
   idToken;
   expiresAt;
-  userProfile;
 
   auth0 = new auth0.WebAuth({
     domain: AUTH_CONFIG.domain,
@@ -32,7 +34,7 @@ class Auth {
         this.setSession(authResult);
         loginSuccess(authResult.accessToken);
         // Set accessToken in localStorage
-        localStorage.setItem('accessToken', authResult.accessToken);
+        localStorage.setItem(JWTLocalStorage, authResult.accessToken);
       } else if (err) {
         loginFail({err});
       }
@@ -49,8 +51,7 @@ class Auth {
 
   setSession(authResult) {
     // Set isLoggedIn flag in localStorage
-    localStorage.setItem('isLoggedIn', 'true');
-
+    localStorage.setItem(isLoggedInLocalStorage, 'true');
     // Set the time that the access token will expire at
     let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
     this.accessToken = authResult.accessToken;
@@ -75,12 +76,9 @@ class Auth {
     this.idToken = null;
     this.expiresAt = 0;
 
-    // Remove user profile
-    this.userProfile = null;
-
     // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem(isLoggedInLocalStorage);
+    localStorage.removeItem(JWTLocalStorage);
     this.auth0.logout({
       returnTo: window.location.origin
     });

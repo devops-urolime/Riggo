@@ -12,8 +12,8 @@ module "VPC" {
   cidr_block = "${var.cidr_block}"
   from_port  = "${var.from_port}"
   to_port    = "${var.to_port}"
-  peering_vpc_id = "${var.peering_vpc_id}"
-  peer_security_group_id = "${var.peer_security_group_id}"
+  # peering_vpc_id = "${var.peering_vpc_id}"
+  # peer_security_group_id = "${var.peer_security_group_id}"
 }
 
 module "RDS" {
