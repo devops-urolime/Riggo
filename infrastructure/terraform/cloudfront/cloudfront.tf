@@ -111,9 +111,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   }
 
- lifecycle {
-   ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
-  }
+#  lifecycle {
+#    ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
+#   }
 
 }
 

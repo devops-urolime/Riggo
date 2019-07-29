@@ -230,17 +230,17 @@ variable "to_port" {
   default     = "5432"
 }
 
-variable "peering_vpc_id" {
-  description = "Perring VPC id of Riggo-VPC"
-  default = "vpc-0bd2666e449685359"
+# variable "peering_vpc_id" {
+#   description = "Perring VPC id of Riggo-VPC"
+#   default = "vpc-0bd2666e449685359"
   
-}
+# }
 
-variable "peer_security_group_id" {
-   description = "sG id of Riggo-VPC"
-   default = "sg-0e0c7b276070e72d8"
+# variable "peer_security_group_id" {
+#    description = "sG id of Riggo-VPC"
+#    default = "sg-0e0c7b276070e72d8"
   
-}
+# }
 
 
 
