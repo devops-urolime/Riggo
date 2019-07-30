@@ -162,7 +162,7 @@ class Login extends Component{
                         label="Email"
                         type="email"
                         name="email"
-                        autoComplete="email"
+                        autoComplete="new-email"
                         margin="normal"
                         variant="outlined"
                         onChange={this.onEmailChange}
@@ -177,7 +177,7 @@ class Login extends Component{
                         id="outlined-password-input"
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         margin="normal"
                         variant="outlined"
                         onChange={this.onPasswordChange}
