@@ -25,9 +25,9 @@ describe('<AppPage />', () => {
 
   const wrapperMount = (testProps) => {
       return shallow(
-          <BrowserRouter>
+
             <AppPage {...testProps} />
-          </BrowserRouter>
+
         );
     };
 
@@ -38,6 +38,7 @@ describe('<AppPage />', () => {
 
   it('must contain one TopBar component', () => {
     const wrapper = wrapperMount(baseTestProps);
+    console.log(wrapper.debug());
     expect_c(wrapper.find(TopBar)).to.have.lengthOf(1);
   });
 

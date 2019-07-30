@@ -1,5 +1,8 @@
 @import 'base.scss';
 
+$CardSummarySectionLefRight: 20px;
+$SectionsVisualizationWidth: 310px;
+
 .HomePage{
     &__MuiPaper-root{
         background-color: $paper-section !important;
@@ -10,10 +13,18 @@
 
 .StatusVisualization{
     height: 250px;
-    width: 357px;
+    width: $SectionsVisualizationWidth;
 }
 
 .PerformancePickUpVisualization{
     height: 350px;
-    width: 357px;
+    width: $SectionsVisualizationWidth;
+}
+
+
+
+.CardSummarySection{
+    margin-bottom: 8px;
+    margin-right:  $CardSummarySectionLefRight;
+    margin-left:  $CardSummarySectionLefRight;
 }
