@@ -1,15 +1,13 @@
-/** In the future, this JS should:
- * Read X-API-Key from request header
- * Find X-API-Key in site_license.
- * Populate JWT Token with site.
-  * @param user
- * @param context
- * @param callback
- */
 function (user, context, callback) {
-    //if (context.connection === 'company.com') {
-    context.idToken['siteId'] = '100';
-    //}
+    /** namespace cannot be an auth0 domain */
+    const namespace = 'https://auth.riggoqa.com/';
+    context.idToken[namespace + 'siteId'] = '100';
+    context.idToken[namespace + 'email'] = user.email;
+    context.idToken[namespace + 'email_verified'] = user.email_verified;
+
+    context.accessToken[namespace + 'siteId'] = '100';
+    context.accessToken[namespace + 'email'] = user.email;
+    context.accessToken[namespace + 'email_verified'] = user.email_verified;
 
     callback(null, user, context);
 }

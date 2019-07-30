@@ -2,7 +2,7 @@ import {
   BASE_END_POINT,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
-  LOAD_PIPELINE_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
+  LOAD_PIPELINE_SUMMARY_END_POINT, LOAD_STOP_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
 } from './config';
 
 const METHOD_GET = 'get';
@@ -10,12 +10,6 @@ const METHOD_GET = 'get';
 const validateEmptyJWT = (jwt) => {
   if (!jwt) { throw new Error(EMPTY_JWT_ERROR_MESSAGE); }
 };
-
-const pipeLineSummaryMockData = [
-  {label: "pending", number :58},
-  {label: "in transit", number :30},
-  {label: "Delivered", number :28}
-];
 
 const menuMockData = [
 		{
@@ -56,6 +50,128 @@ const menuMockData = [
 		}
 ];
 
+const summaryMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "id":1,
+         "name":"Pending",
+         "count":26,
+         "subStatuses":[
+            {
+               "id":1,
+               "name":"Quoted",
+               "count":30
+            },
+            {
+               "id":2,
+               "name":"Booked",
+               "count":20
+            }
+         ]
+      },
+      {
+         "id":2,
+         "name":"In Transit",
+         "count":4,
+         "subStatuses":[
+            {
+               "id":3,
+               "name":"Dispatched",
+               "count":30
+            },
+            {
+               "id":4,
+               "name":"@Pickup",
+               "count":40
+            },
+            {
+               "id":5,
+               "name":"In transit",
+               "count":50
+            },
+            {
+               "id":6,
+               "name":"@Delivery",
+               "count":60
+            }
+         ]
+      },
+      {
+         "id":3,
+         "name":"Delivered",
+         "count":0,
+         "subStatuses":[
+            {
+               "id":7,
+               "name":"Pending Docs",
+               "count":70
+            },
+            {
+               "id":8,
+               "name":"Docs Received",
+               "count":80
+            },
+           {
+              "id":8,
+              "name":"Invoiced",
+              "count":30
+           }
+         ]
+      }
+   ]
+};
+
+const summaryStopMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "id":1,
+         "name":"Pickup",
+         "data":[
+            {
+               "id":1,
+               "name":"Early",
+               "count":12
+            },
+            {
+               "id":2,
+               "name":"On Time",
+               "count":26
+            },
+            {
+               "id":3,
+               "name":"Delayed",
+               "count":50
+            }
+         ]
+      },
+      {
+         "id":2,
+         "name":"Delivery",
+         "data":[
+            {
+               "id":1,
+               "name":"Early",
+               "count":12
+            },
+            {
+               "id":2,
+               "name":"On Time",
+               "count":26
+            },
+            {
+               "id":3,
+               "name":"Delayed",
+               "count":50
+            }
+         ]
+      }
+   ]
+};
+
 const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
    return {
      method: method,
@@ -81,21 +197,19 @@ export const findLoadByIdApi = async (idLoad, JWT) => {
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
-    const json = await response.json();
-    let responseData = [];
-    if(json && json.data){
-      json.data.forEach((item) => {
-        const infoItem = Object.entries(item);
-        const summary = {
-            label: infoItem[0][0],
-            number: infoItem[0][1]
-        };
-        responseData.push(summary);
-      });
+    let responseData = null;
+    let json = null;
+    if (MOCK_ALL_DATA){
+      console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
+      json = summaryMock;
+    } else {
+      const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
+      json = await response.json();
     }
-    if (MOCK_ALL_DATA) console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
-    return (MOCK_ALL_DATA) ? pipeLineSummaryMockData : responseData;
+    if(json && json.data){
+      responseData = json.data;
+    }
+    return responseData;
 };
 
 export const getMenuApi = async (JWT) => {
@@ -108,4 +222,21 @@ export const getMenuApi = async (JWT) => {
     }
     if (MOCK_ALL_DATA) console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
     return (MOCK_ALL_DATA) ? menuMockData : responseData;
+};
+
+export const loadStopsSummaryApi = async (JWT) => {
+    const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
+    let responseData = null;
+    let json = null;
+    if (MOCK_ALL_DATA){
+      console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
+      json = summaryStopMock;
+    } else {
+      const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
+      json = await response.json();
+    }
+    if(json && json.data){
+      responseData = json.data;
+    }
+    return responseData;
 };

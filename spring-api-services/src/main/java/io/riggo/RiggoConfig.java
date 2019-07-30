@@ -45,17 +45,17 @@ public class RiggoConfig extends WebSecurityConfigurerAdapter {
         JwtWebSecurityConfigurer
                 .forRS256(apiAudience, issuer)
                 .configure(http)
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).authenticated()
-//                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).hasAuthority("read:loadPipeline")
-//                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").authenticated()
-//                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").hasAuthority("read:load")
-//                .antMatchers(HttpMethod.POST, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
-//                .antMatchers(HttpMethod.GET, Paths.API_VERSION_MENUS + "/menus").authenticated()
-//                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").authenticated()
-//                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
-//                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").authenticated()
-//                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load");
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).authenticated()
+                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).hasAuthority("read:loadPipeline")
+                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").authenticated()
+                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").hasAuthority("read:load")
+                .antMatchers(HttpMethod.POST, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
+                .antMatchers(HttpMethod.GET, Paths.API_VERSION_MENUS + "/menus").authenticated()
+                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").authenticated()
+                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
+                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").authenticated()
+                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load");
         ;
 
     }

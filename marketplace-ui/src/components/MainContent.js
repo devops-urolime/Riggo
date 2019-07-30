@@ -10,7 +10,10 @@ const MainContent = ({children}) => {
 };
 
 MainContent.propTypes = {
-  children: PropTypes.object
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool
+  ]),
 };
 
 export default MainContent;

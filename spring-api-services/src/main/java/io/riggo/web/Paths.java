@@ -7,6 +7,7 @@ public class Paths {
 
     public static final String LOAD = "/load";
     public static final String LOAD_PIPELINE_SUMMARY = "/load/pipeline/summary";
+    public static final String LOAD_STOP_SUMMARY = "/load/stop/summary";
     public static final String MENUS = "/menus";
 
     public static final String API_VERSION_LOAD = API + VERSION + LOAD;

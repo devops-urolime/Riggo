@@ -1,12 +1,22 @@
 import { takeEvery, all, put, select } from 'redux-saga/effects';
 import {
   APP_API_CALL_FAIL,
-  GET_LOAD, GET_LOAD_FAIL,
-  GET_LOAD_PIPE_LINE_SUMMARY, GET_LOAD_PIPE_LINE_SUMMARY_FAIL,
+  GET_LOAD,
+  GET_LOAD_FAIL,
+  GET_LOAD_PIPE_LINE_SUMMARY,
+  GET_LOAD_PIPE_LINE_SUMMARY_FAIL,
   GET_LOAD_PIPE_LINE_SUMMARY_SUCCESS,
+  GET_LOAD_STOP_SUMMARY,
+  GET_LOAD_STOP_SUMMARY_FAIL,
+  GET_LOAD_STOP_SUMMARY_SUCCESS,
   GET_LOAD_SUCCESS
 } from '../actions/load';
-import { findLoadByIdApi, getMenuApi, loadPipeLineSummaryApi } from '../../api';
+import {
+  findLoadByIdApi,
+  getMenuApi,
+  loadPipeLineSummaryApi,
+  loadStopsSummaryApi
+} from '../../api';
 import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
 import { getToken } from '../reducers/auth';
 
@@ -48,6 +58,21 @@ function* getLoadPipeLineSummarySaga() {
     }
 }
 
+function* getLoadStopSummarySaga() {
+    try{
+      const JWT = yield select(getToken);
+      const result = yield loadStopsSummaryApi(JWT);
+      yield put({type: GET_LOAD_STOP_SUMMARY_SUCCESS, stopSummary: result});
+    } catch (e) {
+      yield put({type: GET_LOAD_STOP_SUMMARY_FAIL});
+      yield put({
+        type: APP_API_CALL_FAIL,
+        message: "Error when get Load Stop Summary",
+        err: e
+      });
+    }
+}
+
 function* getMenuSaga() {
     try{
       const JWT = yield select(getToken);
@@ -68,6 +93,10 @@ export function* watchGetLoad() {
     yield takeEvery(GET_LOAD, getLoadSaga);
 }
 
+export function* watchGetLoadStopSummary() {
+    yield takeEvery(GET_LOAD_STOP_SUMMARY, getLoadStopSummarySaga);
+}
+
 export function* watchGetLoadPipeLineSummary() {
     yield takeEvery(GET_LOAD_PIPE_LINE_SUMMARY, getLoadPipeLineSummarySaga);
 }
@@ -80,6 +109,7 @@ export default function* rootSaga() {
     yield all([
       watchGetLoad(),
       watchGetLoadPipeLineSummary(),
+      watchGetLoadStopSummary(),
       watchGetMenu()
     ]);
 }

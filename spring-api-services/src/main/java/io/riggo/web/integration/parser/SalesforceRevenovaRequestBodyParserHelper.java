@@ -48,6 +48,14 @@ public class SalesforceRevenovaRequestBodyParserHelper {
         throw new PayloadParseException(key);
     }
 
+    public BigDecimal getMapValueIntegerAsBigDecimal(String key, Map<String, Object> map) {
+        Integer value = MapUtils.getInteger(map, key, null);
+        if (value == null) {
+            return null;
+        }
+        return new BigDecimal(value);
+    }
+
 
     public Boolean getMapValueAsBoolean(String key, Map<String, Object> map) {
         return MapUtils.getBoolean(map, key);
