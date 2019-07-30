@@ -119,3 +119,55 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   #                                 EOF
 
 }
+
+resource "aws_launch_template" "ECS-launch-template" {
+name_prefix          = "ECS-Riggo-${terraform.workspace}"
+image_id             = "${data.aws_ami.amazon-linux-ecs.id}"
+instance_type        = "${var.ecs_instance_type}"
+iam_instance_profile  {
+                name = "${aws_iam_instance_profile.ecs-instance-profile.name}"
+     }
+vpc_security_group_ids = ["${aws_security_group.ecs-instance-SG.id}"]
+
+
+# block_device_mappings {
+
+#   device_name = "/dev/xvda1"
+# ebs {
+#   volume_type           = "${var.ecs_volume_type}"
+#   volume_size           = "${var.ecs_volume_size}"
+#   delete_on_termination = true
+
+# }
+# }
+
+lifecycle {
+    create_before_destroy = true
+
+    # ignore_changes = [ user_data,image_id ]
+  }
+
+# network_interfaces {
+#     associate_public_ip_address = false
+#     security_groups = ["${aws_security_group.ecs-instance-SG.id}"]
+#     delete_on_termination = true
+#   }
+key_name  = "${var.keyname}"
+user_data = "${base64encode(data.template_file.userdataECS.rendered)}"
+ tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = "ECS Instance - EC2ContainerService-${aws_ecs_cluster.ecs-cluster.name}"
+    }
+  }
+
+   tag_specifications {
+    resource_type = "volume"
+
+    tags = {
+      Name = "ECS EBS Volume - EC2ContainerService-${aws_ecs_cluster.ecs-cluster.name}"
+    }
+  }
+
+}

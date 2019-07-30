@@ -1,5 +1,5 @@
 resource "aws_security_group" "sec_elasticache" {
-  name        = "${terraform.workspace}-elasticache-redis"
+  name        = "${terraform.workspace}-ElasticCache-Redis"
   description = "Security group for redis elasticcache"
   vpc_id      = "${var.vpc_id}"
 
