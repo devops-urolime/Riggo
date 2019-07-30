@@ -1,9 +1,9 @@
 export const BASE_END_POINT='https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa';
 export const EMPTY_JWT_ERROR_MESSAGE='There is no JWT access token to make calls to the APIs';
 export const LOAD_END_POINT='/load';
-//TODO: Update menu mock url when the real service is up.
 export const MENU_END_POINT='/menus/mock';
 export const LOAD_PIPELINE_SUMMARY_END_POINT= LOAD_END_POINT + '/pipeline/summary';
+export const LOAD_STOP_SUMMARY_END_POINT= LOAD_END_POINT + '/stop/summary';
 export const LOAD_READ_SCOPE = "read:load";
 export const LOAD_READ_PIPE_LINE_SCOPE = "read:loadPipeline";
 export const PROFILE_SCOPE = "profile";
