@@ -48,9 +48,13 @@ export const NIVO = "nivo";
 export const DARK2 = "dark2";
 
 const PieVisualization = ({ data, rootClass, colorsScheme}) => {
+  const customLabelFormat = (d)=> {
+    return (<p>{d.id} {d.percent}% </p>)
+  };
   return (
     <div className={"PieVisualization " +rootClass}>
       <ResponsivePie
+              tooltip= {customLabelFormat}
               colors={{ scheme: colorsScheme }}
               data={data}
               margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
@@ -58,7 +62,7 @@ const PieVisualization = ({ data, rootClass, colorsScheme}) => {
               innerRadius={0.65}
               padAngle={0.7}
               enableRadialLabels={false}
-              sliceLabel={(item) => `${item.value}%`}
+              sliceLabel={(item) => `${item.value}`}
               slicesLabelsSkipAngle={10}
               slicesLabelsTextColor="#333333"
               animate={true}

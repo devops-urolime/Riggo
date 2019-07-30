@@ -2,7 +2,7 @@ import {
   BASE_END_POINT,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
-  LOAD_PIPELINE_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
+  LOAD_PIPELINE_SUMMARY_END_POINT, LOAD_STOP_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
 } from './config';
 
 const METHOD_GET = 'get';
@@ -123,6 +123,55 @@ const summaryMock = {
    ]
 };
 
+const summaryStopMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "id":1,
+         "name":"Pickup",
+         "data":[
+            {
+               "id":1,
+               "name":"Early",
+               "count":12
+            },
+            {
+               "id":2,
+               "name":"On Time",
+               "count":26
+            },
+            {
+               "id":3,
+               "name":"Delayed",
+               "count":50
+            }
+         ]
+      },
+      {
+         "id":2,
+         "name":"Delivery",
+         "data":[
+            {
+               "id":1,
+               "name":"Early",
+               "count":12
+            },
+            {
+               "id":2,
+               "name":"On Time",
+               "count":26
+            },
+            {
+               "id":3,
+               "name":"Delayed",
+               "count":50
+            }
+         ]
+      }
+   ]
+};
+
 const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
    return {
      method: method,
@@ -173,4 +222,21 @@ export const getMenuApi = async (JWT) => {
     }
     if (MOCK_ALL_DATA) console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
     return (MOCK_ALL_DATA) ? menuMockData : responseData;
+};
+
+export const loadStopsSummaryApi = async (JWT) => {
+    const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
+    let responseData = null;
+    let json = null;
+    if (MOCK_ALL_DATA){
+      console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
+      json = summaryStopMock;
+    } else {
+      const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
+      json = await response.json();
+    }
+    if(json && json.data){
+      responseData = json.data;
+    }
+    return responseData;
 };
