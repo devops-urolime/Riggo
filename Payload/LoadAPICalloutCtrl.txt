@@ -1,70 +1,120 @@
 /**************************************************************************
 -----------------------------------------------
 Purpose:
-This class contains the methods to call HTTP Rest web service and error handler 
+This class contains the methods to call HTTP Rest web service and error handler for the Load Object
 -----------------------------------------------------------------------
 **************************************************************************/
 
 //========================
 /*
-	Class Name  : LoadAPICalloutCtrl
-	Note		: We are using this class for the calling webserive api to post Load object to market place using rest api.
+Class Name  : LoadAPICalloutCtrl
+Note		: We are using this class for the calling webserive api to post Load object to market place using rest api.
 */
 public class LoadAPICalloutCtrl {
     /*********************************************************************
-    Purpose     : To initiate the the HTTP request 
-    Parameters  : LoadID- Load Ojbect Id to generate payload
-                  triggerAction  - To identify the event of the load object either Insert update or Delete
-    **********************************************************************/
-     
+Purpose     : To initiate the the HTTP request 
+Parameters  : LoadID- Load Ojbect Id to generate payload
+triggerAction  - To identify the event of the load object either Insert update or Delete
+**********************************************************************/
+    
     @future(callout=true)
-    public static void makePostCallout(Id LoadId,String triggerAction) { 
-        responeClass resResult=null;
-        ServiceProxy prox = new ServiceProxy(); 
-        LoadPayload palyloadCls = new LoadPayload();
-        // Get the load payload by json formate.
-        string LoadPayloadBody=palyloadCls.getSavePayload(LoadId,triggerAction); 
-        system.debug('--requestBody---'+LoadPayloadBody);
+    public static void makePostCallout(string LoadId,String triggerAction) { 
+        List<Marketplace_Exposed_Data__c> markPlcExList = [select id,Marketplace_Exposed_Id__c from Marketplace_Exposed_Data__c where Load__c =:LoadId limit 1];
         String methodDefine = 'POST';
+        string marketplaceExId = '';
         if(triggerAction == 'Update'){
-            //methodDefine = 'PUT';
-            methodDefine = 'POST';
-        }
-        // Calling webserive to push the load object 
-        // Passing parameters like end pint url, Method Name and Load payload
-          HttpResponse httpResponse=null;
-         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody);
-        String response =  httpResponse.getBody();
-        system.debug('--response'+response);
-         
-        // string c = (responeClass)JSON.deserializeStrict(response);
-        resResult = (responeClass)JSON.deserialize(response, LoadAPICalloutCtrl.responeClass.class);
-        system.debug('---resResult----'+resResult.id);
-        system.debug('---resResult----'+resResult.message);
-        string StatusCode = string.valueof(httpResponse.getStatusCode());
-        if(resResult != null && resResult.id != null){
-            rtms__Load__c ldUpdate = [select id,Marketplace_Exposed_Id__c from rtms__Load__c where Id =:LoadId];
-            if(ldUpdate.Marketplace_Exposed_Id__c == null){
-               ldUpdate.Marketplace_Exposed_Id__c =  resResult.id;
-                system.debug('--ldUpdate--'+ldUpdate);
-               update ldUpdate;
+            methodDefine = 'PUT';
+            if(markPlcExList!= null && markPlcExList.size() > 0 ){
+                marketplaceExId = markPlcExList[0].Marketplace_Exposed_Id__c;
             }
         }
-        // if there is any exception we are creating exception record in Error Log object
-        if(response!= null && StatusCode != '200'){
-            if (response.contains('201')) {
-                system.debug('--response'+response);
-                Error_Log__c errorlog = new Error_Log__c();
-                errorlog.Error__c = response;
-                errorlog.Description__c = response;
-                //errorlog.Load__c = LoadId;
-                insert errorlog; 
-                system.debug('errorlog--'+errorlog);
+        
+        responeClass resResult=null;
+        
+        LoadPayload palyloadCls = new LoadPayload();
+        // Get the load payload by json formate.
+        string LoadPayloadBody=palyloadCls.getSavePayload(LoadId,triggerAction,methodDefine,marketplaceExId); 
+        system.debug('--Load Payload---'+LoadPayloadBody);
+        
+        // Calling webserive to push the load object  Passing parameters like end pint url, Method Name and Load payload
+        HttpResponse httpResponse=null;
+        ServiceProxy prox = new ServiceProxy(); 
+        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Load');
+        String response = null;
+        if(HttpResponse != null){
+        	response =  httpResponse.getBody();
+            system.debug('---response---'+response);
+            resResult = (responeClass)JSON.deserialize(response, LoadAPICalloutCtrl.responeClass.class);
+            if(resResult != null && resResult.hashId != null){
+                if(markPlcExList.isEmpty() && triggerAction == 'Insert'){
+                    Marketplace_Exposed_Data__c makP = new Marketplace_Exposed_Data__c();
+                    makP.Marketplace_Exposed_Id__c = resResult.hashId;
+                    makP.Load__c = LoadId;
+                    insert makp;
+                    system.debug('---makp'+makp);
+                }
             } 
         }
+         
+        if(httpResponse != null){
+            string StatusCode = string.valueof(httpResponse.getStatusCode());
+            // if there is any exception we are creating exception record in Error Log object
+            if(response!= null && StatusCode != '200'){
+                if (response.contains('201')) {
+                    system.debug('--response'+response);
+                    Error_Log__c errorlog = new Error_Log__c();
+                    errorlog.Error__c = response;
+                    errorlog.Error_Code__c = StatusCode;
+                    errorlog.Description__c = response;
+                    errorlog.Load__c = LoadId;
+                    insert errorlog; 
+                    system.debug('errorlog--'+errorlog);
+                } 
+            }
+        }
     }    
+    // return Resonse wrapper class 
     public class responeClass{
-        public string id{get;set;}
-        public string message{get;set;}
+        public Integer status;
+        public String message;
+        public List<Data> data;
+        public String hashId;
+        
+    }
+    public class Data {
+        public Integer id;
+		public String extSysId;
+		public Object extSysTenantId;
+		public Object expectedShipDate;
+		public Object carrier;
+		public String transportMode;
+		public Object postedRate;
+		public Object insuranceAmt;
+		public Integer equipmentTypeId;
+		public Integer loadStatus;
+		public Boolean teamReq;
+		public Boolean foodGradeTrailerReq;
+		public Boolean tempControlReq;
+		public Object expectedDeliveryDate;
+		public Object driver;
+		public Object locationBasedSvcsReq;
+		public Object createdAt;
+		public Object updatedAt;
+		public Object deleted;
+		public Object referenceNumber;
+		public Object billOfLadingNo;
+		public String name;
+		public Object invoiceTotal;
+		public Object carrierQuoteTotal;
+		public Object carrierInvoiceTotal;
+		public Object customerQuoteTotal;
+		public Object customerTransportTotal;
+		public Boolean hazMat;
+		public Object loadStatusReq;
+		public String modeName;
+		public String orderDate;
+		public Object salesStatus;
+		public String loadUrl;
+		public Integer shipperId;
     }
 }

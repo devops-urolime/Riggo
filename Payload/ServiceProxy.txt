@@ -5,101 +5,140 @@ This class contains the methods for HTTP Rest web service Callouts
 -----------------------------------------------------------------------
 **************************************************************************/
 public with sharing class ServiceProxy{
-	/*********************************************************************
-    Purpose     : To initiate the the HTTP request 
-    Parameters  : endPoint- Target endpoint of the service
-                  methodName- HTTP method to be used 
-                  requestBody - JSON Body to be sent in request
-    Returns     : String in JSON format containing the response from
-                  the HTTP service**
-    **********************************************************************/
- /* public string clientKey = 'tBI1EU8rbwZrUZ27giNcW1ecG2CLe0N7';
-    public string clientSecret ='Ucs3BK6GbhvQ4ALpYL5k_tz-8TGvYAwHrcFsL6COXi2b1ekz1jK0lXPxvui4BR1m';
-   	public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
- */
-    
-	public HttpResponse callRestService(String endPointURL, String methodName, String requestBody){
-        
-		String response=null;
+    /*********************************************************************
+Purpose     : To initiate the the HTTP request 
+Parameters  : endPoint- Target endpoint of the service
+methodName- HTTP method to be used 
+requestBody - JSON Body to be sent in request
+Returns     : String in JSON format containing the response from
+the HTTP service**
+**********************************************************************/
+    /* public string clientKey = 'tBI1EU8rbwZrUZ27giNcW1ecG2CLe0N7';
+public string clientSecret ='Ucs3BK6GbhvQ4ALpYL5k_tz-8TGvYAwHrcFsL6COXi2b1ekz1jK0lXPxvui4BR1m';
+public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
+*/
+    public static string errorcode = '';
+    public static integer calloutForGetAccessToken = 0;
+    public HttpResponse callRestService(String endPointURL, String methodName, String requestBody,String objectName){
+        String response=null;
         string accessToken = null;
-         HttpResponse httpResponse=null;
-        List<Auth0_API_Token__c> authAPIToken=null;
+        HttpResponse httpResponse=null;
         try { 
-            system.debug('--requestBody---'+requestBody);
-        	authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
-			if(requestBody!=null && methodName!=null){
-                if(authAPIToken.size() > 0){
-                    if(authAPIToken[0].Token__c == null){
-                        accessToken =  getAccesstoken(authAPIToken[0].Client_Key__c,authAPIToken[0].Client_Secret__c,authAPIToken[0].End_Point__c);
-                        authAPIToken[0].Token__c = accessToken;
+            calloutForGetAccessToken++;
+            accessToken = getAccesstoken(errorCode);
+            httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
+            response = httpResponse.getBody();
+            errorcode = string.valueof(httpResponse.getStatusCode());
+            
+            if(errorcode.startswith('4') || errorcode.startswith('5') ){
+                accessToken =  getAccesstoken(errorCode);
+                try{
+                    // Again calling end point url with valid token
+                    httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
+                    response = httpResponse.getBody();
+                    errorcode = string.valueof(httpResponse.getStatusCode());
+                    //errorcode = '500';
+                    system.debug('errorcode--'+errorcode);
+                    if(calloutForGetAccessToken <= 5){
+                        callRestService(endPointURL,methodName,requestBody,objectName);
                     }else{
-                    	accessToken = authAPIToken[0].Token__c;
-                    }
-                }
-                system.debug('---accessToken-'+accessToken);
-                httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken); 
-                
-                response = httpResponse.getBody();
-                string errorcode = string.valueof(httpResponse.getStatusCode());
-                system.debug('token erro '+errorcode);
-                system.debug('accessToken '+accessToken);
-                if(errorcode == '401'){
-                     system.debug('accessToken '+accessToken);
-                    system.debug('--inside errorcode');
-                    if(authAPIToken.size() > 0){
-                        system.debug('--inside errorcode 2');
-                    	accessToken =  getAccesstoken(authAPIToken[0].Client_Key__c,authAPIToken[0].Client_Secret__c,authAPIToken[0].End_Point__c);
-                        system.debug('NEW accessToken'+accessToken);
-                        authAPIToken[0].Token__c = accessToken;
-                        
-                        try{
-                        	// Again calling end point url with valid token
-                            httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken); 
-                            response = httpResponse.getBody();
-                            authTokenUpdate(authAPIToken[0]);
-                        }catch(Exception e){
+                        if(errorcode.startswith('4') || errorcode.startswith('5') ){
+                            system.debug('--response'+response);
                             Error_Log__c errorlog = new Error_Log__c();
-                            errorlog.Error__c = e.getMessage();
-                            errorlog.Description__c = e.getMessage();
+                            errorlog.Error__c = response;
+                            errorlog.Error_Code__c = string.valueof(httpResponse.getStatusCode());
+                            errorlog.Description__c = response;
                             insert errorlog; 
-                            system.debug('--errorlog---'+errorlog);
+                                    
                         }
                     }
-	      		 }
-                authTokenUpdate(authAPIToken[0]);
-			}       		
-		}catch(Exception e) {
+                }catch(Exception e){
+                    Error_Log__c errorlog = new Error_Log__c();
+                    errorlog.Error__c = e.getMessage();
+                    errorlog.Description__c = e.getMessage();
+                    insert errorlog; 
+                    system.debug('--errorlog---'+errorlog);
+                }
+            }
+        } catch(Exception e) {
             system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in callRestService():'+e.getMessage());
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:callRestService'+response);
+        if(!(errorcode.startswith('4') && errorcode.startswith('5'))){
+            Auth0_API_Token__c authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+            authAPIToken.Token__c = accessToken;
+            authTokenUpdate(authAPIToken);
+        }
         return httpResponse;    
-	}
-    private Auth0_API_Token__c authTokenUpdate(Auth0_API_Token__c authUpdate){
+    }
+    private void authTokenUpdate(Auth0_API_Token__c authUpdate){
         update authUpdate;
-        return authUpdate;
+        system.debug('---authUpdate--'+authUpdate);
+        //return authUpdate;
     }
-    private string getAccesstoken(String clientKey,String clientSecret,String setEndpoint){
-        String body = '{"client_id": "'+clientKey+'",'+
-            '"client_secret": "'+clientSecret+'",'+
-            '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
-        HttpRequest req = new HttpRequest(); 
-        req.setMethod('POST');
-        req.setEndpoint(setEndpoint);
-        req.setheader('content-type', 'application/json');
-        req.setBody(body);
-        
-        Http http = new Http();        
-        HTTPResponse res = http.send(req);
-        
-        Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
-        system.debug('res.getBody---'+res.getBody());
-        String token  = string.valueof(cObjMap.get('access_token'));
-        return token;
+    private string getAccesstoken(String errorCode){
+        String accessToken = null;
+        system.debug('--errorCode--'+errorCode);
+        List<Auth0_API_Token__c> authAPIToken=null;
+        authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+        if(authAPIToken.isEmpty()){
+            Auth0_API_Token__c api = new Auth0_API_Token__c();
+            api.Client_Key__c = 'Keyvalye';
+            api.Client_Secret__c = 'secretkey';
+            api.End_Point__c    = 'http://example.com/example/test';
+            api.Enable__c = true;
+            api.Token__c ='test token';
+            insert api;
+            return api.Token__c;
+        }
+        system.debug('--errorCode--'+errorCode);
+        if((errorcode == null ||  errorcode == '') && authAPIToken.size() > 0){
+            if(authAPIToken[0].Token__c != null){
+                accessToken = authAPIToken[0].Token__c;
+                system.debug('--return 91 --accessToken '+accessToken);
+                return accessToken;
+            }else{
+                String body = '{"client_id": "'+authAPIToken[0].Client_Key__c+'",'+
+                    '"client_secret": "'+authAPIToken[0].Client_Secret__c+'",'+
+                    '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
+                HttpRequest req = new HttpRequest(); 
+                req.setMethod('POST');
+                req.setEndpoint(authAPIToken[0].End_Point__c);
+                req.setheader('content-type', 'application/json');
+                req.setBody(body);
+                
+                Http http = new Http();        
+                HTTPResponse res = http.send(req);
+                Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+                system.debug('res.getBody---'+res.getBody());
+                accessToken  = string.valueof(cObjMap.get('access_token'));
+                system.debug('--return 108 --accessToken '+accessToken);
+                return accessToken;
+            }
+        }
+        if(errorcode.startswith('4') || errorcode.startswith('5') ){
+            String body = '{"client_id": "'+authAPIToken[0].Client_Key__c+'",'+
+                '"client_secret": "'+authAPIToken[0].Client_Secret__c+'",'+
+                '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
+            HttpRequest req = new HttpRequest(); 
+            req.setMethod('POST');
+            req.setEndpoint(authAPIToken[0].End_Point__c);
+            req.setheader('content-type', 'application/json');
+            req.setBody(body);
+            
+            Http http = new Http();        
+            HTTPResponse res = http.send(req);
+            Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+            system.debug('res.getBody---'+res.getBody());
+            accessToken  = string.valueof(cObjMap.get('access_token'));
+            system.debug('--return 128 --accessToken '+accessToken);
+            return accessToken;
+        } 
+        return accessToken;
     }
-    
-	private HttpResponse initiateHTTPCall(String endPointURL, String methodName, String requestBody,string accessToken){
-		String response=null;
-		Http httpConnection=null;
+    private HttpResponse initiateHTTPCall(String endPointURL, String methodName, String requestBody,string accessToken,string objectName){
+        String response=null;
+        Http httpConnection=null;
         HttpRequest httpRequest=null; 
         HttpResponse httpResponse=null;
         List<Riggo_API_Configuration__c> riggoConfigList=null;
@@ -107,45 +146,49 @@ public with sharing class ServiceProxy{
         String endPoint;
         String contentType;
         String authorizationHeader;
-		try { 
-			 
-			if(endPointURL!=null && methodName!=null){
+        try { 
+            if(endPointURL!=null && methodName!=null){
                 Riggo_API_Configuration__c riggoApipostCall = Riggo_API_Configuration__c.getValues('Riggo post');
-                   
                 timeOut=Integer.valueOf(riggoApipostCall.Time_Out__c);
                 contentType=riggoApipostCall.Content_Type__c; 
                 endPoint=riggoApipostCall.End_Point_URL__c;
                 authorizationHeader=riggoApipostCall.Authorization_Header__c;
-                  
-				httpConnection=new Http();
-			    httpResponse = new HttpResponse();
-			    httpRequest= new HttpRequest();
-			    //httpRequest.setEndpoint(endPoint+endPointURL);
+                
+                httpConnection=new Http();
+                httpResponse = new HttpResponse();
+                httpRequest= new HttpRequest();
+                httpRequest.setEndpoint(endPoint+endPointURL);
                 httpRequest.setEndpoint(endPoint+endPointURL);
                 //GW
                 //httpRequest.setEndpoint('https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa/load');
-                //LB
-                httpRequest.setEndpoint('http://riggo-ecs-qa-1478706502.us-west-2.elb.amazonaws.com/api/v1/load');
-                
                 system.debug('--methodName--'+methodName);
-			    httpRequest.setMethod(methodName);
-			    httpRequest.setTimeout(timeOut);
+                
+                
+                if(objectName == 'Stops' || objectName == 'Lineitems'){
+                    system.debug('-objectName-'+objectName);
+                	httpRequest.setMethod('POST');
+                    httpRequest.setHeader('X-HTTP-Method-Override','PATCH');
+					
+                }else{
+                	httpRequest.setMethod(methodName);    
+                }
+                
+                httpRequest.setTimeout(timeOut);
                 httpRequest.setHeader('Content-Type',contentType);
-               	httpRequest.setHeader('Authorization', 'Bearer '+ accessToken); 
+                httpRequest.setHeader('Authorization', 'Bearer '+ accessToken); 
                 if(requestBody !='' && requestBody!=null){
-			    	httpRequest.setBody(requestBody);
-			    }
-			            		
-	      		httpResponse = httpConnection.send(httpRequest);
-				system.debug('--httpResponse--'+httpResponse);
-	      		if(httpResponse!=null){            		
-	       		    response=httpResponse.getBody();
+                    httpRequest.setBody(requestBody);
+                }
+                system.debug('-httpRequest-'+httpRequest);
+                httpResponse = httpConnection.send(httpRequest);
+                system.debug('--httpResponse--'+httpResponse);
+                if(httpResponse!=null){            		
+                    response=httpResponse.getBody();
                     integer codeft = httpResponse.getStatusCode();
-	       		    System.debug('web service response: '+response);
-                    System.debug('codeft---: '+codeft);
-	      		}	      		
-			}       		
-		}catch(Exception e) {
+                    System.debug('web service response: '+response);
+                }	      		
+            }       		
+        }catch(Exception e) {
             system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in initiateHTTPCall():'+e.getMessage());
             Error_Log__c errorlog = new Error_Log__c();
             errorlog.Error__c = e.getMessage();
@@ -156,5 +199,5 @@ public with sharing class ServiceProxy{
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:initiateHTTPCall'+response);
         return HttpResponse;    
-	} 
+    } 
 }

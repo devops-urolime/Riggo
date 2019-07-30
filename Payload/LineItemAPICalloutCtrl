@@ -1,65 +1,67 @@
 /**************************************************************************
 -----------------------------------------------
 Purpose:
-This class contains the methods to call HTTP Rest web service and error handler for the Stop object
+This class contains the methods to call HTTP Rest web service and error handler for the LineItem object
 -----------------------------------------------------------------------
 **************************************************************************/
 
 //========================
 /*
 	Class Name  : LineItemAPICalloutCtrl
-	Note		: We are using this class for the calling webserive api to post Stop object to market place using rest api.
+	Note		: We are using this class for the calling webserive api to post LineItem object to market place using rest api.
 */
-public class StopAPICalloutCtrl {
+public class LineItemAPICalloutCtrl {
     /*********************************************************************
     Purpose     : To initiate the the HTTP request 
-    Parameters  : Set of Stop Id
+    Parameters  : Set of Line item Id
                   triggerAction  - To identify the event of the load object either Insert update or Delete
     **********************************************************************/
      
     @future(callout=true)
-    public static void makePostCallout(Set<Id> stopSet ,String triggerAction) { 
+    public static void makePostCallout(Set<Id> LineItemSet ,String triggerAction) { 
         String methodDefine = 'PATCH';
         /*string marketplaceExId = '';
         if(triggerAction == 'Update'){
             methodDefine = 'PUT';
-        } */
+        }*/
         
         responeClass resResult=null;
         ServiceProxy prox = new ServiceProxy(); 
-        StopPayload palyloadCls = new StopPayload();
-        // Get the Array Stop payload by json formate.
-        string LoadPayloadBody=palyloadCls.getSavePayload(stopSet,triggerAction); 
-        system.debug('--STOPS payload---'+LoadPayloadBody);
+        LineItemPayLoad palyloadCls = new LineItemPayLoad();
+        // Get the load payload by json formate.
+        string LoadPayloadBody=palyloadCls.getSavePayload(LineItemSet,triggerAction); 
+        system.debug('--LineItems Payload---'+LoadPayloadBody);
         
         
         
         // Calling webserive to push the load object 
         // Passing parameters like end pint url, Method Name and Load payload
           HttpResponse httpResponse=null;
-         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops');
+         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Lineitems');
         String response =  httpResponse.getBody();
         system.debug('--response'+response);
          
         // string c = (responeClass)JSON.deserializeStrict(response);
-        //resResult = (responeClass)JSON.deserialize(response, StopAPICalloutCtrl.responeClass.class);
+        //resResult = (responeClass)JSON.deserialize(response, LineItemAPICalloutCtrl.responeClass.class);
        // system.debug('---resResult----'+resResult.id);
         //system.debug('---resResult----'+resResult.message);
-        //string StatusCode = string.valueof(httpResponse.getStatusCode());
+       // string StatusCode = string.valueof(httpResponse.getStatusCode());
         
         // if there is any exception we are creating exception record in Error Log object
         if(response!= null){
             if (response.contains('201')) {
-                 List<Error_Log__c> errorlogList  = new List<Error_Log__c>();
-                    for(Id stopId : stopSet){
-                        Error_Log__c errorlog = new Error_Log__c();
-                        errorlog.Error__c = response;
-                        //errorlog.Error_Code__c = StatusCode;
-                        errorlog.Description__c = response;
-                        errorlog.Stop__c = stopId;
-                        errorlogList.add(errorlog);
-                    }
-                    insert errorlogList; 
+               system.debug('--response'+response);
+                List<Error_Log__c> errorlogList  = new List<Error_Log__c>();
+                for(Id lineitemId : LineItemSet){
+                    Error_Log__c errorlog = new Error_Log__c();
+                    errorlog.Error__c = response;
+                    //errorlog.Error_Code__c = StatusCode;
+                    errorlog.Description__c = response;
+                    errorlog.Line_Item__c = lineitemId;
+                    errorlogList.add(errorlog);
+                }
+                insert errorlogList; 
+                    
             } 
         }
     }    

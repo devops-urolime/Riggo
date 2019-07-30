@@ -1,23 +1,17 @@
-trigger StopTriggerForAPI on rtms__Stop__c (after insert,after update) {
-    
-   if(trigger.isInsert){
-        List<rtms__Stop__c> StopList = [select id,rtms__Load__c,rtms__Load__r.Marketplace_Exposed_Id__c from rtms__Stop__c where Id IN : trigger.newmap.keyset()];
-        for(rtms__Stop__c st : trigger.new){
-            if(st.rtms__Load__r.Marketplace_Exposed_Id__c != null){
-                //Call method for the webservice call
-                StopAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Insert');
+trigger StopTriggerForAPI on rtms__Stop__c (before delete) {
+	Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPI');
+    if(apxTriOnOff != null && apxTriOnOff.isEnable__c){	
+        // Trigger is on before update event 
+        if(trigger.isbefore && trigger.isdelete){
+            Set<Id> deleteId = new Set<Id>();
+            for(rtms__Stop__c stp : trigger.old){ 
+                // Calling webservice callout passing parameters as Load Id and event name
+                deleteId.add(trigger.old[0].id);
+            }
+            if(deleteId != null){
+                StopAPICalloutCtrl.makePostCallout(deleteId,'Delete');    
             }
             
         }
     }
-    if(trigger.isUpdate){
-        List<rtms__Stop__c> StopList = [select id,rtms__Load__c,rtms__Load__r.Marketplace_Exposed_Id__c from rtms__Stop__c where Id IN : trigger.newmap.keyset()];
-        for(rtms__Stop__c st : trigger.new){
-            system.debug('----stop trigger call');
-            if(st.rtms__Load__r.Marketplace_Exposed_Id__c != null){
-                StopAPICalloutCtrl.makePostCallout(trigger.new[0].id,'Update');
-            }
-        }
-    }
-	
 }
