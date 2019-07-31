@@ -158,7 +158,7 @@ class Login extends Component{
                         margin="normal"
                         variant="outlined"
                         onChange={this.onEmailChange}
-                        className="TextField"
+                        fullWidth
                         required
                       />
                     </div>
@@ -173,6 +173,7 @@ class Login extends Component{
                         margin="normal"
                         variant="outlined"
                         onChange={this.onPasswordChange}
+                        fullWidth
                         required
                       />
                     </div>
@@ -184,7 +185,7 @@ class Login extends Component{
                   </Grid>
                   <Grid item xs={gridWidth}>
                     <div className="ButtonGroup">
-                      <Button className="Login-btn" type="submit" variant="contained" color="primary">
+                      <Button fullWidth className="Login-btn" type="submit" variant="contained" color="primary">
                         {
                           (!isSingUp) ?
                             "Log In":
