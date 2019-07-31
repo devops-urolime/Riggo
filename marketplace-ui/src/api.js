@@ -5,6 +5,8 @@ import {
   LOAD_PIPELINE_SUMMARY_END_POINT, LOAD_STOP_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
 } from './config';
 
+import { JWTLocalStorage } from './lib/auth';
+
 const METHOD_GET = 'get';
 
 const validateEmptyJWT = (jwt) => {
@@ -183,7 +185,7 @@ const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
 };
 
 const buildRequestData = (method, JWT) => {
-  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem('accessToken');
+  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem(JWTLocalStorage);
   validateEmptyJWT(ACCESS_TOKEN_JWT);
   return buildRequestMetaData(method, ACCESS_TOKEN_JWT);
 };
