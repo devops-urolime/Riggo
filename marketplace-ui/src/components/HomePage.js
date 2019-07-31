@@ -6,6 +6,7 @@ import './HomePage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
 import Paper from '@material-ui/core/Paper';
+import Grow from '@material-ui/core/Grow';
 import PieVisualization, {
   DARK2,
   NIVO
@@ -135,9 +136,11 @@ class HomePage extends Component {
           { pipeLineSummaryCard &&
             pipeLineSummaryCard.map((item, index) => {
             return (
-              <Grid xs={4} key={`card-summary-${index}`} item>
-                <CardSummary number={item.number} label={item.label}/>
-              </Grid>
+              <Grow in={true} timeout={500}>
+                <Grid xs={4} key={`card-summary-${index}`} item>
+                    <CardSummary number={item.number} label={item.label}/>
+                </Grid>
+              </Grow>
             );
           })}
           </Grid>
