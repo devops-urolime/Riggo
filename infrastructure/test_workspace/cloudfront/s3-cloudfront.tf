@@ -6,7 +6,7 @@
 # }
 resource "aws_s3_bucket" "s3-cloudfront" {
   # provider = "aws.local"
-  bucket = "${var.client_app_name}-${terraform.workspace}"
+  bucket = "${var.client_app_name}-${terraform.workspace}-new"
   acl    = "private"
   #region = "${var.s3_region}"
   # region = "aws.local"
@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "s3-cloudfront" {
   }
 
   tags = {
-    Name = "${var.client_app_name}-${terraform.workspace}"
+    Name = "${var.client_app_name}-${terraform.workspace}-new"
     env  = "${terraform.workspace}"
   }
 

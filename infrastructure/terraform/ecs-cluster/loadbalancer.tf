@@ -32,7 +32,8 @@ resource "aws_security_group_rule" "lb_http_egress" {
 }
 resource "aws_security_group" "lb_securitygroup" {
   vpc_id = "${var.vpc_id}"
-
+  name = "SG-${terraform.workspace}-ALB"
+  
   tags = {
     Name = "SG-${terraform.workspace}-ALB"
   }
@@ -129,6 +130,11 @@ resource "aws_lb_listener" "front_end" {
     target_group_arn = "${aws_lb_target_group.ecs-lb-targetgroup.arn}"
     type             = "forward"
   }
+
+
+lifecycle {
+  ignore_changes = [default_action]
+}
 }
 
 resource "aws_lb_listener" "testing-listener" {

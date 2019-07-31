@@ -1,7 +1,7 @@
 # need an ASG so we can easily add more ecs host nodes as necessary
 #
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
-  name             = "${aws_launch_configuration.ecs-launch-configuration.name}-ASG"
+  name             = "${aws_launch_template.ECS-launch-template.name}-ASG"
   max_size         = "${var.max_ecs_instance-size}"
   min_size         = "${var.min_ecs_instance-size}"
   desired_capacity = "${var.desired_ecs_instance-size}"
@@ -11,7 +11,11 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
   vpc_zone_identifier = [
     "${var.private_subnet1}",
   "${var.private_subnet2}"]
-  launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
+  # launch_configuration = "${aws_launch_configuration.ecs-launch-configuration.name}"
+  launch_template {
+     id = "${aws_launch_template.ECS-launch-template.id}"
+     version ="$Latest"
+  }
   health_check_type    = "EC2"
 
    lifecycle {
@@ -35,6 +39,8 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     value               = "Terraform"
     propagate_at_launch = true
   }
+
+  
 }
 
 
