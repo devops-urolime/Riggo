@@ -1,7 +1,7 @@
 export const BASE_END_POINT='https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa';
 export const EMPTY_JWT_ERROR_MESSAGE='There is no JWT access token to make calls to the APIs';
 export const LOAD_END_POINT='/load';
-export const MENU_END_POINT='/menus/mock';
+export const MENU_END_POINT='/menus';
 export const LOAD_PIPELINE_SUMMARY_END_POINT= LOAD_END_POINT + '/pipeline/summary';
 export const LOAD_STOP_SUMMARY_END_POINT= LOAD_END_POINT + '/stop/summary';
 export const LOAD_READ_SCOPE = "read:load";
@@ -24,4 +24,4 @@ export const APP_PATH_LOAD = "/load";
 export const APP_PATH_LOGIN = "/login";
 export const APP_PATH_LOAD_ID = APP_PATH_LOAD + "/:id*";
 export const APP_PATH_AUTH0_CALLBACK = "/callback";
-export const MOCK_ALL_DATA= process.env.REACT_APP_MOCK_ALL_DATA;
+export const MOCK_ALL_DATA= (process.env.REACT_APP_MOCK_ALL_DATA === 'true');
