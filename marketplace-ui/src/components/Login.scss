@@ -6,7 +6,7 @@
     font-family: $main-font-family !important;
     color: $general-text;
     height: 100%;
-    min-height: 700px;
+    min-height: 550px;
 }
 
 .MuiPaper-root{
@@ -18,6 +18,7 @@
 .SecondaryLoginOverlay{
     width: 305px;
     background: transparent;
+    padding: 8px;
 }
 
 .MainLogo{
@@ -25,18 +26,15 @@
     margin: 0 auto;
 }
 .InputGroup{
-    width: 200px;
     margin: 0 auto 8px;
 }
 .InputGroup--last{
     margin: 0 auto;
 }
 .ButtonGroup{
-    width: 200px;
     margin: 0 auto 2px;
 }
 .ForgotPassword{
-    width: 200px;
     text-align: right;
     font-family: $main-font-family;
     font-size: 12px;
@@ -88,7 +86,6 @@
 .Login-btn.MuiButtonBase-root{
     background-color: $login-btn-color !important;
     color: $general-text !important;
-    width: 196px;
     height: 52px;
     font-size: 22px !important;
     line-height: 30px !important;

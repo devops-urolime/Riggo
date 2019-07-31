@@ -79,6 +79,22 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
   return result;
 };
 
+const getTimingEffect = (index) => {
+  const GROW_TIMING_EFFECT = [ 600, 800, 1000 ];
+  return ( index < GROW_TIMING_EFFECT.length ) ? GROW_TIMING_EFFECT[index] : 500;
+};
+
+const getConfigGrow = (index) => {
+  const configGrow = {
+    in:true
+  };
+  if (index > 0){
+    configGrow['timeout'] = getTimingEffect(index);
+    configGrow['style'] = { transformOrigin: '0 0 0' };
+  }
+  return configGrow;
+};
+
 class HomePage extends Component {
 
   constructor(props) {
@@ -135,8 +151,9 @@ class HomePage extends Component {
           >
           { pipeLineSummaryCard &&
             pipeLineSummaryCard.map((item, index) => {
+            const configGrow =  getConfigGrow(index) ;
             return (
-              <Grow in={true} timeout={500}>
+              <Grow {...configGrow}  key={`card-summary-grow-${index}`}>
                 <Grid xs={4} key={`card-summary-${index}`} item>
                     <CardSummary number={item.number} label={item.label}/>
                 </Grid>
