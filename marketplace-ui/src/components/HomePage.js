@@ -83,7 +83,7 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isBarGroupMode: false,
+      isBarGroupMode: true,
     };
   }
 
@@ -124,6 +124,14 @@ class HomePage extends Component {
               <TitleSection label="Status"/>
             </Grid>
           </Grid>
+          <Grid
+            spacing={0}
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="CardSummarySection"
+          >
           { pipeLineSummaryCard &&
             pipeLineSummaryCard.map((item, index) => {
             return (
@@ -132,6 +140,7 @@ class HomePage extends Component {
               </Grid>
             );
           })}
+          </Grid>
           <Grid
             container
             spacing={0}

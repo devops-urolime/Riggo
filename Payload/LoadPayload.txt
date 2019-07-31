@@ -1,5 +1,6 @@
 public class LoadPayload {
     public string getSavePayload(ID loadId,String triggerAction,String methodName,String marketplaceExId){ 
+        system.debug('loadId'+loadId);   
         
         String payload  = '';
         if(triggerAction == 'Insert' || triggerAction == 'Update' ){
@@ -30,6 +31,13 @@ public class LoadPayload {
                                         rtms__Equipment_Type__r.rtms__Max_Weight__c,rtms__Equipment_Type__r.rtms__Weight_Units__c,
                                         rtms__Expected_Delivery_Date2__c, rtms__Expected_Ship_Date2__c, 
                                         rtms__First_Stop__c,
+                                        rtms__First_Stop__r.rtms__Location2__r.Id,
+                                        rtms__First_Stop__r.rtms__Location2__r.Name,
+                                        rtms__First_Stop__r.rtms__Location2__r.ShippingStreet,
+                                        rtms__First_Stop__r.rtms__Location2__r.ShippingCity,
+                                        rtms__First_Stop__r.rtms__Location2__r.ShippingState,
+                                        rtms__First_Stop__r.rtms__Location2__r.ShippingPostalCode,
+                                        rtms__First_Stop__r.rtms__Instructions__c,
                                        	rtms__First_Stop__r.rtms__City__c,rtms__First_Stop__r.rtms__State_Province__c,rtms__First_Stop__r.rtms__Postal_Code__c,
 										rtms__First_Stop__r.rtms__Country__c,
                                         rtms__First_Stop__r.Id,rtms__First_Stop__r.Name,
@@ -40,6 +48,13 @@ public class LoadPayload {
                                         rtms__First_Stop__r.rtms__Appointment_Time__c,rtms__First_Stop__r.rtms__Stop_Status__c,
                                         rtms__First_Stop__r.rtms__Carrier_Status2__c,rtms__Hazardous_Materials__c, rtms__Insurance_Amount__c, rtms__Last_Reported_City__c, rtms__Last_Reported_Country__c, rtms__Last_Reported_Geolocation__Latitude__s, rtms__Last_Reported_Geolocation__Longitude__s, rtms__Last_Reported_Geolocation__c, rtms__Last_Reported_Location2__c, rtms__Last_Reported_State_Province__c, 
                                         rtms__Last_Stop__c, 
+                                        rtms__Last_Stop__r.rtms__Instructions__c,
+                                        rtms__Last_Stop__r.rtms__Location2__r.Id,
+                                        rtms__Last_Stop__r.rtms__Location2__r.Name,
+                                        rtms__Last_Stop__r.rtms__Location2__r.ShippingStreet,
+                                        rtms__Last_Stop__r.rtms__Location2__r.ShippingCity,
+                                        rtms__Last_Stop__r.rtms__Location2__r.ShippingState,
+                                        rtms__Last_Stop__r.rtms__Location2__r.ShippingPostalCode,
                                         rtms__Last_Stop__r.Id,
                                         rtms__Last_Stop__r.Name,
                                     	rtms__Last_Stop__r.rtms__City__c,rtms__Last_Stop__r.rtms__State_Province__c,rtms__Last_Stop__r.rtms__Postal_Code__c,
@@ -61,7 +76,7 @@ public class LoadPayload {
                                           rtms__Vendor__c,rtms__Vendor__r.Id,rtms__Vendor__r.Name,rtms__Vendor__r.rtms__TMS_Type__c,rtms__Vendor__r.ShippingStreet,rtms__Vendor__r.ShippingCity,rtms__Vendor__r.ShippingPostalCode,rtms__Vendor__r.ShippingState,rtms__Vendor__r.ShippingCountry,
                                           Posted_Notes__c, Pickup_Delivery_Number__c, Stop_Reference_Numbers__c, Tractor_Number__c, Trailer_Number__c, Historical_Load__c, Legacy_Load_Number__c, Pickup_Appointment_Time__c, Delivery_Appointment_Time__c, rig_riggoh_status__c, EDI_Shipment_ID__c, food_grade_trailer_required__c, riggoh_Formatted_Expected_Delivery_Date__c, riggoh_Formatted_Expected_Ship_Date__c,
                                           rtms__Carrier_Sales_Rep__c, rtms__Carrier_Sales_Rep__r.id,rtms__Carrier_Sales_Rep__r.Name,rtms__Carrier_Sales_Rep__r.Email,
-                                          Marketplace_Exposed_Id__c,rtms__Master_BOL_Option__c, rig_Expected_TTT__c, rig_Previous_Cost__c, riggoh_Required_Temperature__c, rig_Lead_Source__c, Pickup_Location__c, Delivery_Location__c, rigPostedRate__c, rig_Completed_Date__c, rig_Load_URL__c, rig_Team_Required__c, rtms__Pickup_Delivery_Status__c, rtms__Carrier_Portal__c, rtms__EDI_Provider__c, Send_Status_Updates__c, rig_Email_Automation__c, rig_Load_Board__c FROM rtms__Load__c  
+                                          rtms__Master_BOL_Option__c, rig_Expected_TTT__c, rig_Previous_Cost__c, riggoh_Required_Temperature__c, rig_Lead_Source__c, Pickup_Location__c, Delivery_Location__c, rigPostedRate__c, rig_Completed_Date__c, rig_Load_URL__c, rig_Team_Required__c, rtms__Pickup_Delivery_Status__c, rtms__Carrier_Portal__c, rtms__EDI_Provider__c, Send_Status_Updates__c, rig_Email_Automation__c, rig_Load_Board__c FROM rtms__Load__c  
                                           where Id =: loadId]; 
             
             system.debug('marketplaceExId'+marketplaceExId);
@@ -183,11 +198,15 @@ public class LoadPayload {
                         	'"FirstStoprtms__P_D__c": "'+ld.rtms__First_Stop__r.rtms__P_D__c+ '",'+
                             '"FirstStoprig_Load_Customer_Name__c": "'+ld.rtms__First_Stop__r.rig_Load_Customer_Name__c+ '",'+
                             '"FirstStoprtms__Number__c": "'+ld.rtms__First_Stop__r.rtms__Number__c+ '",'+
-                        	'"FirstStoprtms__City__c": "'+ld.rtms__First_Stop__r.rtms__City__c+ '",'+
-                        	'"FirstStoprtms__State_Province__c": "'+ld.rtms__First_Stop__r.rtms__State_Province__c+ '",'+
-                        	'"FirstStoprtms__Postal_Code__c": "'+ld.rtms__First_Stop__r.rtms__Postal_Code__c+ '",'+
-                        	'"FirstStoprtms__Country__c": "'+ld.rtms__First_Stop__r.rtms__Country__c+ '",'+
-                            '"FirstStoprtms__Address2__c": "'+ld.rtms__First_Stop__r.rtms__Address2__c+ '",'+
+                            '"FirstStoprtms__Instructions__c": "'+convertedString(ld.rtms__First_Stop__r.rtms__Instructions__c)+ '",'+
+                            '"FirstStopLocation": {'+
+                            	'"FirstStopLocationId": "'+ld.rtms__First_Stop__r.rtms__Location2__r.Id+'",'+
+                            	'"FirstStopLocationName": "'+ld.rtms__First_Stop__r.rtms__Location2__r.Name+'",'+
+                                '"FirstStopLocationShippingStreet": "'+ld.rtms__First_Stop__r.rtms__Location2__r.ShippingStreet+'",'+
+                                '"FirstStopLocationShippingShippingCity": "'+ld.rtms__First_Stop__r.rtms__Location2__r.ShippingCity+'",'+
+                            	'"FirstStopLocationShippingShippingState": "'+ld.rtms__First_Stop__r.rtms__Location2__r.ShippingState+'",'+
+                            	'"FirstStopLocationShippingShippingPostalCode": "'+ld.rtms__First_Stop__r.rtms__Location2__r.ShippingPostalCode+'"'+
+                            '},'+ 
                             '"FirstStoprtms__Shipping_Receiving_Hours__c": "'+ld.rtms__First_Stop__r.rtms__Shipping_Receiving_Hours__c+ '",'+
                             '"FirstStoprtms__Expected_Date__c": "'+ld.rtms__First_Stop__r.rtms__Expected_Date__c+ '",'+
                             '"FirstStoprtms__Expected_Day__c": "'+ld.rtms__First_Stop__r.rtms__Expected_Day__c+ '",'+
@@ -209,11 +228,15 @@ public class LoadPayload {
                         	'"LastStoprtms__P_D__c": "'+ld.rtms__Last_Stop__r.rtms__P_D__c+ '",'+
                             '"LastStoprig_Load_Customer_Name__c": "'+ld.rtms__Last_Stop__r.rig_Load_Customer_Name__c+ '",'+
                             '"LastStoprtms__Number__c": "'+ld.rtms__Last_Stop__r.rtms__Number__c+ '",'+
-                            '"LastStoprtms__City__c": "'+ld.rtms__Last_Stop__r.rtms__City__c+ '",'+
-                        	'"LastStoprtms__State_Province__c": "'+ld.rtms__Last_Stop__r.rtms__State_Province__c+ '",'+
-                        	'"LastStoprtms__Postal_Code__c": "'+ld.rtms__Last_Stop__r.rtms__Postal_Code__c+ '",'+
-                        	'"LastStoprtms__Country__c": "'+ld.rtms__Last_Stop__r.rtms__Country__c+ '",'+
-                            '"LastStoprtms__Address2__c": "'+ld.rtms__Last_Stop__r.rtms__Address2__c+ '",'+
+                            '"LastStoprtms__Instructions__c": "'+convertedString(ld.rtms__Last_Stop__r.rtms__Instructions__c)+ '",'+
+                            '"LastStopLocation": {'+
+                            	'"LastStopLocationId": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.Id+'",'+
+                            	'"LastStopLocationName": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.Name+'",'+
+                                '"LastStopLocationShippingStreet": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.ShippingStreet+'",'+
+                                '"LastStopLocationShippingShippingCity": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.ShippingCity+'",'+
+                            	'"LastStopLocationShippingShippingState": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.ShippingState+'",'+
+                            	'"LastStopLocationShippingShippingPostalCode": "'+ld.rtms__Last_Stop__r.rtms__Location2__r.ShippingPostalCode+'"'+
+                            '},'+ 
                             '"LastStoprtms__Shipping_Receiving_Hours__c": "'+ld.rtms__Last_Stop__r.rtms__Shipping_Receiving_Hours__c+ '",'+
                             '"LastStoprtms__Expected_Date__c": "'+ld.rtms__Last_Stop__r.rtms__Expected_Date__c+ '",'+
                             '"LastStoprtms__Expected_Day__c": "'+ld.rtms__Last_Stop__r.rtms__Expected_Day__c+ '",'+
@@ -319,7 +342,7 @@ public class LoadPayload {
         if(triggerAction == 'Delete'){
             payload = '{"LoadDetails":';
                 payload = payload + '{'+ 
-                		'"Id": "'+payload+'"'+ 
+                		'"Id": "'+loadId+'"'+ 
                     '}}';
         	
         }

@@ -57,9 +57,9 @@ const PieVisualization = ({ data, rootClass, colorsScheme}) => {
               tooltip= {customLabelFormat}
               colors={{ scheme: colorsScheme }}
               data={data}
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+              margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
               sortByValue={true}
-              innerRadius={0.65}
+              innerRadius={0.75}
               padAngle={0.7}
               enableRadialLabels={false}
               sliceLabel={(item) => `${item.value}`}
@@ -73,11 +73,12 @@ const PieVisualization = ({ data, rootClass, colorsScheme}) => {
                       anchor: 'bottom',
                       direction: 'row',
                       translateY: 56,
-                      itemWidth: 100,
+                      translateX: 15,
+                      itemWidth: 90,
                       itemHeight: 18,
                       itemTextColor: '#999',
                       symbolSize: 18,
-                      symbolShape: 'circle',
+                      symbolShape: 'square',
                       effects: [
                           {
                               on: 'hover',
