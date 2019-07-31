@@ -148,14 +148,6 @@ class Login extends Component{
               <Paper className="SecondaryLoginOverlay">
                 <Grid container spacing={0} {...gridConfig}>
                   <Grid item xs={gridWidth}>
-                    <p className="MainTitle">
-                      Sign In to Shipper
-                    </p>
-                    <p className="SubTitle">
-                      Enter your details below
-                    </p>
-                  </Grid>
-                  <Grid item xs={gridWidth}>
                     <div className="InputGroup">
                       <TextField
                         id="outlined-email-input"
