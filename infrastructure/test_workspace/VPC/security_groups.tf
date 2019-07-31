@@ -1,5 +1,5 @@
 resource "aws_security_group" "sec_grp_rds" {
-  name        = "RDS"
+  name        = "${terraform.workspace} RDS SG1"
   description = "RDS security group"
   vpc_id      = "${aws_vpc.VPC.id}"
 
@@ -46,4 +46,9 @@ resource "aws_security_group" "sec_grp_rds" {
     Name = "${terraform.workspace} RDS SG"
     env  = "${terraform.workspace}"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }

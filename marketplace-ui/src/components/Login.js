@@ -148,14 +148,6 @@ class Login extends Component{
               <Paper className="SecondaryLoginOverlay">
                 <Grid container spacing={0} {...gridConfig}>
                   <Grid item xs={gridWidth}>
-                    <p className="MainTitle">
-                      Sign In to Shipper
-                    </p>
-                    <p className="SubTitle">
-                      Enter your details below
-                    </p>
-                  </Grid>
-                  <Grid item xs={gridWidth}>
                     <div className="InputGroup">
                       <TextField
                         id="outlined-email-input"
@@ -166,7 +158,7 @@ class Login extends Component{
                         margin="normal"
                         variant="outlined"
                         onChange={this.onEmailChange}
-                        className="TextField"
+                        fullWidth
                         required
                       />
                     </div>
@@ -181,6 +173,7 @@ class Login extends Component{
                         margin="normal"
                         variant="outlined"
                         onChange={this.onPasswordChange}
+                        fullWidth
                         required
                       />
                     </div>
@@ -192,7 +185,7 @@ class Login extends Component{
                   </Grid>
                   <Grid item xs={gridWidth}>
                     <div className="ButtonGroup">
-                      <Button className="Login-btn" type="submit" variant="contained" color="primary">
+                      <Button fullWidth className="Login-btn" type="submit" variant="contained" color="primary">
                         {
                           (!isSingUp) ?
                             "Log In":

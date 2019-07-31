@@ -187,9 +187,11 @@ variable "cname_alias" {
 }
 
 variable "error_caching_min_ttl" {
-  type = list(number)
-  default = [300,300]
-  
+  type = "map"
+  default = {
+    403 = "300"
+    404 = "300"
+  }
 }
 
 variable "error_code" {
@@ -199,15 +201,20 @@ variable "error_code" {
 }
 
 variable "response_code" {
-   type = list(number)
-  default = [200,200]
+   type = "map"
+  default = {
+    403 = "200"
+    404 = "200"
+  }
   
 }
 
 variable "response_page_path" {
-   type = list(string)
-  default = ["/index.html"]
-  
+   type = "map"
+  default = {
+    403 = "/index.html"
+    404 = "/index.html"
+  }
 }
 
 

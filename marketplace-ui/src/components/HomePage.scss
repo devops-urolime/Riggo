@@ -1,8 +1,10 @@
 @import 'base.scss';
 
 $CardSummarySectionLefRight: 20px;
-$SectionsVisualizationWidth: 310px;
-
+$SectionsVisualizationWidth: 320px;
+$SectionsVisualizationWidthXl: 1120px;
+$SectionsVisualizationWidthMd: 690px;
+$SectionsVisualizationWidthLg: 860px;
 .HomePage{
     &__MuiPaper-root{
         background-color: $paper-section !important;
@@ -14,17 +16,41 @@ $SectionsVisualizationWidth: 310px;
 .StatusVisualization{
     height: 250px;
     width: $SectionsVisualizationWidth;
+    @media (min-width: $md-min-width) {
+        width: $SectionsVisualizationWidthMd;
+    }
+    @media (min-width: $lg-min-width) {
+        width: $SectionsVisualizationWidthLg;
+    }
+    @media (min-width: $xl-min-width) {
+        width: $SectionsVisualizationWidthXl;
+    }
 }
 
 .PerformancePickUpVisualization{
     height: 350px;
     width: $SectionsVisualizationWidth;
+    @media (min-width: $md-min-width) {
+        width: $SectionsVisualizationWidthMd;
+    }
+    @media (min-width: $lg-min-width) {
+        width: $SectionsVisualizationWidthLg;
+    }
+    @media (min-width: $xl-min-width) {
+        width: $SectionsVisualizationWidthXl;
+    }
 }
 
 
 
 .CardSummarySection{
     margin-bottom: 8px;
+    @media (min-width: $md-min-width) {
+        margin-bottom: 12px;
+    }
+    @media (min-width: $xl-min-width) {
+        margin-bottom: 16px;
+    }
     margin-right:  $CardSummarySectionLefRight;
     margin-left:  $CardSummarySectionLefRight;
 }

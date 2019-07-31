@@ -14,7 +14,7 @@ export default function(state = initState, action) {
     case LOGIN_SUCCESS:
       return {
           ...state,
-          token: action.token,
+          token: action.token.token,
           isLogin: true
       };
     case LOGIN_REQUEST:
@@ -37,9 +37,15 @@ export default function(state = initState, action) {
   }
 }
 
-const currentTokenSelector = state => state.auth.token.token;
+const currentTokenSelector = state => state.auth.token;
+const isLoginSelector = state => state.auth.isLogin;
 
 export const getToken = createSelector(
   currentTokenSelector,
   defaultMenu => defaultMenu
+);
+
+export const isLogin = createSelector(
+  isLoginSelector,
+  isLogin => isLogin
 );

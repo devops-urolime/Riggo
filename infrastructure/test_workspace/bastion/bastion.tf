@@ -49,13 +49,18 @@ resource "aws_security_group_rule" "egress_bastion" {
 
 resource "aws_security_group" "private_instances_security_group" {
   description = "Enable SSH access to the Private instances from the bastion via SSH port"
-  name        = "${terraform.workspace}-priv-instances"
+  name        = "${terraform.workspace}-Private-instances-SG"
   vpc_id      = "${var.vpc_id}"
+
 
   tags = {
     Name = "${terraform.workspace}-Bastion2PrivNet"
     env  = "${terraform.workspace}"
   }
+
+lifecycle {
+  create_before_destroy = true
+}
 }
 resource "aws_security_group_rule" "ingress_instances" {
   description = "Incoming traffic from bastion"
@@ -102,5 +107,8 @@ resource "aws_instance" "bastion" {
   tags = {
     Name = "${terraform.workspace}-Bastion-EC2"
     env  = "${terraform.workspace}"
+  }
+  volume_tags = {
+    Name = "${terraform.workspace}-Bastion-EBS"
   }
 }

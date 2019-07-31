@@ -83,6 +83,14 @@ module "cloudfront" {
   allowed_methods = "${var.allowed_methods}"
   cached_methods  = "${var.cached_methods}"
   sse_algorithm   = "${var.sse_algorithm}"
+  cloudfront_root_object = "${var.cloudfront_root_object}"
+  cloudfront_acm_arn = "${var.cloudfront_acm_arn}"
+  cloudfront_ssl_protocol_ver = "${var.cloudfront_ssl_protocol_ver}"
+  cname_alias                 = "${var.cname_alias}"
+  error_caching_min_ttl        = "${var.error_caching_min_ttl}"
+  error_code                   = "${var.error_code}"
+  response_code                = "${var.response_code}"
+  response_page_path           = "${var.response_page_path}"
 }
 
 module "api-gateway" {
