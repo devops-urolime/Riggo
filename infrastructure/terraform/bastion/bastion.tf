@@ -56,6 +56,9 @@ resource "aws_security_group" "private_instances_security_group" {
     Name = "${terraform.workspace}-Bastion2PrivNet"
     env  = "${terraform.workspace}"
   }
+   lifecycle {
+    ignore_changes = [name]
+  }
 }
 resource "aws_security_group_rule" "ingress_instances" {
   description = "Incoming traffic from bastion"

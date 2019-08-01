@@ -12,6 +12,9 @@ resource "aws_db_subnet_group" "db_sub_gr" {
     Name = "${terraform.workspace} RDS Postgress"
     env  = "${terraform.workspace}"
   }
+   lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 #data "aws_vpc" "select" {

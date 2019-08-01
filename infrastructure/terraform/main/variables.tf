@@ -183,7 +183,7 @@ variable "cloudfront_ssl_protocol_ver" {
 
 variable "cname_alias" {
   description = "Domain name to use as cname in cloudfront"
-  default = "riggo.riggoqa.net"
+  default = "*.riggoqa.net"
 }
 
 variable "error_caching_min_ttl" {
@@ -515,5 +515,22 @@ variable "lambda_timeout" {
   
 }
 
+
+#Variables for Cloudwatch Alarms
+
+variable "cpu_utilization_high_threshold" {
+  description = "The maximum percentage of CPU utilization average."
+  default = "65"
+}
+
+variable "cpu_utilization_high_evaluation_periods" {
+  description = "Number of periods to evaluate for the alarmn"
+  default = "1"
+}
+
+variable "cpu_utilization_high_period" {
+  description = "Duration in seconds to evaluate for the alarm"
+  default = "120"
+}
 
 

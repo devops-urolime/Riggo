@@ -37,6 +37,9 @@ resource "aws_security_group" "lb_securitygroup" {
   tags = {
     Name = "SG-${terraform.workspace}-ALB"
   }
+   lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 resource "aws_lb_target_group" "ecs-lb-targetgroup" {
