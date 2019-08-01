@@ -2,8 +2,9 @@ import { WebAuth } from 'auth0-js';
 import { AUTH_CONFIG } from '../config';
 import { loginSuccess, loginFail, logOut } from '../redux/actions/auth';
 
-export const JWTLocalStorage = 'token';
-export const isLoggedInLocalStorage = 'isLoggedIn';
+export const JWT_LOCAL_STORAGE = 'token';
+export const EXPIRES_IN_LOCAL_STORAGE = 'expiresIn';
+export const IS_LOGGED_IN_LOCAL_STORAGE = 'isLoggedIn';
 export const webAuth = new WebAuth({
   domain: AUTH_CONFIG.domain,
   clientID: AUTH_CONFIG.clientId,
@@ -15,40 +16,28 @@ export const webAuth = new WebAuth({
 
 export const logout = () => {
   // Remove isLoggedIn flag from localStorage
-  localStorage.removeItem(isLoggedInLocalStorage);
-  localStorage.removeItem(JWTLocalStorage);
+  localStorage.removeItem(IS_LOGGED_IN_LOCAL_STORAGE);
+  localStorage.removeItem(JWT_LOCAL_STORAGE);
   logOut();
   webAuth.logout({
     returnTo: window.location.origin
   });
 };
 
-export const isAuthenticated = (expiresAt) => {
-  // Check whether the current time is past the
-  // access token's expiry time
+export const isNotExpired = (expiresIn) => {
+  let expiresAt = (expiresIn * 1000) + new Date().getTime();
   return new Date().getTime() < expiresAt;
-};
-
-export const renewSession = () => {
-  webAuth.checkSession({}, (err, authResult) => {
-     if (authResult && authResult.accessToken && authResult.idToken) {
-       // Set the time that the access token will expire at
-       let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
-       loginSuccess(authResult.accessToken, expiresAt);
-     } else if (err) {
-       loginFail({err});
-     }
-  });
 };
 
 export const handleAuthentication = () =>  {
   webAuth.parseHash((err, authResult) => {
     if (authResult && authResult.accessToken && authResult.idToken) {
-      // Set the time that the access token will expire at
-      let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
-      loginSuccess(authResult.accessToken, expiresAt);
+      const { accessToken, expiresIn} = authResult;
+      loginSuccess(accessToken, expiresIn);
       // Set accessToken in localStorage
-      // localStorage.setItem(JWTLocalStorage, authResult.accessToken);
+      localStorage.setItem(JWT_LOCAL_STORAGE, accessToken);
+      localStorage.setItem(EXPIRES_IN_LOCAL_STORAGE, expiresIn);
+      localStorage.setItem(IS_LOGGED_IN_LOCAL_STORAGE, 'true');
     } else if (err) {
       loginFail({err});
     }

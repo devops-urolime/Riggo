@@ -8,7 +8,7 @@ import {
   MOCK_ALL_DATA, STATUS_400_ERROR_MESSAGE, STATUS_401_ERROR_MESSAGE
 } from './config';
 
-import { JWTLocalStorage } from './lib/auth';
+import { JWT_LOCAL_STORAGE } from './lib/auth';
 
 const METHOD_GET = 'get';
 
@@ -202,7 +202,7 @@ const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
 };
 
 const buildRequestData = (method, JWT) => {
-  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem(JWTLocalStorage);
+  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem(JWT_LOCAL_STORAGE);
   validateEmptyJWT(ACCESS_TOKEN_JWT);
   return buildRequestMetaData(method, ACCESS_TOKEN_JWT);
 };
@@ -231,6 +231,7 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
   } else {
     response = await fetch(endPoint, buildRequestData(method, JWT));
     json = await response.json();
+    handleStatus(response);
   }
   if(json && json.data){
     response = json.data;

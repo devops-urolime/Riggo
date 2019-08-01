@@ -22,9 +22,6 @@ class AppPage extends Component{
   }
   componentDidMount() {
     const {loadMenu } = this.props;
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      // renewSession();
-    }
     loadMenu();
   }
   render(){
