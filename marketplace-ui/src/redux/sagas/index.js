@@ -1,4 +1,4 @@
-import { takeEvery, all, put, select } from 'redux-saga/effects';
+import { all, put, select, takeEvery } from 'redux-saga/effects';
 import {
   APP_API_CALL_FAIL,
   GET_LOAD,
@@ -73,10 +73,10 @@ function* getLoadStopSummarySaga() {
     }
 }
 
-function* getMenuSaga() {
+function* getMenuSaga(action) {
     try{
-      const JWT = yield select(getToken);
-      const result = yield getMenuApi(JWT);
+      const JWT = yield select(getToken, action.menuTypePosition);
+      const result = yield getMenuApi(JWT, action.menuTypePosition);
       yield put({type: GET_MENU_SUCCESS, menu: result});
       yield put({type: SET_DEFAULT_MENU, menuItem: getDefaultMenu(result)});
     } catch (e) {
@@ -84,7 +84,7 @@ function* getMenuSaga() {
       yield put({
         type: APP_API_CALL_FAIL,
         message: "Error when get Menu",
-        err: e
+        err: e.message
       });
     }
 }

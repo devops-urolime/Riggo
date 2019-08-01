@@ -9,6 +9,7 @@ import Icon, { EXIT_ICON, MENU_ICON, USER_ACCOUNT_ICON } from './Icon';
 import './TopBar.scss';
 import { withRouter } from 'react-router-dom';
 import { APP_PATH_LOGIN } from '../config';
+import { logout } from '../lib/auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -60,8 +61,7 @@ MenuAppBar.propTypes = {
   onMenuClick: PropTypes.func,
 };
 
-const TopBar = ({title, onMenuClick, auth, history}) => {
-  const isLogin =  auth.isAuthenticated();
+const TopBar = ({title, onMenuClick, isLogin, history}) => {
   const login = () => {
     history.push(APP_PATH_LOGIN);
   };
@@ -69,7 +69,7 @@ const TopBar = ({title, onMenuClick, auth, history}) => {
     <MenuAppBar
       title={title}
       onMenuClick={onMenuClick}
-      logout={auth.logout}
+      logout={logout}
       login={login}
       isLogin={isLogin}
     />
@@ -79,7 +79,7 @@ const TopBar = ({title, onMenuClick, auth, history}) => {
 TopBar.propTypes = {
   title: PropTypes.string,
   onMenuClick: PropTypes.func,
-  auth: PropTypes.object,
+  isLogin: PropTypes.bool,
   history: PropTypes.object,
 };
 
