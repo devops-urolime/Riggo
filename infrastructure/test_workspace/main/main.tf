@@ -106,6 +106,7 @@ module "cloudfront" {
 
 module "elasticache" {
   source = "../elasticache"
+  # source = "git::git@github.com:rig-go/riggo.git//infrastructure/test_workspace/elasticache"
 
   # env                  = "${terraform.workspace}"
   vpc_id               = "${module.VPC.vpc_id}"

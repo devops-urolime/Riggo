@@ -47,6 +47,9 @@ resource "aws_security_group" "sec_elasticache" {
     Name = "${terraform.workspace} ElastiCache Redis"
     env  = "${terraform.workspace}"
   }
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 

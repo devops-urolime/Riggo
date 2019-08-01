@@ -1,15 +1,16 @@
 # data "aws_availability_zones" "available" {}
 resource "aws_db_subnet_group" "db_sub_gr" {
   description = "terrafom db subnet group"
-  name        = "${terraform.workspace} rds subnet group1"
+  name_prefix       = "${terraform.workspace} rds subnet group"
   subnet_ids = [
     "${var.subnet1}",
   "${var.subnet2}"]
 
- lifecycle {
+  # subnet_ids = ["subnet-8ac1e0c1","subnet-ad4f48d4"]
+#  lifecycle {
 
-   create_before_destroy = true
- }
+#    create_before_destroy = true
+#  }
   #  subnet_ids = [
   #    "${var.api_dev_int_subnet_ids}"]
   tags = {
@@ -19,6 +20,8 @@ resource "aws_db_subnet_group" "db_sub_gr" {
 
   # depends_on = ["aws_db_instance.db"]
 }
+
+
 
 #data "aws_vpc" "select" {
 #  id = "${var.vpc_id}"

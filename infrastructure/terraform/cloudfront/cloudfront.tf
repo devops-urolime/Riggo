@@ -132,9 +132,9 @@ dynamic "custom_error_response" {
 
   }
 
-#  lifecycle {
-#    ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
-#   }
+ lifecycle {
+   ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
+  }
 
 }
 

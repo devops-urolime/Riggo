@@ -1,5 +1,5 @@
 resource "aws_security_group" "sec_grp_rds" {
-  name        = "${terraform.workspace} RDS SG1"
+  name        = "${terraform.workspace} RDS SG"
   description = "RDS security group"
   vpc_id      = "${aws_vpc.VPC.id}"
 
