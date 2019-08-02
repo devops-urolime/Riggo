@@ -104,6 +104,15 @@ output "cloudfront_distribution" {
   value = "${module.cloudfront.cloudfront_domain_name}"
 }
 
+output "cloudfront_distribution_id" {
+  value = "${module.cloudfront.cloudfront_distribution_id}"
+}
+
+output "s3_bucket_region_for_cloudfront" {
+  value = "${module.cloudfront.s3_bucket_region}"
+}
+
+
 #output from elasticache
 
 output "elasticache_endpoint" {
