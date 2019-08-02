@@ -15,7 +15,7 @@ export default function(state = initState, action) {
     case LOGIN_SUCCESS:
       return {
           ...state,
-          token: action.token.token,
+          token: (action.token.token) ? action.token.token : action.token,
           expiresAt: action.expiresAt,
           isLogin: true
       };

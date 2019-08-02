@@ -8,8 +8,6 @@ import {
   MOCK_ALL_DATA, STATUS_400_ERROR_MESSAGE, STATUS_401_ERROR_MESSAGE
 } from './config';
 
-import { JWT_LOCAL_STORAGE } from './lib/auth';
-
 const METHOD_GET = 'get';
 
 const validateEmptyJWT = (jwt) => {
@@ -202,9 +200,8 @@ const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
 };
 
 const buildRequestData = (method, JWT) => {
-  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem(JWT_LOCAL_STORAGE);
-  validateEmptyJWT(ACCESS_TOKEN_JWT);
-  return buildRequestMetaData(method, ACCESS_TOKEN_JWT);
+  validateEmptyJWT(JWT);
+  return buildRequestMetaData(method, JWT);
 };
 
 const handleStatus = (response) => {
@@ -246,13 +243,13 @@ export const findLoadByIdApi = async (idLoad, JWT) => {
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
 };
 
 export const getMenuApi = async (JWT, menuTypePosition) => {
     const MENU_TYPE_POSITION = menuTypePosition || "";
     const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
