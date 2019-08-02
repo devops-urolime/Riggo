@@ -238,21 +238,21 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
 
 export const findLoadByIdApi = async (idLoad, JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_END_POINT + '/' + idLoad;
-    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock);
 };
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock);
 };
 
 export const getMenuApi = async (JWT, menuTypePosition) => {
     const MENU_TYPE_POSITION = menuTypePosition || "";
     const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock);
 };
