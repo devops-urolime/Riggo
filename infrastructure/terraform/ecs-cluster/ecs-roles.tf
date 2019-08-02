@@ -28,7 +28,7 @@ resource "aws_iam_role_policy_attachment" "ecs-instance-role-cloudwatch-attachme
 }
 
 resource "aws_iam_policy" "ECS-policy" {
-  name        = "ECS-CloudwatchLog-Full"
+  name        = "${terraform.workspace}-ECS-CloudwatchLog-Full"
   description = "policy to create, update ,write and read logs"
 
   policy = <<EOF

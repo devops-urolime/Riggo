@@ -38,6 +38,9 @@ resource "aws_security_group" "ecs-instance-SG" {
   tags = {
     Name = "SG-${terraform.workspace}-ECSinstance"
   }
+   lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 data "aws_ami" "amazon-linux-ecs" {

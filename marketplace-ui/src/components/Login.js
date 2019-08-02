@@ -1,23 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Login.scss';
-import { WebAuth } from "auth0-js";
-import { TextField, Button } from '@material-ui/core';
-import { AUTH_CONFIG, AUTH_CONFIG_REALM } from '../config';
-import { LOGO_MAIN_LOGIN } from './Icon';
-import Icon from './Icon';
+import { Button, TextField } from '@material-ui/core';
+import { AUTH_CONFIG_REALM } from '../config';
+import Icon, { LOGO_MAIN_LOGIN } from './Icon';
 import Grid from '@material-ui/core/Grid/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
-
-const webAuth = new WebAuth({
-  domain: AUTH_CONFIG.domain,
-  clientID: AUTH_CONFIG.clientId,
-  redirectUri: AUTH_CONFIG.callbackUrl,
-  audience: AUTH_CONFIG.audience,
-  responseType: AUTH_CONFIG.responseType,
-  scope: AUTH_CONFIG.scope
-});
+import { webAuth } from '../lib/auth';
 
 const gridWidth = 12;
 const gridConfig = {

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './containers/AppContainer';
 import * as serviceWorker from './serviceWorker';
-import { auth } from './lib/auth';
 import Provider from 'react-redux/es/components/Provider';
 import configureStore from './redux/store/configureStore';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,7 +11,7 @@ const store = configureStore();
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App auth={auth}/>
+      <App />
     </BrowserRouter>
   </Provider>
   , document.getElementById('root'));

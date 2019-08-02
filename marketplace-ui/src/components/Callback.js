@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import queryString from 'querystring';
 
-const Callback = ({auth, location:{hash}, loginSuccess, loginFail}) => {
+const Callback = ({ location:{hash}, loginSuccess, loginFail}) => {
   const parsedHash = queryString.parse(hash.substring(1,hash.length), { ignoreQueryPrefix: true });
   const hasToken = parsedHash.access_token;
   if(hasToken){
@@ -21,7 +21,6 @@ const Callback = ({auth, location:{hash}, loginSuccess, loginFail}) => {
 };
 
 Callback.propTypes = {
-  auth: PropTypes.object,
   location: PropTypes.object,
   loginSuccess: PropTypes.func,
   loginFail: PropTypes.func,

@@ -4,5 +4,9 @@ resource "aws_elasticache_subnet_group" "elastic_subnet" {
   subnet_ids = [
     "${var.subnet1}",
   "${var.subnet2}"]
+ lifecycle {
+    ignore_changes = [name]
+  }
+
 }
 

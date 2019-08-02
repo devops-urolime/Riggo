@@ -46,4 +46,7 @@ resource "aws_security_group" "sec_grp_rds" {
     Name = "${terraform.workspace} RDS SG"
     env  = "${terraform.workspace}"
   }
+   lifecycle {
+    ignore_changes = [name]
+  }
 }
