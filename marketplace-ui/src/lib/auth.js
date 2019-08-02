@@ -1,95 +1,46 @@
-import auth0 from 'auth0-js';
+import { WebAuth } from 'auth0-js';
 import { AUTH_CONFIG } from '../config';
 import { loginSuccess, loginFail, logOut } from '../redux/actions/auth';
 
-export const JWTLocalStorage = 'token';
-export const isLoggedInLocalStorage = 'isLoggedIn';
+export const JWT_LOCAL_STORAGE = 'token';
+export const EXPIRES_IN_LOCAL_STORAGE = 'expiresIn';
+export const IS_LOGGED_IN_LOCAL_STORAGE = 'isLoggedIn';
+export const webAuth = new WebAuth({
+  domain: AUTH_CONFIG.domain,
+  clientID: AUTH_CONFIG.clientId,
+  redirectUri: AUTH_CONFIG.callbackUrl,
+  audience: AUTH_CONFIG.audience,
+  responseType: AUTH_CONFIG.responseType,
+  scope: AUTH_CONFIG.scope
+});
 
-class Auth {
-  accessToken;
-  idToken;
-  expiresAt;
-
-  auth0 = new auth0.WebAuth({
-    domain: AUTH_CONFIG.domain,
-    clientID: AUTH_CONFIG.clientId,
-    redirectUri: AUTH_CONFIG.callbackUrl,
-    audience: AUTH_CONFIG.audience,
-    responseType: AUTH_CONFIG.responseType,
-    scope: AUTH_CONFIG.scope
+export const logout = () => {
+  // Remove isLoggedIn flag from localStorage
+  localStorage.removeItem(IS_LOGGED_IN_LOCAL_STORAGE);
+  localStorage.removeItem(JWT_LOCAL_STORAGE);
+  logOut();
+  webAuth.logout({
+    returnTo: window.location.origin
   });
+};
 
-  constructor() {
-    this.logout = this.logout.bind(this);
-    this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.getAccessToken = this.getAccessToken.bind(this);
-    this.getIdToken = this.getIdToken.bind(this);
-    this.renewSession = this.renewSession.bind(this);
-  }
+export const isNotExpired = (expiresIn) => {
+  let expiresAt = (expiresIn * 1000) + new Date().getTime();
+  return new Date().getTime() < expiresAt;
+};
 
-  handleAuthentication() {
-    this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
-        loginSuccess(authResult.accessToken);
-        // Set accessToken in localStorage
-        localStorage.setItem(JWTLocalStorage, authResult.accessToken);
-      } else if (err) {
-        loginFail({err});
-      }
-    });
-  }
+export const handleAuthentication = () =>  {
+  webAuth.parseHash((err, authResult) => {
+    if (authResult && authResult.accessToken && authResult.idToken) {
+      const { accessToken, expiresIn} = authResult;
+      loginSuccess(accessToken, expiresIn);
+      // Set accessToken in localStorage
+      localStorage.setItem(JWT_LOCAL_STORAGE, accessToken);
+      localStorage.setItem(EXPIRES_IN_LOCAL_STORAGE, expiresIn);
+      localStorage.setItem(IS_LOGGED_IN_LOCAL_STORAGE, 'true');
+    } else if (err) {
+      loginFail({err});
+    }
+  });
+};
 
-  getAccessToken() {
-    return this.accessToken;
-  }
-
-  getIdToken() {
-    return this.idToken;
-  }
-
-  setSession(authResult) {
-    // Set isLoggedIn flag in localStorage
-    localStorage.setItem(isLoggedInLocalStorage, 'true');
-    // Set the time that the access token will expire at
-    let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
-    this.accessToken = authResult.accessToken;
-    this.idToken = authResult.idToken;
-    this.expiresAt = expiresAt;
-  }
-
-  renewSession() {
-    this.auth0.checkSession({}, (err, authResult) => {
-       if (authResult && authResult.accessToken && authResult.idToken) {
-         this.setSession(authResult);
-       } else if (err) {
-         this.logout();
-         console.log(`Could not get a new token (${err.error}: ${err.error_description}).`);
-       }
-    });
-  }
-
-  logout() {
-    // Remove tokens and expiry time
-    this.accessToken = null;
-    this.idToken = null;
-    this.expiresAt = 0;
-
-    // Remove isLoggedIn flag from localStorage
-    localStorage.removeItem(isLoggedInLocalStorage);
-    localStorage.removeItem(JWTLocalStorage);
-    this.auth0.logout({
-      returnTo: window.location.origin
-    });
-    logOut();
-  }
-
-  isAuthenticated() {
-    // Check whether the current time is past the
-    // access token's expiry time
-    let expiresAt = this.expiresAt;
-    return new Date().getTime() < expiresAt;
-  }
-}
-export const auth = new Auth();
