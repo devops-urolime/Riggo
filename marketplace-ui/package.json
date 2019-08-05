@@ -39,7 +39,8 @@
     "@nivo/sankey": "^0.59.1",
     "@nivo/tooltip": "^0.59.1",
     "@nivo/pie": "^0.59.1",
-    "@nivo/bar": "^0.59.2"
+    "@nivo/bar": "^0.59.2",
+    "recharts": "^1.6.2"
   },
   "scripts": {
     "env": "export $(cat .env | xargs) && env",

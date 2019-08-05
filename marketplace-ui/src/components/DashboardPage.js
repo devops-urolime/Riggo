@@ -12,6 +12,7 @@ import PieVisualization, {
   NIVO
 } from './PieVisualization';
 import BarVisualization, { BAR_DARK2 } from './BarVisualization';
+import MultiYAxesVisualization from './MultiYAxesVisualization';
 
 const ROOT_INDEX_BAR_VISUALIZATION = "status";
 const KEYS_DATA_BAR_VISUALIZATION= [
@@ -177,6 +178,30 @@ class DashboardPage extends Component {
                   indexBy={ROOT_INDEX_BAR_VISUALIZATION}
                   keys={KEYS_DATA_BAR_VISUALIZATION}
                 />
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            spacing={0}
+            direction="row"
+            justify="flex-start"
+            alignItems="flex-start"
+          >
+            <Grid item xs={12}>
+              <TitleSection label="Shipments"/>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            className="DashboardPage"
+          >
+            <Grid item xs={11}>
+              <Paper className="DashboardPage__MuiPaper-root">
+                <MultiYAxesVisualization />
               </Paper>
             </Grid>
           </Grid>

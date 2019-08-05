@@ -17,7 +17,7 @@ class SideBar extends Component {
             open={isOpen}
             className="SideBar-menu"
           >
-            <nav className="SideBar-menu__Header" >
+            <nav className="SideBar-menu__Header" onClick={handleClose} >
               <Icon name={LOGO_ICON}/>
             </nav>
             <Divider />
