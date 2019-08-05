@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import {
   ComposedChart, Line, Bar, XAxis, YAxis, Legend,
 } from 'recharts';
@@ -26,9 +26,9 @@ const data = [
   },
 ];
 
-class MultiYAxesLineAndBar extends PureComponent {
-  render() {
-    return (
+const MultiYAxesVisualization = () => {
+  return (
+    <div className="MultiYAxesVisualization">
       <ComposedChart
         width={324}
         height={360}
@@ -57,15 +57,9 @@ class MultiYAxesLineAndBar extends PureComponent {
           stroke="#E84B5E"
         />
       </ComposedChart>
-    );
-  }
-}
-
-const MultiYAxesVisualization = () => {
-  return (
-    <div className="MultiYAxesVisualization">
-       <MultiYAxesLineAndBar />
     </div>
   )
 };
+
+
 export default MultiYAxesVisualization;
