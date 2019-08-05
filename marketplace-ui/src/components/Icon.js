@@ -2,17 +2,16 @@ import React  from 'react';
 import PropTypes from 'prop-types';
 import './Icon.scss';
 
-export const DASHBOARD_ICON = 'Dashboard';
-export const SHIPMENTS_ICON = 'Shipments';
-export const REPORTS_ICON = 'Reports';
-export const BILLING_ICON = 'Billing';
-export const LOGO_ICON = 'Logo';
-export const MENU_ICON = 'Menu';
-export const EXIT_ICON = 'Exit';
-export const USER_ACCOUNT_ICON = 'UserAccount';
-export const LOGO_MAIN_LOGIN = 'LogoMainLogin';
+export const DASHBOARD_ICON = 'dashboard';
+export const SHIPMENTS_ICON = 'shipments';
+export const REPORTS_ICON = 'reports';
+export const BILLING_ICON = 'billing';
+export const LOGO_ICON = 'logo';
+export const MENU_ICON = 'menu';
+export const EXIT_ICON = 'exit';
+export const USER_ACCOUNT_ICON = 'userAccount';
+export const LOGO_MAIN_LOGIN = 'logoMainLogin';
 
-// TODO: Coordinate with the menu service to respect or update the name icons in the app.
 const getIcon = (name) => {
   switch (name) {
     case DASHBOARD_ICON:

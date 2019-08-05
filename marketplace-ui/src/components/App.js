@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import 'reset-css';
@@ -11,27 +11,36 @@ import {
 import Login from './Login';
 import AppPage from '../containers/AppPageContainer';
 import Callback from '../containers/CallbackContainer';
+import { handleAuthentication } from '../lib/auth';
 
-const App = ({auth, isLogin}) => {
-   return (
-     <Switch>
-       <Route exact path={APP_PATH_ROOT} render={() => {
-         return (isLogin) ? <AppPage auth={auth}/> : <Login auth={auth}/>;
-       }} />
-       <Route exact path={APP_PATH_LOGIN} render={() => (
-         <Login auth={auth}/>
-       )} />
-       <Route path={APP_PATH_AUTH0_CALLBACK} render={(props) => {
-          auth.handleAuthentication();
-          return <Callback auth={auth} {...props} />;
-       }}/>
-     </Switch>
-   );
-};
+class App extends Component {
+
+  componentDidMount() {
+    this.props.isAlreadyLocallyAuthenticated();
+  }
+
+  render () {
+    const { isLogin } = this.props;
+    return (
+      <Switch>
+        <Route exact path={APP_PATH_ROOT} render={() => {
+         return (isLogin) ? <AppPage isLogin={isLogin}/> : <Login />;
+        }} />
+        <Route exact path={APP_PATH_LOGIN} render={() => (
+         <Login />
+        )} />
+        <Route path={APP_PATH_AUTH0_CALLBACK} render={(props) => {
+          handleAuthentication();
+          return <Callback {...props} />;
+        }}/>
+      </Switch>
+    );
+  }
+}
 
 App.propTypes = {
-  auth: PropTypes.object,
   isLogin: PropTypes.bool,
+  isAlreadyLocallyAuthenticated: PropTypes.func
 };
 
 export default withRouter(App);
