@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import CardSummary from './CardSummary';
-import './HomePage.scss';
+import './DashboardPage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
 import Paper from '@material-ui/core/Paper';
@@ -95,7 +95,7 @@ const getConfigGrow = (index) => {
   return configGrow;
 };
 
-class HomePage extends Component {
+class DashboardPage extends Component {
 
   constructor(props) {
     super(props);
@@ -128,7 +128,7 @@ class HomePage extends Component {
           spacing={0}
           direction="row"
           alignItems="center"
-          className="HomePage"
+          className="DashboardPage"
         >
           <Grid
             container
@@ -168,7 +168,7 @@ class HomePage extends Component {
             alignItems="center"
           >
             <Grid item xs={11}>
-              <Paper className="HomePage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
+              <Paper className="DashboardPage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
                 <BarVisualization
                   data={pipeLineSummaryBar}
                   colorsScheme={BAR_DARK2}
@@ -196,10 +196,10 @@ class HomePage extends Component {
             spacing={0}
             direction="column"
             alignItems="center"
-            className="HomePage"
+            className="DashboardPage"
           >
             <Grid item xs={11}>
-              <Paper className="HomePage__MuiPaper-root">
+              <Paper className="DashboardPage__MuiPaper-root">
                 <PieVisualization
                   data={stopSummaryPickUpPie}
                   rootClass="PerformancePickUpVisualization"
@@ -224,10 +224,10 @@ class HomePage extends Component {
             spacing={0}
             direction="column"
             alignItems="center"
-            className="HomePage"
+            className="DashboardPage"
           >
             <Grid item xs={11}>
-              <Paper className="HomePage__MuiPaper-root">
+              <Paper className="DashboardPage__MuiPaper-root">
                 <PieVisualization
                   data={stopSummaryDeliveryPie}
                   rootClass="PerformancePickUpVisualization"
@@ -241,15 +241,15 @@ class HomePage extends Component {
   }
 }
 
-HomePage.propTypes = {
+DashboardPage.propTypes = {
   pipeLineSummary: PropTypes.array,
   stopSummary: PropTypes.array,
   loadPipeLineSummary: PropTypes.func,
   loadStopSummary: PropTypes.func,
 };
 
-HomePage.defaultProps = {
+DashboardPage.defaultProps = {
   pipeLineSummary: [],
   stopSummary: [],
 };
-export default withRouter(HomePage);
+export default withRouter(DashboardPage);

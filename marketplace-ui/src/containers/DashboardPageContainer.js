@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import HomePage from '../components/HomePage';
+import DashboardPage from '../components/DashboardPage';
 import { loadPipeLineSummary, loadStopSummary } from '../redux/actions/load';
 import { getPipeLineSummary, getStopSummary } from '../redux/reducers/load';
 
@@ -25,4 +25,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(HomePage));
+)(withRouter(DashboardPage));

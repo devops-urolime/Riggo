@@ -5,6 +5,7 @@ import { loginSuccess, loginFail, logOut } from '../redux/actions/auth';
 export const JWT_LOCAL_STORAGE = 'token';
 export const EXPIRES_IN_LOCAL_STORAGE = 'expiresIn';
 export const IS_LOGGED_IN_LOCAL_STORAGE = 'isLoggedIn';
+export const IS_LOGGED_IN_LOCAL_STORAGE_TRUE = 'true';
 export const webAuth = new WebAuth({
   domain: AUTH_CONFIG.domain,
   clientID: AUTH_CONFIG.clientId,
@@ -34,13 +35,16 @@ export const handleAuthentication = () =>  {
     if (authResult && authResult.accessToken && authResult.idToken) {
       const { accessToken, expiresIn} = authResult;
       loginSuccess(accessToken, expiresIn);
-      // Set accessToken in localStorage
-      localStorage.setItem(JWT_LOCAL_STORAGE, accessToken);
-      localStorage.setItem(EXPIRES_IN_LOCAL_STORAGE, expiresIn);
-      localStorage.setItem(IS_LOGGED_IN_LOCAL_STORAGE, 'true');
+      saveJWTInfoToLocalStorage(accessToken, expiresIn, IS_LOGGED_IN_LOCAL_STORAGE_TRUE);
     } else if (err) {
       loginFail({err});
     }
   });
 };
 
+export const saveJWTInfoToLocalStorage= (accessToken, expiresIn, isLogin) =>{
+  // Set accessToken in localStorage
+  localStorage.setItem(JWT_LOCAL_STORAGE, accessToken);
+  localStorage.setItem(EXPIRES_IN_LOCAL_STORAGE, expiresIn);
+  localStorage.setItem(IS_LOGGED_IN_LOCAL_STORAGE, isLogin);
+};
