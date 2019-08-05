@@ -1,23 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './Login.scss';
-import { WebAuth } from "auth0-js";
-import { TextField, Button } from '@material-ui/core';
-import { AUTH_CONFIG, AUTH_CONFIG_REALM } from '../config';
-import { LOGO_MAIN_LOGIN } from './Icon';
-import Icon from './Icon';
+import { Button, TextField } from '@material-ui/core';
+import { AUTH_CONFIG_REALM } from '../config';
+import Icon, { LOGO_MAIN_LOGIN } from './Icon';
 import Grid from '@material-ui/core/Grid/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
-
-const webAuth = new WebAuth({
-  domain: AUTH_CONFIG.domain,
-  clientID: AUTH_CONFIG.clientId,
-  redirectUri: AUTH_CONFIG.callbackUrl,
-  audience: AUTH_CONFIG.audience,
-  responseType: AUTH_CONFIG.responseType,
-  scope: AUTH_CONFIG.scope
-});
+import { webAuth } from '../lib/auth';
 
 const gridWidth = 12;
 const gridConfig = {
@@ -148,25 +138,17 @@ class Login extends Component{
               <Paper className="SecondaryLoginOverlay">
                 <Grid container spacing={0} {...gridConfig}>
                   <Grid item xs={gridWidth}>
-                    <p className="MainTitle">
-                      Sign In to Shipper
-                    </p>
-                    <p className="SubTitle">
-                      Enter your details below
-                    </p>
-                  </Grid>
-                  <Grid item xs={gridWidth}>
                     <div className="InputGroup">
                       <TextField
                         id="outlined-email-input"
                         label="Email"
                         type="email"
                         name="email"
-                        autoComplete="email"
+                        autoComplete="new-email"
                         margin="normal"
                         variant="outlined"
                         onChange={this.onEmailChange}
-                        className="TextField"
+                        fullWidth
                         required
                       />
                     </div>
@@ -177,10 +159,11 @@ class Login extends Component{
                         id="outlined-password-input"
                         label="Password"
                         type="password"
-                        autoComplete="current-password"
+                        autoComplete="new-password"
                         margin="normal"
                         variant="outlined"
                         onChange={this.onPasswordChange}
+                        fullWidth
                         required
                       />
                     </div>
@@ -192,7 +175,7 @@ class Login extends Component{
                   </Grid>
                   <Grid item xs={gridWidth}>
                     <div className="ButtonGroup">
-                      <Button className="Login-btn" type="submit" variant="contained" color="primary">
+                      <Button fullWidth className="Login-btn" type="submit" variant="contained" color="primary">
                         {
                           (!isSingUp) ?
                             "Log In":

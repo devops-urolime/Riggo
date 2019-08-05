@@ -4,6 +4,7 @@ import { createSelector } from 'reselect';
 const initState = {
   message:"",
   token: null,
+  expiresAt: 0,
   isLogin:false,
   user: null,
   err: null,
@@ -14,7 +15,8 @@ export default function(state = initState, action) {
     case LOGIN_SUCCESS:
       return {
           ...state,
-          token: action.token,
+          token: (action.token.token) ? action.token.token : action.token,
+          expiresAt: action.expiresAt,
           isLogin: true
       };
     case LOGIN_REQUEST:
@@ -30,16 +32,24 @@ export default function(state = initState, action) {
     case LOGOUT_REQUEST:
       return {
         ...state,
-        isLogin: false
+        isLogin: false,
+        token: null,
+        expiresAt: 0
       };
     default:
       return state;
   }
 }
 
-const currentTokenSelector = state => state.auth.token.token;
+const currentTokenSelector = state => state.auth.token;
+const isLoginSelector = state => state.auth.isLogin;
 
 export const getToken = createSelector(
   currentTokenSelector,
   defaultMenu => defaultMenu
+);
+
+export const isLogin = createSelector(
+  isLoginSelector,
+  isLogin => isLogin
 );

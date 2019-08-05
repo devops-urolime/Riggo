@@ -17,10 +17,11 @@ export function loginFail(err){
   };
 }
 
-export function loginSuccess(token){
+export function loginSuccess(token, expiresAt){
   return {
     type: LOGIN_SUCCESS,
-    token
+    token,
+    expiresAt
   };
 }
 

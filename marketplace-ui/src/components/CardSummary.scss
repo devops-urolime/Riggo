@@ -1,18 +1,18 @@
 @import 'base.scss';
 
 .CardSummary{
-    width: 105px;
+    width: 95px;
     height: 124px;
     background: $card-background !important;
     text-align: center;
     color: $general-text !important;
-    margin-bottom: 15px;
-    margin-left: 10px;
+    margin: 0 auto;
     &__number {
 
     }
     &__label{
         text-transform: capitalize;
+        font-size: 12px !important;
     }
     @media (min-width: $md-min-width) {
         width: 200px;

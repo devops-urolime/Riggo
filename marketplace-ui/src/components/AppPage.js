@@ -21,21 +21,17 @@ class AppPage extends Component{
     this.setState({openMenu:true});
   }
   componentDidMount() {
-    const { auth:{renewSession}, loadMenu } = this.props;
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-      renewSession();
-    }
+    const {loadMenu } = this.props;
     loadMenu();
   }
   render(){
-    const {auth, menu, defaultMenu} = this.props;
-    const isLogin = auth.isAuthenticated();
+    const { menu, defaultMenu, isLogin} = this.props;
     const {openMenu} = this.state;
     return (
      <div className="App-layout">
          <Grid container spacing={0}>
             <Grid item xs={12}>
-             <TopBar title="Dashboard" onMenuClick={() => this.openMenu()} auth={auth}/>
+             <TopBar title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>
             </Grid>
             <Grid item xs={12}>
              <SideBar
@@ -50,8 +46,8 @@ class AppPage extends Component{
                 {
                   isLogin &&
                  <Switch>
-                   <Route exact path={APP_PATH_ROOT} render={() => (<HomePage auth={auth}/>)} />
-                   <Route exact path={APP_PATH_HOME} render={() => (<HomePage auth={auth}/>)} />
+                   <Route exact path={APP_PATH_ROOT} render={() => (<HomePage />)} />
+                   <Route exact path={APP_PATH_HOME} render={() => (<HomePage />)} />
                  </Switch>
                 }
               </MainContent>
@@ -63,10 +59,10 @@ class AppPage extends Component{
 }
 
 AppPage.propTypes = {
-  auth: PropTypes.object,
   loadMenu: PropTypes.func,
   menu: PropTypes.array,
   defaultMenu: PropTypes.object,
+  isLogin: PropTypes.bool,
 };
 
 export default withRouter(AppPage);

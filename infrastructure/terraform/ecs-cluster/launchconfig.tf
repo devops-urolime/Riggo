@@ -33,9 +33,13 @@ resource "aws_security_group_rule" "ingress_ecs_ssh_instance" {
 
 resource "aws_security_group" "ecs-instance-SG" {
   vpc_id = "${var.vpc_id}"
+  name   = "SG-${terraform.workspace}-ECSinstance"
 
   tags = {
     Name = "SG-${terraform.workspace}-ECSinstance"
+  }
+   lifecycle {
+    ignore_changes = [name]
   }
 }
 
@@ -63,7 +67,8 @@ data "template_file" "userdataECS" {
 
 
 resource "aws_launch_configuration" "ecs-launch-configuration" {
-  name                 = "ECS-Riggo-${terraform.workspace}-launch-configuration"
+  #name                 = "ECS-Riggo-${terraform.workspace}-launch-configuration"
+  name_prefix          = "ECS-Riggo-${terraform.workspace}"
   image_id             = "${data.aws_ami.amazon-linux-ecs.id}"
   instance_type        = "${var.ecs_instance_type}"
   iam_instance_profile = "${aws_iam_instance_profile.ecs-instance-profile.id}"
@@ -78,7 +83,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
   lifecycle {
     create_before_destroy = true
 
-    ignore_changes = [ user_data,image_id ]
+    ignore_changes = [ user_data,image_id,name,name_prefix ]
   }
 
   associate_public_ip_address = "false"

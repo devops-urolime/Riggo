@@ -1,7 +1,8 @@
 # need an ASG so we can easily add more ecs host nodes as necessary
 #
 resource "aws_autoscaling_group" "ecs-autoscaling-group" {
-  name             = "${terraform.workspace}-ecs-autoscaling"
+  #name             = "${terraform.workspace}-ecs-autoscaling"
+  name             = "${aws_launch_configuration.ecs-launch-configuration.name}-ASG"
   max_size         = "${var.max_ecs_instance-size}"
   min_size         = "${var.min_ecs_instance-size}"
   desired_capacity = "${var.desired_ecs_instance-size}"
@@ -31,6 +32,9 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     value               = "Terraform"
     propagate_at_launch = true
   }
+lifecycle {
+  ignore_changes = [name]
+}
 }
 
 

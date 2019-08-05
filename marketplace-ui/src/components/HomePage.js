@@ -6,6 +6,7 @@ import './HomePage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
 import Paper from '@material-ui/core/Paper';
+import Grow from '@material-ui/core/Grow';
 import PieVisualization, {
   DARK2,
   NIVO
@@ -78,12 +79,28 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
   return result;
 };
 
+const getTimingEffect = (index) => {
+  const GROW_TIMING_EFFECT = [ 600, 800, 1000 ];
+  return ( index < GROW_TIMING_EFFECT.length ) ? GROW_TIMING_EFFECT[index] : 500;
+};
+
+const getConfigGrow = (index) => {
+  const configGrow = {
+    in:true
+  };
+  if (index > 0){
+    configGrow['timeout'] = getTimingEffect(index);
+    configGrow['style'] = { transformOrigin: '0 0 0' };
+  }
+  return configGrow;
+};
+
 class HomePage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isBarGroupMode: false,
+      isBarGroupMode: true,
     };
   }
 
@@ -124,14 +141,26 @@ class HomePage extends Component {
               <TitleSection label="Status"/>
             </Grid>
           </Grid>
+          <Grid
+            spacing={0}
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+            className="CardSummarySection"
+          >
           { pipeLineSummaryCard &&
             pipeLineSummaryCard.map((item, index) => {
+            const configGrow =  getConfigGrow(index) ;
             return (
-              <Grid xs={4} key={`card-summary-${index}`} item>
-                <CardSummary number={item.number} label={item.label}/>
-              </Grid>
+              <Grow {...configGrow}  key={`card-summary-grow-${index}`}>
+                <Grid xs={4} key={`card-summary-${index}`} item>
+                    <CardSummary number={item.number} label={item.label}/>
+                </Grid>
+              </Grow>
             );
           })}
+          </Grid>
           <Grid
             container
             spacing={0}

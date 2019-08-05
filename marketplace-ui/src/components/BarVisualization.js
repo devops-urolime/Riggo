@@ -35,7 +35,7 @@ export const SAMPLE_DATA_BAR = [
 export const BAR_DARK2 = "dark2";
 
 const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, keys}) => {
-  const customLabelFormat = (d)=>{
+  const customLabelFormat = (d) => {
     return (!groupMode) ? `${d.id} ${d.value}` : `${d.value}`
   };
   let configBar = {
@@ -44,15 +44,15 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, k
     enableGridX: false,
     keys,
     indexBy: indexBy,
-    margin:{ top: 20, right: 30, bottom: 50, left: 15 },
-    padding:0,
+    margin:{ top: 20, right: 10, bottom: 50, left: 10 },
+    padding: (!groupMode) ? 0.05: 0,
+    innerPadding: (!groupMode) ? 0: 4,
     colors:{ scheme: colorsScheme },
     axisTop:null,
     axisRight:null,
-    axisBottom:null,
     axisLeft:null,
-    labelSkipWidth:12 ,
-    labelSkipHeight:12,
+    labelSkipWidth:(!groupMode) ? 0: 1000 ,
+    labelSkipHeight:(!groupMode) ? 0: 1000,
     borderColor:{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     labelTextColor:{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     label: customLabelFormat,
@@ -60,9 +60,16 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, k
     motionStiffness:90,
     motionDamping:15,
     isInteractive:false,
+    axisBottom:{
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legendPosition: 'middle',
+      legendOffset: 32
+    }
   };
   if(groupMode){
-    configBar.groupMode = "grouped";
+    configBar['groupMode'] = "grouped";
   }
   return (
     <div className={"BarVisualization " +rootClass}>

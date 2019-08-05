@@ -1,7 +1,7 @@
 # data "aws_availability_zones" "available" {}
 resource "aws_db_subnet_group" "db_sub_gr" {
   description = "terrafom db subnet group"
-  name        = "${terraform.workspace}-subnet-group"
+  name        = "${terraform.workspace} rds subnet group"
   subnet_ids = [
     "${var.subnet1}",
   "${var.subnet2}"]
@@ -11,6 +11,9 @@ resource "aws_db_subnet_group" "db_sub_gr" {
   tags = {
     Name = "${terraform.workspace} RDS Postgress"
     env  = "${terraform.workspace}"
+  }
+   lifecycle {
+    ignore_changes = [name]
   }
 }
 

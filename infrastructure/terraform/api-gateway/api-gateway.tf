@@ -66,10 +66,10 @@ resource "aws_api_gateway_deployment" "riggo-api-gateway-deployment" {
 #   }
 # }
 
-resource "aws_api_gateway_account" "Global-log" {
-  cloudwatch_role_arn = "${var.cloudwatchlogs-globalarn}"
+# resource "aws_api_gateway_account" "Global-log" {
+#   cloudwatch_role_arn = "${var.cloudwatchlogs-globalarn}"
 
-  lifecycle {
-  prevent_destroy = true
-  }
-}
+#   lifecycle {
+#   prevent_destroy = true
+#   }
+# }

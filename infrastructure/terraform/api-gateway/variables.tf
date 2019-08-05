@@ -5,9 +5,9 @@
 # variable "name" {
 
 # }
-variable "cloudwatchlogs-globalarn" {
+# variable "cloudwatchlogs-globalarn" {
   
-}
+# }
 
 variable "authorizerArn" {
   

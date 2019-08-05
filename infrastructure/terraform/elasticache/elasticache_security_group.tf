@@ -1,5 +1,5 @@
 resource "aws_security_group" "sec_elasticache" {
-  name        = "${terraform.workspace}-elasticache-redis"
+  name        = "${terraform.workspace}-ElasticCache-Redis"
   description = "Security group for redis elasticcache"
   vpc_id      = "${var.vpc_id}"
 
@@ -46,6 +46,9 @@ resource "aws_security_group" "sec_elasticache" {
   tags = {
     Name = "${terraform.workspace} ElastiCache Redis"
     env  = "${terraform.workspace}"
+  }
+  lifecycle {
+    ignore_changes = [name]
   }
 }
 

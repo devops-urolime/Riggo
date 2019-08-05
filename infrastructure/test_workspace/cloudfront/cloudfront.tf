@@ -4,20 +4,6 @@ locals {
 
 }
 
-locals {
-  custom_error_response = {
-    # error_caching_min_ttl = ["${var.error_caching_min_ttl}"]
-    # error_code            = ["${var.error_code}"]
-    # response_code         = ["${var.response_code}"]
-    # response_page_path    = ["${var.response_page_path}"]
-    "error_caching_min_ttl" = [300,300]
-    "error_code"            = [404,403]
-    "response_code"         = [200,200]
-    "response_page_path"    = ["/index.html","/index.html"]
-
-    
-  }
-}
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
   #comment = "${var.client_app_name}.${terraform.workspace}.s3.us-west-2.amazonaws.com"
@@ -119,10 +105,10 @@ dynamic "custom_error_response" {
     # error_code = custom_error_response.error_code
     # response_code = custom_error_response.response_code
     # response_page_path = custom_error_response.response_page_path
-    error_caching_min_ttl = 300
+    error_caching_min_ttl = "${var.error_caching_min_ttl["${custom_error_response.value}"]}"
     error_code            = custom_error_response.value
-    response_code         = 200
-    response_page_path    = "/index.html"
+    response_code         = "${var.response_code["${custom_error_response.value}"]}"
+    response_page_path    = "${var.response_page_path["${custom_error_response.value}"]}"
   }
 }
 

@@ -83,13 +83,21 @@ module "cloudfront" {
   allowed_methods = "${var.allowed_methods}"
   cached_methods  = "${var.cached_methods}"
   sse_algorithm   = "${var.sse_algorithm}"
+  cloudfront_root_object = "${var.cloudfront_root_object}"
+  cloudfront_acm_arn = "${var.cloudfront_acm_arn}"
+  cloudfront_ssl_protocol_ver = "${var.cloudfront_ssl_protocol_ver}"
+  cname_alias                 = "${var.cname_alias}"
+  error_caching_min_ttl        = "${var.error_caching_min_ttl}"
+  error_code                   = "${var.error_code}"
+  response_code                = "${var.response_code}"
+  response_page_path           = "${var.response_page_path}"
 }
 
 module "api-gateway" {
   source = "../api-gateway"
   # env    = "${terraform.workspace}"
   # name = "${var.name}"
-  cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
+  # cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
   authorizerArn = "${module.iam.lambda_invoke}"
   authorize_uri         = "${module.lambda.authorize_uri}"    
 
@@ -155,7 +163,11 @@ module "ecs-cluster" {
 
 module "CloudWatch" {
   source = "../cloudwatch"
-
+  cpu_utilization_high_threshold = "${var.cpu_utilization_high_threshold}"
+  cluster_name = "${module.ecs-cluster.ecs_cluster_name}"
+  service_name = "${module.ecs-cluster.ecs_service_name}"
+  cpu_utilization_high_evaluation_periods = "${var.cpu_utilization_high_evaluation_periods}"
+  cpu_utilization_high_period = "${var.cpu_utilization_high_period}"
 
 }
 

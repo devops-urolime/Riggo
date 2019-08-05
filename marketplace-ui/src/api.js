@@ -1,8 +1,11 @@
 import {
-  BASE_END_POINT,
+  BASE_END_POINT, CORS_ERROR_MESSAGE,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
-  LOAD_PIPELINE_SUMMARY_END_POINT, LOAD_STOP_SUMMARY_END_POINT, MENU_END_POINT, MOCK_ALL_DATA
+  LOAD_PIPELINE_SUMMARY_END_POINT,
+  LOAD_STOP_SUMMARY_END_POINT,
+  MENU_END_POINT,
+  MOCK_ALL_DATA, STATUS_400_ERROR_MESSAGE, STATUS_401_ERROR_MESSAGE
 } from './config';
 
 const METHOD_GET = 'get';
@@ -11,44 +14,52 @@ const validateEmptyJWT = (jwt) => {
   if (!jwt) { throw new Error(EMPTY_JWT_ERROR_MESSAGE); }
 };
 
-const menuMockData = [
-		{
-			"id":null,
-			"siteId":null,
-			"name":"Dashboard",
-			"type":null,
-			"parentMenuId":0,
-			"url":"/?url=Dashboard",
-			"rank":1
-		},
-		{
-			"id":null,
-			"siteId":null,
-			"name":"Shipments",
-			"type":null,
-			"parentMenuId":0,
-			"url":"/?url=Shipments",
-			"rank":2
-		},
-		{
-			"id":null,
-			"siteId":null,
-			"name":"Reports",
-			"type":null,
-			"parentMenuId":0,
-			"url":"/?url=Reports",
-			"rank":3
-		},
-		{
-			"id":null,
-			"siteId":null,
-			"name":"Billing",
-			"type":null,
-			"parentMenuId":0,
-			"url":"/?url=Billing",
-			"rank":4
-		}
-];
+const menuMockData = {
+    "status": 200,
+    "message": "success",
+    "data": [
+        {
+          "id": 1,
+          "siteId": 100,
+          "name": "Dashboard",
+          "type": 1,
+          "parentMenuId": 0,
+          "urlCode":"dashboard",
+          "rank": 1,
+          "icon": "dashboard"
+        },
+        {
+          "id": 2,
+          "siteId": 100,
+          "name": "Shipments",
+          "type": 1,
+          "parentMenuId": 0,
+          "urlCode":"shipments",
+          "rank": 2,
+          "icon": "shipments"
+        },
+        {
+          "id": 3,
+          "siteId": 100,
+          "name": "Reports",
+          "type": 1,
+          "parentMenuId": 0,
+          "urlCode":"reports",
+          "rank": 3,
+          "icon": "reports"
+        },
+        {
+          "id": 4,
+          "siteId": 100,
+          "name": "Billing",
+          "type": 1,
+          "parentMenuId": 0,
+          "urlCode":"billing",
+          "rank": 4,
+          "icon": "reports"
+        }
+    ]
+};
 
 const summaryMock = {
    "status":200,
@@ -172,6 +183,12 @@ const summaryStopMock = {
    ]
 };
 
+const loadByIdMock =  {
+   "status":200,
+   "message":"success",
+   "data":{}
+};
+
 const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
    return {
      method: method,
@@ -183,60 +200,59 @@ const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
 };
 
 const buildRequestData = (method, JWT) => {
-  const ACCESS_TOKEN_JWT = JWT || localStorage.getItem('accessToken');
-  validateEmptyJWT(ACCESS_TOKEN_JWT);
-  return buildRequestMetaData(method, ACCESS_TOKEN_JWT);
+  validateEmptyJWT(JWT);
+  return buildRequestMetaData(method, JWT);
+};
+
+const handleStatus = (response) => {
+   const apiMessage = (response) => {
+      return " -- API message : " + response.message;
+   };
+   if(response && response.type === "cors"){
+     throw new Error(CORS_ERROR_MESSAGE + apiMessage({message: "None because CORS error."}))
+   }
+   if(response && response.status === 401){
+     throw new Error(STATUS_401_ERROR_MESSAGE + apiMessage(response));
+   }
+   if(response && response.status === 400){
+     throw new Error(STATUS_400_ERROR_MESSAGE + apiMessage(response));
+   }
+};
+
+const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
+  let response = null;
+  let json = null;
+  if ( MOCK_ALL_DATA || mockOverride){
+    console.log(`MOCK_ALL_DATA active for endpoint: ${endPoint}`);
+    json = mockData;
+  } else {
+    response = await fetch(endPoint, buildRequestData(method, JWT));
+    json = await response.json();
+    handleStatus(response);
+  }
+  if(json && json.data){
+    response = json.data;
+  }
+  return response;
 };
 
 export const findLoadByIdApi = async (idLoad, JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_END_POINT + '/' + idLoad;
-    const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
-    const json = await response.json();
-    return (json && json.load) ? json.load : {};
+    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, true);
 };
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    let responseData = null;
-    let json = null;
-    if (MOCK_ALL_DATA){
-      console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
-      json = summaryMock;
-    } else {
-      const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
-      json = await response.json();
-    }
-    if(json && json.data){
-      responseData = json.data;
-    }
-    return responseData;
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
 };
 
-export const getMenuApi = async (JWT) => {
-    const END_POINT = BASE_END_POINT + MENU_END_POINT ;
-    const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
-    const json = await response.json();
-    let responseData = [];
-    if(json && json.data){
-      responseData = json.data;
-    }
-    if (MOCK_ALL_DATA) console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
-    return (MOCK_ALL_DATA) ? menuMockData : responseData;
+export const getMenuApi = async (JWT, menuTypePosition) => {
+    const MENU_TYPE_POSITION = menuTypePosition || "";
+    const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
-    let responseData = null;
-    let json = null;
-    if (MOCK_ALL_DATA){
-      console.log(`MOCK_ALL_DATA active for endpoint: ${END_POINT}`);
-      json = summaryStopMock;
-    } else {
-      const response = await fetch(END_POINT, buildRequestData(METHOD_GET, JWT));
-      json = await response.json();
-    }
-    if(json && json.data){
-      responseData = json.data;
-    }
-    return responseData;
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, true);
 };
