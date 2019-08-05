@@ -83,6 +83,11 @@ output "db_instance_port" {
   value = "${module.RDS.db_instance_port}"
 }
 
+# output "db_instance_db" {
+#   value = "${module.RDS.db_instance_db}"
+# }
+
+
 #output from bastion
 
 output "bastion_instance_id" {

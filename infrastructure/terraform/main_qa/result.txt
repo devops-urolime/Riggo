@@ -1,0 +1,1581 @@
+Acquiring state lock. This may take a few moments...
+[0m[1mRefreshing Terraform state in-memory prior to plan...[0m
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+[0m
+[0m[1mmodule.RDS.data.external.rds_db_credentials: Refreshing state...[0m
+[0m[1mmodule.VPC.data.aws_region.current: Refreshing state...[0m
+[0m[1mmodule.VPC.data.aws_availability_zones.available: Refreshing state...[0m
+[0m[1mmodule.ecs-cluster.data.aws_iam_policy_document.ecs-instance-policy: Refreshing state...[0m
+[0m[1mmodule.ecs-cluster.data.aws_iam_policy_document.ecs-service-policy: Refreshing state...[0m
+[0m[1mmodule.iam.data.aws_iam_policy_document.relationship-lambda: Refreshing state...[0m
+[0m[1mmodule.ecs-cluster.data.aws_ami.amazon-linux-ecs: Refreshing state...[0m
+
+------------------------------------------------------------------------
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  [32m+[0m create
+ [36m<=[0m read (data resources)
+[0m
+Terraform will perform the following actions:
+
+[1m  # module.CloudWatch.aws_cloudwatch_log_group.ecs_logs[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_cloudwatch_log_group" "ecs_logs" {
+      [32m+[0m [0m[1m[0marn[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m              = "/ecs/riggo-ecs-temp"
+      [32m+[0m [0m[1m[0mretention_in_days[0m[0m = 0
+      [32m+[0m [0m[1m[0mtags[0m[0m              = {
+          [32m+[0m [0m"env" = "temp"
+        }
+    }
+
+[1m  # module.CloudWatch.aws_cloudwatch_metric_alarm.ecs_cpu[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_cloudwatch_metric_alarm" "ecs_cpu" {
+      [32m+[0m [0m[1m[0mactions_enabled[0m[0m                       = true
+      [32m+[0m [0m[1m[0malarm_description[0m[0m                     = "This metric monitors ec2 cpu utilization"
+      [32m+[0m [0m[1m[0malarm_name[0m[0m                            = "temp-ecs-cpu-high-utilization-alarm"
+      [32m+[0m [0m[1m[0marn[0m[0m                                   = (known after apply)
+      [32m+[0m [0m[1m[0mcomparison_operator[0m[0m                   = "GreaterThanOrEqualToThreshold"
+      [32m+[0m [0m[1m[0mdimensions[0m[0m                            = {
+          [32m+[0m [0m"ClusterName" = "Riggo-ECS-temp"
+          [32m+[0m [0m"ServiceName" = "Riggo-ECS-temp-SVC"
+        }
+      [32m+[0m [0m[1m[0mevaluate_low_sample_count_percentiles[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mevaluation_periods[0m[0m                    = 1
+      [32m+[0m [0m[1m[0mid[0m[0m                                    = (known after apply)
+      [32m+[0m [0m[1m[0mmetric_name[0m[0m                           = "CPUUtilization"
+      [32m+[0m [0m[1m[0mnamespace[0m[0m                             = "AWS/ECS"
+      [32m+[0m [0m[1m[0mperiod[0m[0m                                = 120
+      [32m+[0m [0m[1m[0mstatistic[0m[0m                             = "Average"
+      [32m+[0m [0m[1m[0mthreshold[0m[0m                             = 65
+      [32m+[0m [0m[1m[0mtreat_missing_data[0m[0m                    = "missing"
+    }
+
+[1m  # module.RDS.aws_db_instance.db[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_db_instance" "db" {
+      [32m+[0m [0m[1m[0maddress[0m[0m                               = (known after apply)
+      [32m+[0m [0m[1m[0mallocated_storage[0m[0m                     = 100
+      [32m+[0m [0m[1m[0mapply_immediately[0m[0m                     = true
+      [32m+[0m [0m[1m[0marn[0m[0m                                   = (known after apply)
+      [32m+[0m [0m[1m[0mauto_minor_version_upgrade[0m[0m            = true
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mbackup_retention_period[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mbackup_window[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mca_cert_identifier[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mcharacter_set_name[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mcopy_tags_to_snapshot[0m[0m                 = false
+      [32m+[0m [0m[1m[0mdb_subnet_group_name[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mendpoint[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mengine[0m[0m                                = "postgres"
+      [32m+[0m [0m[1m[0mengine_version[0m[0m                        = "11.2"
+      [32m+[0m [0m[1m[0mhosted_zone_id[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                                    = (known after apply)
+      [32m+[0m [0m[1m[0midentifier[0m[0m                            = "riggo-io-temp"
+      [32m+[0m [0m[1m[0midentifier_prefix[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0minstance_class[0m[0m                        = "db.t2.micro"
+      [32m+[0m [0m[1m[0mkms_key_id[0m[0m                            = (known after apply)
+      [32m+[0m [0m[1m[0mlicense_model[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mmaintenance_window[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mmonitoring_interval[0m[0m                   = 0
+      [32m+[0m [0m[1m[0mmonitoring_role_arn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mmulti_az[0m[0m                              = false
+      [32m+[0m [0m[1m[0mname[0m[0m                                  = "temp_postgress"
+      [32m+[0m [0m[1m[0moption_group_name[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mparameter_group_name[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mpassword[0m[0m                              = (sensitive value)
+      [32m+[0m [0m[1m[0mperformance_insights_enabled[0m[0m          = false
+      [32m+[0m [0m[1m[0mperformance_insights_kms_key_id[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mperformance_insights_retention_period[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mport[0m[0m                                  = (known after apply)
+      [32m+[0m [0m[1m[0mpublicly_accessible[0m[0m                   = false
+      [32m+[0m [0m[1m[0mreplicas[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mresource_id[0m[0m                           = (known after apply)
+      [32m+[0m [0m[1m[0mskip_final_snapshot[0m[0m                   = true
+      [32m+[0m [0m[1m[0mstatus[0m[0m                                = (known after apply)
+      [32m+[0m [0m[1m[0mstorage_encrypted[0m[0m                     = false
+      [32m+[0m [0m[1m[0mstorage_type[0m[0m                          = "gp2"
+      [32m+[0m [0m[1m[0mtags[0m[0m                                  = {
+          [32m+[0m [0m"Name" = "temp RDS Instance"
+        }
+      [32m+[0m [0m[1m[0mtimezone[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0musername[0m[0m                              = "terradmin"
+      [32m+[0m [0m[1m[0mvpc_security_group_ids[0m[0m                = (known after apply)
+    }
+
+[1m  # module.RDS.aws_db_subnet_group.db_sub_gr[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_db_subnet_group" "db_sub_gr" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "terrafom db subnet group"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "temp rds subnet group"
+      [32m+[0m [0m[1m[0mname_prefix[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_ids[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m        = {
+          [32m+[0m [0m"Name" = "temp RDS Postgress"
+          [32m+[0m [0m"env"  = "temp"
+        }
+    }
+
+[1m  # module.Route53.aws_service_discovery_private_dns_namespace.ecs_namespace[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_service_discovery_private_dns_namespace" "ecs_namespace" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "Riggo namespace"
+      [32m+[0m [0m[1m[0mhosted_zone[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "temp"
+      [32m+[0m [0m[1m[0mvpc[0m[0m         = (known after apply)
+    }
+
+[1m  # module.Route53.aws_service_discovery_service.ecs_svc_discover[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_service_discovery_service" "ecs_svc_discover" {
+      [32m+[0m [0m[1m[0marn[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m = "Riggo-ECS-temp-service"
+
+      [32m+[0m [0mdns_config {
+          [32m+[0m [0m[1m[0mnamespace_id[0m[0m   = (known after apply)
+          [32m+[0m [0m[1m[0mrouting_policy[0m[0m = "MULTIVALUE"
+
+          [32m+[0m [0mdns_records {
+              [32m+[0m [0m[1m[0mttl[0m[0m  = 60
+              [32m+[0m [0m[1m[0mtype[0m[0m = "SRV"
+            }
+        }
+
+      [32m+[0m [0mhealth_check_custom_config {
+          [32m+[0m [0m[1m[0mfailure_threshold[0m[0m = 1
+        }
+    }
+
+[1m  # module.VPC.aws_eip.nat-eip[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_eip" "nat-eip" {
+      [32m+[0m [0m[1m[0mallocation_id[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0massociation_id[0m[0m    = (known after apply)
+      [32m+[0m [0m[1m[0mdomain[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0minstance[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mnetwork_interface[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mprivate_dns[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mprivate_ip[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_dns[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_ip[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_ipv4_pool[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m              = {
+          [32m+[0m [0m"Name" = "temp NAT EIP"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc[0m[0m               = true
+    }
+
+[1m  # module.VPC.aws_internet_gateway.igw[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_internet_gateway" "igw" {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mowner_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m     = {
+          [32m+[0m [0m"Name" = "temp VPC IGW"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m   = (known after apply)
+    }
+
+[1m  # module.VPC.aws_nat_gateway.ngw[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_nat_gateway" "ngw" {
+      [32m+[0m [0m[1m[0mallocation_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mnetwork_interface_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mprivate_ip[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_ip[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                 = {
+          [32m+[0m [0m"Name" = "temp VPC NGW"
+          [32m+[0m [0m"env"  = "temp"
+        }
+    }
+
+[1m  # module.VPC.aws_route_table.private-rt[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table" "private-rt" {
+      [32m+[0m [0m[1m[0mid[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mowner_id[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpropagating_vgws[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mroute[0m[0m            = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_block                = "0.0.0.0/0"
+              [32m+[0m [0megress_only_gateway_id    = ""
+              [32m+[0m [0mgateway_id                = ""
+              [32m+[0m [0minstance_id               = ""
+              [32m+[0m [0mipv6_cidr_block           = ""
+              [32m+[0m [0mnat_gateway_id            = (known after apply)
+              [32m+[0m [0mnetwork_interface_id      = ""
+              [32m+[0m [0mtransit_gateway_id        = ""
+              [32m+[0m [0mvpc_peering_connection_id = ""
+            },
+        ]
+      [32m+[0m [0m[1m[0mtags[0m[0m             = {
+          [32m+[0m [0m"Name" = "temp Private Subnet RT"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m           = (known after apply)
+    }
+
+[1m  # module.VPC.aws_route_table.public-rt[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table" "public-rt" {
+      [32m+[0m [0m[1m[0mid[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mowner_id[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpropagating_vgws[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mroute[0m[0m            = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_block                = "0.0.0.0/0"
+              [32m+[0m [0megress_only_gateway_id    = ""
+              [32m+[0m [0mgateway_id                = (known after apply)
+              [32m+[0m [0minstance_id               = ""
+              [32m+[0m [0mipv6_cidr_block           = ""
+              [32m+[0m [0mnat_gateway_id            = ""
+              [32m+[0m [0mnetwork_interface_id      = ""
+              [32m+[0m [0mtransit_gateway_id        = ""
+              [32m+[0m [0mvpc_peering_connection_id = ""
+            },
+        ]
+      [32m+[0m [0m[1m[0mtags[0m[0m             = {
+          [32m+[0m [0m"Name" = "temp Public Subnet RT"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m           = (known after apply)
+    }
+
+[1m  # module.VPC.aws_route_table_association.private-rt[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table_association" "private-rt" {
+      [32m+[0m [0m[1m[0mid[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mroute_table_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m      = (known after apply)
+    }
+
+[1m  # module.VPC.aws_route_table_association.private-rt2[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table_association" "private-rt2" {
+      [32m+[0m [0m[1m[0mid[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mroute_table_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m      = (known after apply)
+    }
+
+[1m  # module.VPC.aws_route_table_association.public-rt[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table_association" "public-rt" {
+      [32m+[0m [0m[1m[0mid[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mroute_table_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m      = (known after apply)
+    }
+
+[1m  # module.VPC.aws_route_table_association.public-rt2[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_route_table_association" "public-rt2" {
+      [32m+[0m [0m[1m[0mid[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mroute_table_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m      = (known after apply)
+    }
+
+[1m  # module.VPC.aws_security_group.sec_grp_rds[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "sec_grp_rds" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "RDS security group"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_blocks      = [
+                  [32m+[0m [0m"0.0.0.0/0",
+                ]
+              [32m+[0m [0mdescription      = ""
+              [32m+[0m [0mfrom_port        = 5432
+              [32m+[0m [0mipv6_cidr_blocks = []
+              [32m+[0m [0mprefix_list_ids  = []
+              [32m+[0m [0mprotocol         = "tcp"
+              [32m+[0m [0msecurity_groups  = []
+              [32m+[0m [0mself             = false
+              [32m+[0m [0mto_port          = 5432
+            },
+        ]
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_blocks      = [
+                  [32m+[0m [0m"10.0.0.0/16",
+                ]
+              [32m+[0m [0mdescription      = ""
+              [32m+[0m [0mfrom_port        = 5432
+              [32m+[0m [0mipv6_cidr_blocks = []
+              [32m+[0m [0mprefix_list_ids  = []
+              [32m+[0m [0mprotocol         = "tcp"
+              [32m+[0m [0msecurity_groups  = []
+              [32m+[0m [0mself             = false
+              [32m+[0m [0mto_port          = 5432
+            },
+        ]
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "temp RDS SG"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "temp RDS SG"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.VPC.aws_subnet.private-subnet[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_subnet" "private-subnet" {
+      [32m+[0m [0m[1m[0marn[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0massign_ipv6_address_on_creation[0m[0m = false
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m               = "us-west-2a"
+      [32m+[0m [0m[1m[0mavailability_zone_id[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcidr_block[0m[0m                      = "10.0.2.0/24"
+      [32m+[0m [0m[1m[0mid[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block_association_id[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mmap_public_ip_on_launch[0m[0m         = false
+      [32m+[0m [0m[1m[0mowner_id[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                            = {
+          [32m+[0m [0m"Name" = "temp Private Subnet"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                          = (known after apply)
+    }
+
+[1m  # module.VPC.aws_subnet.private-subnet2[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_subnet" "private-subnet2" {
+      [32m+[0m [0m[1m[0marn[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0massign_ipv6_address_on_creation[0m[0m = false
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m               = "us-west-2b"
+      [32m+[0m [0m[1m[0mavailability_zone_id[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcidr_block[0m[0m                      = "10.0.4.0/24"
+      [32m+[0m [0m[1m[0mid[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block_association_id[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mmap_public_ip_on_launch[0m[0m         = false
+      [32m+[0m [0m[1m[0mowner_id[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                            = {
+          [32m+[0m [0m"Name" = "temp Private Subnet2"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                          = (known after apply)
+    }
+
+[1m  # module.VPC.aws_subnet.public-subnet[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_subnet" "public-subnet" {
+      [32m+[0m [0m[1m[0marn[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0massign_ipv6_address_on_creation[0m[0m = false
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m               = "us-west-2a"
+      [32m+[0m [0m[1m[0mavailability_zone_id[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcidr_block[0m[0m                      = "10.0.1.0/24"
+      [32m+[0m [0m[1m[0mid[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block_association_id[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mmap_public_ip_on_launch[0m[0m         = false
+      [32m+[0m [0m[1m[0mowner_id[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                            = {
+          [32m+[0m [0m"Name" = "temp Public Subnet"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                          = (known after apply)
+    }
+
+[1m  # module.VPC.aws_subnet.public-subnet2[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_subnet" "public-subnet2" {
+      [32m+[0m [0m[1m[0marn[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0massign_ipv6_address_on_creation[0m[0m = false
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m               = "us-west-2b"
+      [32m+[0m [0m[1m[0mavailability_zone_id[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcidr_block[0m[0m                      = "10.0.3.0/24"
+      [32m+[0m [0m[1m[0mid[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block_association_id[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mmap_public_ip_on_launch[0m[0m         = false
+      [32m+[0m [0m[1m[0mowner_id[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                            = {
+          [32m+[0m [0m"Name" = "temp Public Subnet2"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                          = (known after apply)
+    }
+
+[1m  # module.VPC.aws_vpc.VPC[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_vpc" "VPC" {
+      [32m+[0m [0m[1m[0marn[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0massign_generated_ipv6_cidr_block[0m[0m = false
+      [32m+[0m [0m[1m[0mcidr_block[0m[0m                       = "10.0.0.0/16"
+      [32m+[0m [0m[1m[0mdefault_network_acl_id[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mdefault_route_table_id[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mdefault_security_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mdhcp_options_id[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0menable_classiclink[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0menable_classiclink_dns_support[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0menable_dns_hostnames[0m[0m             = true
+      [32m+[0m [0m[1m[0menable_dns_support[0m[0m               = true
+      [32m+[0m [0m[1m[0mid[0m[0m                               = (known after apply)
+      [32m+[0m [0m[1m[0minstance_tenancy[0m[0m                 = "default"
+      [32m+[0m [0m[1m[0mipv6_association_id[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_cidr_block[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mmain_route_table_id[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0mowner_id[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                             = {
+          [32m+[0m [0m"Name" = "temp VPC"
+          [32m+[0m [0m"env"  = "temp"
+        }
+    }
+
+[1m  # module.api-gateway.data.template_file.riggo_api_swagger[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m[36m <=[0m [0mdata "template_file" "riggo_api_swagger"  {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mrendered[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mtemplate[0m[0m = "---\nswagger: \"2.0\"\ninfo:\n  version: \"2019-06-12T22:13:54Z\"\n  title: \"${name}\"\n  description: \"Api gateway entry point to the ${name} where you can see many useful resources for Client Apps. Done for POC.\"\nhost: \"iwspihms22.execute-api.us-west-2.amazonaws.com\"\nbasePath: \"/dev\"\nschemes:\n  - \"https\"\npaths:\n  /:\n    get:\n      produces:\n        - \"application/json\"\n      responses:\n        200:\n          description: \"200 response\"\n          headers:\n            Access-Control-Allow-Origin:\n              type: \"string\"\n            Content-Type:\n              type: \"string\"\n      x-amazon-apigateway-integration:\n        uri: \"http://riggo-saas-load-balancer-1137667330.us-west-2.elb.amazonaws.com/v1/public\"\n        responses:\n          default:\n            statusCode: \"200\"\n            responseParameters:\n              method.response.header.Access-Control-Allow-Origin: \"'*'\"\n        passthroughBehavior: \"when_no_match\"\n        httpMethod: \"GET\"\n        type: \"http\"\n    options:\n      consumes:\n        - \"application/json\"\n      produces:\n        - \"application/json\"\n      responses:\n        200:\n          description: \"200 response\"\n          schema:\n            $ref: \"#/definitions/Empty\"\n          headers:\n            Access-Control-Allow-Origin:\n              type: \"string\"\n            Access-Control-Allow-Methods:\n              type: \"string\"\n            Access-Control-Allow-Headers:\n              type: \"string\"\n      x-amazon-apigateway-integration:\n        responses:\n          default:\n            statusCode: \"200\"\n            responseParameters:\n              method.response.header.Access-Control-Allow-Methods: \"'GET,OPTIONS'\"\n              method.response.header.Access-Control-Allow-Headers: \"'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'\"\n              method.response.header.Access-Control-Allow-Origin: \"'*'\"\n        requestTemplates:\n          application/json: \"{\\\"statusCode\\\": 200}\"\n        passthroughBehavior: \"when_no_match\"\n        type: \"mock\"\n  /load:\n    get:\n      produces:\n        - \"application/json\"\n      parameters:\n        - name: \"Authorization\"\n          in: \"header\"\n          required: false\n          type: \"string\"\n      responses:\n        200:\n          description: \"200 response\"\n          schema:\n            $ref: \"#/definitions/Empty\"\n          headers:\n            Access-Control-Allow-Origin:\n              type: \"string\"\n      security:\n        - load-riggo-jwt-rsa-custom-authorizer: []\n      x-amazon-apigateway-integration:\n        uri: \"http://riggo-saas-load-balancer-1137667330.us-west-2.elb.amazonaws.com/v1/load\"\n        responses:\n          default:\n            statusCode: \"200\"\n            responseParameters:\n              method.response.header.Access-Control-Allow-Origin: \"'*'\"\n        requestParameters:\n          integration.request.header.Authorization: \"method.request.header.Authorization\"\n        passthroughBehavior: \"when_no_match\"\n        httpMethod: \"GET\"\n        cacheNamespace: \"stjoe1\"\n        cacheKeyParameters:\n          - \"method.request.header.Authorization\"\n          - \"integration.request.header.Authorization\"\n        type: \"http\"\n    options:\n      consumes:\n        - \"application/json\"\n      produces:\n        - \"application/json\"\n      responses:\n        200:\n          description: \"200 response\"\n          schema:\n            $ref: \"#/definitions/Empty\"\n          headers:\n            Access-Control-Allow-Origin:\n              type: \"string\"\n            Access-Control-Allow-Methods:\n              type: \"string\"\n            Access-Control-Allow-Headers:\n              type: \"string\"\n      x-amazon-apigateway-integration:\n        responses:\n          default:\n            statusCode: \"200\"\n            responseParameters:\n              method.response.header.Access-Control-Allow-Methods: \"'GET,OPTIONS'\"\n              method.response.header.Access-Control-Allow-Headers: \"'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'\"\n              method.response.header.Access-Control-Allow-Origin: \"'*'\"\n        requestTemplates:\n          application/json: \"{\\\"statusCode\\\": 200}\"\n        passthroughBehavior: \"when_no_match\"\n        type: \"mock\"\nsecurityDefinitions:\n  load-riggo-jwt-rsa-custom-authorizer:\n    type: \"apiKey\"\n    name: \"Authorization\"\n    in: \"header\"\n    x-amazon-apigateway-authtype: \"custom\"\n    x-amazon-apigateway-authorizer:\n      authorizerUri: \"${authorizerUri}\"\n      authorizerCredentials: \"${authorizerArn}\"\n      authorizerResultTtlInSeconds: 3600\n      identityValidationExpression: \"^Bearer [-0-9a-zA-z\\\\.]*$\"\n      type: \"token\"\ndefinitions:\n  Empty:\n    type: \"object\"\n"
+      [32m+[0m [0m[1m[0mvars[0m[0m     = {
+          [32m+[0m [0m"authorizerArn" = (known after apply)
+          [32m+[0m [0m"authorizerUri" = (known after apply)
+          [32m+[0m [0m"name"          = "Riggo Platform temp"
+        }
+    }
+
+[1m  # module.api-gateway.aws_api_gateway_account.Global-log[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_api_gateway_account" "Global-log" {
+      [32m+[0m [0m[1m[0mcloudwatch_role_arn[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mthrottle_settings[0m[0m   = (known after apply)
+    }
+
+[1m  # module.api-gateway.aws_api_gateway_deployment.riggo-api-gateway-deployment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_api_gateway_deployment" "riggo-api-gateway-deployment" {
+      [32m+[0m [0m[1m[0mcreated_date[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mexecution_arn[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0minvoke_url[0m[0m    = (known after apply)
+      [32m+[0m [0m[1m[0mrest_api_id[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mstage_name[0m[0m    = "temp"
+    }
+
+[1m  # module.api-gateway.aws_api_gateway_rest_api.riggo-api-gateway[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_api_gateway_rest_api" "riggo-api-gateway" {
+      [32m+[0m [0m[1m[0mapi_key_source[0m[0m           = "HEADER"
+      [32m+[0m [0m[1m[0mbody[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mcreated_date[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mexecution_arn[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mminimum_compression_size[0m[0m = -1
+      [32m+[0m [0m[1m[0mname[0m[0m                     = "Riggo Platform temp"
+      [32m+[0m [0m[1m[0mroot_resource_id[0m[0m         = (known after apply)
+
+      [32m+[0m [0mendpoint_configuration {
+          [32m+[0m [0m[1m[0mtypes[0m[0m = [
+              [32m+[0m [0m"REGIONAL",
+            ]
+        }
+    }
+
+[1m  # module.bastion.aws_instance.bastion[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_instance" "bastion" {
+      [32m+[0m [0m[1m[0mami[0m[0m                          = "ami-068a5e9c87370be8b"
+      [32m+[0m [0m[1m[0marn[0m[0m                          = (known after apply)
+      [32m+[0m [0m[1m[0massociate_public_ip_address[0m[0m  = true
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcpu_core_count[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mcpu_threads_per_core[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mget_password_data[0m[0m            = false
+      [32m+[0m [0m[1m[0mhost_id[0m[0m                      = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                           = (known after apply)
+      [32m+[0m [0m[1m[0minstance_state[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0minstance_type[0m[0m                = "t2.micro"
+      [32m+[0m [0m[1m[0mipv6_address_count[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mipv6_addresses[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mkey_name[0m[0m                     = "staging_ec2_pair"
+      [32m+[0m [0m[1m[0mnetwork_interface_id[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpassword_data[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mplacement_group[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0mprimary_network_interface_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mprivate_dns[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mprivate_ip[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_dns[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mpublic_ip[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0msecurity_groups[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0msource_dest_check[0m[0m            = true
+      [32m+[0m [0m[1m[0msubnet_id[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                         = {
+          [32m+[0m [0m"Name" = "temp-Bastion-EC2"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mtenancy[0m[0m                      = (known after apply)
+      [32m+[0m [0m[1m[0mvolume_tags[0m[0m                  = {
+          [32m+[0m [0m"Name" = "temp-Bastion-EBS"
+        }
+      [32m+[0m [0m[1m[0mvpc_security_group_ids[0m[0m       = (known after apply)
+
+      [32m+[0m [0mebs_block_device {
+          [32m+[0m [0m[1m[0mdelete_on_termination[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mdevice_name[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mencrypted[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0miops[0m[0m                  = (known after apply)
+          [32m+[0m [0m[1m[0msnapshot_id[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_id[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_size[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_type[0m[0m           = (known after apply)
+        }
+
+      [32m+[0m [0mephemeral_block_device {
+          [32m+[0m [0m[1m[0mdevice_name[0m[0m  = (known after apply)
+          [32m+[0m [0m[1m[0mno_device[0m[0m    = (known after apply)
+          [32m+[0m [0m[1m[0mvirtual_name[0m[0m = (known after apply)
+        }
+
+      [32m+[0m [0mnetwork_interface {
+          [32m+[0m [0m[1m[0mdelete_on_termination[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mdevice_index[0m[0m          = (known after apply)
+          [32m+[0m [0m[1m[0mnetwork_interface_id[0m[0m  = (known after apply)
+        }
+
+      [32m+[0m [0mroot_block_device {
+          [32m+[0m [0m[1m[0mdelete_on_termination[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0miops[0m[0m                  = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_id[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_size[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_type[0m[0m           = (known after apply)
+        }
+    }
+
+[1m  # module.bastion.aws_security_group.bastion_host_security_group[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "bastion_host_security_group" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "Enable SSH access to the bastion host from external via SSH port"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "temp-bastion_host_security_group"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "temp-Bastion-SG"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.bastion.aws_security_group.private_instances_security_group[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "private_instances_security_group" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "Enable SSH access to the Private instances from the bastion via SSH port"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "temp-Private-instances-SG"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "temp-Bastion2PrivNet"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.bastion.aws_security_group_rule.egress_bastion[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "egress_bastion" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Outgoing traffic from bastion to instances"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 0
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "-1"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 65535
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "egress"
+    }
+
+[1m  # module.bastion.aws_security_group_rule.egress_instance[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "egress_instance" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Outgoing traffic to bastion from instances"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 0
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "-1"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 65535
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "egress"
+    }
+
+[1m  # module.bastion.aws_security_group_rule.ingress_bastion[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "ingress_bastion" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Incoming traffic to bastion"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 22
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 22
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.bastion.aws_security_group_rule.ingress_instances[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "ingress_instances" {
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Incoming traffic from bastion"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 22
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 22
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.cloudfront.data.aws_iam_policy_document.origin[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m[36m <=[0m [0mdata "aws_iam_policy_document" "origin"  {
+      [32m+[0m [0m[1m[0mid[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mjson[0m[0m = (known after apply)
+
+      [32m+[0m [0mstatement {
+          [32m+[0m [0m[1m[0mactions[0m[0m   = [
+              [32m+[0m [0m"s3:GetObject",
+            ]
+          [32m+[0m [0m[1m[0mresources[0m[0m = [
+              [32m+[0m [0m"arn:aws:s3:::${bucket_name}${origin_path}*",
+            ]
+
+          [32m+[0m [0mprincipals {
+              [32m+[0m [0m[1m[0midentifiers[0m[0m = [
+                  [32m+[0m [0m(known after apply),
+                ]
+              [32m+[0m [0m[1m[0mtype[0m[0m        = "AWS"
+            }
+        }
+      [32m+[0m [0mstatement {
+          [32m+[0m [0m[1m[0mactions[0m[0m   = [
+              [32m+[0m [0m"s3:ListBucket",
+            ]
+          [32m+[0m [0m[1m[0mresources[0m[0m = [
+              [32m+[0m [0m"arn:aws:s3:::${bucket_name}",
+            ]
+
+          [32m+[0m [0mprincipals {
+              [32m+[0m [0m[1m[0midentifiers[0m[0m = [
+                  [32m+[0m [0m(known after apply),
+                ]
+              [32m+[0m [0m[1m[0mtype[0m[0m        = "AWS"
+            }
+        }
+    }
+
+[1m  # module.cloudfront.data.template_file.default[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m[36m <=[0m [0mdata "template_file" "default"  {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mrendered[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mtemplate[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mvars[0m[0m     = {
+          [32m+[0m [0m"bucket_name" = "riggo-io-client-app-temp"
+          [32m+[0m [0m"origin_path" = "/"
+        }
+    }
+
+[1m  # module.cloudfront.aws_cloudfront_distribution.s3_distribution[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_cloudfront_distribution" "s3_distribution" {
+      [32m+[0m [0m[1m[0mactive_trusted_signers[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0maliases[0m[0m                        = [
+          [32m+[0m [0m"*.riggoqa.net",
+        ]
+      [32m+[0m [0m[1m[0marn[0m[0m                            = (known after apply)
+      [32m+[0m [0m[1m[0mcaller_reference[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mdefault_root_object[0m[0m            = "index.html"
+      [32m+[0m [0m[1m[0mdomain_name[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0menabled[0m[0m                        = true
+      [32m+[0m [0m[1m[0metag[0m[0m                           = (known after apply)
+      [32m+[0m [0m[1m[0mhosted_zone_id[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mhttp_version[0m[0m                   = "http2"
+      [32m+[0m [0m[1m[0mid[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0min_progress_validation_batches[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mis_ipv6_enabled[0m[0m                = true
+      [32m+[0m [0m[1m[0mlast_modified_time[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0mprice_class[0m[0m                    = "PriceClass_100"
+      [32m+[0m [0m[1m[0mretain_on_delete[0m[0m               = false
+      [32m+[0m [0m[1m[0mstatus[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                           = {
+          [32m+[0m [0m"env" = "temp"
+        }
+      [32m+[0m [0m[1m[0mwait_for_deployment[0m[0m            = true
+
+      [32m+[0m [0mcustom_error_response {
+          [32m+[0m [0m[1m[0merror_caching_min_ttl[0m[0m = 300
+          [32m+[0m [0m[1m[0merror_code[0m[0m            = 403
+          [32m+[0m [0m[1m[0mresponse_code[0m[0m         = 200
+          [32m+[0m [0m[1m[0mresponse_page_path[0m[0m    = "/index.html"
+        }
+      [32m+[0m [0mcustom_error_response {
+          [32m+[0m [0m[1m[0merror_caching_min_ttl[0m[0m = 300
+          [32m+[0m [0m[1m[0merror_code[0m[0m            = 404
+          [32m+[0m [0m[1m[0mresponse_code[0m[0m         = 200
+          [32m+[0m [0m[1m[0mresponse_page_path[0m[0m    = "/index.html"
+        }
+
+      [32m+[0m [0mdefault_cache_behavior {
+          [32m+[0m [0m[1m[0mallowed_methods[0m[0m        = [
+              [32m+[0m [0m"GET",
+              [32m+[0m [0m"HEAD",
+            ]
+          [32m+[0m [0m[1m[0mcached_methods[0m[0m         = [
+              [32m+[0m [0m"GET",
+              [32m+[0m [0m"HEAD",
+            ]
+          [32m+[0m [0m[1m[0mcompress[0m[0m               = false
+          [32m+[0m [0m[1m[0mdefault_ttl[0m[0m            = 86400
+          [32m+[0m [0m[1m[0mmax_ttl[0m[0m                = 31536000
+          [32m+[0m [0m[1m[0mmin_ttl[0m[0m                = 0
+          [32m+[0m [0m[1m[0mtarget_origin_id[0m[0m       = "s3-riggo-io-client-app"
+          [32m+[0m [0m[1m[0mviewer_protocol_policy[0m[0m = "redirect-to-https"
+
+          [32m+[0m [0mforwarded_values {
+              [32m+[0m [0m[1m[0mquery_string[0m[0m = false
+
+              [32m+[0m [0mcookies {
+                  [32m+[0m [0m[1m[0mforward[0m[0m = "none"
+                }
+            }
+        }
+
+      [32m+[0m [0morigin {
+          [32m+[0m [0m[1m[0mdomain_name[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0morigin_id[0m[0m   = "s3-riggo-io-client-app"
+
+          [32m+[0m [0ms3_origin_config {
+              [32m+[0m [0m[1m[0morigin_access_identity[0m[0m = (known after apply)
+            }
+        }
+
+      [32m+[0m [0mrestrictions {
+          [32m+[0m [0mgeo_restriction {
+              [32m+[0m [0m[1m[0mrestriction_type[0m[0m = "none"
+            }
+        }
+
+      [32m+[0m [0mviewer_certificate {
+          [32m+[0m [0m[1m[0macm_certificate_arn[0m[0m      = "arn:aws:acm:us-east-1:845657178663:certificate/155bca16-2b02-4a3e-bdec-f17da6f3b058"
+          [32m+[0m [0m[1m[0mminimum_protocol_version[0m[0m = "TLSv1.1_2016"
+          [32m+[0m [0m[1m[0mssl_support_method[0m[0m       = "sni-only"
+        }
+    }
+
+[1m  # module.cloudfront.aws_cloudfront_origin_access_identity.origin_access_identity[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
+      [32m+[0m [0m[1m[0mcaller_reference[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mcloudfront_access_identity_path[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mcomment[0m[0m                         = "riggo-io-client-app.temp.s3.us-west-2.amazonaws.com"
+      [32m+[0m [0m[1m[0metag[0m[0m                            = (known after apply)
+      [32m+[0m [0m[1m[0miam_arn[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                              = (known after apply)
+      [32m+[0m [0m[1m[0ms3_canonical_user_id[0m[0m            = (known after apply)
+    }
+
+[1m  # module.cloudfront.aws_s3_bucket.s3-cloudfront[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_s3_bucket" "s3-cloudfront" {
+      [32m+[0m [0m[1m[0macceleration_status[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0macl[0m[0m                         = "private"
+      [32m+[0m [0m[1m[0marn[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mbucket[0m[0m                      = "riggo-io-client-app-temp"
+      [32m+[0m [0m[1m[0mbucket_domain_name[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mbucket_regional_domain_name[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mforce_destroy[0m[0m               = true
+      [32m+[0m [0m[1m[0mhosted_zone_id[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                          = (known after apply)
+      [32m+[0m [0m[1m[0mregion[0m[0m                      = (known after apply)
+      [32m+[0m [0m[1m[0mrequest_payer[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                        = {
+          [32m+[0m [0m"Name" = "riggo-io-client-app-temp"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mwebsite_domain[0m[0m              = (known after apply)
+      [32m+[0m [0m[1m[0mwebsite_endpoint[0m[0m            = (known after apply)
+
+      [32m+[0m [0mserver_side_encryption_configuration {
+          [32m+[0m [0mrule {
+              [32m+[0m [0mapply_server_side_encryption_by_default {
+                  [32m+[0m [0m[1m[0msse_algorithm[0m[0m = "AES256"
+                }
+            }
+        }
+
+      [32m+[0m [0mversioning {
+          [32m+[0m [0m[1m[0menabled[0m[0m    = true
+          [32m+[0m [0m[1m[0mmfa_delete[0m[0m = false
+        }
+    }
+
+[1m  # module.cloudfront.aws_s3_bucket_policy.s3-bucket[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_s3_bucket_policy" "s3-bucket" {
+      [32m+[0m [0m[1m[0mbucket[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0mpolicy[0m[0m = (known after apply)
+    }
+
+[1m  # module.cloudfront.aws_s3_bucket_public_access_block.s3-cloudfront-denied[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_s3_bucket_public_access_block" "s3-cloudfront-denied" {
+      [32m+[0m [0m[1m[0mblock_public_acls[0m[0m       = true
+      [32m+[0m [0m[1m[0mblock_public_policy[0m[0m     = false
+      [32m+[0m [0m[1m[0mbucket[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                      = (known after apply)
+      [32m+[0m [0m[1m[0mignore_public_acls[0m[0m      = true
+      [32m+[0m [0m[1m[0mrestrict_public_buckets[0m[0m = true
+    }
+
+[1m  # module.ecs-cluster.data.template_file.container-definition[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m[36m <=[0m [0mdata "template_file" "container-definition"  {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mrendered[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mtemplate[0m[0m = "[\n  {\n    \"dnsSearchDomains\": null,\n    \"logConfiguration\": {\n      \"logDriver\": \"awslogs\",\n      \"secretOptions\": null,\n      \"options\": {\n        \"awslogs-group\": \"${cloudwatch_logname}\",\n        \"awslogs-region\": \"us-west-2\",\n        \"awslogs-stream-prefix\": \"ecs\"\n      }\n    },\n    \"entryPoint\": null,\n    \"portMappings\": [\n      {\n      \"hostPort\": 0,\n      \"protocol\":\"tcp\",\n      \"containerPort\":${container_port}\n    }\n    ],\n    \"command\": null,\n    \"linuxParameters\": null,\n    \"cpu\": 0,\n    \"environment\": [  \n      {\n      \"name\": \"SPRING_PROFILES_ACTIVE\",\n      \"value\": \"${spring_profile_key}\"\n    }\n    ],\n  \"resourceRequirements\":null,\n  \"ulimits\":null,\n  \"dnsServers\":null,\n  \"mountPoints\":[],\n  \"workingDirectory\":null,\n  \"secrets\":null,\n  \"dockerSecurityOptions\":null,\n  \"memory\":null,\n  \"memoryReservation\": ${TD_mem_soft_limit},\n  \"volumesFrom\":[],\n  \"stopTimeout\":null,\n  \"image\":\"845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-${terraform-workspace}:latest\",\n  \"startTimeout\":null,\n  \"dependsOn\":null,\n  \"disableNetworking\":null,\n  \"interactive\":null,\n  \"healthCheck\":null,\n  \"essential\":true,\n  \"links\":null,\n  \"hostname\":null,\n  \"extraHosts\":null,\n  \"pseudoTerminal\":null,\n  \"user\":null,\n  \"readonlyRootFilesystem\":false,\n  \"dockerLabels\":null,\n  \"systemControls\":null,\n  \"privileged\":null,\n  \"name\":\"Riggo-resource-svr-${terraform-workspace}\"\n  }\n]"
+      [32m+[0m [0m[1m[0mvars[0m[0m     = {
+          [32m+[0m [0m"TD_mem_soft_limit"   = "256"
+          [32m+[0m [0m"cloudwatch_logname"  = "/ecs/riggo-ecs-temp"
+          [32m+[0m [0m"container_port"      = "8088"
+          [32m+[0m [0m"spring_profile_key"  = "qa"
+          [32m+[0m [0m"terraform-workspace" = "temp"
+        }
+    }
+
+[1m  # module.ecs-cluster.data.template_file.userdataECS[0m will be read during apply
+  # (config refers to values not yet known)[0m[0m
+[0m[36m <=[0m [0mdata "template_file" "userdataECS"  {
+      [32m+[0m [0m[1m[0mid[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mrendered[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mtemplate[0m[0m = "#!/bin/bash\necho ECS_CLUSTER=\"${CLUSTER_NAME}\" >> /etc/ecs/ecs.config"
+      [32m+[0m [0m[1m[0mvars[0m[0m     = {
+          [32m+[0m [0m"CLUSTER_NAME" = "Riggo-ECS-temp"
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_autoscaling_attachment.ecs-targetgroup-attachment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_autoscaling_attachment" "ecs-targetgroup-attachment" {
+      [32m+[0m [0m[1m[0malb_target_group_arn[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mautoscaling_group_name[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_autoscaling_group.ecs-autoscaling-group[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_autoscaling_group" "ecs-autoscaling-group" {
+      [32m+[0m [0m[1m[0marn[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mavailability_zones[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mdefault_cooldown[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mdesired_capacity[0m[0m          = 1
+      [32m+[0m [0m[1m[0mforce_delete[0m[0m              = false
+      [32m+[0m [0m[1m[0mhealth_check_grace_period[0m[0m = 30
+      [32m+[0m [0m[1m[0mhealth_check_type[0m[0m         = "EC2"
+      [32m+[0m [0m[1m[0mid[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mlaunch_configuration[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0mload_balancers[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mmax_size[0m[0m                  = 2
+      [32m+[0m [0m[1m[0mmetrics_granularity[0m[0m       = "1Minute"
+      [32m+[0m [0m[1m[0mmin_size[0m[0m                  = 1
+      [32m+[0m [0m[1m[0mname[0m[0m                      = (known after apply)
+      [32m+[0m [0m[1m[0mprotect_from_scale_in[0m[0m     = false
+      [32m+[0m [0m[1m[0mservice_linked_role_arn[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mtarget_group_arns[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mvpc_zone_identifier[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0mwait_for_capacity_timeout[0m[0m = "10m"
+
+      [32m+[0m [0mtag {
+          [32m+[0m [0m[1m[0mkey[0m[0m                 = "Managed_By"
+          [32m+[0m [0m[1m[0mpropagate_at_launch[0m[0m = true
+          [32m+[0m [0m[1m[0mvalue[0m[0m               = "Terraform"
+        }
+      [32m+[0m [0mtag {
+          [32m+[0m [0m[1m[0mkey[0m[0m                 = "Name"
+          [32m+[0m [0m[1m[0mpropagate_at_launch[0m[0m = true
+          [32m+[0m [0m[1m[0mvalue[0m[0m               = "ECS Instance - EC2ContainerService-Riggo-ECS-temp"
+        }
+      [32m+[0m [0mtag {
+          [32m+[0m [0m[1m[0mkey[0m[0m                 = "env"
+          [32m+[0m [0m[1m[0mpropagate_at_launch[0m[0m = true
+          [32m+[0m [0m[1m[0mvalue[0m[0m               = "temp"
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_ecs_cluster.ecs-cluster[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_ecs_cluster" "ecs-cluster" {
+      [32m+[0m [0m[1m[0marn[0m[0m  = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m = "Riggo-ECS-temp"
+    }
+
+[1m  # module.ecs-cluster.aws_ecs_service.riggo-ecs-service[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_ecs_service" "riggo-ecs-service" {
+      [32m+[0m [0m[1m[0mcluster[0m[0m                            = (known after apply)
+      [32m+[0m [0m[1m[0mdeployment_maximum_percent[0m[0m         = 100
+      [32m+[0m [0m[1m[0mdeployment_minimum_healthy_percent[0m[0m = 0
+      [32m+[0m [0m[1m[0mdesired_count[0m[0m                      = 1
+      [32m+[0m [0m[1m[0menable_ecs_managed_tags[0m[0m            = false
+      [32m+[0m [0m[1m[0mhealth_check_grace_period_seconds[0m[0m  = 300
+      [32m+[0m [0m[1m[0miam_role[0m[0m                           = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                                 = (known after apply)
+      [32m+[0m [0m[1m[0mlaunch_type[0m[0m                        = "EC2"
+      [32m+[0m [0m[1m[0mname[0m[0m                               = "Riggo-ECS-temp-SVC"
+      [32m+[0m [0m[1m[0mplatform_version[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mscheduling_strategy[0m[0m                = "REPLICA"
+      [32m+[0m [0m[1m[0mtask_definition[0m[0m                    = (known after apply)
+
+      [32m+[0m [0mdeployment_controller {
+          [32m+[0m [0m[1m[0mtype[0m[0m = "CODE_DEPLOY"
+        }
+
+      [32m+[0m [0mload_balancer {
+          [32m+[0m [0m[1m[0mcontainer_name[0m[0m   = "Riggo-resource-svr-temp"
+          [32m+[0m [0m[1m[0mcontainer_port[0m[0m   = 8088
+          [32m+[0m [0m[1m[0mtarget_group_arn[0m[0m = (known after apply)
+        }
+
+      [32m+[0m [0mordered_placement_strategy {
+          [32m+[0m [0m[1m[0mfield[0m[0m = "attribute:ecs.availability-zone"
+          [32m+[0m [0m[1m[0mtype[0m[0m  = "spread"
+        }
+      [32m+[0m [0mordered_placement_strategy {
+          [32m+[0m [0m[1m[0mfield[0m[0m = "instanceId"
+          [32m+[0m [0m[1m[0mtype[0m[0m  = "spread"
+        }
+
+      [32m+[0m [0mplacement_strategy {
+          [32m+[0m [0m[1m[0mfield[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mtype[0m[0m  = (known after apply)
+        }
+
+      [32m+[0m [0mservice_registries {
+          [32m+[0m [0m[1m[0mcontainer_name[0m[0m = "Riggo-resource-svr-temp"
+          [32m+[0m [0m[1m[0mcontainer_port[0m[0m = 8088
+          [32m+[0m [0m[1m[0mregistry_arn[0m[0m   = (known after apply)
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_ecs_task_definition.riggo-ecs-TD[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_ecs_task_definition" "riggo-ecs-TD" {
+      [32m+[0m [0m[1m[0marn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mcontainer_definitions[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mfamily[0m[0m                = "Riggo-ECS-temp-TD"
+      [32m+[0m [0m[1m[0mid[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mnetwork_mode[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mrevision[0m[0m              = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_iam_instance_profile.ecs-instance-profile[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_instance_profile" "ecs-instance-profile" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mcreate_date[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "temp-ECS-Instance-profile"
+      [32m+[0m [0m[1m[0mpath[0m[0m        = "/"
+      [32m+[0m [0m[1m[0mrole[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mroles[0m[0m       = (known after apply)
+      [32m+[0m [0m[1m[0munique_id[0m[0m   = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_iam_policy.ECS-policy[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_policy" "ECS-policy" {
+      [32m+[0m [0m[1m[0marn[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "policy to create, update ,write and read logs"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "temp-ECS-CloudwatchLog-Full"
+      [32m+[0m [0m[1m[0mpath[0m[0m        = "/"
+      [32m+[0m [0m[1m[0mpolicy[0m[0m      = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction   = [
+                          [32m+[0m [0m"logs:CreateLogGroup",
+                          [32m+[0m [0m"logs:CreateLogStream",
+                          [32m+[0m [0m"logs:PutLogEvents",
+                          [32m+[0m [0m"logs:DescribeLogStreams",
+                        ]
+                      [32m+[0m [0mEffect   = "Allow"
+                      [32m+[0m [0mResource = [
+                          [32m+[0m [0m"arn:aws:logs:*:*:*",
+                        ]
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+    }
+
+[1m  # module.ecs-cluster.aws_iam_role.ecs-instance-role[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role" "ecs-instance-role" {
+      [32m+[0m [0m[1m[0marn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0massume_role_policy[0m[0m    = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction    = "sts:AssumeRole"
+                      [32m+[0m [0mEffect    = "Allow"
+                      [32m+[0m [0mPrincipal = {
+                          [32m+[0m [0mService = "ec2.amazonaws.com"
+                        }
+                      [32m+[0m [0mSid       = ""
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+      [32m+[0m [0m[1m[0mcreate_date[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mforce_detach_policies[0m[0m = false
+      [32m+[0m [0m[1m[0mid[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mmax_session_duration[0m[0m  = 3600
+      [32m+[0m [0m[1m[0mname[0m[0m                  = "temp-ECS-Instance-role"
+      [32m+[0m [0m[1m[0mpath[0m[0m                  = "/"
+      [32m+[0m [0m[1m[0munique_id[0m[0m             = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_iam_role.ecs-service-role[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role" "ecs-service-role" {
+      [32m+[0m [0m[1m[0marn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0massume_role_policy[0m[0m    = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction    = "sts:AssumeRole"
+                      [32m+[0m [0mEffect    = "Allow"
+                      [32m+[0m [0mPrincipal = {
+                          [32m+[0m [0mService = "ecs.amazonaws.com"
+                        }
+                      [32m+[0m [0mSid       = ""
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+      [32m+[0m [0m[1m[0mcreate_date[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mforce_detach_policies[0m[0m = false
+      [32m+[0m [0m[1m[0mid[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mmax_session_duration[0m[0m  = 3600
+      [32m+[0m [0m[1m[0mname[0m[0m                  = "temp-ECS-Service-role"
+      [32m+[0m [0m[1m[0mpath[0m[0m                  = "/"
+      [32m+[0m [0m[1m[0munique_id[0m[0m             = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_iam_role_policy_attachment.ecs-instance-role-attachment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role_policy_attachment" "ecs-instance-role-attachment" {
+      [32m+[0m [0m[1m[0mid[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpolicy_arn[0m[0m = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+      [32m+[0m [0m[1m[0mrole[0m[0m       = "temp-ECS-Instance-role"
+    }
+
+[1m  # module.ecs-cluster.aws_iam_role_policy_attachment.ecs-instance-role-cloudwatch-attachment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role_policy_attachment" "ecs-instance-role-cloudwatch-attachment" {
+      [32m+[0m [0m[1m[0mid[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpolicy_arn[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mrole[0m[0m       = "temp-ECS-Instance-role"
+    }
+
+[1m  # module.ecs-cluster.aws_iam_role_policy_attachment.ecs-service-role-attachment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
+      [32m+[0m [0m[1m[0mid[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpolicy_arn[0m[0m = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+      [32m+[0m [0m[1m[0mrole[0m[0m       = "temp-ECS-Service-role"
+    }
+
+[1m  # module.ecs-cluster.aws_launch_configuration.ecs-launch-configuration[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_launch_configuration" "ecs-launch-configuration" {
+      [32m+[0m [0m[1m[0massociate_public_ip_address[0m[0m = false
+      [32m+[0m [0m[1m[0mebs_optimized[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0menable_monitoring[0m[0m           = true
+      [32m+[0m [0m[1m[0miam_instance_profile[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                          = (known after apply)
+      [32m+[0m [0m[1m[0mimage_id[0m[0m                    = "ami-077368b501184adb9"
+      [32m+[0m [0m[1m[0minstance_type[0m[0m               = "t2.micro"
+      [32m+[0m [0m[1m[0mkey_name[0m[0m                    = "staging_ec2_pair"
+      [32m+[0m [0m[1m[0mname[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0mname_prefix[0m[0m                 = "ECS-Riggo-temp"
+      [32m+[0m [0m[1m[0msecurity_groups[0m[0m             = (known after apply)
+      [32m+[0m [0m[1m[0muser_data[0m[0m                   = (known after apply)
+
+      [32m+[0m [0mebs_block_device {
+          [32m+[0m [0m[1m[0mdelete_on_termination[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mdevice_name[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mencrypted[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0miops[0m[0m                  = (known after apply)
+          [32m+[0m [0m[1m[0mno_device[0m[0m             = (known after apply)
+          [32m+[0m [0m[1m[0msnapshot_id[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_size[0m[0m           = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_type[0m[0m           = (known after apply)
+        }
+
+      [32m+[0m [0mroot_block_device {
+          [32m+[0m [0m[1m[0mdelete_on_termination[0m[0m = true
+          [32m+[0m [0m[1m[0miops[0m[0m                  = (known after apply)
+          [32m+[0m [0m[1m[0mvolume_size[0m[0m           = 20
+          [32m+[0m [0m[1m[0mvolume_type[0m[0m           = "standard"
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_lb.ecs-lb[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lb" "ecs-lb" {
+      [32m+[0m [0m[1m[0marn[0m[0m                        = (known after apply)
+      [32m+[0m [0m[1m[0marn_suffix[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mdns_name[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0menable_deletion_protection[0m[0m = false
+      [32m+[0m [0m[1m[0menable_http2[0m[0m               = true
+      [32m+[0m [0m[1m[0mid[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0midle_timeout[0m[0m               = 60
+      [32m+[0m [0m[1m[0minternal[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0mip_address_type[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mload_balancer_type[0m[0m         = "application"
+      [32m+[0m [0m[1m[0mname[0m[0m                       = "Riggo-ECS-temp"
+      [32m+[0m [0m[1m[0msecurity_groups[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0msubnets[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                       = {
+          [32m+[0m [0m"env" = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mzone_id[0m[0m                    = (known after apply)
+
+      [32m+[0m [0msubnet_mapping {
+          [32m+[0m [0m[1m[0mallocation_id[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0msubnet_id[0m[0m     = (known after apply)
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_lb_listener.front_end[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lb_listener" "front_end" {
+      [32m+[0m [0m[1m[0marn[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mload_balancer_arn[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mport[0m[0m              = 80
+      [32m+[0m [0m[1m[0mprotocol[0m[0m          = "HTTP"
+      [32m+[0m [0m[1m[0mssl_policy[0m[0m        = (known after apply)
+
+      [32m+[0m [0mdefault_action {
+          [32m+[0m [0m[1m[0morder[0m[0m            = (known after apply)
+          [32m+[0m [0m[1m[0mtarget_group_arn[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mtype[0m[0m             = "forward"
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_lb_listener.testing-listener[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lb_listener" "testing-listener" {
+      [32m+[0m [0m[1m[0marn[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mload_balancer_arn[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mport[0m[0m              = 8080
+      [32m+[0m [0m[1m[0mprotocol[0m[0m          = "HTTP"
+      [32m+[0m [0m[1m[0mssl_policy[0m[0m        = (known after apply)
+
+      [32m+[0m [0mdefault_action {
+          [32m+[0m [0m[1m[0morder[0m[0m            = (known after apply)
+          [32m+[0m [0m[1m[0mtarget_group_arn[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0mtype[0m[0m             = "forward"
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_lb_target_group.ecs-lb-targetgroup[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lb_target_group" "ecs-lb-targetgroup" {
+      [32m+[0m [0m[1m[0marn[0m[0m                                = (known after apply)
+      [32m+[0m [0m[1m[0marn_suffix[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mderegistration_delay[0m[0m               = 30
+      [32m+[0m [0m[1m[0mid[0m[0m                                 = (known after apply)
+      [32m+[0m [0m[1m[0mlambda_multi_value_headers_enabled[0m[0m = false
+      [32m+[0m [0m[1m[0mname[0m[0m                               = "Riggo-ECS-temp"
+      [32m+[0m [0m[1m[0mport[0m[0m                               = 8088
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                           = "HTTP"
+      [32m+[0m [0m[1m[0mproxy_protocol_v2[0m[0m                  = false
+      [32m+[0m [0m[1m[0mslow_start[0m[0m                         = 0
+      [32m+[0m [0m[1m[0mtags[0m[0m                               = {
+          [32m+[0m [0m"env" = "temp"
+        }
+      [32m+[0m [0m[1m[0mtarget_type[0m[0m                        = "instance"
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                             = (known after apply)
+
+      [32m+[0m [0mhealth_check {
+          [32m+[0m [0m[1m[0menabled[0m[0m             = true
+          [32m+[0m [0m[1m[0mhealthy_threshold[0m[0m   = 5
+          [32m+[0m [0m[1m[0minterval[0m[0m            = 30
+          [32m+[0m [0m[1m[0mmatcher[0m[0m             = "200"
+          [32m+[0m [0m[1m[0mpath[0m[0m                = "/favicon.ico"
+          [32m+[0m [0m[1m[0mport[0m[0m                = "traffic-port"
+          [32m+[0m [0m[1m[0mprotocol[0m[0m            = "HTTP"
+          [32m+[0m [0m[1m[0mtimeout[0m[0m             = 3
+          [32m+[0m [0m[1m[0munhealthy_threshold[0m[0m = 2
+        }
+
+      [32m+[0m [0mstickiness {
+          [32m+[0m [0m[1m[0mcookie_duration[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0menabled[0m[0m         = (known after apply)
+          [32m+[0m [0m[1m[0mtype[0m[0m            = (known after apply)
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_lb_target_group.ecs-lb-targetgroup-testlistner[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lb_target_group" "ecs-lb-targetgroup-testlistner" {
+      [32m+[0m [0m[1m[0marn[0m[0m                                = (known after apply)
+      [32m+[0m [0m[1m[0marn_suffix[0m[0m                         = (known after apply)
+      [32m+[0m [0m[1m[0mderegistration_delay[0m[0m               = 30
+      [32m+[0m [0m[1m[0mid[0m[0m                                 = (known after apply)
+      [32m+[0m [0m[1m[0mlambda_multi_value_headers_enabled[0m[0m = false
+      [32m+[0m [0m[1m[0mname[0m[0m                               = "Riggo-ECS-temp-testlistner"
+      [32m+[0m [0m[1m[0mport[0m[0m                               = 8088
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                           = "HTTP"
+      [32m+[0m [0m[1m[0mproxy_protocol_v2[0m[0m                  = false
+      [32m+[0m [0m[1m[0mslow_start[0m[0m                         = 0
+      [32m+[0m [0m[1m[0mtags[0m[0m                               = {
+          [32m+[0m [0m"env" = "temp"
+        }
+      [32m+[0m [0m[1m[0mtarget_type[0m[0m                        = "instance"
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                             = (known after apply)
+
+      [32m+[0m [0mhealth_check {
+          [32m+[0m [0m[1m[0menabled[0m[0m             = true
+          [32m+[0m [0m[1m[0mhealthy_threshold[0m[0m   = 5
+          [32m+[0m [0m[1m[0minterval[0m[0m            = 30
+          [32m+[0m [0m[1m[0mmatcher[0m[0m             = "200"
+          [32m+[0m [0m[1m[0mpath[0m[0m                = "/favicon.ico"
+          [32m+[0m [0m[1m[0mport[0m[0m                = "traffic-port"
+          [32m+[0m [0m[1m[0mprotocol[0m[0m            = "HTTP"
+          [32m+[0m [0m[1m[0mtimeout[0m[0m             = 3
+          [32m+[0m [0m[1m[0munhealthy_threshold[0m[0m = 2
+        }
+
+      [32m+[0m [0mstickiness {
+          [32m+[0m [0m[1m[0mcookie_duration[0m[0m = (known after apply)
+          [32m+[0m [0m[1m[0menabled[0m[0m         = (known after apply)
+          [32m+[0m [0m[1m[0mtype[0m[0m            = (known after apply)
+        }
+    }
+
+[1m  # module.ecs-cluster.aws_security_group.ecs-instance-SG[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "ecs-instance-SG" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "Managed by Terraform"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "SG-temp-ECSinstance"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "SG-temp-ECSinstance"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_security_group.lb_securitygroup[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "lb_securitygroup" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "Managed by Terraform"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = (known after apply)
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "SG-temp-ALB"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "SG-temp-ALB"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.egress_ecs_instance[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "egress_ecs_instance" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Outgoing traffic from ECS instances"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 0
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "-1"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 65535
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "egress"
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.ingress_ecs_instance[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "ingress_ecs_instance" {
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Incoming traffic to ECS instances"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 8088
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 8088
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.ingress_ecs_ssh_instance[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "ingress_ecs_ssh_instance" {
+      [32m+[0m [0m[1m[0mdescription[0m[0m              = "Incoming ssh traffic to ECS instances"
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 22
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 22
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.lb_http_egress[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "lb_http_egress" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 0
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "-1"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 65535
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "egress"
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.lb_http_ingress[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "lb_http_ingress" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 80
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 80
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.ecs-cluster.aws_security_group_rule.lb_testlistnerPort_ingress[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group_rule" "lb_testlistnerPort_ingress" {
+      [32m+[0m [0m[1m[0mcidr_blocks[0m[0m              = [
+          [32m+[0m [0m"0.0.0.0/0",
+        ]
+      [32m+[0m [0m[1m[0mfrom_port[0m[0m                = 8080
+      [32m+[0m [0m[1m[0mid[0m[0m                       = (known after apply)
+      [32m+[0m [0m[1m[0mprotocol[0m[0m                 = "tcp"
+      [32m+[0m [0m[1m[0msecurity_group_id[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mself[0m[0m                     = false
+      [32m+[0m [0m[1m[0msource_security_group_id[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mto_port[0m[0m                  = 8080
+      [32m+[0m [0m[1m[0mtype[0m[0m                     = "ingress"
+    }
+
+[1m  # module.elasticache.aws_elasticache_cluster.redis[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_elasticache_cluster" "redis" {
+      [32m+[0m [0m[1m[0mapply_immediately[0m[0m      = true
+      [32m+[0m [0m[1m[0mavailability_zone[0m[0m      = (known after apply)
+      [32m+[0m [0m[1m[0maz_mode[0m[0m                = (known after apply)
+      [32m+[0m [0m[1m[0mcache_nodes[0m[0m            = (known after apply)
+      [32m+[0m [0m[1m[0mcluster_address[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0mcluster_id[0m[0m             = "temp-redis-cluster"
+      [32m+[0m [0m[1m[0mconfiguration_endpoint[0m[0m = (known after apply)
+      [32m+[0m [0m[1m[0mengine[0m[0m                 = "redis"
+      [32m+[0m [0m[1m[0mengine_version[0m[0m         = "5.0.4"
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mmaintenance_window[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0mnode_type[0m[0m              = "cache.t2.micro"
+      [32m+[0m [0m[1m[0mnum_cache_nodes[0m[0m        = 1
+      [32m+[0m [0m[1m[0mparameter_group_name[0m[0m   = "default.redis5.0"
+      [32m+[0m [0m[1m[0mport[0m[0m                   = 6379
+      [32m+[0m [0m[1m[0mreplication_group_id[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0msecurity_group_ids[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0msecurity_group_names[0m[0m   = (known after apply)
+      [32m+[0m [0m[1m[0msnapshot_window[0m[0m        = (known after apply)
+      [32m+[0m [0m[1m[0msubnet_group_name[0m[0m      = "temp-elasticcache-subnet-group"
+    }
+
+[1m  # module.elasticache.aws_elasticache_subnet_group.elastic_subnet[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_elasticache_subnet_group" "elastic_subnet" {
+      [32m+[0m [0m[1m[0mdescription[0m[0m = "subnet group for elasticcache"
+      [32m+[0m [0m[1m[0mid[0m[0m          = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m        = "temp-elasticcache-subnet-group"
+      [32m+[0m [0m[1m[0msubnet_ids[0m[0m  = (known after apply)
+    }
+
+[1m  # module.elasticache.aws_security_group.sec_elasticache[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_security_group" "sec_elasticache" {
+      [32m+[0m [0m[1m[0marn[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m            = "Security group for redis elasticcache"
+      [32m+[0m [0m[1m[0megress[0m[0m                 = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_blocks      = [
+                  [32m+[0m [0m"0.0.0.0/0",
+                ]
+              [32m+[0m [0mdescription      = ""
+              [32m+[0m [0mfrom_port        = 6379
+              [32m+[0m [0mipv6_cidr_blocks = []
+              [32m+[0m [0mprefix_list_ids  = []
+              [32m+[0m [0mprotocol         = "tcp"
+              [32m+[0m [0msecurity_groups  = []
+              [32m+[0m [0mself             = false
+              [32m+[0m [0mto_port          = 6379
+            },
+        ]
+      [32m+[0m [0m[1m[0mid[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mingress[0m[0m                = [
+          [32m+[0m [0m{
+              [32m+[0m [0mcidr_blocks      = [
+                  [32m+[0m [0m"10.0.0.0/16",
+                ]
+              [32m+[0m [0mdescription      = ""
+              [32m+[0m [0mfrom_port        = 6379
+              [32m+[0m [0mipv6_cidr_blocks = []
+              [32m+[0m [0mprefix_list_ids  = []
+              [32m+[0m [0mprotocol         = "tcp"
+              [32m+[0m [0msecurity_groups  = []
+              [32m+[0m [0mself             = false
+              [32m+[0m [0mto_port          = 6379
+            },
+        ]
+      [32m+[0m [0m[1m[0mname[0m[0m                   = "temp-ElasticCache-Redis"
+      [32m+[0m [0m[1m[0mowner_id[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mrevoke_rules_on_delete[0m[0m = false
+      [32m+[0m [0m[1m[0mtags[0m[0m                   = {
+          [32m+[0m [0m"Name" = "temp ElastiCache Redis"
+          [32m+[0m [0m"env"  = "temp"
+        }
+      [32m+[0m [0m[1m[0mvpc_id[0m[0m                 = (known after apply)
+    }
+
+[1m  # module.iam.aws_iam_role.cloudwatch-APIGateway[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role" "cloudwatch-APIGateway" {
+      [32m+[0m [0m[1m[0marn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0massume_role_policy[0m[0m    = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction    = "sts:AssumeRole"
+                      [32m+[0m [0mEffect    = "Allow"
+                      [32m+[0m [0mPrincipal = {
+                          [32m+[0m [0mService = "apigateway.amazonaws.com"
+                        }
+                      [32m+[0m [0mSid       = ""
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+      [32m+[0m [0m[1m[0mcreate_date[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mforce_detach_policies[0m[0m = false
+      [32m+[0m [0m[1m[0mid[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mmax_session_duration[0m[0m  = 3600
+      [32m+[0m [0m[1m[0mname[0m[0m                  = "api_gateway_cloudwatch_global"
+      [32m+[0m [0m[1m[0mpath[0m[0m                  = "/"
+      [32m+[0m [0m[1m[0munique_id[0m[0m             = (known after apply)
+    }
+
+[1m  # module.iam.aws_iam_role.lambda-invoke-role[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role" "lambda-invoke-role" {
+      [32m+[0m [0m[1m[0marn[0m[0m                   = (known after apply)
+      [32m+[0m [0m[1m[0massume_role_policy[0m[0m    = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction    = "sts:AssumeRole"
+                      [32m+[0m [0mEffect    = "Allow"
+                      [32m+[0m [0mPrincipal = {
+                          [32m+[0m [0mService = [
+                              [32m+[0m [0m"lambda.amazonaws.com",
+                              [32m+[0m [0m"apigateway.amazonaws.com",
+                            ]
+                        }
+                      [32m+[0m [0mSid       = ""
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+      [32m+[0m [0m[1m[0mcreate_date[0m[0m           = (known after apply)
+      [32m+[0m [0m[1m[0mforce_detach_policies[0m[0m = false
+      [32m+[0m [0m[1m[0mid[0m[0m                    = (known after apply)
+      [32m+[0m [0m[1m[0mmax_session_duration[0m[0m  = 3600
+      [32m+[0m [0m[1m[0mname[0m[0m                  = "Riggo-Auth0-Integration-temp"
+      [32m+[0m [0m[1m[0mpath[0m[0m                  = "/"
+      [32m+[0m [0m[1m[0munique_id[0m[0m             = (known after apply)
+    }
+
+[1m  # module.iam.aws_iam_role_policy.cloudwatch[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role_policy" "cloudwatch" {
+      [32m+[0m [0m[1m[0mid[0m[0m     = (known after apply)
+      [32m+[0m [0m[1m[0mname[0m[0m   = "AmazonAPIGatewayPushToCloudWatchLogs"
+      [32m+[0m [0m[1m[0mpolicy[0m[0m = jsonencode(
+            {
+              [32m+[0m [0mStatement = [
+                  [32m+[0m [0m{
+                      [32m+[0m [0mAction   = [
+                          [32m+[0m [0m"logs:CreateLogGroup",
+                          [32m+[0m [0m"logs:CreateLogStream",
+                          [32m+[0m [0m"logs:DescribeLogGroups",
+                          [32m+[0m [0m"logs:DescribeLogStreams",
+                          [32m+[0m [0m"logs:PutLogEvents",
+                          [32m+[0m [0m"logs:GetLogEvents",
+                          [32m+[0m [0m"logs:FilterLogEvents",
+                        ]
+                      [32m+[0m [0mEffect   = "Allow"
+                      [32m+[0m [0mResource = "*"
+                    },
+                ]
+              [32m+[0m [0mVersion   = "2012-10-17"
+            }
+        )
+      [32m+[0m [0m[1m[0mrole[0m[0m   = (known after apply)
+    }
+
+[1m  # module.iam.aws_iam_role_policy_attachment.relationship-attachment[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_iam_role_policy_attachment" "relationship-attachment" {
+      [32m+[0m [0m[1m[0mid[0m[0m         = (known after apply)
+      [32m+[0m [0m[1m[0mpolicy_arn[0m[0m = "arn:aws:iam::aws:policy/service-role/AWSLambdaRole"
+      [32m+[0m [0m[1m[0mrole[0m[0m       = "Riggo-Auth0-Integration-temp"
+    }
+
+[1m  # module.lambda.aws_lambda_function.JWT-CustomAuthorizer[0m will be created[0m[0m
+[0m[32m  +[0m [0mresource "aws_lambda_function" "JWT-CustomAuthorizer" {
+      [32m+[0m [0m[1m[0marn[0m[0m                            = (known after apply)
+      [32m+[0m [0m[1m[0mdescription[0m[0m                    = "JWT RSA Custom Authorizer"
+      [32m+[0m [0m[1m[0mfilename[0m[0m                       = "../lambda/custom-authorizer.zip"
+      [32m+[0m [0m[1m[0mfunction_name[0m[0m                  = "jwtRsaCustomAuthorizer-temp"
+      [32m+[0m [0m[1m[0mhandler[0m[0m                        = "index.handler"
+      [32m+[0m [0m[1m[0mid[0m[0m                             = (known after apply)
+      [32m+[0m [0m[1m[0minvoke_arn[0m[0m                     = (known after apply)
+      [32m+[0m [0m[1m[0mlast_modified[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mmemory_size[0m[0m                    = 128
+      [32m+[0m [0m[1m[0mpublish[0m[0m                        = false
+      [32m+[0m [0m[1m[0mqualified_arn[0m[0m                  = (known after apply)
+      [32m+[0m [0m[1m[0mreserved_concurrent_executions[0m[0m = -1
+      [32m+[0m [0m[1m[0mrole[0m[0m                           = (known after apply)
+      [32m+[0m [0m[1m[0mruntime[0m[0m                        = "nodejs10.x"
+      [32m+[0m [0m[1m[0msource_code_hash[0m[0m               = "BFPJQdiGwRJRGhT8VihbR0uTy4b37nUpjomBTMcFfRM="
+      [32m+[0m [0m[1m[0msource_code_size[0m[0m               = (known after apply)
+      [32m+[0m [0m[1m[0mtags[0m[0m                           = {
+          [32m+[0m [0m"env" = "temp"
+        }
+      [32m+[0m [0m[1m[0mtimeout[0m[0m                        = 30
+      [32m+[0m [0m[1m[0mversion[0m[0m                        = (known after apply)
+
+      [32m+[0m [0menvironment {
+          [32m+[0m [0m[1m[0mvariables[0m[0m = {
+              [32m+[0m [0m"AUDIENCE"     = "load-resource-api"
+              [32m+[0m [0m"JWKS_URI"     = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+              [32m+[0m [0m"TOKEN_ISSUER" = "https://riggo-staging.auth0.com/"
+            }
+        }
+
+      [32m+[0m [0mtracing_config {
+          [32m+[0m [0m[1m[0mmode[0m[0m = (known after apply)
+        }
+    }
+
+[0m[1mPlan:[0m 70 to add, 0 to change, 0 to destroy.[0m
+
+------------------------------------------------------------------------
+
+Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+can't guarantee that exactly these actions will be performed if
+"terraform apply" is subsequently run.
+
+Releasing state lock. This may take a few moments...
