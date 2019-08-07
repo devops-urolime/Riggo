@@ -1,11 +1,14 @@
 import {
-  BASE_END_POINT, CORS_ERROR_MESSAGE,
+  BASE_END_POINT,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
   LOAD_PIPELINE_SUMMARY_END_POINT,
   LOAD_STOP_SUMMARY_END_POINT,
   MENU_END_POINT,
-  MOCK_ALL_DATA, STATUS_400_ERROR_MESSAGE, STATUS_401_ERROR_MESSAGE
+  MOCK_ALL_DATA,
+  STATUS_400_ERROR_MESSAGE,
+  STATUS_401_ERROR_MESSAGE,
+  STATUS_500_ERROR_MESSAGE
 } from './config';
 
 const METHOD_GET = 'get';
@@ -205,18 +208,18 @@ const buildRequestData = (method, JWT) => {
 };
 
 const handleStatus = (response) => {
-   const apiMessage = (response) => {
+    const apiMessage = (response) => {
       return " -- API message : " + response.message;
-   };
-   if(response && response.type === "cors"){
-     throw new Error(CORS_ERROR_MESSAGE + apiMessage({message: "None because CORS error."}))
-   }
-   if(response && response.status === 401){
+    };
+    if(response && response.status === 401){
      throw new Error(STATUS_401_ERROR_MESSAGE + apiMessage(response));
-   }
-   if(response && response.status === 400){
+    }
+    if(response && response.status === 400){
      throw new Error(STATUS_400_ERROR_MESSAGE + apiMessage(response));
-   }
+    }
+    if(response && response.status === 500){
+     throw new Error(STATUS_500_ERROR_MESSAGE + apiMessage(response));
+    }
 };
 
 const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
@@ -238,21 +241,21 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
 
 export const findLoadByIdApi = async (idLoad, JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_END_POINT + '/' + idLoad;
-    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock);
 };
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock);
 };
 
 export const getMenuApi = async (JWT, menuTypePosition) => {
     const MENU_TYPE_POSITION = menuTypePosition || "";
     const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock);
 };

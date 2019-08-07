@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 const initState = {
   message:"",
   token: null,
-  expiresAt: 0,
+  expiresIn: 0,
   isLogin:false,
   user: null,
   err: null,
@@ -16,7 +16,7 @@ export default function(state = initState, action) {
       return {
           ...state,
           token: (action.token.token) ? action.token.token : action.token,
-          expiresAt: action.expiresAt,
+          expiresIn: action.expiresIn,
           isLogin: true
       };
     case LOGIN_REQUEST:

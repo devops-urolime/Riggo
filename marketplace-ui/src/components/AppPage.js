@@ -5,8 +5,8 @@ import TopBar from './TopBar';
 import SideBar from '../components/SideBar';
 import { Switch, withRouter, Route } from 'react-router-dom';
 import MainContent from './MainContent';
-import { APP_PATH_HOME, APP_PATH_ROOT } from '../config';
-import HomePage from '../containers/HomePageContainer';
+import { APP_PATH_DASHBOARD, APP_PATH_ROOT } from '../config';
+import DashboardPage from '../containers/DashboardPageContainer';
 
 class AppPage extends Component{
 
@@ -46,8 +46,8 @@ class AppPage extends Component{
                 {
                   isLogin &&
                  <Switch>
-                   <Route exact path={APP_PATH_ROOT} render={() => (<HomePage />)} />
-                   <Route exact path={APP_PATH_HOME} render={() => (<HomePage />)} />
+                   <Route exact path={APP_PATH_ROOT} render={() => (<DashboardPage />)} />
+                   <Route exact path={APP_PATH_DASHBOARD} render={() => (<DashboardPage />)} />
                  </Switch>
                 }
               </MainContent>

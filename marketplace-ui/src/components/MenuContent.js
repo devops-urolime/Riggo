@@ -7,11 +7,11 @@ import List from '@material-ui/core/List/List';
 import { withRouter } from 'react-router-dom';
 import Icon from './Icon';
 import './MenuContent.scss';
-import { APP_PATH_ROOT, URL_CODE_APP } from '../config';
+import { APP_PATH_DASHBOARD, URL_CODE_APP } from '../config';
 
 const translateUrlCode = (urlCode) => {
   const url = URL_CODE_APP[urlCode];
-  return (url) ? url : APP_PATH_ROOT;
+  return (url) ? url : APP_PATH_DASHBOARD;
 };
 
 const MenuContent = ({ menu, history, onClick }) => {
