@@ -49,6 +49,12 @@ public class LoadControllerTest {
     private LoadLineItemService loadLineItemService;
 
     @MockBean
+    private LocationService locationService;
+
+    @MockBean
+    private AddressService addressService;
+
+    @MockBean
     private SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserPostPutLoad;
 
     @MockBean
@@ -63,10 +69,10 @@ public class LoadControllerTest {
     public void getLoadById() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -82,10 +88,10 @@ public class LoadControllerTest {
     @Test
     public void getLoadByIdUnauthenticated() throws Exception {
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -102,10 +108,10 @@ public class LoadControllerTest {
     public void postLoadDOESNTREALLYTESTANYTHING() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD)
                 .content(jsonPostLoadFor200)
@@ -122,7 +128,7 @@ public class LoadControllerTest {
     public void putLoadDOESNTREALLYTESTANYTHING() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
         given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
@@ -143,7 +149,7 @@ public class LoadControllerTest {
     public void patchLoadForLoadLineItemDOESNTREALLYTESTANYTHING() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
         given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
@@ -164,7 +170,7 @@ public class LoadControllerTest {
     public void patchLoadForLoadStopDOESNTREALLYTESTANYTHING() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
         given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
@@ -184,10 +190,10 @@ public class LoadControllerTest {
     @Test
     public void getLoadByIdRequiresReadLoadPermission() throws Exception {
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))

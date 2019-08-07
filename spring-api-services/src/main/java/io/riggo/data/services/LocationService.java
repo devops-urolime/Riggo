@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class LocationService implements RiggoService {
+public class LocationService {
 
     @Autowired
     private LocationRepository locationRepository;
@@ -26,7 +26,7 @@ public class LocationService implements RiggoService {
     }
 
 
-    public Location findById(Long eqId) {
+    public Location findById(Integer eqId) {
         try {
             Location eqt = locationRepository.findById(eqId).get();
             if (eqt == null) {
