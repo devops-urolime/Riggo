@@ -14,7 +14,7 @@ public class Load implements Serializable {
 
 
     private static final long serialVersionUID = -4133343645808769934L;
-    private Long id;
+    private Integer id;
     private String extSysId;
     private String extSysTenantId;
 
@@ -25,7 +25,7 @@ public class Load implements Serializable {
     private String transportMode;
     private BigDecimal postedRate;
     private BigDecimal insuranceAmt;
-    private Long equipmentTypeId;
+    private Integer equipmentTypeId;
     private Integer loadStatus;
     private Boolean teamReq;
     private Boolean foodGradeTrailerReq;
@@ -50,17 +50,17 @@ public class Load implements Serializable {
     private LocalDateTime orderDate;
     private String salesStatus;
     private String loadUrl;
-    private Long shipperId;
+    private Integer shipperId;
 
 
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -137,11 +137,11 @@ public class Load implements Serializable {
 
     @Basic
     @Column(name = "equipment_type_id")
-    public Long getEquipmentTypeId() {
+    public Integer getEquipmentTypeId() {
         return equipmentTypeId;
     }
 
-    public void setEquipmentTypeId(Long equipmentTypeId) {
+    public void setEquipmentTypeId(Integer equipmentTypeId) {
         this.equipmentTypeId = equipmentTypeId;
     }
 
@@ -393,11 +393,11 @@ public class Load implements Serializable {
 
     @Basic
     @Column(name = "shipper_id")
-    public Long getShipperId() {
+    public Integer getShipperId() {
         return shipperId;
     }
 
-    public void setShipperId(Long shipperId) {
+    public void setShipperId(Integer shipperId) {
         this.shipperId = shipperId;
     }
 }

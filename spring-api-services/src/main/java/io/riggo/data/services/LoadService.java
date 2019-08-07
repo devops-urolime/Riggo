@@ -23,7 +23,7 @@ public class LoadService {
         }
     }
 
-    public Optional<Load> findById(Long id) {
+    public Optional<Load> findById(Integer id) {
         try {
             return loadRepository.findById(id);
         } catch (Exception e) {

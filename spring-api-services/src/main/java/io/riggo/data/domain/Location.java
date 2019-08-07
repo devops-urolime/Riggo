@@ -15,7 +15,7 @@ public class Location implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "ext_sys_id")
     @JsonAlias({"LastStopId", "FirstStopId","StopId"})
@@ -41,23 +41,24 @@ public class Location implements Serializable {
     private java.util.Date deleted;
 
     @Column(name = "address_id")
-    private Long addressId;
+    private Integer addressId;
 
+    @Transient
     private Address address;
 
-    public Long getAddressId() {
+    public Integer getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(Long address_id) {
+    public void setAddressId(Integer address_id) {
         this.addressId = address_id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

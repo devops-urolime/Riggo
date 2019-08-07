@@ -6,4 +6,6 @@ public interface SalesforceRevenovaConstants {
     String[] PATCH_LOAD_LOAD_LINE_ITEM_IGNORE_PROPERTIES = new String[]{"id", "extSysTenantId", "pickupStop", "deliveryStop", "rank", "loadId", "deleted"};
     String[] PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES = new String[]{"id", "extSysTenantId", "name", "shippingReceivingHours", "location", "stopNumber", "type", "expectedDateTime", "appointmentRequired", "appointmentTime", "stopStatus", "carrierStatus", "arrivalStatus", "departureStatus", "arrivalDate", "departureDateTime"};
     String[] POST_PUT_SHIPPER_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
+    String[] POST_PUT_LOAD_STOP_LOCATION_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
+    String[] POST_PUT_LOAD_STOP_LOCATION_ADDRESS_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
 }

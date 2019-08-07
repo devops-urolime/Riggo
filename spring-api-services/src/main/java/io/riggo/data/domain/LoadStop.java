@@ -15,7 +15,7 @@ public class LoadStop implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "ext_sys_id")
     private String extSysId;
@@ -78,7 +78,7 @@ public class LoadStop implements Serializable {
     private java.util.Date deleted;
 
     @Column(name = "load_id")
-    private Long loadId;
+    private Integer loadId;
 
 
     @Transient
@@ -88,11 +88,11 @@ public class LoadStop implements Serializable {
     private Location location;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -240,11 +240,11 @@ public class LoadStop implements Serializable {
         this.departureDateTime = departureDateTime;
     }
 
-    public Long getLoadId() {
+    public Integer getLoadId() {
         return loadId;
     }
 
-    public void setLoadId(Long loadId) {
+    public void setLoadId(Integer loadId) {
         this.loadId = loadId;
     }
 

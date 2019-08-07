@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface LoadStopRepository extends CrudRepository<LoadStop, Long> {
+public interface LoadStopRepository extends CrudRepository<LoadStop, Integer> {
 
     @Override
     Iterable<LoadStop> findAll();
