@@ -1,0 +1,11 @@
+@import 'base.scss';
+
+.MultiYAxesVisualization{
+  tspan{
+    fill: $general-text;
+    font-size: 12px;
+  }
+  span{
+    font-size: 11px;
+  }
+}

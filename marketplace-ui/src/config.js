@@ -2,7 +2,7 @@ export const BASE_END_POINT='https://o0de6p7v3h.execute-api.us-west-2.amazonaws.
 export const EMPTY_JWT_ERROR_MESSAGE='There is no JWT access token to make calls to the APIs';
 export const STATUS_401_ERROR_MESSAGE='Calls to the API return 401 Unauthorized';
 export const STATUS_400_ERROR_MESSAGE='Calls to the API return 400 Bad Request';
-export const CORS_ERROR_MESSAGE='Calls to the API return cors';
+export const STATUS_500_ERROR_MESSAGE='Calls to the API return 500 Internal Server Error';
 export const LOAD_END_POINT='/load';
 export const MENU_END_POINT='/menus';
 export const LOAD_PIPELINE_SUMMARY_END_POINT= LOAD_END_POINT + '/pipeline/summary';
@@ -24,9 +24,9 @@ export const AUTH_CONFIG = {
 };
 
 export const APP_PATH_ROOT = "/";
-export const APP_PATH_HOME = "/home";
 export const APP_PATH_LOAD = "/load";
 export const APP_PATH_LOGIN = "/login";
+export const APP_PATH_DASHBOARD = "/dashboard";
 export const APP_PATH_SHIPMENTS = "/shipments";
 export const APP_PATH_REPORTS = "/reports";
 export const APP_PATH_BILLING = "/billing";
@@ -34,7 +34,7 @@ export const APP_PATH_LOAD_ID = APP_PATH_LOAD + "/:id*";
 export const APP_PATH_AUTH0_CALLBACK = "/callback";
 export const MOCK_ALL_DATA= (process.env.REACT_APP_MOCK_ALL_DATA === 'true');
 export const URL_CODE_APP = {
-  dashboard: APP_PATH_HOME,
+  dashboard: APP_PATH_DASHBOARD,
   shipments: APP_PATH_SHIPMENTS,
   reports: APP_PATH_REPORTS,
   billing: APP_PATH_BILLING,

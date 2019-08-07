@@ -29,6 +29,8 @@ locals {
   db_instance_username          = "${element(concat(coalescelist(aws_db_instance.db.*.username), list("")), 0)}"
   db_instance_password          = "${element(concat(coalescelist(aws_db_instance.db.*.password), list("")), 0)}"
   db_instance_port              = "${element(concat(coalescelist(aws_db_instance.db.*.port), list("")), 0)}"
+
+  # db_instance_db                = "${element(concat(coalescelist(aws_db_instance.db.*.db), list("")), 0)}"
 }
 
 output "db_instance_address" {
@@ -40,6 +42,10 @@ output "db_instance_arn" {
   description = "The ARN of the RDS instance"
   value       = "${local.db_instance_arn}"
 }
+# output "db_instance_db" {
+#   value = "${local.db_instance_db}"
+# }
+
 
 output "db_instance_availability_zone" {
   description = "The availability zone of the RDS instance"

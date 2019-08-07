@@ -31,7 +31,7 @@ RUN ./build.sh
 ENV JAVA_HOME=/usr/lib/jvm/${ZULU_DIR}
 
 
-ARG JAR_FILE=target/api-services-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=build/libs/api-services-0.0.1-SNAPSHOT.jar
 ADD ${JAR_FILE} api-services-0.0.1-SNAPSHOT.jar
 
 #ARG SHELL_FILE=setup.sh

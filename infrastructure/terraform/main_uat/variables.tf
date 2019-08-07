@@ -106,7 +106,7 @@ variable "instance_type" {
 variable "keyname" {
 
   description = "Name of the key pairs"
-  default     = "staging_ec2_pair"
+  default     = "RiggoKeyPair-uat"
 }
 
 variable "cidr_blocks" {
