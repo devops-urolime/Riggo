@@ -56,7 +56,7 @@ module "bastion" {
   instance_type   = "${var.instance_type}"
   subnet_public   = "${module.VPC.public_subnet_id1}"
   keyname         = "${var.keyname}"
-  cidr_blocks     = "${var.cidr_blocks}"
+  cidr_blocks     = "${var.cidr_block}"
 }
 
 
@@ -143,7 +143,7 @@ module "ecs-cluster" {
   public_subnet2                    = "${module.VPC.public_subnet_id2}"
   private_subnet1                   = "${module.VPC.private_subnet_id1}"
   private_subnet2                   = "${module.VPC.private_subnet_id2}"
-  cidr_blocks                       = "${var.cidr_blocks}"
+  cidr_blocks                       = "${var.cidr_block}"
   keyname                           = "${var.keyname}"
   bastion_SG                        = "${module.bastion.bastion_host_security_group}"
   deployment_minimum_healh_percent  = "${var.deployment_minimum_healh_percent}"
