@@ -55,7 +55,7 @@
     "deploy": "npm-run-all aws-s3-push-qa aws-cloudfront-invalidation",
     "build-deploy": "npm-run-all build deploy",
     "test-dev": "react-scripts test --env=jsdom",
-    "test": "react-scripts test --watchAll=false --env=jsdom --forceExit",
+    "test": "react-scripts test --watchAll=false --env=jsdom --forceExit --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
