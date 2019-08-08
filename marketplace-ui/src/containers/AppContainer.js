@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => {
   return {
     isAlreadyLocallyAuthenticated: () => {
       const isLoggedInLocal = localStorage.getItem(IS_LOGGED_IN_LOCAL_STORAGE) === 'true';
-      const expiresIn = localStorage.getItem(EXPIRES_IN_LOCAL_STORAGE);
+      const expiresIn = parseInt(localStorage.getItem(EXPIRES_IN_LOCAL_STORAGE), 10);
       if (
         isLoggedInLocal  &&
         isNotExpired(expiresIn)

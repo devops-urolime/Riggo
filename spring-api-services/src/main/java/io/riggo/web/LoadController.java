@@ -49,6 +49,12 @@ public class LoadController {
     private LoadStopService loadStopService;
 
     @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private AddressService addressService;
+
+    @Autowired
     private LoadLineItemService loadLineItemService;
 
     @Autowired
@@ -64,7 +70,7 @@ public class LoadController {
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
     @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
-    public LoadResponse getLoadById(@PathVariable("id") Long id, Authentication authentication) {
+    public LoadResponse getLoadById(@PathVariable("id") Integer id, Authentication authentication) {
         // TODO: Remove this line in a future is just a demo authentication.
         logger.debug(authentication.toString());
         Optional<Load> load = loadService.findById(id);
@@ -77,9 +83,8 @@ public class LoadController {
     public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal) {
         if (findByExternal) {
             return loadService.findByExtSysId(extSysId);
-        } else {
-            return loadService.findById(Long.valueOf(extSysId));
         }
+        return loadService.findById(Integer.valueOf(extSysId));
     }
 
 
@@ -114,20 +119,9 @@ public class LoadController {
 
         LoadStop firstStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(dataHashMap);
         LoadStop lastStop = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(dataHashMap);
-        if (StringUtils.isNotBlank(firstStop.getExtSysId())) {
-            Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(firstStop.getExtSysId());
-            if (!checkFirstStopExists.isPresent()) {
-                firstStop.setLoadId(load.getId());
-                loadStopService.save(firstStop);
-            }
-        }
-        if (StringUtils.isNotBlank(lastStop.getExtSysId())) {
-            Optional<LoadStop> checkLastStopExists = loadStopService.findByExtSysId(lastStop.getExtSysId());
-            if (!checkLastStopExists.isPresent()) {
-                lastStop.setLoadId(load.getId());
-                loadStopService.save(lastStop);
-            }
-        }
+
+        persistLoadStop(firstStop, load.getId());
+        persistLoadStop(lastStop, load.getId());
 
         LoadAPIResponse loadAPIResponse = new LoadAPIResponse();
         loadAPIResponse.addData(load);
@@ -174,6 +168,46 @@ public class LoadController {
             load.setShipperId(shipper.getId());
         }
     }
+
+
+    private void persistLoadStop(LoadStop loadStop, Integer loadId)
+    {
+        Location location = loadStop.getLocation();
+        if(location != null) {
+            Optional<Location> checkLocationExists = null;
+            Optional<Address> checkAddressExists = null;
+            if (StringUtils.isNotBlank(location.getExtSysId())) {
+                checkLocationExists = locationService.findByExtSysId(location.getExtSysId());
+                if (checkLocationExists.isPresent() && checkLocationExists.get().getAddressId() != null) {
+                    checkAddressExists = addressService.findById(location.getAddressId());
+                }
+            }
+
+            Address address = location.getAddress();
+            if(address != null) {
+                if (checkAddressExists != null && checkAddressExists.isPresent()) {
+                    BeanUtils.copyProperties(checkAddressExists.get(), address, SalesforceRevenovaConstants.POST_PUT_LOAD_STOP_LOCATION_ADDRESS_IGNORE_PROPERTIES);
+                }
+                addressService.save(address);
+                location.setAddressId(address.getId());
+            }
+
+            if (checkLocationExists.isPresent()) {
+                BeanUtils.copyProperties(checkLocationExists.get(), location, SalesforceRevenovaConstants.POST_PUT_LOAD_STOP_LOCATION_IGNORE_PROPERTIES);
+            }
+            locationService.save(location);
+            loadStop.setLocationId(location.getId());
+        }
+
+        if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
+            Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(loadStop.getExtSysId());
+            if (!checkFirstStopExists.isPresent()) {
+                loadStop.setLoadId(loadId);
+                loadStopService.save(loadStop);
+            }
+        }
+    }
+
 
     @PatchMapping(value = "/load", produces = "application/json")
     public NestedBaseAPIResponse<?> patchLoad(@RequestBody Map<String, Object> dataHashMap) {

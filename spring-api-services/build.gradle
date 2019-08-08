@@ -5,9 +5,11 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'com.gradle.build-scan' version '2.3'
 }
 
 repositories {
+    jcenter()
     mavenLocal()
     maven {
         url = 'https://riggo.jfrog.io/riggo/libs-release'
@@ -70,5 +72,6 @@ if (hasProperty('buildScan')) {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
         termsOfServiceAgree = 'yes'
+        publishAlways()
     }
 }

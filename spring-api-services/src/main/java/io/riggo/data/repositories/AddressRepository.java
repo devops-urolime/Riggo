@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface AddressRepository extends CrudRepository<Address, Long> {
+public interface AddressRepository extends CrudRepository<Address, Integer> {
 
     @Query("select a from Address a where a.extSysId = :extSysId")
     Optional<Address> findByExtSysId(@Param("extSysId") String extSysId);

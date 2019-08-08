@@ -32,9 +32,9 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
     value               = "Terraform"
     propagate_at_launch = true
   }
-lifecycle {
-  ignore_changes = [name]
-}
+# lifecycle {
+#   ignore_changes = [name]
+# }
 }
 
 
