@@ -1,6 +1,6 @@
-trigger StopTriggerForAPI on rtms__Stop__c (before delete) {
-	Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPI');
-    if(apxTriOnOff != null && apxTriOnOff.isEnable__c){	
+trigger StopTrigger on rtms__Stop__c (before delete,after insert,after update) {
+    Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPI');
+    if(apxTriOnOff != null && apxTriOnOff.isEnable__c){ 
         // Trigger is on before update event 
         if(trigger.isbefore && trigger.isdelete){
             Set<Id> deleteId = new Set<Id>();
@@ -11,7 +11,12 @@ trigger StopTriggerForAPI on rtms__Stop__c (before delete) {
             if(deleteId != null){
                 StopAPICalloutCtrl.makePostCallout(deleteId,'Delete');    
             }
-            
         }
+    }
+    if(trigger.isupdate || trigger.isInsert ){
+        Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPIForDetentionEmail');
+        if(apxTriOnOff != null && apxTriOnOff.isEnable__c){ 
+            DetentionEmailsCtrl.detentionRecordCreation(trigger.newmap.keyset());
+         }
     }
 }
