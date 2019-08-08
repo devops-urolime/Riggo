@@ -6,6 +6,11 @@ import { BrowserRouter } from 'react-router-dom';
 import Icon, { LOGO_ICON } from './Icon';
 
 describe('<SideBar />', () => {
+
+  afterAll(done => {
+      server.close(done);
+  });
+
   const baseTestProps = {
     isOpen: false,
     handleClose: () => {},

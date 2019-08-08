@@ -6,6 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 describe('<AppPage />', () => {
 
+  afterAll(done => {
+      server.close(done);
+  });
+
   const baseTestProps = {
     auth:{
       renewSession: () => {} ,
