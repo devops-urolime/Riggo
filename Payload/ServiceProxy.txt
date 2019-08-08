@@ -20,44 +20,32 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
     public static string errorcode = '';
     public static integer calloutForGetAccessToken = 0;
     public HttpResponse callRestService(String endPointURL, String methodName, String requestBody,String objectName){
+        List<Auth0_API_Token__c> authAPIToken=null;
+        authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
         String response=null;
         string accessToken = null;
         HttpResponse httpResponse=null;
         try { 
             calloutForGetAccessToken++;
-            accessToken = getAccesstoken(errorCode);
+            accessToken = getAccessTokenFromConfiguration(); 
             httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
             response = httpResponse.getBody();
             errorcode = string.valueof(httpResponse.getStatusCode());
             
             if(errorcode.startswith('4') || errorcode.startswith('5') ){
-                accessToken =  getAccesstoken(errorCode);
-                try{
-                    // Again calling end point url with valid token
-                    httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
-                    response = httpResponse.getBody();
-                    errorcode = string.valueof(httpResponse.getStatusCode());
-                    //errorcode = '500';
-                    system.debug('errorcode--'+errorcode);
-                    if(calloutForGetAccessToken <= 5){
-                        callRestService(endPointURL,methodName,requestBody,objectName);
-                    }else{
-                        if(errorcode.startswith('4') || errorcode.startswith('5') ){
-                            system.debug('--response'+response);
-                            Error_Log__c errorlog = new Error_Log__c();
-                            errorlog.Error__c = response;
-                            errorlog.Error_Code__c = string.valueof(httpResponse.getStatusCode());
-                            errorlog.Description__c = response;
-                            insert errorlog; 
-                                    
-                        }
+                accessToken =  refreshAccessToken(); 
+                // Again calling end point url with valid token
+                httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
+                response = httpResponse.getBody();
+                errorcode = string.valueof(httpResponse.getStatusCode());
+                //errorcode = '500';
+                system.debug('errorcode--'+errorcode);
+                if(calloutForGetAccessToken <= 5){
+                    callRestService(endPointURL,methodName,requestBody,objectName);
+                }else{
+                    if(errorcode.startswith('4') || errorcode.startswith('5') ){
+                        APIExceptionHandler.erroLogCreation(null,httpResponse);   
                     }
-                }catch(Exception e){
-                    Error_Log__c errorlog = new Error_Log__c();
-                    errorlog.Error__c = e.getMessage();
-                    errorlog.Description__c = e.getMessage();
-                    insert errorlog; 
-                    system.debug('--errorlog---'+errorlog);
                 }
             }
         } catch(Exception e) {
@@ -65,77 +53,50 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:callRestService'+response);
         if(!(errorcode.startswith('4') && errorcode.startswith('5'))){
-            Auth0_API_Token__c authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
-            authAPIToken.Token__c = accessToken;
-            authTokenUpdate(authAPIToken);
+            Auth0_API_Token__c authAPITokenupdate = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+            authAPITokenupdate.Token__c = accessToken;
+            authTokenUpdate(authAPITokenupdate);
         }
         return httpResponse;    
     }
     private void authTokenUpdate(Auth0_API_Token__c authUpdate){
+        // Updating letest Authtoken in salesforce
         update authUpdate;
-        system.debug('---authUpdate--'+authUpdate);
-        //return authUpdate;
     }
-    private string getAccesstoken(String errorCode){
-        String accessToken = null;
-        system.debug('--errorCode--'+errorCode);
+    private string getAccessTokenFromConfiguration(){
         List<Auth0_API_Token__c> authAPIToken=null;
         authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
-        if(authAPIToken.isEmpty()){
-            Auth0_API_Token__c api = new Auth0_API_Token__c();
-            api.Client_Key__c = 'Keyvalye';
-            api.Client_Secret__c = 'secretkey';
-            api.End_Point__c    = 'http://example.com/example/test';
-            api.Enable__c = true;
-            api.Token__c ='test token';
-            insert api;
-            return api.Token__c;
-        }
-        system.debug('--errorCode--'+errorCode);
-        if((errorcode == null ||  errorcode == '') && authAPIToken.size() > 0){
-            if(authAPIToken[0].Token__c != null){
-                accessToken = authAPIToken[0].Token__c;
-                system.debug('--return 91 --accessToken '+accessToken);
-                return accessToken;
-            }else{
-                String body = '{"client_id": "'+authAPIToken[0].Client_Key__c+'",'+
-                    '"client_secret": "'+authAPIToken[0].Client_Secret__c+'",'+
-                    '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
-                HttpRequest req = new HttpRequest(); 
-                req.setMethod('POST');
-                req.setEndpoint(authAPIToken[0].End_Point__c);
-                req.setheader('content-type', 'application/json');
-                req.setBody(body);
-                
-                Http http = new Http();        
-                HTTPResponse res = http.send(req);
-                Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
-                system.debug('res.getBody---'+res.getBody());
-                accessToken  = string.valueof(cObjMap.get('access_token'));
-                system.debug('--return 108 --accessToken '+accessToken);
-                return accessToken;
-            }
-        }
-        if(errorcode.startswith('4') || errorcode.startswith('5') ){
-            String body = '{"client_id": "'+authAPIToken[0].Client_Key__c+'",'+
-                '"client_secret": "'+authAPIToken[0].Client_Secret__c+'",'+
-                '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
-            HttpRequest req = new HttpRequest(); 
-            req.setMethod('POST');
-            req.setEndpoint(authAPIToken[0].End_Point__c);
-            req.setheader('content-type', 'application/json');
-            req.setBody(body);
+        if(authAPIToken.size() > 0 && authAPIToken[0].Token__c != null){
+            system.debug('---token if already exist');
+            return authAPIToken[0].Token__c;
+        }else{
+            system.debug('---token if refresh');
+            return refreshAccessToken(); 
             
-            Http http = new Http();        
-            HTTPResponse res = http.send(req);
-            Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
-            system.debug('res.getBody---'+res.getBody());
-            accessToken  = string.valueof(cObjMap.get('access_token'));
-            system.debug('--return 128 --accessToken '+accessToken);
-            return accessToken;
         } 
-        return accessToken;
     }
+    private string refreshAccessToken(){
+        List<Auth0_API_Token__c> authAPIToken=null;
+        authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+        
+        String accessToken = null;
+        String body = '{"client_id": "'+authAPIToken[0].Client_Key__c+'",'+
+            '"client_secret": "'+authAPIToken[0].Client_Secret__c+'",'+
+            '"audience":"load-resource-api","grant_type":"client_credentials"'+	'}';
+        HttpRequest req = new HttpRequest(); 
+        req.setMethod('POST');
+        req.setEndpoint(authAPIToken[0].End_Point__c);
+        req.setheader('content-type', 'application/json');
+        req.setBody(body);
+        
+        Http http = new Http();        
+        HTTPResponse res = http.send(req);
+        Map<String, Object> cObjMap = (Map<String, Object>) JSON.deserializeUntyped(res.getBody());
+        system.debug('res.getBody---'+res.getBody());
+        accessToken  = string.valueof(cObjMap.get('access_token'));
+        system.debug('--return 108 --accessToken '+accessToken);
+        return accessToken; 
+    }        
     private HttpResponse initiateHTTPCall(String endPointURL, String methodName, String requestBody,string accessToken,string objectName){
         String response=null;
         Http httpConnection=null;
@@ -159,19 +120,7 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
                 httpRequest= new HttpRequest();
                 httpRequest.setEndpoint(endPoint+endPointURL);
                 httpRequest.setEndpoint(endPoint+endPointURL);
-                //GW
-                //httpRequest.setEndpoint('https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa/load');
-                system.debug('--methodName--'+methodName);
-                
-                
-                if(objectName == 'Stops' || objectName == 'Lineitems'){
-                    system.debug('-objectName-'+objectName);
-                	httpRequest.setMethod('POST');
-                    httpRequest.setHeader('X-HTTP-Method-Override','PATCH');
-					
-                }else{
-                	httpRequest.setMethod(methodName);    
-                }
+                httpRequest.setMethod(methodName);    
                 
                 httpRequest.setTimeout(timeOut);
                 httpRequest.setHeader('Content-Type',contentType);
@@ -189,13 +138,7 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
                 }	      		
             }       		
         }catch(Exception e) {
-            system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in initiateHTTPCall():'+e.getMessage());
-            Error_Log__c errorlog = new Error_Log__c();
-            errorlog.Error__c = e.getMessage();
-            errorlog.Description__c = e.getMessage();
-            errorlog.Error_Code__c = string.valueof(httpResponse.getStatusCode());
-            insert errorlog; 
-            system.debug('--errorlog--'+errorlog);
+            APIExceptionHandler.erroLogCreation(e,httpResponse);
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:initiateHTTPCall'+response);
         return HttpResponse;    

@@ -23,10 +23,22 @@ triggerAction  - To identify the event of the load object either Insert update o
         String methodDefine = 'POST';
         string marketplaceExId = '';
         if(triggerAction == 'Update'){
+            List<rtms__Load__c> ListOfLoead =[Select Id, createdDate from rtms__Load__c where ID =:LoadId];
+            
             methodDefine = 'PUT';
             if(markPlcExList!= null && markPlcExList.size() > 0 ){
                 marketplaceExId = markPlcExList[0].Marketplace_Exposed_Id__c;
+                
+            }else{
+                if((marketplaceExId == null || marketplaceExId == '')&& ListOfLoead != null && ListOfLoead.size() > 0){
+                    decimal decMinutes = ((ListOfLoead[0].createdDate.getTime())/1000/60) - ((system.now().getTime())/1000/60);
+                    if(decMinutes <= 1){
+                        //break
+                    }
+                    system.debug('--decMinutes-'+decMinutes);
+                }
             }
+            
         }
         
         responeClass resResult=null;
@@ -49,6 +61,7 @@ triggerAction  - To identify the event of the load object either Insert update o
                 if(markPlcExList.isEmpty() && triggerAction == 'Insert'){
                     Marketplace_Exposed_Data__c makP = new Marketplace_Exposed_Data__c();
                     makP.Marketplace_Exposed_Id__c = resResult.hashId;
+                    //makP.extSysId = resResult.Data.extSysId;
                     makP.Load__c = LoadId;
                     insert makp;
                     system.debug('---makp'+makp);
@@ -60,16 +73,7 @@ triggerAction  - To identify the event of the load object either Insert update o
             string StatusCode = string.valueof(httpResponse.getStatusCode());
             // if there is any exception we are creating exception record in Error Log object
             if(response!= null && StatusCode != '200'){
-                if (response.contains('201')) {
-                    system.debug('--response'+response);
-                    Error_Log__c errorlog = new Error_Log__c();
-                    errorlog.Error__c = response;
-                    errorlog.Error_Code__c = StatusCode;
-                    errorlog.Description__c = response;
-                    errorlog.Load__c = LoadId;
-                    insert errorlog; 
-                    system.debug('errorlog--'+errorlog);
-                } 
+                 APIExceptionHandler.erroLogCreation(null,httpResponse);
             }
         }
     }    
