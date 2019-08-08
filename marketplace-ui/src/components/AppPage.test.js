@@ -6,9 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 describe('<AppPage />', () => {
 
-  afterAll(done => {
-      server.close(done);
-  });
+  afterAll(() => setTimeout(() => process.exit(), 1000));
 
   const baseTestProps = {
     auth:{

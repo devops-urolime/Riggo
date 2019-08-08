@@ -7,9 +7,7 @@ import Icon, { LOGO_ICON } from './Icon';
 
 describe('<SideBar />', () => {
 
-  afterAll(done => {
-      server.close(done);
-  });
+  afterAll(() => setTimeout(() => process.exit(), 1000));
 
   const baseTestProps = {
     isOpen: false,
