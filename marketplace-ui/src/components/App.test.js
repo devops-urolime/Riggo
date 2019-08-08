@@ -5,6 +5,9 @@ import { APP_PATH_AUTH0_CALLBACK, APP_PATH_LOGIN, APP_PATH_ROOT } from '../confi
 import SideBar from './SideBar';
 
 describe('<App />', () => {
+
+  afterAll(() => setTimeout(() => process.exit(), 1000));
+
   const baseTestProps = {
     auth:{
       renewSession: () => {} ,
