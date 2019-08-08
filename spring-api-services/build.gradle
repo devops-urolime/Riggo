@@ -6,10 +6,10 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'com.gradle.build-scan' version '2.3'
+    id "org.springframework.boot" version "2.1.7.RELEASE"
 }
 
 repositories {
-    jcenter()
     mavenLocal()
     maven {
         url = 'https://riggo.jfrog.io/riggo/libs-release'
@@ -55,6 +55,11 @@ group = 'io.riggo'
 version = '0.0.1-SNAPSHOT'
 description = 'api-services'
 sourceCompatibility = '1.8'
+
+bootJar {
+    baseName = 'api-services'
+    version = '0.0.1-SNAPSHOT'
+}
 
 publishing {
     publications {

@@ -6,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 
 describe('<AppPage />', () => {
 
+  afterAll(() => setTimeout(() => process.exit(), 1000));
+
   const baseTestProps = {
     auth:{
       renewSession: () => {} ,

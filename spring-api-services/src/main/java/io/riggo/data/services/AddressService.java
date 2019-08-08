@@ -1,8 +1,6 @@
 package io.riggo.data.services;
 
 import io.riggo.data.domain.Address;
-import io.riggo.data.domain.ResourceType;
-import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class AddressService implements RiggoService {
+public class AddressService {
 
     @Autowired
     private AddressRepository addressRepository;
@@ -26,13 +24,9 @@ public class AddressService implements RiggoService {
     }
 
 
-    public Address findById(Long eqId) {
+    public Optional<Address> findById(Integer id) {
         try {
-            Address eqt = addressRepository.findById(eqId).get();
-            if (eqt == null) {
-                throw new ResourceNotFoundException(ResourceType.SHIPPER, eqId);
-            }
-            return eqt;
+            return addressRepository.findById(id);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class ShipperService implements RiggoService {
+public class ShipperService {
 
     @Autowired
     private ShipperRepository shipperRepository;
@@ -25,7 +25,7 @@ public class ShipperService implements RiggoService {
     }
 
 
-    public Optional<Shipper> findById(Long shipperId) throws ResourceNotFoundException {
+    public Optional<Shipper> findById(Integer shipperId) throws ResourceNotFoundException {
         try {
             return shipperRepository.findById(shipperId);
         } catch (Exception e) {
