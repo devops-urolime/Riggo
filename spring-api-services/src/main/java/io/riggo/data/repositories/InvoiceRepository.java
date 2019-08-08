@@ -11,6 +11,6 @@ import java.util.Optional;
 @Repository
 public interface InvoiceRepository extends CrudRepository<Invoice, Integer> {
 
-    @Query("select a from Invoice i where i.extSysId = :extSysId")
+    @Query("select i from Invoice i where i.extSysId = :extSysId")
     Optional<Invoice> findByExtSysId(@Param("extSysId") String extSysId);
 }
