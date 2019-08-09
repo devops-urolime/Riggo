@@ -179,7 +179,7 @@ public class LoadController {
             if (StringUtils.isNotBlank(location.getExtSysId())) {
                 checkLocationExists = locationService.findByExtSysId(location.getExtSysId());
                 if (checkLocationExists.isPresent() && checkLocationExists.get().getAddressId() != null) {
-                    checkAddressExists = addressService.findById(location.getAddressId());
+                    checkAddressExists = addressService.findById(checkLocationExists.get().getAddressId());
                 }
             }
 

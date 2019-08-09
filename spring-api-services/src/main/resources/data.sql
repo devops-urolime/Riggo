@@ -20,3 +20,6 @@ INSERT INTO load(id, ext_sys_id, carrier, driver, load_status) VALUES (8, 'extSy
 /* load_line_item */
 INSERT INTO load_line_item(id, load_id) VALUES (1, 1);
 INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
+
+
+INSERT INTO invoice(id, ext_sys_id) VALUES (1, 'extSysId1');
