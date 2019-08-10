@@ -21,7 +21,7 @@ public class Invoice implements Serializable {
     private String extSysId;
 
     @Column(name = "load_id")
-    private String loadId;
+    private Integer loadId;
 
     @Column(name = "quote_date")
     private LocalDateTime quoteDate;
@@ -59,6 +59,9 @@ public class Invoice implements Serializable {
     @Column(name = "deleted")
     private Date deleted;
 
+    @Transient
+    private String loadExtSysId;
+
     public Integer getId() {
         return id;
     }
@@ -75,11 +78,11 @@ public class Invoice implements Serializable {
         this.extSysId = extSysId;
     }
 
-    public String getLoadId() {
+    public Integer getLoadId() {
         return loadId;
     }
 
-    public void setLoadId(String loadId) {
+    public void setLoadId(Integer loadId) {
         this.loadId = loadId;
     }
 
@@ -169,5 +172,13 @@ public class Invoice implements Serializable {
 
     public void setDeleted(Date deleted) {
         this.deleted = deleted;
+    }
+
+    public String getLoadExtSysId() {
+        return loadExtSysId;
+    }
+
+    public void setLoadExtSysId(String loadExtSysId) {
+        this.loadExtSysId = loadExtSysId;
     }
 }

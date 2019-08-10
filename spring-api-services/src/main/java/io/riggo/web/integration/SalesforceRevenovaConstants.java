@@ -8,4 +8,5 @@ public interface SalesforceRevenovaConstants {
     String[] POST_PUT_SHIPPER_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
     String[] POST_PUT_LOAD_STOP_LOCATION_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
     String[] POST_PUT_LOAD_STOP_LOCATION_ADDRESS_IGNORE_PROPERTIES = new String[]{"extSysTenantId", "name"};
+    String[] POST_PUT_INVOICE_IGNORE_PROPERTIES = new String[]{"id", "loadId"};
 }
