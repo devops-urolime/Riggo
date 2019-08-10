@@ -102,7 +102,7 @@ public class LoadController {
         persistShipper(shipper, load);
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
-        if (StringUtils.isNotBlank(equipmentType.getExtSysId())) {
+        if (equipmentType != null && StringUtils.isNotBlank(equipmentType.getExtSysId())) {
             Optional<EquipmentType> checkEquipmentTypeExists = equipmentTypeService.findByExtSysId(equipmentType.getExtSysId());
             if (checkEquipmentTypeExists.isPresent()) {
                 EquipmentType checkedEquipmentType = checkEquipmentTypeExists.get();
