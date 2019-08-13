@@ -14,6 +14,12 @@ public class BaseAPIResponse<T> implements Serializable {
 
     private List<T> data = new ArrayList<>();
 
+    public BaseAPIResponse(){}
+
+    public BaseAPIResponse(T data){
+        this.addData(data);
+    }
+
 
     public int getStatus() {
         return status;

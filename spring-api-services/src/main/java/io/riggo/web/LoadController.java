@@ -89,7 +89,7 @@ public class LoadController {
 
 
     @PostMapping(path = "/load", produces = "application/json")
-    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) {
+    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
 
@@ -102,7 +102,7 @@ public class LoadController {
         persistShipper(shipper, load);
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
-        if (StringUtils.isNotBlank(equipmentType.getExtSysId())) {
+        if (equipmentType != null && StringUtils.isNotBlank(equipmentType.getExtSysId())) {
             Optional<EquipmentType> checkEquipmentTypeExists = equipmentTypeService.findByExtSysId(equipmentType.getExtSysId());
             if (checkEquipmentTypeExists.isPresent()) {
                 EquipmentType checkedEquipmentType = checkEquipmentTypeExists.get();
@@ -134,7 +134,7 @@ public class LoadController {
 
 
     @PutMapping(value = "/load", produces = "application/json")
-    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) {
+    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
         Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId());
         if (!loadFromDb.isPresent()) {
@@ -210,7 +210,7 @@ public class LoadController {
 
 
     @PatchMapping(value = "/load", produces = "application/json")
-    public NestedBaseAPIResponse<?> patchLoad(@RequestBody Map<String, Object> dataHashMap) {
+    public NestedBaseAPIResponse<?> patchLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         if(dataHashMap.containsKey("LineItems")) {
             List<LoadLineItem> loadLineItemList = salesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem.resolveLoadLineItemsList(dataHashMap);
 

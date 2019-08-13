@@ -29,7 +29,7 @@ public class LoadPipelineSummaryController {
     @GetMapping(value = Paths.LOAD_PIPELINE_SUMMARY, produces = "application/json")
     @ResponseBody
     //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
-    public BaseAPIResponse<LoadPipelineData> getPipelineSummary() {
+    public BaseAPIResponse<LoadPipelineData> getPipelineSummary() throws ResourceNotFoundException{
         //TODO: obtain siteId from JWT Token.  Make this Resource Context Aware.
         //TODO: Is this how we cache a list?  How do we expire the cache?
         //TODO: Find the user's association to a shipper.

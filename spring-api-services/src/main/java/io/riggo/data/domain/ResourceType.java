@@ -12,7 +12,8 @@ public enum ResourceType
     LOAD( 1, "Load" ),
     SHIPPER(2, "Shipper"),
     LOAD_PIPELINE(3, "Load Pipeline"),
-    LOAD_STOP_SUMMARY(4, "Load Stop Summary");
+    LOAD_STOP_SUMMARY(4, "Load Stop Summary"),
+    INVOICE(4, "Invoice");
 
     private final String displayName;
     private final int colVal;
