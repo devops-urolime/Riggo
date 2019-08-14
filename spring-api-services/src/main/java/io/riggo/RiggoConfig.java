@@ -46,16 +46,18 @@ public class RiggoConfig extends WebSecurityConfigurerAdapter {
                 .forRS256(apiAudience, issuer)
                 .configure(http)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).authenticated()
-                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD_PIPELINE_SUMMARY).hasAuthority("read:loadPipeline")
-                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").authenticated()
-                .antMatchers(HttpMethod.GET, Paths.API_VERSION_LOAD + "/**").hasAuthority("read:load")
-                .antMatchers(HttpMethod.POST, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
-                .antMatchers(HttpMethod.GET, Paths.API_VERSION_MENUS + "/menus").authenticated()
-                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").authenticated()
-                .antMatchers(HttpMethod.PUT, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load")
-                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").authenticated()
-                .antMatchers(HttpMethod.PATCH, Paths.API_VERSION_LOAD + "/**").hasAuthority("write:load");
+
+                .antMatchers(HttpMethod.GET, "/api/v1/load/pipeline/summary").hasAuthority("read:loadPipeline")
+
+                .antMatchers(HttpMethod.POST, "/api/v1/load/invoice", "/api/v1/load/*/invoice").hasAuthority("write:loadInvoice")
+                .antMatchers(HttpMethod.PUT, "/api/v1/load/invoice", "/api/v1/load/*/invoice").hasAuthority("write:loadInvoice")
+                .antMatchers(HttpMethod.GET, "/api/v1/load/*").hasAuthority("read:load")
+
+                .antMatchers(HttpMethod.POST, "/api/v1/load").hasAuthority("write:load")
+                .antMatchers(HttpMethod.PUT, "/api/v1/load").hasAuthority("write:load")
+
+                .antMatchers("/api/v1/**").authenticated()
+
         ;
 
     }
