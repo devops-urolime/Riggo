@@ -66,34 +66,36 @@ public class LoadController {
     @Autowired
     private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
 
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
     @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
-    public LoadResponse getLoadById(@PathVariable("id") Integer id, Authentication authentication) {
+    public LoadResponse getLoadById(@PathVariable("id") Integer id) {
         // TODO: Remove this line in a future is just a demo authentication.
-        logger.debug(authentication.toString());
-        Optional<Load> load = loadService.findById(id);
+        Optional<Load> load = loadService.findById(id, authenticationFacade.getSiteId());
         return new LoadResponse(load.get());
     }
 
 
     @Cacheable(value = "loadsEXT", key = "#p0")//for now
     @GetMapping("/load/external/{extSysId}")
-    public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal) {
+    public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal, Authentication authentication) {
         if (findByExternal) {
-            return loadService.findByExtSysId(extSysId);
+            return loadService.findByExtSysId(extSysId, authenticationFacade.getSiteId());
         }
-        return loadService.findById(Integer.valueOf(extSysId));
+        return loadService.findById(Integer.valueOf(extSysId), authenticationFacade.getSiteId());
     }
 
 
     @PostMapping(path = "/load", produces = "application/json")
-    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
+    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap, Authentication authentication) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
 
-        Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId());
+        Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId(), authenticationFacade.getSiteId());
         if (checkLoadExists.isPresent()) {
             throw new ResourceAlreadyExistsException(ResourceType.LOAD, checkLoadExists.get().getId());
         }
@@ -134,9 +136,9 @@ public class LoadController {
 
 
     @PutMapping(value = "/load", produces = "application/json")
-    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
+    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap, Authentication authentication) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
-        Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId());
+        Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId(), authenticationFacade.getSiteId());
         if (!loadFromDb.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
         }
@@ -219,7 +221,7 @@ public class LoadController {
                 .map(loadLineItem -> {
                     BaseAPIResponse<LoadLineItem> loadLineItemBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadLineItem.getLoadExtSysId())){
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId());
+                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId(), authenticationFacade.getSiteId());
                         if(optionalLoad.isPresent()) {
                             if(StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
                                 Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId());
@@ -250,7 +252,7 @@ public class LoadController {
                 .map(loadStop -> {
                     BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId());
+                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
                         if (optionalLoad.isPresent()) {
                             if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
                                 Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId());

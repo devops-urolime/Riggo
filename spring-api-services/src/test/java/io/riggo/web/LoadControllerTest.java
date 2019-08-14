@@ -69,6 +69,8 @@ public class LoadControllerTest {
     @MockBean
     private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
+    @MockBean
+    private AuthenticationFacade authenticationFacade;
 
     @WithMockUser(value = "spring", authorities = {"read:load"})
     @Test
@@ -76,9 +78,12 @@ public class LoadControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
         load.setName("load");
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(authenticationFacade.getSiteId()).willReturn(100);
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
+
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -95,9 +100,10 @@ public class LoadControllerTest {
     public void getLoadByIdUnauthenticated() throws Exception {
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
         load.setName("load");
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -115,6 +121,7 @@ public class LoadControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
         load.setName("load");
         load.setExtSysId("1");
 
@@ -144,7 +151,7 @@ public class LoadControllerTest {
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
 
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(loadService.save(load)).willReturn(load);
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD)
@@ -165,6 +172,7 @@ public class LoadControllerTest {
         Load load = new Load();
         load.setId(1);
         load.setExtSysId("1");
+        load.setSiteId(100);
         load.setName("load");
 
         Shipper shipper = new Shipper();
@@ -187,13 +195,14 @@ public class LoadControllerTest {
         lastStop.setName("firstStop");
         lastStop.setExtSysId("1");
 
+        given(authenticationFacade.getSiteId()).willReturn(100);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(any(Map.class))).willReturn(load);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class))).willReturn(shipper);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(any(Map.class))).willReturn(equipmentType);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
 
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.of(load));
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.of(load));
         given(loadService.save(load)).willReturn(load);
 
         MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD)
@@ -214,9 +223,10 @@ public class LoadControllerTest {
     public void getLoadByIdRequiresReadLoadPermission() throws Exception {
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
         load.setName("load");
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
 
         mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
