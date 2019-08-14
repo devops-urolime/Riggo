@@ -1,4 +1,4 @@
-# variable "aws_profile" {
+  # variable "aws_profile" {
 #   description = "Region for the VPC"
 #   default = "default"
 # }
@@ -516,7 +516,7 @@ variable "lambda_timeout" {
 }
 
 
-#Variables for Cloudwatch Alarms
+#Variables for Cloudwatch Alarms ECS/CPU
 
 variable "cpu_utilization_high_threshold" {
   description = "The maximum percentage of CPU utilization average."
@@ -531,6 +531,95 @@ variable "cpu_utilization_high_evaluation_periods" {
 variable "cpu_utilization_high_period" {
   description = "Duration in seconds to evaluate for the alarm"
   # default = "120"
+}
+
+
+#Variables for Cloudwatch Alarms ECS/Memory
+
+variable "memory_utilization_high_threshold" {
+  description = "The maximum percentage of Memory utilization average."
+}
+
+variable "memory_utilization_high_evaluation_periods" {
+  description = "Number of periods to evaluate for the alarmn"
+}
+
+variable "memory_utilization_high_period" {
+  description = "Duration in seconds to evaluate for the alarm"
+}
+
+#Variables for Cloudwatch AWS/RDS
+
+variable "rds_cpu_utilization_high_threshold" {
+  description = "The maximum percentage of RDS CPU utilization average."
+}
+
+variable "rds_cpu_utilization_high_evaluation_periods" {
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "rds_cpu_utilization_high_period" {
+  description = "Duration in seconds to evaluate for the alarm"
+}
+
+#Variables for Cloudwatch AWS/RDS-Memory
+variable "rds_freeable_memory_low_evaluation_periods" {
+  
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "rds_freeable_low_memory_period" {
+  description = "Time to evaluate the RDS low memory threshold(In SECS)"
+}
+
+variable "rds_freeable_memory_low_threshold" {
+  type        = "string"
+  description = "Low memory limit in Bytes to alarm in instance"
+}
+
+#Variables for Cloudwatch AWS/RDS-diskspace
+variable "rds_free_low_storage_space_evaluation_periods" {
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "rds_free_low_storage_space_period" {
+  description = "Time to evaluate the RDS low disk space threshold(In SECS)"
+}
+
+variable "rds_free_storage_space_threshold" {
+  type = "string"
+  description = "Disk space value to alarm(in bytes)"
+}
+
+#Variables for AWS/ElastiCache-CPU
+
+variable "redis_cpu_utilization_high_threshold" {
+  
+  description = "The maximum percentage of RDS CPU utilization average."
+}
+
+variable "redis_cpu_utilization_evaluation_period" {
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "redis_cpu_utilization_period" {
+  description = "Duration in seconds to evaluate for the alarm"
+}
+
+
+#Variables for AWS/ElastiCache-Memory
+
+variable "redis_freeable_memory_low_threshold" {
+  type = "string"
+  description = "Lowest freeable memory threshold to alarm"
+}
+
+variable "redis_freeable_memory_evaluation_period" {
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "redis_freeable_memory_period" {
+  description = "Duration in seconds to evaluate for the alarm"
 }
 
 
