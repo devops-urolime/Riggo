@@ -2,8 +2,6 @@ package io.riggo.data.services;
 
 import io.riggo.data.domain.LoadStop;
 import io.riggo.data.domain.LoadStopSummary;
-import io.riggo.data.domain.ResourceType;
-import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.LoadStopRepository;
 import io.riggo.data.repositories.LoadStopSummaryRepository;
@@ -14,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class LoadStopService implements RiggoService {
+public class LoadStopService{
 
     @Autowired
     private LoadStopRepository loadStopRepository;
@@ -33,13 +31,9 @@ public class LoadStopService implements RiggoService {
     }
 
 
-    public LoadStop findById(Long eqId) throws ResourceNotFoundException {
+    public LoadStop findById(Integer eqId){
         try {
-            LoadStop eqt = loadStopRepository.findById(eqId).get();
-            if (eqt == null) {
-                throw new ResourceNotFoundException(ResourceType.SHIPPER, eqId);
-            }
-            return eqt;
+            return loadStopRepository.findById(eqId).get();
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
@@ -55,7 +49,7 @@ public class LoadStopService implements RiggoService {
     }
 
 
-    public Optional<List<LoadStopSummary>> findStopSummaryBySiteIdShipperId(Long siteId, Long shipperId) {
+    public Optional<List<LoadStopSummary>> findStopSummaryBySiteIdShipperId(Integer siteId, Integer shipperId) {
         try {
             return loadStopSummaryRepository.findStopSummaryBySiteIdShipperId(siteId, shipperId);
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,6 +37,7 @@ public class MenuControllerTest {
 
     private static Logger logger = LoggerFactory.getLogger(MenuControllerTest.class);
 
+    @WithMockUser(value = "spring1")
     @Test
     public void getMenusBySiteAndType() throws Exception {
         Menu dashboardMenu = new Menu();
@@ -56,7 +58,7 @@ public class MenuControllerTest {
         logger.error(content);
     }
 
-
+    @WithMockUser(value = "spring1")
     @Test
     public void getMenusBySiteAndTypeReturns400OnBadTypeParam() throws Exception {
         mvc.perform(get(Paths.API + Paths.VERSION + Paths.MENUS + "?type=123")

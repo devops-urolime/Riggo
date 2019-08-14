@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Component
@@ -50,35 +49,127 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
     private String loadUrl;
     private String firstStopExtSysId;
     private String firstStopName;
+    private String firstStopShippingReceivingHours;
+    private Integer firstStopNumber;
+    private Integer firstStopType;
+    private LocalDateTime firstStopExpectedDateTime;
+    private Boolean firstStopAppointmentRequired;
+    private String firstStopAppointmentTime;
+    private Integer firstStopStopStatus;
+    private Integer firstStopCarrierStatus;
+    private String firstStopLocationExtSysId;
+    private String firstStopLocationName;
+    private String firstStopLocationAddress;
+    private String firstStopLocationAddressCity;
+    private String firstStopLocationAddressState;
+    private String firstStopLocationAddressPostalCode;
+
+
     private String lastStopExtSysId;
     private String lastStopName;
+    private String lastStopShippingReceivingHours;
+    private Integer lastStopNumber;
+    private Integer lastStopType;
+    private LocalDateTime lastStopExpectedDateTime;
+    private Boolean lastStopAppointmentRequired;
+    private String lastStopAppointmentTime;
+    private Integer lastStopStopStatus;
+    private Integer lastStopCarrierStatus;
+    private String lastStopLocationExtSysId;
+    private String lastStopLocationName;
+    private String lastStopLocationAddress;
+    private String lastStopLocationAddressCity;
+    private String lastStopLocationAddressState;
+    private String lastStopLocationAddressPostalCode;
+
+
 
     @Autowired
     private SalesforceRevenovaRequestBodyParserHelper salesforceRevenovaRequestBodyParserHelper;
 
+    //For unit tests
+    public void setSalesforceRevenovaRequestBodyParserHelper(SalesforceRevenovaRequestBodyParserHelper salesforceRevenovaRequestBodyParserHelper){
+        this.salesforceRevenovaRequestBodyParserHelper = salesforceRevenovaRequestBodyParserHelper;
+
+    }
 
     @Override
     public LoadStop resolveFirstStop(Map<String, Object> dataHashMap) {
         Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
+        Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
         LoadStop loadStop = new LoadStop();
-        loadStop.setExtSysId(getFirstStopExtSysId(loadDetailsMap));
-        loadStop.setName(getFirstStopName(loadDetailsMap));
-        loadStop.setStopNumber(1);
-        //   loadStop.setShippingReceivingHours(get)
-        loadStop.setType(LoadStopType.PICKUP.getColVal());
+        loadStop.setExtSysId(getFirstStopExtSysId(firstStopMap));
+        loadStop.setName(getFirstStopName(firstStopMap));
+        loadStop.setType(getFirstStopType(firstStopMap));
+        loadStop.setStopNumber(getFirstStopNumber(firstStopMap));
+        loadStop.setShippingReceivingHours(getFirstStopShippingReceivingHours(firstStopMap));
+        loadStop.setExpectedDateTime(getFirstStopExpectedDateTime(firstStopMap));
+        loadStop.setAppointmentRequired(getFirstStopAppointmentRequired(firstStopMap));
+        loadStop.setAppointmentTime(getFirstStopAppointmentTime(firstStopMap));
+        loadStop.setStopStatus(getFirstStopStopStatus(firstStopMap));
+        loadStop.setCarrierStatus(getFirstStopCarrierStatus(firstStopMap));
+
+        Location location = resolveFirstStopLocation(firstStopMap);
+        loadStop.setLocation(location);
         return loadStop;
     }
+
+
+    private Location resolveFirstStopLocation(Map<String, Object> firstStopMap) {
+        Map<String, Object> firstStopLocationMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStopLocation", firstStopMap);
+        Location location = new Location();
+        location.setExtSysId(getFirstStopLocationExtSysId(firstStopLocationMap));
+        location.setName(getFirstStopLocationName(firstStopLocationMap));
+
+        Address address = new Address();
+        address.setAddress1(getFirstStopLocationAddress(firstStopLocationMap));
+        address.setCity(getFirstStopLocationAddressCity(firstStopLocationMap));
+        address.setState(getFirstStopLocationAddressState(firstStopLocationMap));
+        address.setPostalCode(getFirstStopLocationAddressPostalCode(firstStopLocationMap));
+
+        location.setAddress(address);
+        return location;
+    }
+
 
     @Override
     public LoadStop resolveLastStop(Map<String, Object> dataHashMap) {
         Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
+        Map<String, Object> lastStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
         LoadStop loadStop = new LoadStop();
-        loadStop.setExtSysId(getLastStopExtSysId(loadDetailsMap));
-        loadStop.setStopNumber(2);
-        loadStop.setName(getLastStopName(loadDetailsMap));
-        loadStop.setType(LoadStopType.DELIVERY.getColVal());
+        loadStop.setExtSysId(getLastStopExtSysId(lastStopMap));
+        loadStop.setName(getLastStopName(lastStopMap));
+        loadStop.setType(getLastStopType(lastStopMap));
+        loadStop.setStopNumber(getLastStopNumber(lastStopMap));
+        loadStop.setShippingReceivingHours(getLastStopShippingReceivingHours(lastStopMap));
+        loadStop.setExpectedDateTime(getLastStopExpectedDateTime(lastStopMap));
+        loadStop.setAppointmentRequired(getLastStopAppointmentRequired(lastStopMap));
+        loadStop.setAppointmentTime(getLastStopAppointmentTime(lastStopMap));
+        loadStop.setStopStatus(getLastStopStopStatus(lastStopMap));
+        loadStop.setCarrierStatus(getLastStopCarrierStatus(lastStopMap));
+
+        Location location = resolveLastStopLocation(lastStopMap);
+        loadStop.setLocation(location);
         return loadStop;
     }
+
+
+    private Location resolveLastStopLocation(Map<String, Object> firstStopMap) {
+        Map<String, Object> lastStopLocationMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStopLocation", firstStopMap);
+        Location location = new Location();
+        location.setExtSysId(getLastStopLocationExtSysId(lastStopLocationMap));
+        location.setName(getLastStopLocationName(lastStopLocationMap));
+
+        Address address = new Address();
+        address.setAddress1(getLastStopLocationAddress(lastStopLocationMap));
+        address.setCity(getLastStopLocationAddressCity(lastStopLocationMap));
+        address.setState(getLastStopLocationAddressState(lastStopLocationMap));
+        address.setPostalCode(getLastStopLocationAddressPostalCode(lastStopLocationMap));
+
+        location.setAddress(address);
+        return location;
+    }
+
 
     @Override
     public Load resolveLoad(Map<String, Object> dataHashMap) {
@@ -327,42 +418,256 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
     }
 
 
-    private String getFirstStopExtSysId(Map<String, Object> loadDetailsMap) {
+    private String getFirstStopExtSysId(Map<String, Object> firstStopMap) {
         if (firstStopExtSysId == null) {
-            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
             firstStopExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopId", firstStopMap);
         }
         return firstStopExtSysId;
     }
 
-    private String getFirstStopName(Map<String, Object> loadDetailsMap) {
+
+    private String getFirstStopName(Map<String, Object> firstStopMap) {
         if (firstStopName == null) {
-            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
             firstStopName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopName", firstStopMap);
         }
         return firstStopName;
     }
 
 
-    private String getLastStopExtSysId(Map<String, Object> loadDetailsMap) {
+    private Integer getFirstStopNumber(Map<String, Object> firstStopMap) {
+        if (firstStopNumber == null) {
+            firstStopNumber = salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("FirstStoprtms__Number__c", firstStopMap);
+        }
+        return firstStopNumber;
+    }
+
+    private Integer getFirstStopType(Map<String, Object> firstStopMap) {
+        if (firstStopType == null) {
+            LoadStopType loadStopType = getLoadStopType(firstStopMap, "FirstStoprtms__P_D__c");
+            firstStopType =  loadStopType != null ? loadStopType.getColVal() : null;
+        }
+        return firstStopType;
+    }
+
+    private LoadStopType getLoadStopType(Map<String, Object> stopMap, String key){
+        String stopType = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString(key, stopMap);
+        LoadStopType loadStopType = LoadStopType.fromDisplayName(stopType);
+        return loadStopType != null ? loadStopType : null;
+    }
+
+    private String getFirstStopShippingReceivingHours(Map<String, Object> firstStopMap) {
+        if (firstStopShippingReceivingHours == null) {
+            firstStopShippingReceivingHours = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Shipping_Receiving_Hours__c", firstStopMap);
+        }
+        return firstStopShippingReceivingHours;
+    }
+
+    private LocalDateTime getFirstStopExpectedDateTime(Map<String, Object> firstStopMap) {
+        if (firstStopExpectedDateTime == null) {
+            firstStopExpectedDateTime = salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("FirstStoprtms__Expected_Date__c", firstStopMap);
+        }
+        return firstStopExpectedDateTime;
+    }
+
+    private Boolean getFirstStopAppointmentRequired(Map<String, Object> firstStopMap) {
+        if (firstStopAppointmentRequired == null) {
+            firstStopAppointmentRequired = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("FirstStoprtms__Appointment_Required__c", firstStopMap);
+        }
+        return firstStopAppointmentRequired;
+    }
+
+    private String getFirstStopAppointmentTime(Map<String, Object> firstStopMap) {
+        if (firstStopAppointmentTime == null) {
+            firstStopAppointmentTime = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Appointment_Time__c", firstStopMap);
+        }
+        return firstStopAppointmentTime;
+    }
+
+    private Integer getFirstStopStopStatus(Map<String, Object> firstStopMap) {
+        if(firstStopStopStatus == null){
+            LoadStopStatus loadStopStatus = getLoadStopStatus(firstStopMap, "FirstStoprtms__Stop_Status__c");
+            firstStopStopStatus = loadStopStatus != null ? loadStopStatus.getColVal() : null;
+        }
+        return firstStopStopStatus;
+    }
+
+    private Integer getFirstStopCarrierStatus(Map<String, Object> firstStopMap) {
+        if(firstStopCarrierStatus == null){
+            LoadStopStatus loadStopStatus = getLoadStopStatus(firstStopMap, "FirstStoprtms__Carrier_Status2__c");
+            firstStopCarrierStatus = loadStopStatus != null ? loadStopStatus.getColVal() : null;
+        }
+        return firstStopCarrierStatus;
+    }
+
+    private LoadStopStatus getLoadStopStatus(Map<String, Object> firstStopMap, String key) {
+        String firstStopStopStatusValue = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString(key, firstStopMap);
+        if(firstStopStopStatusValue != null) {
+            return LoadStopStatus.fromDisplayName(firstStopStopStatusValue);
+        }
+        return null;
+    }
+
+    private Integer getLastStopType(Map<String, Object> lastStopMap) {
+        if (lastStopType == null) {
+            LoadStopType loadStopType = getLoadStopType(lastStopMap, "LastStoprtms__P_D__c");
+            lastStopType =  loadStopType != null ? loadStopType.getColVal() : null;
+        }
+        return lastStopType;
+    }
+
+    private String getLastStopShippingReceivingHours(Map<String, Object> lastStopMap) {
+        if (lastStopShippingReceivingHours == null) {
+            lastStopShippingReceivingHours = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Shipping_Receiving_Hours__c", lastStopMap);
+        }
+        return lastStopShippingReceivingHours;
+    }
+
+    private LocalDateTime getLastStopExpectedDateTime(Map<String, Object> lastStopMap) {
+        if (lastStopExpectedDateTime == null) {
+            lastStopExpectedDateTime = salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("LastStoprtms__Expected_Date__c", lastStopMap);
+        }
+        return lastStopExpectedDateTime;
+    }
+
+    private Boolean getLastStopAppointmentRequired(Map<String, Object> lastStopMap) {
+        if (lastStopAppointmentRequired == null) {
+            lastStopAppointmentRequired = salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("LastStoprtms__Appointment_Required__c", lastStopMap);
+        }
+        return lastStopAppointmentRequired;
+    }
+
+    private String getLastStopAppointmentTime(Map<String, Object> lastStopMap) {
+        if (lastStopAppointmentTime == null) {
+            lastStopAppointmentTime = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Appointment_Time__c", lastStopMap);
+        }
+        return lastStopAppointmentTime;
+    }
+
+    private Integer getLastStopStopStatus(Map<String, Object> lastStopMap) {
+        if(lastStopStopStatus == null){
+            LoadStopStatus loadStopStatus = getLoadStopStatus(lastStopMap, "LastStoprtms__Stop_Status__c");
+            lastStopStopStatus = loadStopStatus != null ? loadStopStatus.getColVal() : null;
+        }
+        return lastStopStopStatus;
+    }
+
+    private Integer getLastStopCarrierStatus(Map<String, Object> lastStopMap) {
+        if(lastStopCarrierStatus == null){
+            LoadStopStatus loadStopStatus = getLoadStopStatus(lastStopMap, "LastStoprtms__Carrier_Status2__c");
+            lastStopCarrierStatus = loadStopStatus != null ? loadStopStatus.getColVal() : null;
+        }
+        return lastStopCarrierStatus;
+    }
+
+    private Integer getLastStopNumber(Map<String, Object> lastStopMap) {
+        if (lastStopNumber == null) {
+            lastStopNumber = salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("LastStoprtms__Number__c", lastStopMap);
+        }
+        return lastStopNumber;
+    }
+
+    private String getLastStopLocationExtSysId(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationExtSysId == null) {
+            lastStopLocationExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationId", lastStopLocationMap);
+        }
+        return lastStopLocationExtSysId;
+    }
+
+    private String getLastStopLocationName(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationName == null) {
+            lastStopLocationName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationName", lastStopLocationMap);
+        }
+        return lastStopLocationName;
+    }
+
+    private String getLastStopLocationAddress(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationAddress == null) {
+            lastStopLocationAddress = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingStreet", lastStopLocationMap);
+        }
+        return lastStopLocationAddress;
+    }
+
+    private String getLastStopLocationAddressCity(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationAddressCity == null) {
+            lastStopLocationAddressCity = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingCity", lastStopLocationMap);
+        }
+        return lastStopLocationAddressCity;
+    }
+
+    private String getLastStopLocationAddressState(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationAddressState == null) {
+            lastStopLocationAddressState = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingState", lastStopLocationMap);
+        }
+        return lastStopLocationAddressState;
+    }
+
+    private String getLastStopLocationAddressPostalCode(Map<String, Object> lastStopLocationMap) {
+        if (lastStopLocationAddressPostalCode == null) {
+            lastStopLocationAddressPostalCode = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingPostalCode", lastStopLocationMap);
+        }
+        return lastStopLocationAddressPostalCode;
+    }
+
+    private String getFirstStopLocationExtSysId(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationExtSysId == null) {
+            firstStopLocationExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationId", firstStopLocationMap);
+        }
+        return firstStopLocationExtSysId;
+    }
+
+    private String getFirstStopLocationName(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationName == null) {
+            firstStopLocationName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationName", firstStopLocationMap);
+        }
+        return firstStopLocationName;
+    }
+
+    private String getFirstStopLocationAddress(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationAddress == null) {
+            firstStopLocationAddress = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingStreet", firstStopLocationMap);
+        }
+        return firstStopLocationAddress;
+    }
+
+    private String getFirstStopLocationAddressCity(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationAddressCity == null) {
+            firstStopLocationAddressCity = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingCity", firstStopLocationMap);
+        }
+        return firstStopLocationAddressCity;
+    }
+
+    private String getFirstStopLocationAddressState(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationAddressState == null) {
+            firstStopLocationAddressState = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingState", firstStopLocationMap);
+        }
+        return firstStopLocationAddressState;
+    }
+
+    private String getFirstStopLocationAddressPostalCode(Map<String, Object> firstStopLocationMap) {
+        if (firstStopLocationAddressPostalCode == null) {
+            firstStopLocationAddressPostalCode = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingPostalCode", firstStopLocationMap);
+        }
+        return firstStopLocationAddressPostalCode;
+    }
+
+
+    private String getLastStopExtSysId(Map<String, Object> lastStopMap) {
         if (lastStopExtSysId == null) {
-            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
-            lastStopExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopId", firstStopMap);
+            lastStopExtSysId = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopId", lastStopMap);
         }
         return lastStopExtSysId;
     }
 
-    private String getLastStopName(Map<String, Object> loadDetailsMap) {
+    private String getLastStopName(Map<String, Object> lastStopMap) {
         if (lastStopName == null) {
-            Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
-            lastStopName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopName", firstStopMap);
+            lastStopName = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopName", lastStopMap);
         }
         return lastStopName;
     }
 
 
     private Map<String, Object> getLoadDetailsMap(Map<String, Object> dataHashMap) {
-        HashMap<String, Object> loadDetailsMap = (LinkedHashMap<String, Object>) dataHashMap.get("LoadDetails");
+        Map<String, Object> loadDetailsMap = (Map<String, Object>) dataHashMap.get("LoadDetails");
         if (loadDetailsMap != null) {
             return loadDetailsMap;
         }

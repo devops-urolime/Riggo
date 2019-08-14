@@ -29,12 +29,12 @@ public class LoadStopSummaryController {
     @GetMapping(value = Paths.LOAD_STOP_SUMMARY, produces = "application/json")
     @ResponseBody
     //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
-    public BaseAPIResponse<LoadStopSummaryData> getPipelineSummary() {
+    public BaseAPIResponse<LoadStopSummaryData> getPipelineSummary() throws ResourceNotFoundException{
         //TODO: obtain siteId from JWT Token.  Make this Resource Context Aware.
         //TODO: Is this how we cache a list?  How do we expire the cache?
         //TODO: Find the user's association to a shipper.
 
-        Optional<List<LoadStopSummary>> loadStopSummaryList = loadStopService.findStopSummaryBySiteIdShipperId(100l, 1l);
+        Optional<List<LoadStopSummary>> loadStopSummaryList = loadStopService.findStopSummaryBySiteIdShipperId(100, 1);
         if (loadStopSummaryList.isPresent()) {
             List<LoadStopSummaryData> loadStopSummaryDataList = new ArrayList<>();
             for (LoadStopType loadStopType : LoadStopType.values()) {

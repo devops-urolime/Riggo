@@ -1,6 +1,9 @@
 package io.riggo.web;
 
+import io.riggo.data.domain.EquipmentType;
 import io.riggo.data.domain.Load;
+import io.riggo.data.domain.LoadStop;
+import io.riggo.data.domain.Shipper;
 import io.riggo.data.services.*;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
@@ -17,7 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Map;
+
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -49,6 +55,12 @@ public class LoadControllerTest {
     private LoadLineItemService loadLineItemService;
 
     @MockBean
+    private LocationService locationService;
+
+    @MockBean
+    private AddressService addressService;
+
+    @MockBean
     private SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserPostPutLoad;
 
     @MockBean
@@ -63,10 +75,10 @@ public class LoadControllerTest {
     public void getLoadById() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -82,10 +94,10 @@ public class LoadControllerTest {
     @Test
     public void getLoadByIdUnauthenticated() throws Exception {
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))
@@ -99,17 +111,47 @@ public class LoadControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:load"})
     @Test
-    public void postLoadDOESNTREALLYTESTANYTHING() throws Exception {
+    public void postLoadHappyPath() throws Exception {
 
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
+        load.setExtSysId("1");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        Shipper shipper = new Shipper();
+        shipper.setId(1);
+        shipper.setName("shipper");
+        shipper.setExtSysId("1");
+
+        EquipmentType equipmentType = new EquipmentType();
+        equipmentType.setId(1);
+        equipmentType.setName("equipmentType");
+        equipmentType.setExtSysId("1");
+
+        LoadStop firstStop = new LoadStop();
+        firstStop.setId(1);
+        firstStop.setName("firstStop");
+        firstStop.setExtSysId("1");
+
+        LoadStop lastStop = new LoadStop();
+        lastStop.setId(1);
+        lastStop.setName("firstStop");
+        lastStop.setExtSysId("1");
+
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(any(Map.class))).willReturn(load);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class))).willReturn(shipper);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(any(Map.class))).willReturn(equipmentType);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
+
+        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.save(load)).willReturn(load);
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id", is(1)))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
@@ -119,59 +161,46 @@ public class LoadControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:load"})
     @Test
-    public void putLoadDOESNTREALLYTESTANYTHING() throws Exception {
-
+    public void putLoad() throws Exception {
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
+        load.setExtSysId("1");
         load.setName("load");
 
-        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
+        Shipper shipper = new Shipper();
+        shipper.setId(1);
+        shipper.setName("shipper");
+        shipper.setExtSysId("1");
+
+        EquipmentType equipmentType = new EquipmentType();
+        equipmentType.setId(1);
+        equipmentType.setName("equipmentType");
+        equipmentType.setExtSysId("1");
+
+        LoadStop firstStop = new LoadStop();
+        firstStop.setId(1);
+        firstStop.setName("firstStop");
+        firstStop.setExtSysId("1");
+
+        LoadStop lastStop = new LoadStop();
+        lastStop.setId(1);
+        lastStop.setName("firstStop");
+        lastStop.setExtSysId("1");
+
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(any(Map.class))).willReturn(load);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class))).willReturn(shipper);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(any(Map.class))).willReturn(equipmentType);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
+
+        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.of(load));
+        given(loadService.save(load)).willReturn(load);
 
         MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
-                .andReturn();
-
-
-        String content = result.getResponse().getContentAsString();
-        logger.debug(content);
-    }
-
-
-    @WithMockUser(value = "spring", authorities = {"write:load"})
-    @Test
-    public void patchLoadForLoadLineItemDOESNTREALLYTESTANYTHING() throws Exception {
-
-        Load load = new Load();
-        load.setId(1l);
-        load.setName("load");
-
-        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
-
-        MvcResult result = mvc.perform(patch(Paths.API_VERSION_LOAD)
-                .content("NEED TO DEFINE")
-                .contentType(APPLICATION_JSON))
-                .andReturn();
-
-
-        String content = result.getResponse().getContentAsString();
-        logger.debug(content);
-    }
-
-
-    @WithMockUser(value = "spring", authorities = {"write:load"})
-    @Test
-    public void patchLoadForLoadStopDOESNTREALLYTESTANYTHING() throws Exception {
-
-        Load load = new Load();
-        load.setId(1l);
-        load.setName("load");
-
-        given(loadService.findByExtSysId("a0jg000000ExRFcAAN")).willReturn(java.util.Optional.of(load));
-
-        MvcResult result = mvc.perform(patch(Paths.API_VERSION_LOAD)
-                .content("NEED TO DEFINE")
-                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data[0].id", is(1)))
                 .andReturn();
 
 
@@ -184,10 +213,10 @@ public class LoadControllerTest {
     @Test
     public void getLoadByIdRequiresReadLoadPermission() throws Exception {
         Load load = new Load();
-        load.setId(1l);
+        load.setId(1);
         load.setName("load");
 
-        given(loadService.findById(1l)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
 
         mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
                 .contentType(APPLICATION_JSON))

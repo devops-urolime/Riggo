@@ -7,60 +7,39 @@ This class contains the methods to call HTTP Rest web service and error handler 
 
 //========================
 /*
-	Class Name  : LineItemAPICalloutCtrl
-	Note		: We are using this class for the calling webserive api to post Stop object to market place using rest api.
+Class Name  : StopAPICalloutCtrl
+Note		: We are using this class for the calling webserive api to post Stop object to market place using rest api.
 */
 public class StopAPICalloutCtrl {
     /*********************************************************************
-    Purpose     : To initiate the the HTTP request 
-    Parameters  : Set of Stop Id
-                  triggerAction  - To identify the event of the load object either Insert update or Delete
-    **********************************************************************/
-     
+Purpose     : To initiate the the HTTP request 
+Parameters  : Set of Stop Id
+triggerAction  - To identify the event for the Stop object either Insert update or Delete
+**********************************************************************/
+    
     @future(callout=true)
     public static void makePostCallout(Set<Id> stopSet ,String triggerAction) { 
-        String methodDefine = 'PATCH';
-        /*string marketplaceExId = '';
+        String methodDefine = 'POST';
         if(triggerAction == 'Update'){
             methodDefine = 'PUT';
-        } */
-        
+        }
         responeClass resResult=null;
         ServiceProxy prox = new ServiceProxy(); 
         StopPayload palyloadCls = new StopPayload();
         // Get the Array Stop payload by json formate.
         string LoadPayloadBody=palyloadCls.getSavePayload(stopSet,triggerAction); 
         system.debug('--STOPS payload---'+LoadPayloadBody);
-        
-        
-        
-        // Calling webserive to push the load object 
-        // Passing parameters like end pint url, Method Name and Load payload
-          HttpResponse httpResponse=null;
-         HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops');
+        HttpResponse httpResponse=null;
+        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops');
         String response =  httpResponse.getBody();
         system.debug('--response'+response);
-         
-        // string c = (responeClass)JSON.deserializeStrict(response);
-        //resResult = (responeClass)JSON.deserialize(response, StopAPICalloutCtrl.responeClass.class);
-       // system.debug('---resResult----'+resResult.id);
-        //system.debug('---resResult----'+resResult.message);
-        //string StatusCode = string.valueof(httpResponse.getStatusCode());
         
         // if there is any exception we are creating exception record in Error Log object
         if(response!= null){
-            if (response.contains('201')) {
-                 List<Error_Log__c> errorlogList  = new List<Error_Log__c>();
-                    for(Id stopId : stopSet){
-                        Error_Log__c errorlog = new Error_Log__c();
-                        errorlog.Error__c = response;
-                        //errorlog.Error_Code__c = StatusCode;
-                        errorlog.Description__c = response;
-                        errorlog.Stop__c = stopId;
-                        errorlogList.add(errorlog);
-                    }
-                    insert errorlogList; 
-            } 
+            string StatusCode = string.valueof(httpResponse.getStatusCode());
+            if(response!= null && StatusCode != '200'){
+                APIExceptionHandler.erroLogCreation(null,httpResponse);
+            }
         }
     }    
     public class responeClass{

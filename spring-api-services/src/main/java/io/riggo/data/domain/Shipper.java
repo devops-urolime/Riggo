@@ -15,7 +15,7 @@ public class Shipper implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @JsonAlias({"CustomerId"})
     @Column(name = "ext_sys_id")
@@ -42,11 +42,11 @@ public class Shipper implements Serializable {
     private java.util.Date deleted;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

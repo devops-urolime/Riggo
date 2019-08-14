@@ -1,42 +1,41 @@
 package io.riggo.data.services;
 
-import io.riggo.data.domain.Shipper;
-import io.riggo.data.exception.ResourceNotFoundException;
+import io.riggo.data.domain.Invoice;
 import io.riggo.data.exception.RiggoDataAccessException;
-import io.riggo.data.repositories.ShipperRepository;
+import io.riggo.data.repositories.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class ShipperService {
+public class InvoiceService {
 
     @Autowired
-    private ShipperRepository shipperRepository;
+    private InvoiceRepository invoiceRepository;
 
 
-    public Shipper save(Shipper shipper) {
+    public Invoice save(Invoice invoice) {
         try {
-            return shipperRepository.save(shipper);
+            return invoiceRepository.save(invoice);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Optional<Shipper> findById(Integer shipperId) throws ResourceNotFoundException {
+    public Optional<Invoice> findById(Integer id) {
         try {
-            return shipperRepository.findById(shipperId);
+            return invoiceRepository.findById(id);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Optional<Shipper> findByExtSysId(String extSysId) {
+    public Optional<Invoice> findByExtSysId(String extSysId) {
         try {
-            return shipperRepository.findByExtSysId(extSysId);
+            return invoiceRepository.findByExtSysId(extSysId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
