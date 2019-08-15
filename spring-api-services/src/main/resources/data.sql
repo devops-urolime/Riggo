@@ -22,4 +22,25 @@ INSERT INTO load_line_item(id, load_id) VALUES (1, 1);
 INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
 
 
+/* invoice */
 INSERT INTO invoice(id, ext_sys_id) VALUES (1, 'extSysId1');
+
+
+/* shipper */
+INSERT INTO shipper(id, ext_sys_id, site_id) VALUES (1, 'extSysId1', 100);
+
+
+/* user */
+INSERT INTO users(id, email) VALUES (1, 'email@riggo.io');
+
+
+/* site_user */
+INSERT INTO site_user (id, site_id, user_id) VALUES (1, 100, 1);
+
+
+/* shipper_user */
+INSERT INTO shipper_user (id, shipper_id, user_id) VALUES (1, 1, 1);
+
+/* site */
+INSERT INTO site(id) VALUES (100);
+

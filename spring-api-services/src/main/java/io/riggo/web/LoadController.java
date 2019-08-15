@@ -91,7 +91,7 @@ public class LoadController {
 
 
     @PostMapping(path = "/load", produces = "application/json")
-    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap, Authentication authentication) throws ResourceAlreadyExistsException {
+    public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
 
@@ -101,7 +101,7 @@ public class LoadController {
         }
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
-        persistShipper(shipper, load);
+        persistShipper(shipper, load, authenticationFacade.getSiteId());
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
         if (equipmentType != null && StringUtils.isNotBlank(equipmentType.getExtSysId())) {
@@ -136,7 +136,7 @@ public class LoadController {
 
 
     @PutMapping(value = "/load", produces = "application/json")
-    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap, Authentication authentication) throws ResourceNotFoundException{
+    public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
         Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId(), authenticationFacade.getSiteId());
         if (!loadFromDb.isPresent()) {
@@ -144,7 +144,7 @@ public class LoadController {
         }
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
-        persistShipper(shipper, resolvedLoad);
+        persistShipper(shipper, resolvedLoad, authenticationFacade.getSiteId());
 
         //
         Load existingLoad = loadFromDb.get();
@@ -160,9 +160,9 @@ public class LoadController {
         return loadAPIResponse;
     }
 
-    private void persistShipper(Shipper shipper, Load load) {
+    private void persistShipper(Shipper shipper, Load load, Integer siteId) {
         if (StringUtils.isNotBlank(shipper.getExtSysId())) {
-            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId());
+            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId(), siteId);
             if (checkShipperExists.isPresent()) {
                 BeanUtils.copyProperties(checkShipperExists.get(), shipper, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
             }

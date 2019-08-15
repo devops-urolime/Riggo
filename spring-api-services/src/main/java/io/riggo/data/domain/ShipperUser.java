@@ -13,13 +13,13 @@ public class ShipperUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "shipper_id")
-    private Long shipperId;
+    private Integer shipperId;
 
-    @Column(name = "shipper_user")
-    private String shipperUser;
+    @Column(name = "user_id")
+    private Integer userId;
 
     @Transient
     @Column(name = "created_at")
@@ -33,28 +33,28 @@ public class ShipperUser implements Serializable {
     @Column(name = "deleted")
     private java.util.Date deleted;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getShipperId() {
+    public Integer getShipperId() {
         return shipperId;
     }
 
-    public void setShipperId(Long shipperId) {
+    public void setShipperId(Integer shipperId) {
         this.shipperId = shipperId;
     }
 
-    public String getShipperUser() {
-        return shipperUser;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setShipperUser(String shipperUser) {
-        this.shipperUser = shipperUser;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Date getCreatedAt() {

@@ -11,9 +11,9 @@ import java.util.Optional;
 @Repository
 public interface ShipperRepository extends CrudRepository<Shipper, Integer> {
 
-    @Override
-    Iterable<Shipper> findAll();
+    @Query("SELECT s FROM Shipper s WHERE s.extSysId = :extSysId AND s.siteId = :siteId")
+    Optional<Shipper> findByExtSysId(@Param("extSysId") String extSysId, @Param("siteId") Integer siteId);
 
-    @Query("select s from Shipper s where s.extSysId = :extSysId")
-    Optional<Shipper> findByExtSysId(@Param("extSysId") String extSysId);
+    @Query("SELECT s FROM Shipper s JOIN ShipperUser su ON su.shipperId = s.id JOIN User u ON u.id = su.userId JOIN SiteUser siteUser ON siteUser.userId = u.id WHERE u.email = :email AND siteUser.siteId = :siteId")
+    Optional<Shipper> findByEmailAndSiteId(@Param("email") String email, @Param("siteId") Integer siteId);
 }
