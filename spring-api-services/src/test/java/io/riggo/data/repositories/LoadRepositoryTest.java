@@ -26,7 +26,7 @@ public class LoadRepositoryTest {
         String extSysId = "extSysId1";
 
         //when
-        Optional<Load> load = loadRepository.findByExtSysId(extSysId);
+        Optional<Load> load = loadRepository.findByExtSysId(extSysId, 100);
 
         //then menusBySiteAndType isPresent
         assertTrue( load.isPresent());

@@ -11,6 +11,9 @@ import java.util.Optional;
 @Repository
 public interface LoadRepository extends CrudRepository<Load, Integer> {
 
-    @Query("select l from Load l where l.extSysId = :extSysId")
-    Optional<Load> findByExtSysId(@Param("extSysId") String extSysId);
+    @Query("select l from Load l where l.extSysId = :extSysId and l.siteId = :siteId")
+    Optional<Load> findByExtSysId(@Param("extSysId") String extSysId, @Param("siteId") Integer siteId);
+
+    @Query("select l from Load l where l.id = :id and l.siteId = :siteId")
+    Optional<Load> findById(@Param("id") Integer id, @Param("siteId") Integer siteId);
 }

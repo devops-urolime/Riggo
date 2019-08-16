@@ -36,6 +36,9 @@ public class InvoiceController {
     @Autowired
     private SalesforceRevenovaRequestBodyParserPostPutInvoice salesforceRevenovaRequestBodyParserPostPutInvoice;
 
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
 
     @PostMapping(path = "/load/invoice", produces = "application/json")
     public BaseAPIResponse<Invoice> postInvoice( @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, ResourceAlreadyExistsException{
@@ -45,7 +48,7 @@ public class InvoiceController {
 
     @PostMapping(path = "/load/{loadId}/invoice", produces = "application/json")
     public BaseAPIResponse<Invoice> postInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, ResourceAlreadyExistsException{
-        validateLoad(loadId);
+        validateLoad(loadId, authenticationFacade.getSiteId());
         return postInvoice(dataHashMap);  //will validate load twice
     }
 
@@ -54,7 +57,7 @@ public class InvoiceController {
         Invoice invoice = salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(dataHashMap);
         validateInvoiceDoesNotAlreadyExist(invoice.getExtSysId());
         if(validateLoad) {
-            validateLoadExists(invoice);
+            validateLoadExists(invoice, authenticationFacade.getSiteId());
         }
         invoiceService.save(invoice);
 
@@ -70,7 +73,7 @@ public class InvoiceController {
 
     @PutMapping(value = "/load/{loadId}/invoice", produces = "application/json")
     public BaseAPIResponse<Invoice> putInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap)  throws ResourceNotFoundException{
-        validateLoad(loadId);
+        validateLoad(loadId, authenticationFacade.getSiteId());
         return processPutInvoice(dataHashMap, false);
     }
 
@@ -80,7 +83,7 @@ public class InvoiceController {
         Invoice invoiceFromDb = validateInvoiceExists(invoice.getExtSysId());
 
         if(validateLoad) {
-            validateLoadExists(invoice);
+            validateLoadExists(invoice, authenticationFacade.getSiteId());
         }
 
         BeanUtils.copyProperties(invoice, invoiceFromDb, SalesforceRevenovaConstants.POST_PUT_INVOICE_IGNORE_PROPERTIES);
@@ -91,16 +94,16 @@ public class InvoiceController {
 
 
 
-    private void validateLoad(Integer loadId) throws ResourceNotFoundException{
-        Optional<Load> checkLoadExists = loadService.findById(loadId);
+    private void validateLoad(Integer loadId, Integer siteId) throws ResourceNotFoundException{
+        Optional<Load> checkLoadExists = loadService.findById(loadId, siteId);
         if (!checkLoadExists.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, loadId);
         }
     }
 
-    private void validateLoadExists(Invoice invoice) throws ResourceNotFoundException{
+    private void validateLoadExists(Invoice invoice, Integer siteId) throws ResourceNotFoundException{
         if(StringUtils.isNotBlank(invoice.getLoadExtSysId())) {
-            Optional<Load> load = loadService.findByExtSysId(invoice.getLoadExtSysId());
+            Optional<Load> load = loadService.findByExtSysId(invoice.getLoadExtSysId(), siteId);
             if(load.isPresent() && load.get().getId() != null) {
                 invoice.setLoadId(load.get().getId());
             }else{

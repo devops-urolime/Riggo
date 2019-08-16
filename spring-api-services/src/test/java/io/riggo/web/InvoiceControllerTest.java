@@ -45,6 +45,9 @@ public class InvoiceControllerTest {
     @MockBean
     private SalesforceRevenovaRequestBodyParserPostPutInvoice salesforceRevenovaRequestBodyParserPostPutInvoice;
 
+    @MockBean
+    private AuthenticationFacade authenticationFacade;
+
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
     public void postInvoiceHappyPath() throws Exception {
@@ -125,9 +128,11 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
+
 
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/invoice")
@@ -151,9 +156,11 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
 
+        given(authenticationFacade.getSiteId()).willReturn(100);
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
@@ -202,8 +209,10 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(authenticationFacade.getSiteId()).willReturn(100);
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
@@ -230,9 +239,10 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
 
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
         MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/1/invoice")
@@ -325,9 +335,10 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
 
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
         MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
@@ -350,9 +361,11 @@ public class InvoiceControllerTest {
         invoice.setLoadId(1);
 
         Load load = new Load();
+        load.setSiteId(100);
         load.setId(1);
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(authenticationFacade.getSiteId()).willReturn(100);
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
@@ -398,11 +411,11 @@ public class InvoiceControllerTest {
         invoice.setExtSysId("1");
         invoice.setLoadId(1);
 
-
         Load load = new Load();
+        load.setSiteId(100);
         load.setId(1);
 
-        given(loadService.findById(1)).willReturn(java.util.Optional.of(load));
+        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
@@ -429,9 +442,10 @@ public class InvoiceControllerTest {
 
         Load load = new Load();
         load.setId(1);
+        load.setSiteId(100);
 
         given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(loadService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoice);
 
         MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/1/invoice")

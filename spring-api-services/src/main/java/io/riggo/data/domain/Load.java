@@ -21,6 +21,7 @@ public class Load implements Serializable {
     @Column(name = "expected_ship_date", columnDefinition = "DATE")
     private LocalDate expectedShipDate;
 
+    private Integer siteId;
     private Integer carrier;
     private String transportMode;
     private BigDecimal postedRate;
@@ -91,6 +92,16 @@ public class Load implements Serializable {
 
     public void setExpectedShipDate(LocalDate expectedShipDate) {
         this.expectedShipDate = expectedShipDate;
+    }
+
+
+    @Basic
+    @Column(name = "site_id")
+    public Integer getSiteId() {
+        return siteId;
+    }
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
     }
 
 
