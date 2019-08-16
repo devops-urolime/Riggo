@@ -148,4 +148,4 @@ alb_unhealthy_host_count_threshold = "1"
 
 #variables for SNS
 
-alarms_email = ["builds@riggo.io","muhasin.mohammed@urolime.com"]
+alarms_email = ["alerts@riggo.io","muhasin.mohammed@urolime.com"]
