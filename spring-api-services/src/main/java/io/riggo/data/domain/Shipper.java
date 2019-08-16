@@ -21,13 +21,11 @@ public class Shipper implements Serializable {
     @Column(name = "ext_sys_id")
     private String extSysId;
 
-    @Column(name = "ext_sys_tenant_id")
-    private String extSysTenantId;
-
-    @JsonAlias({"CustomerName","BillToName"})
     @Column(name = "name")
     private String name;
 
+    @Column(name = "site_id")
+    private Integer siteId;
 
     @Transient
     @Column(name = "created_at")
@@ -58,20 +56,20 @@ public class Shipper implements Serializable {
         this.extSysId = extSysId;
     }
 
-    public String getExtSysTenantId() {
-        return extSysTenantId;
-    }
-
-    public void setExtSysTenantId(String extSysTenantId) {
-        this.extSysTenantId = extSysTenantId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
     }
 
     public Date getCreatedAt() {

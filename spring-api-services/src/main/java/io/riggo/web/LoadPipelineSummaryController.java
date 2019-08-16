@@ -26,13 +26,18 @@ public class LoadPipelineSummaryController {
     @Autowired
     private LoadPipelineService loadPipelineService;
 
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
     @GetMapping(value = Paths.LOAD_PIPELINE_SUMMARY, produces = "application/json")
     @ResponseBody
     //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
     public BaseAPIResponse<LoadPipelineData> getPipelineSummary() throws ResourceNotFoundException{
-        //TODO: obtain siteId from JWT Token.  Make this Resource Context Aware.
-        //TODO: Is this how we cache a list?  How do we expire the cache?
-        //TODO: Find the user's association to a shipper.
+
+        //TODO: Determine if you are a superadmin
+        //TODO: Determine if you are a related to a shipper.
+        //TODO: If you are not, send a 404.
+
 
         Optional<List<LoadPipeline>> loadPipelineList = loadPipelineService.findPipelineSummaryBySiteIdShipperId(100l, 1l);
         if (loadPipelineList.isPresent()) {
