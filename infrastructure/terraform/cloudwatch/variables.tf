@@ -111,5 +111,36 @@ variable "redis_freeable_memory_low_threshold" {
 }
 
 
+variable "alb_unhealthy_host_evaluation_period" {
+  
+}
+
+variable "alb_unhealthy_host_period" {
+  
+}
+
+variable "alb_unhealthy_host_count_threshold" {
+  
+}
+
+variable "alb_suffix" {
+  
+}
+
+variable "targetgroup_prod_suffix" {
+  
+}
+
+variable "targetgroup_test_suffix" {
+  
+}
+
+
+variable "alarms_email" {
+  
+}
+
+
+
 
 

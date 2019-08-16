@@ -139,3 +139,13 @@ redis_cpu_utilization_period = "120"
 redis_freeable_memory_evaluation_period = "1"
 redis_freeable_memory_period = "120"
 redis_freeable_memory_low_threshold = 256000000
+
+ #Variables for AWS/ApplicationELB
+
+alb_unhealthy_host_evaluation_period = "1"
+alb_unhealthy_host_period = "60"
+alb_unhealthy_host_count_threshold = "1"
+
+#variables for SNS
+
+alarms_email = ["builds@riggo.io","muhasin.mohammed@urolime.com"]

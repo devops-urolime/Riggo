@@ -623,3 +623,23 @@ variable "redis_freeable_memory_period" {
 }
 
 
+#Variables for AWS/ApplicationELB-Unhealthyhost
+
+variable "alb_unhealthy_host_evaluation_period" {
+  description = "Number of periods to evaluate for the alarm"
+}
+
+variable "alb_unhealthy_host_period" {
+  description = "Duration in seconds to evaluate and trigger alarm"
+}
+
+variable "alb_unhealthy_host_count_threshold" {
+  description = "Unhealthy host count in ALB to get alarm"
+}
+
+#variables for SNS
+
+variable "alarms_email" {
+  description = "The email address to receive the notification"
+  type = list
+}

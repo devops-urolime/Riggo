@@ -190,6 +190,13 @@ module "CloudWatch" {
   redis_freeable_memory_evaluation_period = "${var.redis_freeable_memory_evaluation_period}"
   redis_freeable_memory_period = "${var.redis_freeable_memory_period}"
   redis_freeable_memory_low_threshold = "${var.redis_freeable_memory_low_threshold}"
+  alb_unhealthy_host_evaluation_period = "${var.alb_unhealthy_host_evaluation_period}"
+  alb_unhealthy_host_period = "${var.alb_unhealthy_host_period}"
+  alb_unhealthy_host_count_threshold = "${var.alb_unhealthy_host_count_threshold}"
+  alb_suffix = "${module.ecs-cluster.ApplicationELB_Id}"
+  targetgroup_prod_suffix = "${module.ecs-cluster.production_targetgroup_suffix}"
+  targetgroup_test_suffix =  "${module.ecs-cluster.testing_targetgroup_suffix}"
+  alarms_email = ["${var.alarms_email}"]
 }
 
 module "Route53" {
