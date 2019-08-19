@@ -640,6 +640,12 @@ variable "alb_unhealthy_host_count_threshold" {
 #variables for SNS
 
 variable "alarms_email" {
-  type = list
+  type = "list"
   description = "The email address to receive the notification"
+}
+
+variable "protocol" {
+  default     = "email"
+  description = "SNS Protocol to use. email or email-json"
+  type        = "string"
 }

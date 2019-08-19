@@ -32,10 +32,10 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu_utilization_alarm" {
   #   CacheClusterId = "${var.elasticache_cluster_name_id}"
   #   CacheNodeId = "${var.elasticache_node_id}"
   # }
-  alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  ok_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  insufficient_data_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  #alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  #alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis_freeable_memory_alarm" {
@@ -55,8 +55,8 @@ resource "aws_cloudwatch_metric_alarm" "redis_freeable_memory_alarm" {
   #   CacheClusterId = "${var.elasticache_cluster_name_id}"
   #   CacheNodeId = "${var.elasticache_node_id}"
   # }
-  alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  ok_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  insufficient_data_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  #alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  #alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 }
