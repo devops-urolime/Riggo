@@ -2,6 +2,7 @@ package io.riggo.web;
 
 import io.riggo.data.domain.LoadPipeline;
 import io.riggo.data.services.LoadPipelineService;
+import io.riggo.data.services.ShipperService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,7 +15,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,37 +36,58 @@ public class LoadPipelineSummaryControllerTest {
     @MockBean
     private LoadPipelineService loadPipelineService;
 
+    @MockBean
+    private ShipperService shipperService;
+
+    @MockBean
+    private AuthenticationFacade authenticationFacade;
+
+
     private static Logger logger = LoggerFactory.getLogger(LoadPipelineSummaryControllerTest.class);
 
     @WithMockUser(value = "spring", authorities = {"read:loadPipeline"})
     @Test
-    public void getPipelineSummary() throws Exception {
-        //TODO: THIS TEST DOES NOTHING
+    public void getPipelineSummaryHappyPathSuperAdmin() throws Exception {
+
         LoadPipeline loadPipeline = new LoadPipeline();
-//        loadPipeline.setPending(20);
+        loadPipeline.setId(1);
+        loadPipeline.setCount(1);
 
-        //   given(loadPipelineService.findPipelineSummaryBySiteIdShipperId(100l, 1l)).willReturn(java.util.Optional.of(loadPipeline));
+        List<LoadPipeline> loadPipelines = new ArrayList<>();
+        loadPipelines.add(loadPipeline);
 
-//        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
-//                .contentType(APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.data", hasSize(1)))
-//  //              .andExpect(jsonPath("$.data[0].pending", is(loadPipeline.getPending())))
-//                .andReturn();
-//        String content = result.getResponse().getContentAsString();
-//        logger.error(content);
+        given(authenticationFacade.isSuperAdmin()).willReturn(true);
+        given(authenticationFacade.getSiteId()).willReturn(100);
+        given(loadPipelineService.findPipelineSummaryBySiteId(100)).willReturn(java.util.Optional.of(loadPipelines));
+
+        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(3)))
+                .andExpect(jsonPath("$.data[0].subStatuses[0].id", is(loadPipeline.getId())))
+                .andExpect(jsonPath("$.data[0].subStatuses[0].count", is(loadPipeline.getCount())))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.error(content);
+    }
+
+
+    @Test
+    public void getPipelineSummaryUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
     }
 
 
     @WithMockUser(value = "spring1")
     @Test
     public void getPipelineSummaryRequiresReadLoadPipelinePermission() throws Exception {
-        //TODO: THIS TEST DOES NOTHING
-        LoadPipeline loadPipeline = new LoadPipeline();
-//        loadPipeline.setPending(20);
-
-        //  given(loadPipelineService.findPipelineSummaryBySiteIdShipperId(100l, 1l)).willReturn(java.util.Optional.of(loadPipeline));
-
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
@@ -67,19 +96,4 @@ public class LoadPipelineSummaryControllerTest {
         logger.error(content);
     }
 
-    @Test
-    public void getPipelineSummaryUnauthenticated() throws Exception {
-        //TODO: THIS TEST DOES NOTHING
-        LoadPipeline loadPipeline = new LoadPipeline();
-        //       loadPipeline.setPending(20);
-
-        // given(loadPipelineService.findPipelineSummaryBySiteIdShipperId(100l, 1l)).willReturn(java.util.Optional.of(loadPipeline));
-
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-        String content = result.getResponse().getContentAsString();
-        logger.error(content);
-    }
 }

@@ -10,21 +10,24 @@ public class LoadPipeline implements Serializable {
 
     @Id
     @Column(name = "load_status")
-    private int id;
+    private Integer id;
 
     @Column(name = "count")
-    private int count;
+    private Integer count;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getCount() {
+    public Integer getCount() {
         return count;
     }
 
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 }
