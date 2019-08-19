@@ -6,7 +6,7 @@ import SideBar from './SideBar';
 
 describe('<App />', () => {
 
-  afterAll(() => setTimeout(() => process.exit(), 1000));
+  afterAll(() => process.exit());
 
   const baseTestProps = {
     auth:{
