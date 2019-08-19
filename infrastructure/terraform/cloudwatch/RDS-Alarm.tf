@@ -21,9 +21,9 @@ resource "aws_cloudwatch_metric_alarm" "rds_cpu" {
   alarm_description         = "This metric monitors RDS instance cpu utilization"
   # insufficient_data_actions = []
   
-  alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  ok_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  insufficient_data_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 
   dimensions = {
     DBInstanceIdentifier = "${var.rds_db_instance_id}"
@@ -43,9 +43,9 @@ resource "aws_cloudwatch_metric_alarm" "rds_freeable_low_memory" {
   alarm_description         = "This metric monitors low freeable memory in the instance"
   # insufficient_data_actions = []
 
-  alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  ok_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  insufficient_data_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 
   dimensions = {
     DBInstanceIdentifier = "${var.rds_db_instance_id}"
@@ -64,9 +64,9 @@ resource "aws_cloudwatch_metric_alarm" "rds_free_storage_space_too_low" {
   alarm_description   = "Average database free storage space over last 10 minutes too low"
   # alarm_actions       = ["${aws_sns_topic.default.arn}"]
   # ok_actions          = ["${aws_sns_topic.default.arn}"]
-  alarm_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  ok_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
-  insufficient_data_actions = ["${aws_sns_topic.monitoring-notification.arn}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
 
   dimensions = {
     DBInstanceIdentifier = "${var.rds_db_instance_id}"

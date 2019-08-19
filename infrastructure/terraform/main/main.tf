@@ -196,7 +196,8 @@ module "CloudWatch" {
   alb_suffix = "${module.ecs-cluster.ApplicationELB_Id}"
   targetgroup_prod_suffix = "${module.ecs-cluster.production_targetgroup_suffix}"
   targetgroup_test_suffix =  "${module.ecs-cluster.testing_targetgroup_suffix}"
-  alarms_email = ["${var.alarms_email}"]
+  alarms_email = "${var.alarms_email}"
+  protocol = "${var.protocol}"
 }
 
 module "Route53" {
