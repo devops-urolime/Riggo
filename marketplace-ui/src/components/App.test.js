@@ -6,12 +6,12 @@ import SideBar from './SideBar';
 
 describe('<App />', () => {
 
-  const baseTestProps = {
-    auth:{
-      renewSession: () => {} ,
-      isAuthenticated: () => {}
-    }
-  };
+  // const baseTestProps = {
+  //   auth:{
+  //     renewSession: () => {} ,
+  //     isAuthenticated: () => {}
+  //   }
+  // };
 
   it('just run one test', () => {
     expect_c(2).to.equal(2);
