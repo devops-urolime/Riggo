@@ -1,11 +1,9 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.LoadPipeline;
-import io.riggo.data.domain.LoadStatus;
-import io.riggo.data.domain.LoadSubStatus;
-import io.riggo.data.domain.ResourceType;
+import io.riggo.data.domain.*;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.LoadPipelineService;
+import io.riggo.data.services.ShipperService;
 import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.LoadPipelineData;
 import io.riggo.web.response.LoadPipelineStatusData;
@@ -29,18 +27,27 @@ public class LoadPipelineSummaryController {
     @Autowired
     private AuthenticationFacade authenticationFacade;
 
+    @Autowired
+    private ShipperService shipperService;
+
     @GetMapping(value = Paths.LOAD_PIPELINE_SUMMARY, produces = "application/json")
     @ResponseBody
-    //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
     public BaseAPIResponse<LoadPipelineData> getPipelineSummary() throws ResourceNotFoundException{
+        Optional<List<LoadPipeline>> loadPipelineList = null;
+        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
+            loadPipelineList = loadPipelineService.findPipelineSummaryBySiteId(authenticationFacade.getSiteId());
+        }
+        else if(authenticationFacade.isShipperExecutive())
+        {
+            Optional<Shipper> shipper = shipperService.findByEmailAndSiteId(authenticationFacade.getUsername(), authenticationFacade.getSiteId());
+            if(shipper.isPresent()) {
+                loadPipelineList = loadPipelineService.findPipelineSummaryBySiteIdShipperId(authenticationFacade.getSiteId(), shipper.get().getId());
+            }
+        }else{
+            throw new ResourceNotFoundException(ResourceType.LOAD_PIPELINE, authenticationFacade.getSiteId());
+        }
 
-        //TODO: Determine if you are a superadmin
-        //TODO: Determine if you are a related to a shipper.
-        //TODO: If you are not, send a 404.
-
-
-        Optional<List<LoadPipeline>> loadPipelineList = loadPipelineService.findPipelineSummaryBySiteIdShipperId(100l, 1l);
-        if (loadPipelineList.isPresent()) {
+        if (loadPipelineList != null && loadPipelineList.isPresent()) {
             List<LoadPipelineData> loadPipelineDataList = new ArrayList<>();
             for (LoadStatus loadStatus : LoadStatus.values()) {
                 if (loadStatus.getColVal() > 0) {

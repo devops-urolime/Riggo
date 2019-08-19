@@ -13,7 +13,7 @@ public class ResourceNotFoundException extends Exception {
         super();
     }
 
-    public ResourceNotFoundException(ResourceType resourceType, long id) {
+    public ResourceNotFoundException(ResourceType resourceType, Integer id) {
         super("ResourceNotFoundException type=" + resourceType.getDisplayName() + " with id=" + id);
     }
 
