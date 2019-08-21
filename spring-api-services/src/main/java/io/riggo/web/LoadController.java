@@ -73,10 +73,13 @@ public class LoadController {
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
     @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
-    public LoadResponse getLoadById(@PathVariable("id") Integer id) {
-        // TODO: Remove this line in a future is just a demo authentication.
+    public LoadResponse getLoadById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
         Optional<Load> load = loadService.findById(id, authenticationFacade.getSiteId());
-        return new LoadResponse(load.get());
+        if(load.isPresent()) {
+            return new LoadResponse(load.get());
+        }else{
+            throw new ResourceNotFoundException(ResourceType.LOAD, id);
+        }
     }
 
 
@@ -94,6 +97,7 @@ public class LoadController {
     public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
+        load.setSiteId(authenticationFacade.getSiteId());
 
         Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId(), authenticationFacade.getSiteId());
         if (checkLoadExists.isPresent()) {
@@ -142,6 +146,7 @@ public class LoadController {
         if (!loadFromDb.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
         }
+        resolvedLoad.setSiteId(authenticationFacade.getSiteId());
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
         persistShipper(shipper, resolvedLoad, authenticationFacade.getSiteId());
