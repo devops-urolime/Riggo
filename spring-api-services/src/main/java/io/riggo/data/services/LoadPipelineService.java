@@ -15,7 +15,15 @@ public class LoadPipelineService {
     @Autowired
     private LoadPipelineRepository loadPipelineRepository;
 
-    public Optional<List<LoadPipeline>> findPipelineSummaryBySiteIdShipperId(Long siteId, Long shipperId) {
+    public Optional<List<LoadPipeline>> findPipelineSummaryBySiteId(Integer siteId) {
+        try{
+            return loadPipelineRepository.findPipelineSummaryBySiteId(siteId);
+        }catch (Exception e){
+            throw new RiggoDataAccessException(e);
+        }
+    }
+
+    public Optional<List<LoadPipeline>> findPipelineSummaryBySiteIdShipperId(Integer siteId, Integer shipperId) {
         try{
             return loadPipelineRepository.findPipelineSummaryBySiteIdShipperId(siteId, shipperId);
         }catch (Exception e){

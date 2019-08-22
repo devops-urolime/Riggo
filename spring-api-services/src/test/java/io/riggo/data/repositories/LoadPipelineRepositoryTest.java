@@ -21,10 +21,23 @@ public class LoadPipelineRepositoryTest {
 
 
     @Test
+    public void findPipelineSummaryBySiteId() {
+        //given
+        Integer siteId = 100;
+
+        //when
+        Optional<List<LoadPipeline>> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteId(siteId);
+
+        //then menusBySiteAndType isPresent
+        assertTrue( loadPipeline.isPresent());
+    }
+
+
+    @Test
     public void findPipelineSummaryBySiteIdShipperId() {
         //given
-        Long siteId = 100l;
-        Long shipperId = 100l;
+        Integer siteId = 100;
+        Integer shipperId = 1;
 
         //when
         Optional<List<LoadPipeline>> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteIdShipperId(siteId, shipperId);
