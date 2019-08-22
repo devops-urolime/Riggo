@@ -13,6 +13,7 @@ import PieVisualization, {
 } from './PieVisualization';
 import BarVisualization, { BAR_DARK2 } from './BarVisualization';
 import MultiYAxesVisualization from './MultiYAxesVisualization';
+import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 
 const ROOT_INDEX_BAR_VISUALIZATION = "status";
 const KEYS_DATA_BAR_VISUALIZATION= [
@@ -80,6 +81,23 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
   return result;
 };
 
+const digestDataToMultiYAxes = (data) => {
+  return (data && data.length > 0 ) ?
+    data.map((item) => {
+      const dataToVisualize = item.shipmentData.map((axeInfo) =>{
+         return {
+           date: axeInfo.label,
+           "Shipment Delivered": axeInfo.shipments,
+           "Cost Per Mile": axeInfo.costPerMile,
+         };
+      });
+      return {
+        title: item.title,
+        data: dataToVisualize
+      };
+    }) : [] ;
+};
+
 const getTimingEffect = (index) => {
   const GROW_TIMING_EFFECT = [ 600, 800, 1000 ];
   return ( index < GROW_TIMING_EFFECT.length ) ? GROW_TIMING_EFFECT[index] : 500;
@@ -96,19 +114,49 @@ const getConfigGrow = (index) => {
   return configGrow;
 };
 
+const SHIPMENT_OFFSET_DEFAULT = 0;
+const SHIPMENT_FISCAL_MONTH_DEFAULT = 7;
+const SHIPMENT_FISCAL_YEAR_DEFAULT = 2019;
+const SHIPMENT_FISCAL_WEEK_DEFAULT = 1;
+
+const VIEW_TYPES = [
+  SHIPMENT_RESULT_BY_MONTH,
+  SHIPMENT_RESULT_BY_WEEK,
+  SHIPMENT_RESULT_BY_DAY
+];
+
 class DashboardPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isBarGroupMode: true,
+      viewTypeShipment: SHIPMENT_RESULT_BY_MONTH,
+      offsetShipment: SHIPMENT_RESULT_BY_MONTH,
+      fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
+      fiscalYearShipment: SHIPMENT_FISCAL_YEAR_DEFAULT,
+      weekShipment: SHIPMENT_FISCAL_WEEK_DEFAULT,
+      navViewMonthData:null,
+      navViewWeekData:null,
+      navViewDayData:null,
     };
   }
 
   componentDidMount() {
     this.props.loadPipeLineSummary();
     this.props.loadStopSummary();
+    this.loadShipments();
   }
+
+  loadShipments = () =>{
+    this.props.loadShipmentSummary(
+      this.state.offsetShipment ,
+      this.state.viewTypeShipment,
+      this.state.fiscalMonthShipment,
+      this.state.fiscalYearShipment,
+      this.state.weekShipment
+    );
+  };
 
   toggleBarGroup = ()=> {
     this.setState(prevState => ({
@@ -116,12 +164,81 @@ class DashboardPage extends Component {
     }));
   };
 
+  nextViewType = (current, type) => {
+    let idx = type.indexOf(current);
+    if (idx === type.length - 1) {
+      return type[0];
+    }
+    return type[idx + 1];
+  };
+
+  prevViewType = (current, type) =>{
+    let idx = type.indexOf(current);
+    if (idx === 0) {
+      return type[type.length - 1];
+    }
+    return type[idx - 1];
+  };
+
+  navigateToNextViewType = (item) => {
+    const { viewTypeShipment } = this.state;
+    const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
+    this.setState({
+      viewTypeShipment: nextView
+    });
+    this.updateNavigation(item.payload, viewTypeShipment);
+    this.loadShipments(
+      item.payload.offset,
+      item.payload.units,
+      item.payload.fiscalMonth,
+      item.payload.fiscalYear,
+      item.payload.week
+    );
+  };
+
+  navigateToPevViewType = (item) => {
+    const { viewTypeShipment } = this.state;
+    const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
+    this.setState({
+      viewTypeShipment: prevView
+    });
+    this.updateNavigation(item.payload, viewTypeShipment);
+    this.loadShipments(
+      item.payload.offset,
+      item.payload.units,
+      item.payload.fiscalMonth,
+      item.payload.fiscalYear,
+      item.payload.week
+    );
+  };
+
+  updateNavigation = (payload, viewType) =>{
+    switch (viewType) {
+      case SHIPMENT_RESULT_BY_MONTH:
+        this.setState({
+          navViewMonthData: payload
+         });
+        break;
+      case SHIPMENT_RESULT_BY_WEEK:
+        this.setState({
+          navViewWeekData: payload
+         });
+        break;
+      case SHIPMENT_RESULT_BY_DAY:
+        this.setState({
+          navViewDayData: payload
+         });
+        break;
+    }
+  };
+
   render(){
-    const { pipeLineSummary, stopSummary } = this.props;
+    const { pipeLineSummary, stopSummary, shipmentSummary } = this.props;
     const pipeLineSummaryBar = digestDataToBarVisualization(pipeLineSummary);
     const pipeLineSummaryCard = digestDataToCardVisualization(pipeLineSummary);
     const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
+    const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const { isBarGroupMode } = this.state;
       return (
         <Grid
@@ -201,7 +318,15 @@ class DashboardPage extends Component {
           >
             <Grid item xs={11}>
               <Paper className="DashboardPage__MuiPaper-root">
-                <MultiYAxesVisualization />
+                {
+                  shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0 &&
+                  <MultiYAxesVisualization
+                    title={shipmentSummaryMultiYAxes[0].title}
+                    data={shipmentSummaryMultiYAxes[0].data}
+                    onClickBar={this.navigateToNextViewType}
+                    rootClass="ShipmentsVisualization"
+                  />
+                }
               </Paper>
             </Grid>
           </Grid>
@@ -269,12 +394,15 @@ class DashboardPage extends Component {
 DashboardPage.propTypes = {
   pipeLineSummary: PropTypes.array,
   stopSummary: PropTypes.array,
+  shipmentSummary: PropTypes.array,
   loadPipeLineSummary: PropTypes.func,
   loadStopSummary: PropTypes.func,
+  loadShipmentSummary: PropTypes.func,
 };
 
 DashboardPage.defaultProps = {
   pipeLineSummary: [],
   stopSummary: [],
+  shipmentSummary:[],
 };
 export default withRouter(DashboardPage);

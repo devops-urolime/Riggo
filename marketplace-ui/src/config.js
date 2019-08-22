@@ -7,6 +7,7 @@ export const LOAD_END_POINT='/load';
 export const MENU_END_POINT='/menus';
 export const LOAD_PIPELINE_SUMMARY_END_POINT= LOAD_END_POINT + '/pipeline/summary';
 export const LOAD_STOP_SUMMARY_END_POINT= LOAD_END_POINT + '/stop/summary';
+export const LOAD_SHIPMENT_SUMMARY_END_POINT= LOAD_END_POINT + '/shipments/summary';
 export const LOAD_READ_SCOPE = "read:load";
 export const LOAD_WRITE_SCOPE = "write:load";
 export const LOAD_READ_PIPE_LINE_SCOPE = "read:loadPipeline";
