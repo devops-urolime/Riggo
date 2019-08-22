@@ -649,3 +649,35 @@ variable "protocol" {
   description = "SNS Protocol to use. email or email-json"
   type        = "string"
 }
+
+#Variables for codebuild
+variable "compute_type" {
+  type = "string"
+}
+
+variable "codebuild_image" {
+  description = "docker image for codebuild environment"
+  type = "string"
+}
+
+variable "environment_variables" {
+  
+ description = "application related environment variables"
+ type = "map"
+}
+
+# variable "apiservice_environment_variables" {
+  
+#  description = "application related environment variables"
+#  type = "list"
+# }
+
+variable "buildspec_path" {
+  
+  description ="Path of the buildspec file from root of source"
+  type = "map"
+}
+
+
+
+
