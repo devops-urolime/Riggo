@@ -17,7 +17,6 @@ public class Shipper implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @JsonAlias({"CustomerId"})
     @Column(name = "ext_sys_id")
     private String extSysId;
 

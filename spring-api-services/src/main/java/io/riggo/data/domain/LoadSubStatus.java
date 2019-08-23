@@ -17,6 +17,7 @@ public enum LoadSubStatus
     AT_DELIVERY( 6, "@Delivery", LoadStatus.IN_TRANSIT ),
     PENDING_DOCUMENTS( 7, "Booked", LoadStatus.DELIVERED ),
     DOCUMENTS_RECEIVED( 8, "Booked", LoadStatus.DELIVERED ),
+    INVOICED( 9, "Invoiced", LoadStatus.DELIVERED ),
     ;
 
 
