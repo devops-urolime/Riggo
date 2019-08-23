@@ -13,19 +13,13 @@ public class SiteUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "site_id")
-    private String siteId;
+    private Integer siteId;
 
-    @Column(name = "license_type")
-    private Integer licenseType;
-
-    @Column(name = "license_key")
-    private String licenseKey;
-
-    @Column(name = "domain")
-    private String domain;
+    @Column(name = "user_id")
+    private Integer userId;
 
     @Transient
     @Column(name = "created_at")
@@ -40,44 +34,28 @@ public class SiteUser implements Serializable {
     private java.util.Date deleted;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getSiteId() {
+    public Integer getSiteId() {
         return siteId;
     }
 
-    public void setSiteId(String siteId) {
+    public void setSiteId(Integer siteId) {
         this.siteId = siteId;
     }
 
-    public Integer getLicenseType() {
-        return licenseType;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setLicenseType(Integer licenseType) {
-        this.licenseType = licenseType;
-    }
-
-    public String getLicenseKey() {
-        return licenseKey;
-    }
-
-    public void setLicenseKey(String licenseKey) {
-        this.licenseKey = licenseKey;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Date getCreatedAt() {

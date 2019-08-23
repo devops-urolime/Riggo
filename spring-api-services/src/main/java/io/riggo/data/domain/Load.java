@@ -1,7 +1,5 @@
 package io.riggo.data.domain;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,14 +12,28 @@ public class Load implements Serializable {
 
 
     private static final long serialVersionUID = -4133343645808769934L;
+
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "ext_sys_id")
     private String extSysId;
+
+    @Column(name = "ext_sys_tenant_id" )
     private String extSysTenantId;
 
     @Column(name = "expected_ship_date", columnDefinition = "DATE")
     private LocalDate expectedShipDate;
 
+    @Column(name = "site_id")
+    private Integer siteId;
+
+    @Column(name = "carrier")
     private Integer carrier;
+
+    @Column(name = "transport_mode")
     private String transportMode;
     private BigDecimal postedRate;
     private BigDecimal insuranceAmt;
@@ -33,9 +45,19 @@ public class Load implements Serializable {
     private LocalDate expectedDeliveryDate;
     private Integer driver;
     private Boolean locationBasedSvcsReq;
-    private java.util.Date createdAt;
-    private java.util.Date updatedAt;
-    private java.util.Date deleted;
+
+    @Transient
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Transient
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Transient
+    @Column(name = "deleted")
+    private LocalDateTime deleted;
+
     private String referenceNumber;
     private String billOfLadingNo;
     private String name;
@@ -52,10 +74,10 @@ public class Load implements Serializable {
     private String loadUrl;
     private Integer shipperId;
 
+    @Column(name = "distance_miles")
+    private BigDecimal distanceMiles;
 
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public Integer getId() {
         return id;
     }
@@ -64,9 +86,6 @@ public class Load implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @JsonAlias({"CustomerId", "LastStopId", "FirstStopId", "billToId", "CarrierRemitToId"})
-    @Column(name = "ext_sys_id")
     public String getExtSysId() {
         return extSysId;
     }
@@ -75,8 +94,6 @@ public class Load implements Serializable {
         this.extSysId = extSysId;
     }
 
-    @Basic
-    @Column(name = "ext_sys_tenant_id" )
     public String getExtSysTenantId() {
         return extSysTenantId;
     }
@@ -93,9 +110,14 @@ public class Load implements Serializable {
         this.expectedShipDate = expectedShipDate;
     }
 
+    public Integer getSiteId() {
+        return siteId;
+    }
 
-    @Basic
-    @Column(name = "carrier")
+    public void setSiteId(Integer siteId) {
+        this.siteId = siteId;
+    }
+
     public Integer getCarrier() {
         return carrier;
     }
@@ -104,8 +126,6 @@ public class Load implements Serializable {
         this.carrier = carrier;
     }
 
-    @Basic
-    @Column(name = "transport_mode")
     public String getTransportMode() {
         return transportMode;
     }
@@ -214,39 +234,6 @@ public class Load implements Serializable {
 
     public void setLocationBasedSvcsReq(Boolean locationBasedSvcsReq) {
         this.locationBasedSvcsReq = locationBasedSvcsReq;
-    }
-
-    @Transient
-    @Basic
-    @Column(name = "created_at")
-    public java.util.Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(java.util.Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Transient
-    @Basic
-    @Column(name = "updated_at")
-    public java.util.Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(java.util.Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Transient
-    @Basic
-    @Column(name = "deleted")
-    public java.util.Date getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(java.util.Date deleted) {
-        this.deleted = deleted;
     }
 
     @Basic
@@ -399,5 +386,13 @@ public class Load implements Serializable {
 
     public void setShipperId(Integer shipperId) {
         this.shipperId = shipperId;
+    }
+
+    public BigDecimal getDistanceMiles() {
+        return distanceMiles;
+    }
+
+    public void setDistanceMiles(BigDecimal distanceMiles) {
+        this.distanceMiles = distanceMiles;
     }
 }

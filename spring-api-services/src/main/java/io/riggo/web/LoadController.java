@@ -66,25 +66,30 @@ public class LoadController {
     @Autowired
     private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
 
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
     @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
-    public LoadResponse getLoadById(@PathVariable("id") Integer id, Authentication authentication) {
-        // TODO: Remove this line in a future is just a demo authentication.
-        logger.debug(authentication.toString());
-        Optional<Load> load = loadService.findById(id);
-        return new LoadResponse(load.get());
+    public LoadResponse getLoadById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
+        Optional<Load> load = loadService.findById(id, authenticationFacade.getSiteId());
+        if(load.isPresent()) {
+            return new LoadResponse(load.get());
+        }else{
+            throw new ResourceNotFoundException(ResourceType.LOAD, id);
+        }
     }
 
 
     @Cacheable(value = "loadsEXT", key = "#p0")//for now
     @GetMapping("/load/external/{extSysId}")
-    public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal) {
+    public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal, Authentication authentication) {
         if (findByExternal) {
-            return loadService.findByExtSysId(extSysId);
+            return loadService.findByExtSysId(extSysId, authenticationFacade.getSiteId());
         }
-        return loadService.findById(Integer.valueOf(extSysId));
+        return loadService.findById(Integer.valueOf(extSysId), authenticationFacade.getSiteId());
     }
 
 
@@ -92,14 +97,15 @@ public class LoadController {
     public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
+        load.setSiteId(authenticationFacade.getSiteId());
 
-        Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId());
+        Optional<Load> checkLoadExists = loadService.findByExtSysId(load.getExtSysId(), authenticationFacade.getSiteId());
         if (checkLoadExists.isPresent()) {
             throw new ResourceAlreadyExistsException(ResourceType.LOAD, checkLoadExists.get().getId());
         }
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
-        persistShipper(shipper, load);
+        persistShipper(shipper, load, authenticationFacade.getSiteId());
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
         if (equipmentType != null && StringUtils.isNotBlank(equipmentType.getExtSysId())) {
@@ -136,13 +142,14 @@ public class LoadController {
     @PutMapping(value = "/load", produces = "application/json")
     public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
-        Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId());
+        Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId(), authenticationFacade.getSiteId());
         if (!loadFromDb.isPresent()) {
             throw new ResourceNotFoundException(ResourceType.LOAD, resolvedLoad.getExtSysId());
         }
+        resolvedLoad.setSiteId(authenticationFacade.getSiteId());
 
         Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
-        persistShipper(shipper, resolvedLoad);
+        persistShipper(shipper, resolvedLoad, authenticationFacade.getSiteId());
 
         //
         Load existingLoad = loadFromDb.get();
@@ -158,9 +165,9 @@ public class LoadController {
         return loadAPIResponse;
     }
 
-    private void persistShipper(Shipper shipper, Load load) {
+    private void persistShipper(Shipper shipper, Load load, Integer siteId) {
         if (StringUtils.isNotBlank(shipper.getExtSysId())) {
-            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId());
+            Optional<Shipper> checkShipperExists = shipperService.findByExtSysId(shipper.getExtSysId(), siteId);
             if (checkShipperExists.isPresent()) {
                 BeanUtils.copyProperties(checkShipperExists.get(), shipper, SalesforceRevenovaConstants.POST_PUT_SHIPPER_IGNORE_PROPERTIES);
             }
@@ -219,7 +226,7 @@ public class LoadController {
                 .map(loadLineItem -> {
                     BaseAPIResponse<LoadLineItem> loadLineItemBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadLineItem.getLoadExtSysId())){
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId());
+                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId(), authenticationFacade.getSiteId());
                         if(optionalLoad.isPresent()) {
                             if(StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
                                 Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId());
@@ -250,7 +257,7 @@ public class LoadController {
                 .map(loadStop -> {
                     BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId());
+                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
                         if (optionalLoad.isPresent()) {
                             if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
                                 Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId());

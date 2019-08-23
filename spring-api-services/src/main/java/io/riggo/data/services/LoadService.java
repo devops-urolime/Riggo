@@ -15,17 +15,17 @@ public class LoadService {
     private LoadRepository loadRepository;
 
 
-    public Optional<Load> findByExtSysId(String extSysId) {
+    public Optional<Load> findByExtSysId(String extSysId, Integer siteId) {
         try {
-            return loadRepository.findByExtSysId(extSysId);
+            return loadRepository.findByExtSysId(extSysId, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException("Data Access Exception occurred", e);
         }
     }
 
-    public Optional<Load> findById(Integer id) {
+    public Optional<Load> findById(Integer id, Integer siteId) {
         try {
-            return loadRepository.findById(id);
+            return loadRepository.findById(id, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException("Data Access Exception occurred", e);
         }

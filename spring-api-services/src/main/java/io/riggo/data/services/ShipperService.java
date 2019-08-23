@@ -1,7 +1,6 @@
 package io.riggo.data.services;
 
 import io.riggo.data.domain.Shipper;
-import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.exception.RiggoDataAccessException;
 import io.riggo.data.repositories.ShipperRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +24,17 @@ public class ShipperService {
     }
 
 
-    public Optional<Shipper> findById(Integer shipperId) throws ResourceNotFoundException {
-        try {
-            return shipperRepository.findById(shipperId);
+    public Optional<Shipper> findByEmailAndSiteId(String username, Integer siteId){
+        try{
+            return shipperRepository.findByEmailAndSiteId(username, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
     }
 
-
-    public Optional<Shipper> findByExtSysId(String extSysId) {
+    public Optional<Shipper> findByExtSysId(String extSysId, Integer siteId) {
         try {
-            return shipperRepository.findByExtSysId(extSysId);
+            return shipperRepository.findByExtSysId(extSysId, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
