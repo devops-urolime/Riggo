@@ -15,6 +15,7 @@ INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_stat
 INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_status) VALUES (6, 'extSysId6', 100, 1, 0, 0, 6);
 INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_status) VALUES (7, 'extSysId7', 100, 1, 0, 0, 7);
 INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_status) VALUES (8, 'extSysId8', 100, 1, 0, 0, 8);
+INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_status) VALUES (9, 'extSysId8', 100, 1, 0, 0, 9);
 
 
 /* load_line_item */
@@ -23,7 +24,7 @@ INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
 
 
 /* invoice */
-INSERT INTO invoice(id, ext_sys_id) VALUES (1, 'extSysId1');
+INSERT INTO invoice(id, ext_sys_id, load_id, quote_date, status) VALUES (1, 'extSysId1', 1, '2019-07-15 00:00:00', 3);
 
 
 /* shipper */
@@ -43,4 +44,21 @@ INSERT INTO shipper_user (id, shipper_id, user_id) VALUES (1, 1, 1);
 
 /* site */
 INSERT INTO site(id) VALUES (100);
+
+/* fiscal_period */
+INSERT INTO fiscal_period(
+	date_dim_id, date_actual, epoch, day_suffix, day_name, day_of_week, day_of_month,
+	day_of_quarter, day_of_year, week_of_month, week_of_year, week_of_year_iso,
+	month_actual, month_name, month_name_abbreviated, quarter_actual, quarter_name,
+	year_actual, first_day_of_week, last_day_of_week, first_day_of_month,
+	last_day_of_month, first_day_of_quarter, last_day_of_quarter,
+	first_day_of_year, last_day_of_year, mmyyyy, mmddyyyy, weekend_indr)
+	VALUES
+	(20190821, '2019-08-21', 1566345600, '21st', 'Wednesday', 3, 21,
+	52, 233, 3, 34, '2019-W34-3', 8, 'August', 'Aug', 3, 'Third', 2019,
+	'2019-08-19', '2019-08-25', '2019-08-01',
+	'2019-08-31', '2019-07-01', '2019-09-30',
+	'2019-01-01', '2019-12-31', '082019', '08212019', false
+	);
+
 
