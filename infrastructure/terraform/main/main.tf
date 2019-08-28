@@ -227,3 +227,24 @@ module "lambda" {
   timeout          = "${var.lambda_timeout}"
   
 }
+
+module "codebuild" {
+  source = "../CI-CD/CodeBuild"
+  environment_variables = "${var.environment_variables}"
+  # private_subnet1_arn = "${var.private_subnet1_arn}"
+  # private_subnet2_arn = "${var.private_subnet2_arn}"
+  # private_subnet1_id
+  vpc_id = "${module.VPC.vpc_id}"
+  client-app-s3-bucket = "${module.cloudfront.s3-bucket}"
+  compute_type = "${var.compute_type}"
+  codebuild_image = "${var.codebuild_image}"
+  cloudfront_distribution_id = "${module.cloudfront.cloudfront_distribution_id}"
+  codepipeline_artifact_bucket = "${module.codepipeline.codepipeline_s3_bucket}"
+  buildspec_path = "${var.buildspec_path}"
+}
+
+module "codepipeline" {
+  source = "../CI-CD/codepipeline"
+  
+}
+
