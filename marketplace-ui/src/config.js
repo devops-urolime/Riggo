@@ -2,6 +2,7 @@ export const BASE_END_POINT='https://o0de6p7v3h.execute-api.us-west-2.amazonaws.
 export const EMPTY_JWT_ERROR_MESSAGE='There is no JWT access token to make calls to the APIs';
 export const STATUS_401_ERROR_MESSAGE='Calls to the API return 401 Unauthorized';
 export const STATUS_400_ERROR_MESSAGE='Calls to the API return 400 Bad Request';
+export const STATUS_403_ERROR_MESSAGE='Calls to the API return 403 Forbidden';
 export const STATUS_500_ERROR_MESSAGE='Calls to the API return 500 Internal Server Error';
 export const LOAD_END_POINT='/load';
 export const MENU_END_POINT='/menus';
