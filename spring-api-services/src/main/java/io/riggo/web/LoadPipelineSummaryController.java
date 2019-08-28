@@ -65,7 +65,7 @@ public class LoadPipelineSummaryController {
                             loadPipelineStatusData.setName(loadSubStatus.getDisplayName());
                             loadPipelineStatusData.setCount(0);
                             for (LoadPipeline loadPipeline : loadPipelineList.get()) {
-                                if (loadPipeline.getId() == loadStatus.getColVal()) {
+                                if (loadPipeline.getId() == loadSubStatus.getColVal()) {
                                     loadPipelineStatusData.setCount(loadPipeline.getCount());
                                     statusCount = statusCount + loadPipeline.getCount();
                                 }
