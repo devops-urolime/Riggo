@@ -38,6 +38,10 @@ output "target_group_name_green" {
   value = "${aws_lb_target_group.ecs-lb-targetgroup-testlistner.name}"
 }
 
+# output "container_definition" {
+#   value = "${aws_ecs_task_definition.riggo-ecs-TD.container_definitions}"
+# }
+
 output "container_definition" {
-  value = "${aws_ecs_task_definition.riggo-ecs-TD.container_definitions}"
+  value = "${data.template_file.container-definition.rendered}"
 }
