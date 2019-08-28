@@ -38,9 +38,9 @@ resource "aws_autoscaling_group" "ecs-autoscaling-group" {
 }
 
 
-resource "aws_autoscaling_attachment" "ecs-targetgroup-attachment" {
-  autoscaling_group_name = "${aws_autoscaling_group.ecs-autoscaling-group.id}"
-  alb_target_group_arn   = "${aws_lb_target_group.ecs-lb-targetgroup.arn}"
-  depends_on = [
-  "aws_autoscaling_group.ecs-autoscaling-group"]
-}
+# resource "aws_autoscaling_attachment" "ecs-targetgroup-attachment" {
+#   autoscaling_group_name = "${aws_autoscaling_group.ecs-autoscaling-group.id}"
+#   alb_target_group_arn   = "${aws_lb_target_group.ecs-lb-targetgroup.arn}"
+#   depends_on = [
+#   "aws_autoscaling_group.ecs-autoscaling-group"]
+# }

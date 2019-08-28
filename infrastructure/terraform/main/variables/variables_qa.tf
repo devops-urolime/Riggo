@@ -2,6 +2,46 @@
 #Application variables
 spring_profile_env = "qa"
 
+#environment variables
+
+environment_variables ={
+      clientapp = [ 
+      {
+        name  = "REACT_APP_DOMAIN_AUTH_CONFIG"
+        value = "riggo-qa.auth0.com"
+      },
+      {
+        name  = "REACT_APP_CLIENT_ID_AUTH_CONFIG"
+        value = "7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv"
+      },
+      {
+        name = "REACT_APP_AUDIENCE_ID_AUTH_CONFIG"
+        value = "load-resource-api"
+
+      },
+      {
+        name = "REACT_APP_CALL_BACK_URL_AUTH_CONFIG"
+        value = "https://riggo.riggoqa.net/callback"
+      },
+      {
+        name = "REACT_APP_MOCK_ALL_DATA"
+        value = "true"
+      }
+],
+apiservices = [
+      {
+        name  = "REPOSITORY_URL"
+        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
+      }
+]
+}
+
+apiservice_environment_variables = [
+      {
+        name  = "REPOSITORY_URL"
+        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
+      }
+      ]
 
 #General Variables
 keyname = "RiggoKeyPair-qa"
@@ -97,11 +137,65 @@ lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
 lambda_runtime = "nodejs10.x"
 lambda_timeout = "30"
 
-#Variables for Cloudwatch Alarms
+#Variables for Cloudwatch Alarm ECS/CPU
 
 cpu_utilization_high_threshold = "65"
 cpu_utilization_high_evaluation_periods = "1"
-cpu_utilization_high_period = "120"
+cpu_utilization_high_period = "60"
 
 
 
+#Variables for Cloudwatch ECS/Memory
+
+memory_utilization_high_threshold = "65"
+memory_utilization_high_evaluation_periods = "1"
+memory_utilization_high_period = "60"
+
+#Variables for Cloudwatch AWS/RDS"
+
+rds_cpu_utilization_high_threshold = "65"
+rds_cpu_utilization_high_evaluation_periods = "1"
+rds_cpu_utilization_high_period = "120"
+
+#Variables for Cloudwatch AWS/RDS-Memory
+ rds_freeable_memory_low_evaluation_periods = "1"
+ rds_freeable_low_memory_period = "120"
+ rds_freeable_memory_low_threshold = 256000000
+
+ #Variables for Cloudwatch AWS/RDS-diskspace
+
+ rds_free_low_storage_space_evaluation_periods = "1"
+ rds_free_low_storage_space_period = "120"
+ rds_free_storage_space_threshold = 37580963840
+
+ #Variables for AWS/ElastiCache-CPU
+
+redis_cpu_utilization_high_threshold = "65"
+redis_cpu_utilization_evaluation_period = "1"
+redis_cpu_utilization_period = "120"
+
+ #Variables for AWS/ElastiCache-Memory
+
+redis_freeable_memory_evaluation_period = "1"
+redis_freeable_memory_period = "120"
+redis_freeable_memory_low_threshold = 256000000
+
+ #Variables for AWS/ApplicationELB
+
+alb_unhealthy_host_evaluation_period = "1"
+alb_unhealthy_host_period = "60"
+alb_unhealthy_host_count_threshold = "1"
+
+#variables for SNS
+
+alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
+
+#variables for codebuild
+
+compute_type = "BUILD_GENERAL1_SMALL"
+codebuild_image = "aws/codebuild/standard:2.0"
+buildspec_path = {
+
+  clientapp  = "CI-CD/clientapp-buildspec.yaml"
+  apiservice = "CI-CD/apiservices-buildspec.yaml"
+}

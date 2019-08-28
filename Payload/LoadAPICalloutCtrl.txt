@@ -19,62 +19,61 @@ triggerAction  - To identify the event of the load object either Insert update o
     
     @future(callout=true)
     public static void makePostCallout(string LoadId,String triggerAction) { 
-        List<Marketplace_Exposed_Data__c> markPlcExList = [select id,Marketplace_Exposed_Id__c from Marketplace_Exposed_Data__c where Load__c =:LoadId limit 1];
+        
+        WrapperClassForAPI.WrapperforMarketPlac wrappMarket = null;
         String methodDefine = 'POST';
         string marketplaceExId = '';
+        Boolean isMarketPlaceId = true;
         if(triggerAction == 'Update'){
-            List<rtms__Load__c> ListOfLoead =[Select Id, createdDate from rtms__Load__c where ID =:LoadId];
+			methodDefine = 'PUT';
+            wrappMarket = GetMarketPlaceDetails.getMarketPlaceDetails(LoadId,triggerAction);
+            system.debug('--wrappMarket--'+wrappMarket);
+            if(wrappMarket != null){
+                isMarketPlaceId = wrappMarket.isMaketplaceIDEist;
+                marketplaceExId = wrappMarket.MarketPlaceId;
+                system.debug('--isMarketPlaceId-'+isMarketPlaceId);
+                system.debug('--marketplaceExId-'+marketplaceExId);
+            }
+        }
+        
+        if(isMarketPlaceId){
+            responeClass resResult=null;
             
-            methodDefine = 'PUT';
-            if(markPlcExList!= null && markPlcExList.size() > 0 ){
-                marketplaceExId = markPlcExList[0].Marketplace_Exposed_Id__c;
-                
-            }else{
-                if((marketplaceExId == null || marketplaceExId == '')&& ListOfLoead != null && ListOfLoead.size() > 0){
-                    decimal decMinutes = ((ListOfLoead[0].createdDate.getTime())/1000/60) - ((system.now().getTime())/1000/60);
-                    if(decMinutes <= 1){
-                        //break
+            LoadPayload palyloadCls = new LoadPayload();
+            // Get the load payload by json formate.
+            string LoadPayloadBody=palyloadCls.getSavePayload(LoadId,triggerAction,methodDefine,marketplaceExId); 
+            system.debug('--Load Payload---'+LoadPayloadBody);
+            
+            // Calling webserive to push the load object  Passing parameters like end pint url, Method Name and Load payload
+            HttpResponse httpResponse=null;
+            ServiceProxy prox = new ServiceProxy(); 
+            HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Load',null);
+            String response = null;
+            if(HttpResponse != null){
+                response =  httpResponse.getBody();
+                system.debug('---response---'+response);
+                resResult = (responeClass)JSON.deserialize(response, LoadAPICalloutCtrl.responeClass.class);
+                if(resResult != null && resResult.hashId != null){
+                    if(triggerAction == 'Insert'){
+                        Marketplace_Exposed_Data__c makP = new Marketplace_Exposed_Data__c();
+                        makP.Marketplace_Exposed_Id__c = resResult.hashId;
+                        //makP.extSysId = resResult.Data.extSysId;
+                        makP.Load__c = LoadId;
+                        insert makp;
+                        system.debug('---makp'+makp);
                     }
-                    system.debug('--decMinutes-'+decMinutes);
-                }
+                } 
             }
             
-        }
-        
-        responeClass resResult=null;
-        
-        LoadPayload palyloadCls = new LoadPayload();
-        // Get the load payload by json formate.
-        string LoadPayloadBody=palyloadCls.getSavePayload(LoadId,triggerAction,methodDefine,marketplaceExId); 
-        system.debug('--Load Payload---'+LoadPayloadBody);
-        
-        // Calling webserive to push the load object  Passing parameters like end pint url, Method Name and Load payload
-        HttpResponse httpResponse=null;
-        ServiceProxy prox = new ServiceProxy(); 
-        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Load');
-        String response = null;
-        if(HttpResponse != null){
-        	response =  httpResponse.getBody();
-            system.debug('---response---'+response);
-            resResult = (responeClass)JSON.deserialize(response, LoadAPICalloutCtrl.responeClass.class);
-            if(resResult != null && resResult.hashId != null){
-                if(markPlcExList.isEmpty() && triggerAction == 'Insert'){
-                    Marketplace_Exposed_Data__c makP = new Marketplace_Exposed_Data__c();
-                    makP.Marketplace_Exposed_Id__c = resResult.hashId;
-                    //makP.extSysId = resResult.Data.extSysId;
-                    makP.Load__c = LoadId;
-                    insert makp;
-                    system.debug('---makp'+makp);
+            if(httpResponse != null){
+                string StatusCode = string.valueof(httpResponse.getStatusCode());
+                // if there is any exception we are creating exception record in Error Log object
+                if(response!= null && StatusCode != '200'){
+                    APIExceptionHandler.erroLogCreation(null,httpResponse);
                 }
-            } 
-        }
-         
-        if(httpResponse != null){
-            string StatusCode = string.valueof(httpResponse.getStatusCode());
-            // if there is any exception we are creating exception record in Error Log object
-            if(response!= null && StatusCode != '200'){
-                 APIExceptionHandler.erroLogCreation(null,httpResponse);
             }
+        }else{
+            system.debug('--Load does not have market place id in PUT request');
         }
     }    
     // return Resonse wrapper class 
@@ -87,38 +86,38 @@ triggerAction  - To identify the event of the load object either Insert update o
     }
     public class Data {
         public Integer id;
-		public String extSysId;
-		public Object extSysTenantId;
-		public Object expectedShipDate;
-		public Object carrier;
-		public String transportMode;
-		public Object postedRate;
-		public Object insuranceAmt;
-		public Integer equipmentTypeId;
-		public Integer loadStatus;
-		public Boolean teamReq;
-		public Boolean foodGradeTrailerReq;
-		public Boolean tempControlReq;
-		public Object expectedDeliveryDate;
-		public Object driver;
-		public Object locationBasedSvcsReq;
-		public Object createdAt;
-		public Object updatedAt;
-		public Object deleted;
-		public Object referenceNumber;
-		public Object billOfLadingNo;
-		public String name;
-		public Object invoiceTotal;
-		public Object carrierQuoteTotal;
-		public Object carrierInvoiceTotal;
-		public Object customerQuoteTotal;
-		public Object customerTransportTotal;
-		public Boolean hazMat;
-		public Object loadStatusReq;
-		public String modeName;
-		public String orderDate;
-		public Object salesStatus;
-		public String loadUrl;
-		public Integer shipperId;
+        public String extSysId;
+        public Object extSysTenantId;
+        public Object expectedShipDate;
+        public Object carrier;
+        public String transportMode;
+        public Object postedRate;
+        public Object insuranceAmt;
+        public Integer equipmentTypeId;
+        public Integer loadStatus;
+        public Boolean teamReq;
+        public Boolean foodGradeTrailerReq;
+        public Boolean tempControlReq;
+        public Object expectedDeliveryDate;
+        public Object driver;
+        public Object locationBasedSvcsReq;
+        public Object createdAt;
+        public Object updatedAt;
+        public Object deleted;
+        public Object referenceNumber;
+        public Object billOfLadingNo;
+        public String name;
+        public Object invoiceTotal;
+        public Object carrierQuoteTotal;
+        public Object carrierInvoiceTotal;
+        public Object customerQuoteTotal;
+        public Object customerTransportTotal;
+        public Boolean hazMat;
+        public Object loadStatusReq;
+        public String modeName;
+        public String orderDate;
+        public Object salesStatus;
+        public String loadUrl;
+        public Integer shipperId;
     }
 }

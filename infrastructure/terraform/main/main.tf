@@ -168,7 +168,36 @@ module "CloudWatch" {
   service_name = "${module.ecs-cluster.ecs_service_name}"
   cpu_utilization_high_evaluation_periods = "${var.cpu_utilization_high_evaluation_periods}"
   cpu_utilization_high_period = "${var.cpu_utilization_high_period}"
-
+  memory_utilization_high_threshold = "${var.memory_utilization_high_threshold}"
+  memory_utilization_high_evaluation_periods = "${var.memory_utilization_high_evaluation_periods}"
+  memory_utilization_high_period = "${var.memory_utilization_high_period}"
+  rds_cpu_utilization_high_threshold = "${var.rds_cpu_utilization_high_threshold}"
+  rds_cpu_utilization_high_evaluation_periods = "${var.rds_cpu_utilization_high_evaluation_periods}"
+  rds_cpu_utilization_high_period = "${var.rds_cpu_utilization_high_period}"
+  rds_db_instance_id = "${module.RDS.db_instance_id}"
+  rds_freeable_memory_low_evaluation_periods = "${var.rds_freeable_memory_low_evaluation_periods}"
+  rds_freeable_low_memory_period = "${var.rds_freeable_low_memory_period}"
+  rds_freeable_memory_low_threshold = "${var.rds_freeable_memory_low_threshold}"
+  rds_free_low_storage_space_evaluation_periods = "${var.rds_free_low_storage_space_evaluation_periods}"
+  rds_free_low_storage_space_period = "${var.rds_free_low_storage_space_period}"
+  rds_free_storage_space_threshold = "${var.rds_free_storage_space_threshold}"
+  redis_cpu_utilization_high_threshold = "${var.redis_cpu_utilization_high_threshold}"
+  redis_cpu_utilization_evaluation_period = "${var.redis_cpu_utilization_evaluation_period}"
+  redis_cpu_utilization_period = "${var.redis_cpu_utilization_period}"
+  elasticache_cluster_name_id = "${module.elasticache.elasticache_redis_cluster_id}"
+  elasticache_node_id = "${module.elasticache.elasticache_redis_node_id}"
+  elasticache_nodes = "${module.elasticache.elasticache_nodes_count}"
+  redis_freeable_memory_evaluation_period = "${var.redis_freeable_memory_evaluation_period}"
+  redis_freeable_memory_period = "${var.redis_freeable_memory_period}"
+  redis_freeable_memory_low_threshold = "${var.redis_freeable_memory_low_threshold}"
+  alb_unhealthy_host_evaluation_period = "${var.alb_unhealthy_host_evaluation_period}"
+  alb_unhealthy_host_period = "${var.alb_unhealthy_host_period}"
+  alb_unhealthy_host_count_threshold = "${var.alb_unhealthy_host_count_threshold}"
+  alb_suffix = "${module.ecs-cluster.ApplicationELB_Id}"
+  targetgroup_prod_suffix = "${module.ecs-cluster.production_targetgroup_suffix}"
+  targetgroup_test_suffix =  "${module.ecs-cluster.testing_targetgroup_suffix}"
+  alarms_email = "${var.alarms_email}"
+  protocol = "${var.protocol}"
 }
 
 module "Route53" {
@@ -198,3 +227,24 @@ module "lambda" {
   timeout          = "${var.lambda_timeout}"
   
 }
+
+module "codebuild" {
+  source = "../CI-CD/CodeBuild"
+  environment_variables = "${var.environment_variables}"
+  # private_subnet1_arn = "${var.private_subnet1_arn}"
+  # private_subnet2_arn = "${var.private_subnet2_arn}"
+  # private_subnet1_id
+  vpc_id = "${module.VPC.vpc_id}"
+  client-app-s3-bucket = "${module.cloudfront.s3-bucket}"
+  compute_type = "${var.compute_type}"
+  codebuild_image = "${var.codebuild_image}"
+  cloudfront_distribution_id = "${module.cloudfront.cloudfront_distribution_id}"
+  codepipeline_artifact_bucket = "${module.codepipeline.codepipeline_s3_bucket}"
+  buildspec_path = "${var.buildspec_path}"
+}
+
+module "codepipeline" {
+  source = "../CI-CD/codepipeline"
+  
+}
+
