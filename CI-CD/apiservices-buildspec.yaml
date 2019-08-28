@@ -32,9 +32,6 @@ artifacts:
       files:
         - appspec.yaml
         - taskdef.json
-      base-directory: 'spring-api-services'
-    Riggo-image:
-      files:
         - imageDetail.json
       base-directory: 'spring-api-services'
 cache:
