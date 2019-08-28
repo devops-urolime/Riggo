@@ -27,9 +27,14 @@ public class LoadPipelineData implements Serializable {
         this.name = name;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
     public void setCount(Integer count) {
         this.count = count;
     }
+
 
     public List<LoadPipelineStatusData> getSubStatuses() {
         return subStatuses;
