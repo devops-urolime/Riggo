@@ -104,7 +104,7 @@ public class LoadPayload {
                         	'"billToShippingCity": "'+ld.rtms__Bill_To__r.ShippingCity+'",'+
                         	'"billToShippingPostalCode": '+ld.rtms__Bill_To__r.ShippingPostalCode+','+
                         	'"billToShippingState": "'+ld.rtms__Bill_To__r.ShippingState+'",'+
-                        	'"billToShippingCountry": "'+ld.rtms__Bill_To__r.ShippingCountry+'"'+ 
+                        	'"billToShippingCountry" "'+ld.rtms__Bill_To__r.ShippingCountry+'"'+ 
                         '},'+            
                         '"rtms__Bill_of_Lading_Number__c": "'+ld.rtms__Bill_of_Lading_Number__c+'",'+
                         '"rtms__Carrier_Invoice_Total__c": '+ld.rtms__Carrier_Invoice_Total__c+','+

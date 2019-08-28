@@ -19,29 +19,26 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
 */
     public static Integer errorcode ;
     public static integer calloutForGetAccessToken = 0;
-    public HttpResponse callRestService(String endPointURL, String methodName, String requestBody,String objectName){
-        List<Auth0_API_Token__c> authAPIToken=null;
-        authAPIToken = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+    public HttpResponse callRestService(String endPointURL, String methodName, String requestBody,String objectName,String accessToken){
         String response=null;
-        string accessToken = null;
+        Boolean isTokenRefereshed = false;
+        //string accessToken = null;
         HttpResponse httpResponse=null;
         try { 
             calloutForGetAccessToken++;
-            accessToken = getAccessTokenFromConfiguration(); 
+            system.debug('-accessToken--'+accessToken);
+            if(accessToken == null){
+            	accessToken = getAccessTokenFromConfiguration(); 
+            }
             httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
             response = httpResponse.getBody();
             errorcode = httpResponse.getStatusCode();
-            
             if(errorcode == 401 || errorcode == 403){
                 accessToken =  refreshAccessToken(); 
+                isTokenRefereshed = true;
                 // Again calling end point url with valid token
-                httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
-                response = httpResponse.getBody();
-                errorcode = httpResponse.getStatusCode();
-                //errorcode = '500';
-                system.debug('errorcode--'+errorcode);
-                if(calloutForGetAccessToken <= 5){
-                    callRestService(endPointURL,methodName,requestBody,objectName);
+                 if(calloutForGetAccessToken <= 5){
+                    callRestService(endPointURL,methodName,requestBody,objectName,accessToken);
                 }else{
                     if(errorcode == 401 || errorcode == 403){
                         APIExceptionHandler.erroLogCreation(null,httpResponse);   
@@ -52,11 +49,11 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
             system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in callRestService():'+e.getMessage());
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:callRestService'+response);
-       
-        Auth0_API_Token__c authAPITokenupdate = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
-        authAPITokenupdate.Token__c = accessToken;
-        authTokenUpdate(authAPITokenupdate);
-       
+        if(isTokenRefereshed){
+            Auth0_API_Token__c authAPITokenupdate = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
+            authAPITokenupdate.Token__c = accessToken;
+            authTokenUpdate(authAPITokenupdate);
+        }
         return httpResponse;    
     }
     private void authTokenUpdate(Auth0_API_Token__c authUpdate){
