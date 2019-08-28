@@ -36,4 +36,18 @@ variable "buildspec_path" {
   
 }
 
+variable "private_subnet_ids" {
+  
+}
 
+# variable "build_output_deploy_dir" {
+  
+# }
+
+# variable "build_output_image_dir" {
+  
+# }
+
+variable "artifactory_directory" {
+#   type = "map"
+}

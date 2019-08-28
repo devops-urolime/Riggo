@@ -31,6 +31,10 @@ output "private_subnet_id1" {
   description = "ID of Private_subnet"
 
 }
+output "private_subnet1_arn" {
+  value = aws_subnet.private-subnet.arn
+}
+
 
 
 output "private_subnet_id2" {
@@ -39,6 +43,11 @@ output "private_subnet_id2" {
   description = "ID of Private_subnet"
 
 }
+
+output "private_subnet2_arn" {
+  value = aws_subnet.private-subnet2.arn
+}
+
 
 output "public_route_table_id" {
 

@@ -24,7 +24,10 @@
 locals  {
   
   apiservice_codebuildname = "${terraform.workspace}-api-service-codebuild"
-  apiservice_description = "Build project for apiservice"
+  apiservice_description = "Build project for apiservice in ${terraform.workspace} environment"
+  build_image_directory = "${lookup(var.artifactory_directory, "build_output_image_dir")}"
+  build_deploy_directory = "${lookup(var.artifactory_directory, "build_output_deploy_dir")}"
+
 
 }
 
@@ -56,7 +59,16 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
       name  = "AWS_REGION"
       value = "${data.aws_region.current.name}"
     }
-  
+
+    environment_variable {
+      name = "DEPLOY_ARTIFACT_NAME"
+      value = "${local.build_deploy_directory}"
+    }
+
+    environment_variable {
+      name = "IMAGE_ARTIFACT_NAME"
+      value = "${local.build_image_directory}"
+    }
     dynamic "environment_variable" {
       for_each = var.environment_variables["apiservices"]
       content {
@@ -84,9 +96,10 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
   vpc_config {
     vpc_id = "${var.vpc_id}"
 
-    subnets = "${data.aws_subnet_ids.private.ids}"
+    # subnets = "${data.aws_subnet_ids.private.ids}"
     #   "${var.private_subnet1_id}",
     #   "${var.private_subnet2_id}"
+    subnets = "${var.private_subnet_ids}"
          
     
 
