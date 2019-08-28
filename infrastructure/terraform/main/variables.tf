@@ -649,3 +649,121 @@ variable "protocol" {
   description = "SNS Protocol to use. email or email-json"
   type        = "string"
 }
+
+#Variables for codebuild
+variable "compute_type" {
+  type = "string"
+}
+
+variable "codebuild_image" {
+  description = "docker image for codebuild environment"
+  type = "string"
+}
+
+variable "environment_variables" {
+  
+ description = "application related environment variables"
+ type = "map"
+}
+
+# variable "apiservice_environment_variables" {
+  
+#  description = "application related environment variables"
+#  type = "list"
+# }
+
+variable "buildspec_path" {
+  
+  description ="Path of the buildspec file from root of source"
+  type = "map"
+}
+
+#variables for codedeploy
+
+variable "enable_auto_rollback" {
+  description = "True or False for enabling autorollback"
+  type = "string"
+}
+
+variable "rollback_events" {
+  description = "list of events to trigger auto rollback"
+  type = "list"
+  
+}
+
+variable "action_on_timeout" {
+  description = "How soon the traffic should given to green deployments"
+  type = "string"
+}
+
+variable "action_on_blue_tasks" {
+  description = "action on blue task after successful green deployment"
+  type = "string"
+}
+
+variable "bluetask_termination_wait_minutes" {
+  description = "How long codedeploy wait to terminate blue task after successful deployment"
+}
+
+# variable "source_output_artifact_dir" {
+#   description = "source code checkout directory on s3 bucket"
+#   type = "string"
+# }
+
+# variable "build_output_image_artifact_dir" {
+#   description = "output directory to dump build with image definition file"
+#   type = "string"
+# }
+
+# variable "build_output_deploy_artifact_dir" {
+#   description = "output directory to dump build with deployment definition files"
+#   type = "string"
+  
+# }
+
+# variable "image_placeholder_text" {
+#   description = "placeholder text to replace the image url"
+  
+# }
+
+variable "github_repository_name" {
+  description = "respository name in github"
+  type = "string"
+}
+
+variable "github_branch_name" {
+  description = "branch of the repository"
+  type = "map"
+}
+
+# variable "apiservice_source_output_artifact_dir" {
+#   description = "source code checkout directory on s3 bucket"
+#   type = "string"
+# }
+
+# variable "apiservice_build_output_image_artifact_dir" {
+#   description = "output directory to dump build with image definition file"
+#   type = "string"
+# }
+
+# variable "apiservice_build_output_deploy_artifact_dir" {
+#   description = "output directory to dump build with deployment definition files"
+#   type = "string"
+  
+# }
+
+# variable "apiservice_image_placeholder_text" {
+#   description = "placeholder text to replace the image url"
+  
+# }
+
+
+variable "artifact" {
+  type = map
+  description = "apiservice and clientapp artifact variables"
+  
+}
+
+# variable "codebuild_project_name" {
+  
+# }

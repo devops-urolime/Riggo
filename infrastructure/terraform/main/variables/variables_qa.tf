@@ -2,6 +2,46 @@
 #Application variables
 spring_profile_env = "qa"
 
+#environment variables
+
+environment_variables ={
+      clientapp = [ 
+      {
+        name  = "REACT_APP_DOMAIN_AUTH_CONFIG"
+        value = "riggo-qa.auth0.com"
+      },
+      {
+        name  = "REACT_APP_CLIENT_ID_AUTH_CONFIG"
+        value = "7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv"
+      },
+      {
+        name = "REACT_APP_AUDIENCE_ID_AUTH_CONFIG"
+        value = "load-resource-api"
+
+      },
+      {
+        name = "REACT_APP_CALL_BACK_URL_AUTH_CONFIG"
+        value = "https://riggo.riggoqa.net/callback"
+      },
+      {
+        name = "REACT_APP_MOCK_ALL_DATA"
+        value = "true"
+      }
+],
+apiservices = [
+      {
+        name  = "REPOSITORY_URL"
+        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
+      }
+]
+}
+
+# apiservice_environment_variables = [
+#       {
+#         name  = "REPOSITORY_URL"
+#         value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
+#       }
+#       ]
 
 #General Variables
 keyname = "RiggoKeyPair-qa"
@@ -149,3 +189,21 @@ alb_unhealthy_host_count_threshold = "1"
 #variables for SNS
 
 alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
+
+#variables for codebuild
+
+compute_type = "BUILD_GENERAL1_SMALL"
+codebuild_image = "aws/codebuild/standard:2.0"
+buildspec_path = {
+
+  clientapp  = "CI-CD/clientapp-buildspec.yaml"
+  apiservice = "CI-CD/apiservices-buildspec.yaml"
+}
+
+#Variables for  Codedeploy
+
+enable_auto_rollback = "true"
+rollback_events = ["DEPLOYMENT_FAILURE"]
+action_on_timeout = "CONTINUE_DEPLOYMENT"
+action_on_blue_tasks = "TERMINATE"
+bluetask_termination_wait_minutes = 0

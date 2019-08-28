@@ -30,7 +30,7 @@ triggerAction  - To identify the event for the Stop object either Insert update 
         string LoadPayloadBody=palyloadCls.getSavePayload(stopSet,triggerAction); 
         system.debug('--STOPS payload---'+LoadPayloadBody);
         HttpResponse httpResponse=null;
-        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops');
+        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops',null);
         String response =  httpResponse.getBody();
         system.debug('--response'+response);
         

@@ -25,11 +25,13 @@ resource "aws_route_table" "public-rt" {
 
 # Assign the route table to the public Subnet
 resource "aws_route_table_association" "public-rt" {
+  depends_on = ["aws_subnet.public-subnet"]
   subnet_id      = "${aws_subnet.public-subnet.id}"
   route_table_id = "${aws_route_table.public-rt.id}"
 }
 
 resource "aws_route_table_association" "public-rt2" {
+  depends_on = ["aws_subnet.public-subnet2"]
   subnet_id      = "${aws_subnet.public-subnet2.id}"
   route_table_id = "${aws_route_table.public-rt.id}"
 }

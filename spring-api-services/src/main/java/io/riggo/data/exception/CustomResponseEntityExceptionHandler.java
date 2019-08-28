@@ -24,12 +24,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, PayloadParseException.class})
+    @ExceptionHandler({IllegalArgumentException.class, PayloadParseException.class, BadRequestException.class})
     public final ResponseEntity<Object> badRequestExceptions(Exception ex, WebRequest request) {
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({ResourceNotFoundException.class, LoadNotFoundException.class})
+    @ExceptionHandler({ResourceNotFoundException.class})
     public final ResponseEntity<Object> notFoundExceptions(Exception ex, WebRequest request) {
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
     }

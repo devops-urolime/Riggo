@@ -21,3 +21,23 @@ output "production_targetgroup_suffix" {
 output "testing_targetgroup_suffix" {
   value = "${aws_lb_target_group.ecs-lb-targetgroup-testlistner.arn_suffix}"
 }
+
+output "prod_listener" {
+  value = "${aws_lb_listener.front_end.arn}"
+}
+
+output "test_listener" {
+  value = "${aws_lb_listener.testing-listener.arn}"
+}
+
+output "target_group_name_blue" {
+  value = "${aws_lb_target_group.ecs-lb-targetgroup.name}"
+}
+
+output "target_group_name_green" {
+  value = "${aws_lb_target_group.ecs-lb-targetgroup-testlistner.name}"
+}
+
+output "container_definition" {
+  value = "${aws_ecs_task_definition.riggo-ecs-TD.container_definitions}"
+}

@@ -1,22 +1,24 @@
-trigger StopTrigger on rtms__Stop__c (before delete,after insert,after update) {
-    Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPI');
-    if(apxTriOnOff != null && apxTriOnOff.isEnable__c){ 
-        // Trigger is on before update event 
-        if(trigger.isbefore && trigger.isdelete){
-            Set<Id> deleteId = new Set<Id>();
-            for(rtms__Stop__c stp : trigger.old){ 
-                // Calling webservice callout passing parameters as Load Id and event name
-                deleteId.add(trigger.old[0].id);
-            }
-            if(deleteId != null){
-                StopAPICalloutCtrl.makePostCallout(deleteId,'Delete');    
-            }
-        }
-    }
-    if(trigger.isupdate || trigger.isInsert ){
+trigger StopTrigger on rtms__Stop__c (after insert,after update) {
+ 
+    if(trigger.isInsert ){
         Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPIForDetentionEmail');
         if(apxTriOnOff != null && apxTriOnOff.isEnable__c){ 
             DetentionEmailsCtrl.detentionRecordCreation(trigger.newmap.keyset());
          }
+    }
+    if(trigger.isupdate){
+        Apex_Trigger_On_Off__c apxTriOnOff = Apex_Trigger_On_Off__c.getValues('StopTriggerForAPIForDetentionEmail');
+        if(apxTriOnOff != null && apxTriOnOff.isEnable__c){ 
+            Set<Id> stopIdSet = new Set<Id>();
+            for(rtms__Stop__c stp : trigger.new){
+                if(stp.rtms__Stop_Status__c != Trigger.oldMap.get(stp.Id).rtms__Stop_Status__c || stp.LoadStatus__c != Trigger.oldMap.get(stp.Id).LoadStatus__c || stp.rtms__Expected_Date__c != Trigger.oldMap.get(stp.Id).rtms__Expected_Date__c || stp.rtms__Appointment_Time__c != Trigger.oldMap.get(stp.Id).rtms__Appointment_Time__c){
+                    stopIdSet.add(stp.Id);
+                }
+            }
+        	if(stopIdSet != null && stopIdSet.size() > 0){
+               DetentionEmailsCtrl.detentionRecordCreation(stopIdSet); 
+            }    
+         }
+        
     }
 }
