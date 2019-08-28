@@ -42,11 +42,13 @@ resource "aws_route_table" "private-rt" {
 
 # Assign the route table to the private Subnet
 resource "aws_route_table_association" "private-rt" {
+  depends_on = ["aws_subnet.private-subnet"]
   subnet_id      = "${aws_subnet.private-subnet.id}"
   route_table_id = "${aws_route_table.private-rt.id}"
 }
 
 resource "aws_route_table_association" "private-rt2" {
+  depends_on = ["aws_subnet.private-subnet2"]
   subnet_id      = "${aws_subnet.private-subnet2.id}"
   route_table_id = "${aws_route_table.private-rt.id}"
 }

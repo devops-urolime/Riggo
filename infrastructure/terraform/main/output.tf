@@ -65,6 +65,11 @@ output "Task_definition" {
   value = "${module.ecs-cluster.task_definition}"
 }
 
+output "container_definition" {
+  value = "${module.ecs-cluster.container_definition}"
+}
+
+
 #output for RDS
 
 output "rds_instance_endpoint" {

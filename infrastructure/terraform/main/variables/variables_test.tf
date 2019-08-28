@@ -31,20 +31,13 @@ environment_variables ={
 apiservices = [
       {
         name  = "REPOSITORY_URL"
-        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
+        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-test"
       }
 ]
 }
 
-# apiservice_environment_variables = [
-#       {
-#         name  = "REPOSITORY_URL"
-#         value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
-#       }
-#       ]
-
 #General Variables
-keyname = "RiggoKeyPair-qa"
+keyname = "RiggoKeyPair-test"
 cidr_block = "0.0.0.0/0"
 
 
@@ -74,7 +67,7 @@ allowed_methods = ["GET","HEAD"]
 cloudfront_root_object = "index.html"
 cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/155bca16-2b02-4a3e-bdec-f17da6f3b058"
 cloudfront_ssl_protocol_ver = "TLSv1.1_2016"
-cname_alias = "*.riggoqa.net"
+cname_alias = "test.riggoqa.net"
 error_caching_min_ttl = {
   403 = "300"
   404 = "300"
@@ -188,7 +181,7 @@ alb_unhealthy_host_count_threshold = "1"
 
 #variables for SNS
 
-alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
+alarms_email = ["muhasin.mohammed@urolime.com"]
 
 #variables for codebuild
 
@@ -207,3 +200,17 @@ rollback_events = ["DEPLOYMENT_FAILURE"]
 action_on_timeout = "CONTINUE_DEPLOYMENT"
 action_on_blue_tasks = "TERMINATE"
 bluetask_termination_wait_minutes = 0
+
+#variables for codepipeline
+artifact = {
+source_output_artifact_dir = "Riggo-source"
+build_output_image_artifact_dir = "Riggo-image"
+build_output_deploy_artifact_dir = "Riggo-deploy"
+image_placeholder_text = "<IMAGE1_NAME>"
+  }
+
+github_repository_name = "riggo"
+github_branch_name = {
+  clientapp = "client-app"
+  apiservices = "api-services"
+}

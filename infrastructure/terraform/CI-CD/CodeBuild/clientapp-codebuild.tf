@@ -1,18 +1,18 @@
 data "aws_region" "current" {}
 
-data "aws_subnet_ids" "private" {
-  vpc_id = "${var.vpc_id}"
+# data "aws_subnet_ids" "private" {
+#   vpc_id = "${var.vpc_id}"
 
-  filter {
-    name   = "tag:Name"
-    values = ["${terraform.workspace} Private*"]       # insert values here
-  }
+#   filter {
+#     name   = "tag:Name"
+#     values = ["${terraform.workspace} Private*"]       # insert values here
+#   }
 
-}
+# }
 data "aws_security_groups" "security_groups" {
-  filter {
-    name   = "group-name"
-    values = ["terraform*"]
+    filter {
+    name   = "tag:Name"
+    values = ["*-${terraform.workspace}-ECSinstance"]
   }
 
   filter {
@@ -24,8 +24,9 @@ data "aws_security_groups" "security_groups" {
 locals  {
   
   clientapp_codebuildname = "${terraform.workspace}-client-app-codebuild"
-  clientapp_description = "Build project for client-app"
+  clientapp_description = "Build project for client-app in ${terraform.workspace} environment"
 }
+
 
 
 
@@ -86,9 +87,10 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
   vpc_config {
     vpc_id = "${var.vpc_id}"
 
-    subnets = "${data.aws_subnet_ids.private.ids}"
+    # subnets = "${data.aws_subnet_ids.private.ids}"
     #   "${var.private_subnet1_id}",
     #   "${var.private_subnet2_id}"
+      subnets = "${var.private_subnet_ids}"
          
     
 
