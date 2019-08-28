@@ -6,6 +6,9 @@ import {
   GET_LOAD_PIPE_LINE_SUMMARY,
   GET_LOAD_PIPE_LINE_SUMMARY_FAIL,
   GET_LOAD_PIPE_LINE_SUMMARY_SUCCESS,
+  GET_LOAD_SHIPMENT_SUMMARY,
+  GET_LOAD_SHIPMENT_SUMMARY_FAIL,
+  GET_LOAD_SHIPMENT_SUMMARY_SUCCESS,
   GET_LOAD_STOP_SUMMARY,
   GET_LOAD_STOP_SUMMARY_FAIL,
   GET_LOAD_STOP_SUMMARY_SUCCESS,
@@ -14,7 +17,7 @@ import {
 import {
   findLoadByIdApi,
   getMenuApi,
-  loadPipeLineSummaryApi,
+  loadPipeLineSummaryApi, loadShipmentSummaryApi,
   loadStopsSummaryApi
 } from '../../api';
 import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
@@ -73,6 +76,28 @@ function* getLoadStopSummarySaga() {
     }
 }
 
+function* getLoadShipmentSummarySaga(action) {
+    try{
+      const JWT = yield select(getToken);
+      const result = yield loadShipmentSummaryApi(
+        action.offset,
+        action.units,
+        action.fiscalMonth,
+        action.fiscalYear,
+        action.week,
+        JWT
+      );
+      yield put({type: GET_LOAD_SHIPMENT_SUMMARY_SUCCESS, shipmentSummary: result});
+    } catch (e) {
+      yield put({type: GET_LOAD_SHIPMENT_SUMMARY_FAIL});
+      yield put({
+        type: APP_API_CALL_FAIL,
+        message: "Error when get Load Shipment Summary",
+        err: e
+      });
+    }
+}
+
 function* getMenuSaga(action) {
     try{
       const JWT = yield select(getToken, action.menuTypePosition);
@@ -101,6 +126,10 @@ export function* watchGetLoadPipeLineSummary() {
     yield takeEvery(GET_LOAD_PIPE_LINE_SUMMARY, getLoadPipeLineSummarySaga);
 }
 
+export function* watchGetLoadShipmentSummary() {
+    yield takeEvery(GET_LOAD_SHIPMENT_SUMMARY, getLoadShipmentSummarySaga);
+}
+
 export function* watchGetMenu() {
     yield takeEvery(GET_MENU, getMenuSaga);
 }
@@ -110,6 +139,7 @@ export default function* rootSaga() {
       watchGetLoad(),
       watchGetLoadPipeLineSummary(),
       watchGetLoadStopSummary(),
+      watchGetLoadShipmentSummary(),
       watchGetMenu()
     ]);
 }
