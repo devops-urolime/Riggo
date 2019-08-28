@@ -191,6 +191,12 @@ class DashboardPage extends Component {
     });
   };
 
+  hasPrev = () => {
+    let hasPrev = this.state.historyNavIndex > this.state.historyNav.length - 1;
+    this.setState({
+      showPrev: hasPrev
+    });
+  };
 
   navigateToNextViewType = (item) => {
     const { viewTypeShipment } = this.state;
@@ -277,6 +283,8 @@ class DashboardPage extends Component {
         this.setState({
           navViewDayData: payload
          });
+        break;
+      default:
         break;
     }
   };
