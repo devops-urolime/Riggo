@@ -136,9 +136,6 @@ class DashboardPage extends Component {
       fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
       fiscalYearShipment: SHIPMENT_FISCAL_YEAR_DEFAULT,
       weekShipment: SHIPMENT_FISCAL_WEEK_DEFAULT,
-      navViewMonthData:null,
-      navViewWeekData:null,
-      navViewDayData:null,
       showNext: false,
       showPrev: false,
       historyNav:[],
@@ -266,7 +263,6 @@ class DashboardPage extends Component {
           showPrev: hasPrev,
           historyNavIndex: this.state.historyNavIndex - 1
         });
-        this.updateNavigation(item, viewTypeShipment);
         this.loadShipments(
           item.offset,
           item.units,
