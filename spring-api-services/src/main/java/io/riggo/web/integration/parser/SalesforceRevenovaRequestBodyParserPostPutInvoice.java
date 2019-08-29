@@ -8,7 +8,9 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Scope(value="prototype", proxyMode=ScopedProxyMode.TARGET_CLASS)
@@ -33,24 +35,27 @@ public class SalesforceRevenovaRequestBodyParserPostPutInvoice implements Reques
 
 
     @Override
-    public Invoice resolveInvoice(Map<String, Object> dataHashMap) {
-        Map<String, Object> invoiceMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("Invoice", dataHashMap);
-        Invoice invoice = new Invoice();
-        invoice.setExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("id", invoiceMap));
-        invoice.setQuoteDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("quote_date", invoiceMap));
+    public List<Invoice> resolveInvoice(Map<String, Object> dataHashMap) {
+        List<Map<String, Object>> invoiceListMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsListOfMap("Invoice", dataHashMap);
+        List<Invoice> invoices = invoiceListMap.stream().map(invoiceMap -> {
+            Invoice invoice = new Invoice();
+            invoice.setExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("id", invoiceMap));
+            invoice.setQuoteDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("quote_date", invoiceMap));
 
 
-        Map<String, Object> invoiceStatusMap = new HashMap<>();
-        invoiceStatusMap.put(SalesforceRevenovaInvoiceStatusResolver.INVOICE_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("status", invoiceMap));
-        invoice.setStatus(salesforceRevenovaInvoiceStatusResolver.resolveInvoiceStatus(invoiceStatusMap).getColVal());
+            Map<String, Object> invoiceStatusMap = new HashMap<>();
+            invoiceStatusMap.put(SalesforceRevenovaInvoiceStatusResolver.INVOICE_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("status", invoiceMap));
+            invoice.setStatus(salesforceRevenovaInvoiceStatusResolver.resolveInvoiceStatus(invoiceStatusMap).getColVal());
 
-        invoice.setComments(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("comments", invoiceMap));
-        invoice.setLoadExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("load_id", invoiceMap));
-        invoice.setNetFreightCharges(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("net_freight_charges", invoiceMap));
-        invoice.setFuelSurcharge(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("fuel_surcharges", invoiceMap));
-        invoice.setAccessorialCharges(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("accessorial_charge", invoiceMap));
-        invoice.setTransportationTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("transportation_total", invoiceMap));
-        invoice.setCustomerQuoteTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("customer_quote_total", invoiceMap));
-        return invoice;
+            invoice.setComments(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("comments", invoiceMap));
+            invoice.setLoadExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("load_id", invoiceMap));
+            invoice.setNetFreightCharges(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("net_freight_charges", invoiceMap));
+            invoice.setFuelSurcharge(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("fuel_surcharges", invoiceMap));
+            invoice.setAccessorialCharges(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("accessorial_charge", invoiceMap));
+            invoice.setTransportationTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("transportation_total", invoiceMap));
+            invoice.setCustomerQuoteTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("customer_quote_total", invoiceMap));
+            return invoice;
+        }).collect(Collectors.toList());
+        return invoices;
     }
 }

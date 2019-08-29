@@ -50,7 +50,8 @@ resource "aws_iam_role_policy" "api-service-codebuild-service-role-policy" {
     {
             "Effect": "Allow",
             "Action": [
-                "ecr:*"
+                "ecr:*",
+                "ecs:*"
             ],
             "Resource": "*"
     },
@@ -67,6 +68,16 @@ resource "aws_iam_role_policy" "api-service-codebuild-service-role-policy" {
       ],
       "Resource": "*"
     },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.codebuild_caching_s3_bucket.arn}",
+        "${aws_s3_bucket.codebuild_caching_s3_bucket.arn}/*"
+      ]
+    },   
     {
       "Effect": "Allow",
       "Action": [

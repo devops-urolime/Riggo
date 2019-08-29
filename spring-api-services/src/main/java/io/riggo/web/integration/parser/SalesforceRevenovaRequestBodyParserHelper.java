@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -34,7 +36,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
 
     public BigDecimal getMapValueAsBigDecimal(String key, Map<String, Object> map) {
-        String value = (String) map.get(key);
+        String value = MapUtils.getString(map, key);
         if (value == null) {
             return null;
         }
@@ -66,9 +68,13 @@ public class SalesforceRevenovaRequestBodyParserHelper {
         return (Map<String, Object>) MapUtils.getMap(map, key);
     }
 
+    public List<Map<String, Object>> getMapValueAsListOfMap(String key, Map<String, Object> map) {
+        return (ArrayList<Map<String, Object>>) map.get("key");
+    }
+
 
     public LocalDateTime getMapValueAsLocalDateTime(String key, Map<String, Object> map) {
-        String value = (String) map.get(key);
+        String value = MapUtils.getString(map, key);
         if (StringUtils.isBlank(value)) {
             return null;
         }
@@ -77,8 +83,8 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
 
     public LocalDateTime getMapValueAsLocalDateTimeFrom2Keys(String dateKey, String timeKey, Map<String, Object> map) {
-        String dateValue = (String) map.get(dateKey);
-        String timeValue = (String) map.get(timeKey);
+        String dateValue = MapUtils.getString(map, dateKey);
+        String timeValue = MapUtils.getString(map, timeKey);
         if (StringUtils.isBlank(dateValue)) {
             return null;
         }
@@ -91,7 +97,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
 
     public LocalDate getMapValueAsLocalDate(String key, Map<String, Object> map) {
-        String value = (String) map.get(key);
+        String value = MapUtils.getString(map, key);
         if (StringUtils.isNotBlank(key)) {
             return null;
         }

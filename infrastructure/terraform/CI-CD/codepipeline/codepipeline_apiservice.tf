@@ -68,7 +68,7 @@ resource "aws_codepipeline" "codepipeline_apiservice" {
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["${local.source_directory}"]
-      output_artifacts = ["${local.build_image_directory}","${local.build_deploy_directory}"]
+      output_artifacts = ["${local.build_deploy_directory}"]      
       version          = "1"
 
       configuration = {
@@ -85,13 +85,13 @@ resource "aws_codepipeline" "codepipeline_apiservice" {
       category        = "Deploy"
       owner           = "AWS"
       provider        = "CodeDeployToECS"
-      input_artifacts = ["${local.build_image_directory}","${local.build_deploy_directory}"]
+      input_artifacts = ["${local.build_deploy_directory}"]
       version         = "1"
 
       configuration = {
         ApplicationName = "${var.codedeploy_application_name}"
         DeploymentGroupName = "${var.codedeploy_application_deploymentgroupname}"
-        Image1ArtifactName = "${local.build_image_directory}"
+        Image1ArtifactName = "${local.build_deploy_directory}"
         TaskDefinitionTemplateArtifact = "${local.build_deploy_directory}"
         Image1ContainerName = "${substr(local.placeholder_text, 1, 11)}"
         TaskDefinitionTemplatePath = "taskdef.json"
