@@ -20,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,6 +73,7 @@ public class LoadController {
 
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
+    @PreAuthorize("hasAuthority('read:load')")
     @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
     public LoadResponse getLoadById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
         Optional<Load> load = loadService.findById(id, authenticationFacade.getSiteId());
@@ -85,6 +87,7 @@ public class LoadController {
 
     @Cacheable(value = "loadsEXT", key = "#p0")//for now
     @GetMapping("/load/external/{extSysId}")
+    @PreAuthorize("hasAuthority('read:load')")
     public Optional<Load> getLoadByExternalId(@PathVariable("extSysId") String extSysId, @RequestParam(required = false, name = "external", value = "false") Boolean findByExternal, Authentication authentication) {
         if (findByExternal) {
             return loadService.findByExtSysId(extSysId, authenticationFacade.getSiteId());
@@ -94,6 +97,7 @@ public class LoadController {
 
 
     @PostMapping(path = "/load", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:load')")
     public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
         Load load = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
@@ -140,6 +144,7 @@ public class LoadController {
 
 
     @PutMapping(value = "/load", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:load')")
     public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
         Optional<Load> loadFromDb = loadService.findByExtSysId(resolvedLoad.getExtSysId(), authenticationFacade.getSiteId());
