@@ -243,6 +243,7 @@ module "codebuild" {
   buildspec_path = "${var.buildspec_path}"
   private_subnet_ids = ["${module.VPC.private_subnet_id1}","${module.VPC.private_subnet_id2}"]
   artifactory_directory = "${local.artifact}"
+  task_definition = "${module.ecs-cluster.task_definition_family}"
   # build_output_deploy_dir = "${local.build_output_deploy_dir}"
   # build_output_image_dir = "${local.build_output_image_dir}"
   # build_output_image_dir = "${lookup(local.apiservices, "build_output_image_dir")}"

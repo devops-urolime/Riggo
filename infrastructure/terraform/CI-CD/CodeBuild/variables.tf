@@ -51,3 +51,7 @@ variable "private_subnet_ids" {
 variable "artifactory_directory" {
 #   type = "map"
 }
+
+variable "task_definition" {
+  
+}

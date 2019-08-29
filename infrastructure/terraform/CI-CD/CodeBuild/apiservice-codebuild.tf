@@ -27,7 +27,7 @@ locals  {
   apiservice_description = "Build project for apiservice in ${terraform.workspace} environment"
   build_image_directory = "${lookup(var.artifactory_directory, "build_output_image_dir")}"
   build_deploy_directory = "${lookup(var.artifactory_directory, "build_output_deploy_dir")}"
-
+  placeholder_text = "${lookup(var.artifactory_directory, "placeholder_text")}"
 
 }
 
@@ -38,7 +38,7 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
   depends_on = ["aws_s3_bucket.codebuild_caching_s3_bucket"]
   name          = "${local.apiservice_codebuildname}"
   description   = "${local.apiservice_description}"
-  build_timeout = "5"
+  build_timeout = "300"
   service_role  = "${aws_iam_role.api-service-codebuild-service-role.arn}"
 
   artifacts {
@@ -53,7 +53,7 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
     image                       = "${var.codebuild_image}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-     
+    privileged_mode = true
 
     environment_variable {
       name  = "AWS_REGION"
@@ -64,6 +64,15 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
       name = "DEPLOY_ARTIFACT_NAME"
       value = "${local.build_deploy_directory}"
     }
+    environment_variable {
+      name = "TASKDEF_NAME"
+      value = "${var.task_definition}"
+    }
+    environment_variable {
+      name = "ECR_PLACEHOLDER"
+      value = "${local.placeholder_text}"
+    }
+
 
     environment_variable {
       name = "IMAGE_ARTIFACT_NAME"
