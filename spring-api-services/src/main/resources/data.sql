@@ -22,6 +22,10 @@ INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_stat
 INSERT INTO load_line_item(id, load_id) VALUES (1, 1);
 INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
 
+/* load_stop */
+INSERT INTO load_stop(id, load_id, arrival_status, type) VALUES (1, 1, 1, 1);
+INSERT INTO load_stop(id, load_id, arrival_status, type) VALUES (2, 1, 2, 2);
+
 
 /* invoice */
 INSERT INTO invoice(id, ext_sys_id, load_id, quote_date, status) VALUES (1, 'extSysId1', 1, '2019-07-15 00:00:00', 3);
