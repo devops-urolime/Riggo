@@ -12,9 +12,9 @@ export const LOAD_SHIPMENT_SUMMARY_END_POINT= LOAD_END_POINT + '/shipments/summa
 export const LOAD_READ_SCOPE = "read:load";
 export const LOAD_WRITE_SCOPE = "write:load";
 export const LOAD_READ_PIPE_LINE_SCOPE = "read:loadPipeline";
+export const LOAD_WRITE_INVOICE_SCOPE = "write:loadInvoice";
 export const PROFILE_SCOPE = "profile";
 export const OPENID_SCOPE = "openid";
-export const MENU_READ_SCOPE = "read:menu";
 export const AUTH_CONFIG_REALM = "Username-Password-Authentication";
 export const AUTH_CONFIG = {
   domain: process.env.REACT_APP_DOMAIN_AUTH_CONFIG,
@@ -22,7 +22,7 @@ export const AUTH_CONFIG = {
   audience: process.env.REACT_APP_AUDIENCE_ID_AUTH_CONFIG,
   callbackUrl: process.env.REACT_APP_CALL_BACK_URL_AUTH_CONFIG,
   responseType: 'token id_token',
-  scope: `${OPENID_SCOPE} ${PROFILE_SCOPE} ${LOAD_READ_SCOPE} ${LOAD_READ_PIPE_LINE_SCOPE} ${MENU_READ_SCOPE} ${LOAD_WRITE_SCOPE}`
+  scope: `${OPENID_SCOPE} ${PROFILE_SCOPE} ${LOAD_READ_SCOPE} ${LOAD_READ_PIPE_LINE_SCOPE} ${LOAD_WRITE_SCOPE} ${LOAD_WRITE_INVOICE_SCOPE}`
 };
 
 export const APP_PATH_ROOT = "/";
