@@ -7,7 +7,7 @@ import {
   MENU_END_POINT,
   MOCK_ALL_DATA,
   STATUS_400_ERROR_MESSAGE,
-  STATUS_401_ERROR_MESSAGE,
+  STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
   STATUS_500_ERROR_MESSAGE
 } from './config';
 
@@ -199,52 +199,48 @@ const shipmentsSummaryMonthlyMock = {
       {
          "title":"Monthly",
          "units":"month",
+         // TODO: add total properties at this level to show in the shipments visualization section agree this with Backend.
+         "totalShipmentsInPeriod": 382,
+         "costPerMlInPeriod": 1.89,
+         "totalCostInPeriod": 371450,
          "shipmentData":[
-            {
-               "label":"Aug 2019",
-               "shipments":55,
-               "costPerMile":5.36,
-               "fiscalMonth":7,
-               "fiscalYear":2019,
-               "week":0,
-               "offset": 0
-            },
-            {
-               "label":"July 2019",
-               "shipments":40,
-               "costPerMile":4.10,
-               "fiscalMonth":7,
-               "fiscalYear":2019,
-               "week":0,
-               "offset": 0
-            },
-            {
-               "label":"June 2019",
-               "shipments":35,
-               "costPerMile":3.20,
-               "fiscalMonth":7,
-               "fiscalYear":2019,
-               "week":0,
-               "offset": 0
-            },
-            {
-               "label":"May 2019",
-               "shipments":65,
-               "costPerMile":8.57,
-               "fiscalMonth":7,
-               "fiscalYear":2019,
-               "week":0,
-               "offset": 0
-            },
-            {
-               "label":"April 2019",
-               "shipments":15,
-               "costPerMile":1.7,
-               "fiscalMonth":7,
-               "fiscalYear":2019,
-               "week":0,
-               "offset": 0
-            }
+          {
+            "label":"April 2019",
+            "shipments":15,
+            "costPerMile":1.7,
+            "fiscalMonth":7,
+            "fiscalYear":2019,
+            "week":0,
+            "offset": 0
+          },
+          {
+           "label":"May 2019",
+           "shipments":65,
+           "costPerMile":8.57,
+           "fiscalMonth":7,
+           "fiscalYear":2019,
+           "week":0,
+           "offset": 0
+          },
+          {
+             "label":"June 2019",
+             "shipments":35,
+             "costPerMile":3.20,
+             "fiscalMonth":7,
+             "fiscalYear":2019,
+             "week":0,
+             "offset": 0
+          },
+          {
+             "label":"July 2019",
+             "shipments":40,
+             "costPerMile":4.10,
+             "fiscalMonth":7,
+             "fiscalYear":2019,
+             "week":0,
+             "offset": 0
+          }
+
          ]
       }
    ]
@@ -413,6 +409,9 @@ const handleStatus = (response) => {
     }
     if(response && response.status === 400){
      throw new Error(STATUS_400_ERROR_MESSAGE + apiMessage(response));
+    }
+    if(response && response.status === 403){
+       throw new Error(STATUS_403_ERROR_MESSAGE + apiMessage(response));
     }
     if(response && response.status === 500){
      throw new Error(STATUS_500_ERROR_MESSAGE + apiMessage(response));
