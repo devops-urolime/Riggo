@@ -5,5 +5,5 @@ Resources:
       Properties:
         TaskDefinition: <TASK_DEFINITION>
         LoadBalancerInfo:
-          ContainerName: "Riggo-test-devops"
+          ContainerName: "$CONTAINER_NAME"
           ContainerPort: 8088

@@ -2,10 +2,13 @@ data "aws_s3_bucket" "bucket_arn" {
   bucket = "${var.client-app-s3-bucket}"
 }
 
-
+# locals {
+#   private_subnet_ids = "${data.aws_subnet_ids.private.ids}"
+# }
 data "aws_subnet" "subnet" {
-  count = "${length(data.aws_subnet_ids.private.ids)}"
-  id = "${tolist(data.aws_subnet_ids.private.ids)[count.index]}"
+  #  depends_on = ["data.aws_subnet_ids.private"]
+  count = length(var.private_subnet_ids)
+  id = tolist(var.private_subnet_ids)[count.index]
 }
 
 

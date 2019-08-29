@@ -241,10 +241,98 @@ module "codebuild" {
   cloudfront_distribution_id = "${module.cloudfront.cloudfront_distribution_id}"
   codepipeline_artifact_bucket = "${module.codepipeline.codepipeline_s3_bucket}"
   buildspec_path = "${var.buildspec_path}"
-}
+  private_subnet_ids = ["${module.VPC.private_subnet_id1}","${module.VPC.private_subnet_id2}"]
+  artifactory_directory = "${local.artifact}"
+  task_definition = "${module.ecs-cluster.task_definition_family}"
+  # build_output_deploy_dir = "${local.build_output_deploy_dir}"
+  # build_output_image_dir = "${local.build_output_image_dir}"
+  # build_output_image_dir = "${lookup(local.apiservices, "build_output_image_dir")}"
+  # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
 
-module "codepipeline" {
-  source = "../CI-CD/codepipeline"
   
 }
 
+
+module "codepipeline" {
+  source = "../CI-CD/codepipeline"
+  github_repository_name = "${var.github_repository_name}"
+  github_branch_name = "${var.github_branch_name}"
+  # codebuild_project_name = "${module.codebuild.codebuild_project_name_apiservice}"
+  codedeploy_application_name = "${module.codedeploy.codedeploy_application_name}"
+  codebuild_project_name = "${local.codebuild_project_name}"
+  codedeploy_application_deploymentgroupname = "${module.codedeploy.codedeploy_application_deploymentgroupname}"
+  # source_output_dir = "${local.source_output_dir}"
+  # build_output_image_dir = "${local.build_output_image_dir}"
+  # build_output_deploy_dir = "${local.build_output_deploy_dir}"
+  # placeholder_text = "${local.placeholder_text}"
+  # source_output_dir = "${lookup(local.apiservices, "source_output_dir")}"
+  # build_output_image_dir = "${lookup(local.apiservices, "build_output_image_dir")}"
+  # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
+  # placeholder_text = "${lookup(local.apiservices, "placeholder_text")}"
+   artifactory_directory = "${local.artifact}"
+  
+  
+
+}
+
+
+module "codedeploy" {
+  source = "../CI-CD/codedeploy"
+  enable_auto_rollback = "${var.enable_auto_rollback}"
+  rollback_events = "${var.rollback_events}"
+  action_on_timeout = "${var.action_on_timeout}"
+  action_on_blue_tasks = "${var.action_on_blue_tasks}"
+  bluetask_termination_wait_minutes = "${var.bluetask_termination_wait_minutes}"
+  cluster_name = "${module.ecs-cluster.ecs_cluster_name}"
+  service_name = "${module.ecs-cluster.ecs_service_name}"
+  prod_listener = "${module.ecs-cluster.prod_listener}"
+  test_listener = "${module.ecs-cluster.test_listener}"
+  target_group_name_blue = "${module.ecs-cluster.target_group_name_blue}"
+  target_group_name_green = "${module.ecs-cluster.target_group_name_green}"
+  
+
+}
+
+# locals {
+#   source_output_dir = "${var.source_output_artifact_dir}"
+#   build_output_image_dir = "${var.build_output_image_artifact_dir}"
+#   build_output_deploy_dir = "${var.build_output_deploy_artifact_dir}"
+
+#   placeholder_text = "${var.image_placeholder_text}"
+# }
+
+
+# locals {
+  
+#   source_output_dir = "${var.source_output_artifact_dir}"
+#   build_output_image_dir = "${var.build_output_image_artifact_dir}"
+#   build_output_deploy_dir = "${var.build_output_deploy_artifact_dir}"
+
+#   placeholder_text = "${var.image_placeholder_text}"
+# }
+
+ locals {
+  
+  # clientapp = {
+  # source_output_dir = "${var.source_output_artifact_dir}"
+  # build_output_image_dir = "${var.build_output_image_artifact_dir}"
+  # build_output_deploy_dir = "${var.build_output_deploy_artifact_dir}"
+  # placeholder_text = "${var.image_placeholder_text}"
+  # }
+
+  artifact = {
+    source_output_dir = "${lookup(var.artifact, "source_output_artifact_dir")}"
+  build_output_image_dir = "${lookup(var.artifact, "build_output_image_artifact_dir")}"
+  build_output_deploy_dir = "${lookup(var.artifact, "build_output_deploy_artifact_dir")}"
+  placeholder_text = "${lookup(var.artifact, "image_placeholder_text")}"
+
+  }
+
+codebuild_project_name = {
+  clientapp = "${module.codebuild.codebuild_project_name_clientapp}"
+  apiservice = "${module.codebuild.codebuild_project_name_apiservice}"
+}
+}
+
+
+ 

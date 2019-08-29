@@ -2,12 +2,12 @@ import {
   BASE_END_POINT,
   EMPTY_JWT_ERROR_MESSAGE,
   LOAD_END_POINT,
-  LOAD_PIPELINE_SUMMARY_END_POINT,
+  LOAD_PIPELINE_SUMMARY_END_POINT, LOAD_SHIPMENT_SUMMARY_END_POINT,
   LOAD_STOP_SUMMARY_END_POINT,
   MENU_END_POINT,
   MOCK_ALL_DATA,
   STATUS_400_ERROR_MESSAGE,
-  STATUS_401_ERROR_MESSAGE,
+  STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
   STATUS_500_ERROR_MESSAGE
 } from './config';
 
@@ -192,6 +192,199 @@ const loadByIdMock =  {
    "data":{}
 };
 
+const shipmentsSummaryMonthlyMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "title":"Monthly",
+         "units":"month",
+         // TODO: add total properties at this level to show in the shipments visualization section agree this with Backend.
+         "totalShipmentsInPeriod": 382,
+         "costPerMlInPeriod": 1.89,
+         "totalCostInPeriod": 371450,
+         "shipmentData":[
+          {
+            "label":"April 2019",
+            "shipments":15,
+            "costPerMile":1.7,
+            "fiscalMonth":7,
+            "fiscalYear":2019,
+            "week":0,
+            "offset": 0
+          },
+          {
+           "label":"May 2019",
+           "shipments":65,
+           "costPerMile":8.57,
+           "fiscalMonth":7,
+           "fiscalYear":2019,
+           "week":0,
+           "offset": 0
+          },
+          {
+             "label":"June 2019",
+             "shipments":35,
+             "costPerMile":3.20,
+             "fiscalMonth":7,
+             "fiscalYear":2019,
+             "week":0,
+             "offset": 0
+          },
+          {
+             "label":"July 2019",
+             "shipments":40,
+             "costPerMile":4.10,
+             "fiscalMonth":7,
+             "fiscalYear":2019,
+             "week":0,
+             "offset": 0
+          }
+
+         ]
+      }
+   ]
+};
+
+const shipmentsSummaryWeeklyMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "title":"July 2019",
+         "units":"weekly",
+         "shipmentData":[
+            {
+               "label":"Week 1",
+               "shipments":30,
+               "costPerMile":2.99,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"Week 2",
+               "shipments":40,
+               "costPerMile":1.99,
+               "fiscalYear":2019,
+               "week":2,
+               "offset": 0
+            },
+            {
+               "label":"Week 3",
+               "shipments":50,
+               "costPerMile":3.69,
+               "fiscalYear":2019,
+               "week":3,
+               "offset": 0
+            },
+            {
+               "label":"Week 4",
+               "shipments":20,
+               "costPerMile":1.99,
+               "fiscalYear":2019,
+               "week":4,
+               "offset": 0
+            }
+         ]
+      }
+   ]
+};
+
+const shipmentsSummaryDailyMock = {
+   "status":200,
+   "message":"success",
+   "data":[
+      {
+         "title":"Week 1 - July 2019",
+         "units":"daily",
+         "shipmentData":[
+            {
+               "label":"July 1",
+               "shipments":60,
+               "costPerMile":1.99,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 2",
+               "shipments":10,
+               "costPerMile":1.10,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 3",
+               "shipments":20,
+               "costPerMile":2.99,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 4",
+               "shipments":40,
+               "costPerMile":1.20,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 5",
+               "shipments":55,
+               "costPerMile":3.68,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 6",
+               "shipments":20,
+               "costPerMile":1.99,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            },
+            {
+               "label":"July 7",
+               "shipments":52,
+               "costPerMile":2.20,
+               "fiscalMonth":7,
+               "fiscalYear":2019,
+               "week":1,
+               "offset": 0
+            }
+         ]
+      }
+   ]
+};
+
+export const SHIPMENT_RESULT_BY_MONTH = "month";
+export const SHIPMENT_RESULT_BY_WEEK = "weekly";
+export const SHIPMENT_RESULT_BY_DAY = "daily";
+
+const getShipmentsSummaryMock = (resultType) => {
+  let mockData = [];
+  if(resultType === SHIPMENT_RESULT_BY_MONTH){
+    mockData = shipmentsSummaryMonthlyMock;
+  }
+  if(resultType === SHIPMENT_RESULT_BY_WEEK){
+    mockData = shipmentsSummaryWeeklyMock;
+  }
+  if(resultType === SHIPMENT_RESULT_BY_DAY){
+    mockData = shipmentsSummaryDailyMock;
+  }
+  return mockData;
+};
+
 const buildRequestMetaData = (method, ACCESS_TOKEN_JWT) =>{
    return {
      method: method,
@@ -217,6 +410,9 @@ const handleStatus = (response) => {
     if(response && response.status === 400){
      throw new Error(STATUS_400_ERROR_MESSAGE + apiMessage(response));
     }
+    if(response && response.status === 403){
+       throw new Error(STATUS_403_ERROR_MESSAGE + apiMessage(response));
+    }
     if(response && response.status === 500){
      throw new Error(STATUS_500_ERROR_MESSAGE + apiMessage(response));
     }
@@ -241,21 +437,29 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
 
 export const findLoadByIdApi = async (idLoad, JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_END_POINT + '/' + idLoad;
-    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock);
+    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, false);
 };
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
 };
 
 export const getMenuApi = async (JWT, menuTypePosition) => {
     const MENU_TYPE_POSITION = menuTypePosition || "";
     const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData);
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, false);
+};
+
+export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalYear, week, JWT) => {
+    const END_POINT =
+      BASE_END_POINT +
+      LOAD_SHIPMENT_SUMMARY_END_POINT +
+      `?offset=${offset}&units=${units}&fiscalMonth=${fiscalMonth}&fiscalYear=${fiscalYear}&week=${week}`;
+    return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), true);
 };

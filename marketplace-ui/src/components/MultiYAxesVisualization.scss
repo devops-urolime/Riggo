@@ -9,3 +9,30 @@
     font-size: 11px;
   }
 }
+
+.TitleVisualization{
+  font-size: 12px !important;
+  text-align: center;
+  line-height: 12px;
+}
+
+$navigate-arrow-size: 19px;
+
+.NavigateSection{
+    margin-top: 10px;
+}
+
+.NavigateBack{
+    font-size: $navigate-arrow-size !important;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.NavigateNext{
+    font-size: $navigate-arrow-size !important;
+    transform: rotateY(180deg);
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+}
