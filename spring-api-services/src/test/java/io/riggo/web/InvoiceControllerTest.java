@@ -92,7 +92,8 @@ public class InvoiceControllerTest {
     @Test
     public void postInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
         mvc.perform(post(Paths.API_VERSION + "/load/invoice")
-                .contentType(APPLICATION_JSON))
+                .contentType(APPLICATION_JSON)
+                .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
                 .andReturn();
     }
@@ -202,7 +203,8 @@ public class InvoiceControllerTest {
     @Test
     public void postInvoicedWithRequireWriteLoadInvvoicePermission() throws Exception {
         mvc.perform(post(Paths.API_VERSION + "/load/1/invoice")
-                .contentType(APPLICATION_JSON))
+                .contentType(APPLICATION_JSON)
+                .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
                 .andReturn();
     }
@@ -311,7 +313,8 @@ public class InvoiceControllerTest {
     @Test
     public void putInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
         mvc.perform(put(Paths.API_VERSION + "/load/invoice")
-                .contentType(APPLICATION_JSON))
+                .contentType(APPLICATION_JSON)
+                .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
                 .andReturn();
     }
@@ -416,8 +419,9 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    public void putInvoicedWithRequireWriteLoadInvvoicePermission() throws Exception {
+    public void putInvoicedWithRequireWriteLoadInvoicePermission() throws Exception {
         mvc.perform(put(Paths.API_VERSION + "/load/1/invoice")
+                .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();

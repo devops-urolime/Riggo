@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,6 +43,7 @@ public class InvoiceController {
 
 
     @PostMapping(path = "/load/invoice", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> postInvoice( @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, ResourceAlreadyExistsException{
         List<Invoice> invoiceList = processPostAPI(dataHashMap, true);
         BaseAPIResponse baseApiResponse = new BaseAPIResponse();
@@ -51,6 +53,7 @@ public class InvoiceController {
 
 
     @PostMapping(path = "/load/{loadId}/invoice", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> postInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, ResourceAlreadyExistsException{
         validateLoad(loadId, authenticationFacade.getSiteId());
         return postInvoice(dataHashMap);  //will validate load twice
@@ -71,6 +74,7 @@ public class InvoiceController {
 
 
     @PutMapping(value = "/load/invoice", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> putInvoice(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         List<Invoice> invoiceList = processPutInvoice(dataHashMap, false);
         BaseAPIResponse baseApiResponse = new BaseAPIResponse();
@@ -80,6 +84,7 @@ public class InvoiceController {
 
 
     @PutMapping(value = "/load/{loadId}/invoice", produces = "application/json")
+    @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> putInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap)  throws ResourceNotFoundException{
         validateLoad(loadId, authenticationFacade.getSiteId());
         List<Invoice> invoiceList = processPutInvoice(dataHashMap, false);
