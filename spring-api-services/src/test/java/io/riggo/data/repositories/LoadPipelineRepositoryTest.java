@@ -28,7 +28,7 @@ public class LoadPipelineRepositoryTest {
         //when
         Optional<List<LoadPipeline>> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteId(siteId);
 
-        //then menusBySiteAndType isPresent
+        //then loadPipeline isPresent
         assertTrue( loadPipeline.isPresent());
     }
 
@@ -42,7 +42,7 @@ public class LoadPipelineRepositoryTest {
         //when
         Optional<List<LoadPipeline>> loadPipeline = loadPipelineRepository.findPipelineSummaryBySiteIdShipperId(siteId, shipperId);
 
-        //then menusBySiteAndType isPresent
+        //then loadPipeline isPresent
         assertTrue( loadPipeline.isPresent());
     }
 }

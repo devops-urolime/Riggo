@@ -49,6 +49,14 @@ public class LoadStopService{
     }
 
 
+    public Optional<List<LoadStopSummary>> findStopSummaryBySiteId(Integer siteId){
+        try {
+            return loadStopSummaryRepository.findStopSummaryBySiteId(siteId);
+        } catch (Exception e) {
+            throw new RiggoDataAccessException(e);
+        }
+    }
+
     public Optional<List<LoadStopSummary>> findStopSummaryBySiteIdShipperId(Integer siteId, Integer shipperId) {
         try {
             return loadStopSummaryRepository.findStopSummaryBySiteIdShipperId(siteId, shipperId);
