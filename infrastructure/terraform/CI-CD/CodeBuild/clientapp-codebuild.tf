@@ -34,7 +34,7 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
   # name          = "${count.index == "0" ? "${terraform.workspace}-client-app-codebuild" : "${terraform.workspace}-api-service-codebuild"}"
   name          = "${local.clientapp_codebuildname}"
   description   = "${local.clientapp_description}"
-  build_timeout = "5"
+  build_timeout = "300"
   service_role  = "${aws_iam_role.client-app-codebuild-service-role.arn}"
 
   artifacts {
@@ -47,6 +47,7 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
     image                       = "${var.codebuild_image}"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    privileged_mode = true
      
     environment_variable {
       name  = "AWS_S3_BUCKET_DEPLOY"

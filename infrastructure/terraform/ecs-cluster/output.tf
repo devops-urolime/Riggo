@@ -45,3 +45,7 @@ output "target_group_name_green" {
 output "container_definition" {
   value = "${data.template_file.container-definition.rendered}"
 }
+
+output "task_definition_family" {
+  value = "${aws_ecs_task_definition.riggo-ecs-TD.family}"
+}
