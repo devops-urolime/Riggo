@@ -100,7 +100,7 @@ function* getLoadShipmentSummarySaga(action) {
 
 function* getMenuSaga(action) {
     try{
-      const JWT = yield select(getToken, action.menuTypePosition);
+      const JWT = yield select(getToken);
       const result = yield getMenuApi(JWT, action.menuTypePosition);
       yield put({type: GET_MENU_SUCCESS, menu: result});
       yield put({type: SET_DEFAULT_MENU, menuItem: getDefaultMenu(result)});
