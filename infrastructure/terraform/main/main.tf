@@ -248,7 +248,7 @@ module "codebuild" {
   # build_output_image_dir = "${local.build_output_image_dir}"
   # build_output_image_dir = "${lookup(local.apiservices, "build_output_image_dir")}"
   # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
-
+  container_name = "${module.ecs-cluster.container_name}"
   
 }
 

@@ -55,3 +55,7 @@ variable "artifactory_directory" {
 variable "task_definition" {
   
 }
+
+variable "container_name" {
+  
+}

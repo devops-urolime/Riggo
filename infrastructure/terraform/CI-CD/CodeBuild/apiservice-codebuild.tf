@@ -61,6 +61,11 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
     }
 
     environment_variable {
+      name = "CONTAINER_NAME"
+      value = "${var.container_name}"
+    }
+
+    environment_variable {
       name = "DEPLOY_ARTIFACT_NAME"
       value = "${local.build_deploy_directory}"
     }

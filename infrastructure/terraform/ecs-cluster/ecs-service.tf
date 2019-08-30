@@ -34,7 +34,8 @@ resource "aws_ecs_service" "riggo-ecs-service" {
   service_registries {
 
     registry_arn   = "${var.service_discovery_arn}"
-    container_name = "Riggo-resource-svr-${terraform.workspace}"
+    #container_name = "Riggo-resource-svr-${terraform.workspace}"
+    container_name = "${data.template_file.container-definition.vars["container_name"]}"
     container_port = "${var.container_port}"
 
   }
