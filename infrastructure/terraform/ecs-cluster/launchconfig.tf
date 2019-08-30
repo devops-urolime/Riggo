@@ -8,6 +8,28 @@ resource "aws_security_group_rule" "ingress_ecs_instance" {
   security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
   source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
 }
+
+resource "aws_security_group_rule" "ingress_ecs_dynamicPort1" {
+  description = "Incoming traffic to ECS instances"
+  type        = "ingress"
+  from_port   = "49153"
+  to_port     = "65535"
+  protocol    = "TCP"
+
+  security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
+  source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+}
+
+resource "aws_security_group_rule" "ingress_ecs_dynamicPort2" {
+  description = "Incoming traffic to ECS instances"
+  type        = "ingress"
+  from_port   = "32768"
+  to_port     = "61000"
+  protocol    = "TCP"
+
+  security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
+  source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+}
 resource "aws_security_group_rule" "egress_ecs_instance" {
   description = "Outgoing traffic from ECS instances"
   type        = "egress"

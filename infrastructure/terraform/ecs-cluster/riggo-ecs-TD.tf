@@ -4,6 +4,7 @@ data "template_file" "container-definition" {
   vars = {
     terraform-workspace = "${terraform.workspace}"
     container_port      = "${var.container_port}"
+    container_name      = "Riggo-resource-svr-${terraform.workspace}"
     # TD_Cpu_limit        = "${var.TD_Cpu_limit}"
     TD_mem_soft_limit   = "${var.TD_mem_soft_limit}"
     cloudwatch_logname  = "${var.cloudwatch_log}"
@@ -22,4 +23,11 @@ resource "aws_ecs_task_definition" "riggo-ecs-TD" {
   }
 
   #depends_on = ["null_resource.efs_url_update"]
+}
+
+resource "null_resource" "task_definition_file" {
+depends_on = ["aws_ecs_task_definition.riggo-ecs-TD"]
+  provisioner "local-exec" {
+    command = "aws ecs describe-task-definition --task-definition ${aws_ecs_task_definition.riggo-ecs-TD.family} |   jq '.taskDefinition' > ../../../CI-CD/taskdef.json"
+  }
 }

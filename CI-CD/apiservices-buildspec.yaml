@@ -20,7 +20,7 @@ phases:
       - docker build -t $REPOSITORY_URL:latest .
   post_build:
     commands:
-      - if [ $CODEBUILD_BUILD_SUCCEEDING = 1 ]; then echo Build completed on `date`; echo Pushing Docker image to ECR $REPOSITORY_URL ; docker push $REPOSITORY_URL:latest ; echo Writing image definitions file...; printf '{"ImageURI":"%s"}' $REPOSITORY_URL:latest > imageDetail.json; echo Image push completed on `date`; aws ecs describe-task-definition --task-definition $TASKDEF_NAME | jq '.taskDefinition' > taskdef.json; cat taskdef.json |  jq --arg IMAGE $ECR_PLACEHOLDER '.containerDefinitions[].image = $IMAGE' > task.json && mv task.json taskdef.json;cp ../CI-CD/appspec_template.yaml . && envsubst < appspec_template.yaml > appspec.yaml; else echo Build failed ignoring deployment ; fi
+      - if [ $CODEBUILD_BUILD_SUCCEEDING = 1 ]; then echo Build completed on `date`; echo Pushing Docker image to ECR $REPOSITORY_URL ; docker push $REPOSITORY_URL:latest ; echo Writing image definitions file...; printf '{"ImageURI":"%s"}' $REPOSITORY_URL:latest > imageDetail.json; echo Image push completed on `date`;FILE=../CI-CD/taskdef.json;if  [ -f "$FILE" ];then cp $FILE .;else aws ecs describe-task-definition --task-definition Riggo-ECS-test-TD |   jq '.taskDefinition' > taskdef.json;fi;cat taskdef.json |  jq --arg IMAGE $ECR_PLACEHOLDER '.containerDefinitions[].image = $IMAGE' > task.json && mv task.json taskdef.json;cp ../CI-CD/appspec_template.yaml . && envsubst < appspec_template.yaml > appspec.yaml; else echo Build failed ignoring deployment ; fi
       - echo Deployment completed on `date`
 artifacts:
   files:

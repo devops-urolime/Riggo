@@ -49,3 +49,7 @@ output "container_definition" {
 output "task_definition_family" {
   value = "${aws_ecs_task_definition.riggo-ecs-TD.family}"
 }
+
+output "container_name" {
+  value = "${data.template_file.container-definition.vars["container_name"]}"
+}

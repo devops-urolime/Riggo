@@ -1,8 +1,13 @@
+
+
+
+
 resource "github_repository_webhook" "github_webhook" {
+  count = "${length(local.application_names)}"
   repository = "${var.github_repository_name}"
 #   name = "${terraform.workspace}-github-webhook"
   configuration {
-    url          = "${aws_codepipeline_webhook.codepipeline_Webhook.url}"
+    url          = "${aws_codepipeline_webhook.codepipeline_Webhook.*.url[count.index]}"
     content_type = "json"
     insecure_ssl = false
     secret       = "${local.webhook_secret}"
@@ -13,10 +18,11 @@ resource "github_repository_webhook" "github_webhook" {
 }
 
 resource "aws_codepipeline_webhook" "codepipeline_Webhook" {
-  name            = "${terraform.workspace}-codepipeline-webhook"
+  count = "${length(local.application_names)}"
+  name            = "${terraform.workspace}-codepipeline-webhook-${count.index}"
   authentication  = "GITHUB_HMAC"
   target_action   = "Source"
-  target_pipeline = "${aws_codepipeline.codepipeline_apiservice.name}"
+  target_pipeline = "${element(local.pipeline_names, count.index)}"
 
   authentication_configuration {
     secret_token = "${local.webhook_secret}"
@@ -30,4 +36,6 @@ resource "aws_codepipeline_webhook" "codepipeline_Webhook" {
 
 locals {
   webhook_secret = "super-secret"
+  application_names = ["apiserver","clientapp"]
+  pipeline_names = ["${aws_codepipeline.codepipeline_apiservice.name}","${aws_codepipeline.codepipeline_clientapp.name}"]
 }
