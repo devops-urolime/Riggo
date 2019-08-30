@@ -37,8 +37,8 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
     public BigDecimal getMapValueAsBigDecimal(String key, Map<String, Object> map) {
         String value = MapUtils.getString(map, key);
-        if (value == null) {
-            return null;
+        if (value == null || StringUtils.equalsIgnoreCase(value, "null")) {
+            return new BigDecimal(0);
         }
         if (StringUtils.isNotBlank(value)) {
             try {
@@ -69,7 +69,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
     }
 
     public List<Map<String, Object>> getMapValueAsListOfMap(String key, Map<String, Object> map) {
-        return (ArrayList<Map<String, Object>>) map.get("key");
+        return (ArrayList<Map<String, Object>>) map.get(key);
     }
 
 
