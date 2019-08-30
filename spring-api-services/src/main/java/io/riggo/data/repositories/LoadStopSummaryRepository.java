@@ -17,7 +17,7 @@ public interface LoadStopSummaryRepository extends CrudRepository<LoadStopSummar
             "FROM load l " +
             "JOIN shipper s ON s.id = l.shipper_id " +
             "JOIN load_stop ls ON ls.load_id = l.id " +
-            "WHERE s.site_id = :siteId " +
+            "WHERE s.site_id = :siteId AND ls.arrival_status IS NOT null " +
             "GROUP BY ls.type, ls.arrival_status")
     Optional<List<LoadStopSummary>> findStopSummaryBySiteId(@Param("siteId") Integer siteId);
 
@@ -25,7 +25,7 @@ public interface LoadStopSummaryRepository extends CrudRepository<LoadStopSummar
             "FROM load l " +
             "JOIN shipper s ON s.id = l.shipper_id " +
             "JOIN load_stop ls ON ls.load_id = l.id " +
-            "WHERE s.site_id = :siteId AND s.id = :shipperId " +
+            "WHERE s.site_id = :siteId AND s.id = :shipperId AND ls.arrival_status IS NOT null " +
             "GROUP BY ls.type, ls.arrival_status")
     Optional<List<LoadStopSummary>> findStopSummaryBySiteIdShipperId(@Param("siteId") Integer siteId, @Param("shipperId") Integer shipperId);
 }
