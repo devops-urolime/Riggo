@@ -8,6 +8,7 @@ import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.LoadPipelineData;
 import io.riggo.web.response.LoadPipelineStatusData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,6 +32,7 @@ public class LoadPipelineSummaryController {
     private ShipperService shipperService;
 
     @GetMapping(value = Paths.LOAD_PIPELINE_SUMMARY, produces = "application/json")
+    @PreAuthorize("hasAuthority('read:loadPipeline')")
     @ResponseBody
     public BaseAPIResponse<LoadPipelineData> getPipelineSummary() throws ResourceNotFoundException{
         Optional<List<LoadPipeline>> loadPipelineList = null;

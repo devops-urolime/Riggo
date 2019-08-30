@@ -64,6 +64,7 @@ public class SalesforceRevenovaLoadStatusResolver implements LoadStatusResolver{
             {
                 return LoadSubStatus.DOCUMENTS_RECEIVED;
             }
+            return LoadSubStatus.QUOTED;
         }
         return LoadSubStatus.NO_STATUS;
     }

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public final ResponseEntity<Object> conflictException(Exception ex, WebRequest request) {
         return new ResponseEntity(buildAPIResponse(ex, HttpStatus.CONFLICT), HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    public final ResponseEntity<Object> accessDeniedException(Exception ex, WebRequest request) {
+        return new ResponseEntity(buildAPIResponse(ex, HttpStatus.FORBIDDEN), HttpStatus.FORBIDDEN);
+    }
+
 
     private BaseAPIResponse<?> buildAPIResponse(Exception ex, HttpStatus httpStatus) {
         logger.error(ex.getClass().getName(), ex);

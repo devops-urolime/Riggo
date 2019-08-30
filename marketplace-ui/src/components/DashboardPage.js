@@ -136,9 +136,6 @@ class DashboardPage extends Component {
       fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
       fiscalYearShipment: SHIPMENT_FISCAL_YEAR_DEFAULT,
       weekShipment: SHIPMENT_FISCAL_WEEK_DEFAULT,
-      navViewMonthData:null,
-      navViewWeekData:null,
-      navViewDayData:null,
       showNext: false,
       showPrev: false,
       historyNav:[],
@@ -184,18 +181,12 @@ class DashboardPage extends Component {
     return type[idx - 1];
   };
 
-  hasNext = () =>{
-    let hasNext = this.state.historyNav.length > 1;
-    this.setState({
-      showNext: hasNext
-    });
+  hasNextHistory = () =>{
+    return this.state.historyNavIndex < this.state.historyNav.length - 1;
   };
 
-  hasPrev = () => {
-    let hasPrev = this.state.historyNavIndex > this.state.historyNav.length - 1;
-    this.setState({
-      showPrev: hasPrev
-    });
+  hasPrevHistory = () => {
+    return this.state.historyNavIndex > this.state.historyNav.length - 1;
   };
 
   navigateToNextViewType = (item) => {
@@ -204,22 +195,35 @@ class DashboardPage extends Component {
       const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav, { viewTypeShipment, item }];
-        let hasPrev = this.state.historyNav.length > 0;
+        const hasNextHistory = this.hasNextHistory();
+        const hasPrevHistory = this.hasPrevHistory();
         return ({
           viewTypeShipment: nextView,
           historyNav: historyNavUpdate,
-          showPrev: hasPrev,
-          historyNavIndex: historyNavUpdate.length - 1
+          historyNavIndex: historyNavUpdate.length - 1,
+          showNext: hasNextHistory,
+          showPrev: hasPrevHistory,
         });
       });
-      this.updateNavigation(item.payload, viewTypeShipment);
       this.loadShipments(
         item.payload.offset,
-        item.payload.units,
+        nextView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
         item.payload.week
       );
+    } else if (this.state.showNext){
+      const item = this.state.historyNav[
+        this.state.historyNavIndex
+      ];
+      console.log(item);
+      if (item){
+
+      } else {
+        this.setState({
+          showNext: false,
+        });
+      }
     }
   };
 
@@ -227,18 +231,26 @@ class DashboardPage extends Component {
     const { viewTypeShipment } = this.state;
     if(item.payload){
       const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
-      this.setState({
-        viewTypeShipment: prevView
+      this.setState(prevState => {
+        const historyNavUpdate = [...prevState.historyNav.splice(-1, prevState.historyNav.length - 1)];
+        const hasNextHistory = this.hasNextHistory();
+        const hasPrevHistory = this.hasPrevHistory();
+        return ({
+          viewTypeShipment: prevView,
+          historyNav: historyNavUpdate,
+          historyNavIndex: historyNavUpdate.length - 2,
+          showNext: hasNextHistory,
+          showPrev: hasPrevHistory,
+        });
       });
-      this.updateNavigation(item.payload, viewTypeShipment);
+
       this.loadShipments(
         item.payload.offset,
-        item.payload.units,
+        prevView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
         item.payload.week
       );
-      this.hasNext();
     } else if (this.state.showPrev){
       const item = this.state.historyNav[
         this.state.historyNavIndex
@@ -251,7 +263,6 @@ class DashboardPage extends Component {
           showPrev: hasPrev,
           historyNavIndex: this.state.historyNavIndex - 1
         });
-        this.updateNavigation(item, viewTypeShipment);
         this.loadShipments(
           item.offset,
           item.units,

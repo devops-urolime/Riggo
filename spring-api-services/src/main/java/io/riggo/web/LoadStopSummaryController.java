@@ -1,15 +1,14 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.LoadStopArrivalStatus;
-import io.riggo.data.domain.LoadStopSummary;
-import io.riggo.data.domain.LoadStopType;
-import io.riggo.data.domain.ResourceType;
+import io.riggo.data.domain.*;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.LoadStopService;
+import io.riggo.data.services.ShipperService;
 import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.IdNameCountData;
 import io.riggo.web.response.LoadStopSummaryData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,16 +25,33 @@ public class LoadStopSummaryController {
     @Autowired
     private LoadStopService loadStopService;
 
+    @Autowired
+    private AuthenticationFacade authenticationFacade;
+
+    @Autowired
+    private ShipperService shipperService;
+
+
     @GetMapping(value = Paths.LOAD_STOP_SUMMARY, produces = "application/json")
+    @PreAuthorize("hasAuthority('read:load')")
     @ResponseBody
     //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
     public BaseAPIResponse<LoadStopSummaryData> getPipelineSummary() throws ResourceNotFoundException{
-        //TODO: obtain siteId from JWT Token.  Make this Resource Context Aware.
-        //TODO: Is this how we cache a list?  How do we expire the cache?
-        //TODO: Find the user's association to a shipper.
+        Optional<List<LoadStopSummary>> loadStopSummaryList = null;
+        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
+            loadStopSummaryList = loadStopService.findStopSummaryBySiteId(authenticationFacade.getSiteId());
+        }
+        else if(authenticationFacade.isShipperExecutive())
+        {
+            Optional<Shipper> shipper = shipperService.findByEmailAndSiteId(authenticationFacade.getUsername(), authenticationFacade.getSiteId());
+            if(shipper.isPresent()) {
+                loadStopSummaryList = loadStopService.findStopSummaryBySiteIdShipperId(authenticationFacade.getSiteId(), shipper.get().getId());
+            }
+        }else{
+            throw new ResourceNotFoundException(ResourceType.LOAD_PIPELINE, authenticationFacade.getSiteId());
+        }
 
-        Optional<List<LoadStopSummary>> loadStopSummaryList = loadStopService.findStopSummaryBySiteIdShipperId(100, 1);
-        if (loadStopSummaryList.isPresent()) {
+        if (loadStopSummaryList != null && loadStopSummaryList.isPresent()) {
             List<LoadStopSummaryData> loadStopSummaryDataList = new ArrayList<>();
             for (LoadStopType loadStopType : LoadStopType.values()) {
                 if (loadStopType.getColVal() > 0) {
