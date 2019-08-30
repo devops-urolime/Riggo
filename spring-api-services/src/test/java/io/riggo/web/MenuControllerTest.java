@@ -37,7 +37,7 @@ public class MenuControllerTest {
 
     private static Logger logger = LoggerFactory.getLogger(MenuControllerTest.class);
 
-    @WithMockUser(value = "spring1")
+    @WithMockUser(value = "spring1" , authorities = {"read:menu"})
     @Test
     public void getMenusBySiteAndType() throws Exception {
         Menu dashboardMenu = new Menu();
@@ -58,7 +58,7 @@ public class MenuControllerTest {
         logger.error(content);
     }
 
-    @WithMockUser(value = "spring1")
+    @WithMockUser(value = "spring1" , authorities = {"read:menu"})
     @Test
     public void getMenusBySiteAndTypeReturns400OnBadTypeParam() throws Exception {
         mvc.perform(get(Paths.API + Paths.VERSION + Paths.MENUS + "?type=123")
