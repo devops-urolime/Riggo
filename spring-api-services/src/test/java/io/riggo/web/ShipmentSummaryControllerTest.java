@@ -114,29 +114,4 @@ public class ShipmentSummaryControllerTest {
         String content = result.getResponse().getContentAsString();
         logger.error(content);
     }
-
-
-    @Test
-    public void getPipelineSummaryUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isUnauthorized())
-                .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-        logger.debug(content);
-    }
-
-
-    @WithMockUser(value = "spring1")
-    @Test
-    public void getPipelineSummaryRequiresReadLoadPipelinePermission() throws Exception {
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
-                .contentType(APPLICATION_JSON))
-                .andExpect(status().isForbidden())
-                .andReturn();
-        String content = result.getResponse().getContentAsString();
-        logger.error(content);
-    }
-
 }

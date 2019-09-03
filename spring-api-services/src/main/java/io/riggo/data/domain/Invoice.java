@@ -1,5 +1,7 @@
 package io.riggo.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -114,6 +116,7 @@ public class Invoice implements Serializable {
         return netFreightCharges;
     }
 
+    @JsonIgnore
     public Double getNetFreightChargesDoubleValue() {
         return netFreightCharges.doubleValue();
     }
