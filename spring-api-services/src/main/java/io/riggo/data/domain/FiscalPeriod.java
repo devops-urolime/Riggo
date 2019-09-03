@@ -329,4 +329,8 @@ public class FiscalPeriod implements Serializable {
     public void setWeekendIndr(Boolean weekendIndr) {
         this.weekendIndr = weekendIndr;
     }
+
+    public String getFiscalQuarter(){
+        return "Q" + quarterActual + " " + year_actual;
+    }
 }
