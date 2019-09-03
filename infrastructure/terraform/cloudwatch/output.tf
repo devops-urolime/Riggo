@@ -3,6 +3,10 @@ output "cloudwatch-log-GroupName" {
 }
 
 output "arn" {
-  value       = "${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"
+  value       = "${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"
   description = "Email SNS topic ARN"
+}
+
+output "name" {
+  value = "value"
 }

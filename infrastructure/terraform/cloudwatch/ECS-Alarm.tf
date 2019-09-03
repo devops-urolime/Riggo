@@ -26,9 +26,9 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cpu" {
   threshold                 = "${local.thresholds["CPUUtilizationHighThreshold"]}"
   alarm_description         = "This metric monitors ECS cpu utilization"
   # insufficient_data_actions = []
-  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
 
   dimensions = "${local.dimensions_map[var.service_name == "" ? "cluster" : "service"]}"
 }
@@ -45,9 +45,9 @@ resource "aws_cloudwatch_metric_alarm" "ecs_memory" {
   threshold                 = "${local.thresholds["MemoryUtilizationHighThreshold"]}"
   alarm_description         = "This metric monitors ECS memory utilization"
   # insufficient_data_actions = []
-  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
 
   dimensions = "${local.dimensions_map[var.service_name == "" ? "cluster" : "service"]}"
 }
@@ -63,9 +63,9 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cluster_cpu" {
   threshold                 = "${local.thresholds["CPUUtilizationHighThreshold"]}"
   alarm_description         = "This metric monitors ECS cluster cpu utilization"
   # insufficient_data_actions = []
-  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
   dimensions = {
     ClusterName = "${var.cluster_name}"
   }
@@ -83,9 +83,9 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cluster_memory" {
   threshold                 = "${local.thresholds["MemoryUtilizationHighThreshold"]}"
   alarm_description         = "This metric monitors ECS cluster memory utilization"
   # insufficient_data_actions = []
-  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
 
   dimensions = {
     ClusterName = "${var.cluster_name}"

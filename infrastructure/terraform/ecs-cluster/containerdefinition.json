@@ -54,6 +54,6 @@
   "dockerLabels":null,
   "systemControls":null,
   "privileged":null,
-  "name":"Riggo-resource-svr-${terraform-workspace}"
+  "name":"${container_name}"
   }
 ]

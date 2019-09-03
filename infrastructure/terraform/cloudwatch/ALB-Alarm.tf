@@ -15,9 +15,9 @@ resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-PROD" {
       TargetGroup = "${var.targetgroup_prod_suffix}"
   }
 
-  alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  ok_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
-  insufficient_data_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
   # insufficient_data_actions = []
 } 
 
@@ -38,7 +38,7 @@ resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-TEST" {
       TargetGroup = "${var.targetgroup_test_suffix}"
   }
 
-  #alarm_actions = ["${aws_cloudformation_stack.sns_topic.outputs["ARN"]}"]
+  #alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
 
   insufficient_data_actions = []
 }
