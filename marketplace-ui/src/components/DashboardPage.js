@@ -308,6 +308,7 @@ class DashboardPage extends Component {
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const { isBarGroupMode, showNext, showPrev } = this.state;
+    const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
       return (
         <Grid
           container
@@ -387,7 +388,7 @@ class DashboardPage extends Component {
             <Grid item xs={11}>
               <Paper className="DashboardPage__MuiPaper-root">
                 {
-                  shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0 &&
+                  isShipmentData &&
                   <MultiYAxesVisualization
                     title={shipmentSummaryMultiYAxes[0].title}
                     data={shipmentSummaryMultiYAxes[0].data}

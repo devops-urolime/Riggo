@@ -8,7 +8,7 @@ import {
   MOCK_ALL_DATA,
   STATUS_400_ERROR_MESSAGE,
   STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
-  STATUS_500_ERROR_MESSAGE
+  STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
 
 const METHOD_GET = 'get';
@@ -415,6 +415,9 @@ const handleStatus = (response) => {
     }
     if(response && response.status === 500){
      throw new Error(STATUS_500_ERROR_MESSAGE + apiMessage(response));
+    }
+    if(response && response.status === 504){
+     throw new Error(STATUS_504_ERROR_MESSAGE + apiMessage(response));
     }
 };
 
