@@ -8,7 +8,7 @@ import {
   MOCK_ALL_DATA,
   STATUS_400_ERROR_MESSAGE,
   STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
-  STATUS_500_ERROR_MESSAGE
+  STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
 
 const METHOD_GET = 'get';
@@ -198,7 +198,7 @@ const shipmentsSummaryMonthlyMock = {
    "data":[
       {
          "title":"Monthly",
-         "units":"month",
+         "units":"months",
          // TODO: add total properties at this level to show in the shipments visualization section agree this with Backend.
          "totalShipmentsInPeriod": 382,
          "costPerMlInPeriod": 1.89,
@@ -252,7 +252,7 @@ const shipmentsSummaryWeeklyMock = {
    "data":[
       {
          "title":"July 2019",
-         "units":"weekly",
+         "units":"weeks",
          "shipmentData":[
             {
                "label":"Week 1",
@@ -297,7 +297,7 @@ const shipmentsSummaryDailyMock = {
    "data":[
       {
          "title":"Week 1 - July 2019",
-         "units":"daily",
+         "units":"days",
          "shipmentData":[
             {
                "label":"July 1",
@@ -367,9 +367,9 @@ const shipmentsSummaryDailyMock = {
    ]
 };
 
-export const SHIPMENT_RESULT_BY_MONTH = "month";
-export const SHIPMENT_RESULT_BY_WEEK = "weekly";
-export const SHIPMENT_RESULT_BY_DAY = "daily";
+export const SHIPMENT_RESULT_BY_MONTH = "months";
+export const SHIPMENT_RESULT_BY_WEEK = "weeks";
+export const SHIPMENT_RESULT_BY_DAY = "days";
 
 const getShipmentsSummaryMock = (resultType) => {
   let mockData = [];
@@ -415,6 +415,9 @@ const handleStatus = (response) => {
     }
     if(response && response.status === 500){
      throw new Error(STATUS_500_ERROR_MESSAGE + apiMessage(response));
+    }
+    if(response && response.status === 504){
+     throw new Error(STATUS_504_ERROR_MESSAGE + apiMessage(response));
     }
 };
 
