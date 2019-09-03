@@ -48,6 +48,6 @@ resource "aws_cloudwatch_event_target" "codebuild-event-target" {
   arn       = "${aws_cloudformation_stack.sns_event_topic.outputs["ARN"]}"
   input_transformer {
       input_paths = {"current-context":"$.detail.current-phase-context","Build-id":"$.detail.build-id","Build-project":"$.detail.project-name","Build-status":"$.detail.build-status"}
-      input_template = tostring("\"This message is to notify you that codeBuild project <Build-project> in qa environment with id <Build-id> is <Build-status>.\"")
+      input_template = tostring("\"This message is to notify you that codeBuild project <Build-project> in ${terraform.workspace} environment with id <Build-id> is <Build-status>.\"")
   }
 }

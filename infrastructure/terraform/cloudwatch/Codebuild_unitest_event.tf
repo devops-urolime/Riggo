@@ -47,6 +47,6 @@ resource "aws_cloudwatch_event_target" "codebuild-unitest-event-target" {
   arn       = "${aws_cloudformation_stack.sns_event_topic.outputs["ARN"]}"
   input_transformer {
       input_paths = {"project-name":"$.detail.project-name","build-id":"$.detail.build-id","Phase-name":"$.detail.completed-phase","phase-status":"$.detail.completed-phase-status"}
-      input_template = tostring("\"This message is to notify you that Testing phase in the codebuild <project-name> with id <build-id> got <phase-status>.\"")
+      input_template = tostring("\"This message is to notify you that Testing phase in the codebuild <project-name> with id <build-id> in ${terraform.workspace} environment got <phase-status>.\"")
   }
 }
