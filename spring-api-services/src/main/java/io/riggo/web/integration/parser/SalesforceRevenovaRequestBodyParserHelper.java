@@ -98,7 +98,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
     public LocalDate getMapValueAsLocalDate(String key, Map<String, Object> map) {
         String value = MapUtils.getString(map, key);
-        if (StringUtils.isNotBlank(key)) {
+        if (StringUtils.isBlank(value)) {
             return null;
         }
         return LocalDate.parse(value, dateFormatter);

@@ -78,7 +78,7 @@ public class InvoiceControllerTest {
 
     @Test
     public void postInvoiceUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD_INVOICE)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -91,7 +91,7 @@ public class InvoiceControllerTest {
     @WithMockUser(value = "spring")
     @Test
     public void postInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
-        mvc.perform(post(Paths.API_VERSION + "/load/invoice")
+        mvc.perform(post(Paths.API_VERSION_LOAD_INVOICE)
                 .contentType(APPLICATION_JSON)
                 .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
@@ -113,7 +113,7 @@ public class InvoiceControllerTest {
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
 
-        MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD_INVOICE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isConflict())
@@ -144,7 +144,7 @@ public class InvoiceControllerTest {
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
 
-        MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD_INVOICE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -285,7 +285,7 @@ public class InvoiceControllerTest {
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_INVOICE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -299,7 +299,7 @@ public class InvoiceControllerTest {
 
     @Test
     public void putInvoiceUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_INVOICE)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -312,7 +312,7 @@ public class InvoiceControllerTest {
     @WithMockUser(value = "spring")
     @Test
     public void putInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
-        mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        mvc.perform(put(Paths.API_VERSION_LOAD_INVOICE)
                 .contentType(APPLICATION_JSON)
                 .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
@@ -333,7 +333,7 @@ public class InvoiceControllerTest {
         given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_INVOICE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -363,7 +363,7 @@ public class InvoiceControllerTest {
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_INVOICE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())

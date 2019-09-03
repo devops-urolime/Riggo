@@ -53,8 +53,7 @@ public class SalesforceRevenovaLoadStatusResolver implements LoadStatusResolver{
                 return LoadSubStatus.IN_TRANSIT;
             }
             if( StringUtils.equals(StringUtils.trim(loadStatus), "Delivered") &&
-                    BooleanUtils.isFalse(hasDocuments)
-            )
+                    (hasDocuments == null || BooleanUtils.isFalse(hasDocuments)))
             {
                 return LoadSubStatus.PENDING_DOCUMENTS;
             }
