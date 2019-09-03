@@ -144,6 +144,17 @@ variable "protocol" {
   
 }
 
+variable "pipeline_jobs" {
+    type = "list"
+  
+}
+
+variable "codebuild_projectnames" {
+  type = "list"
+}
+
+
+
 
 
 

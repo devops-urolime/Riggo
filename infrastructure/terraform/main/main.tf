@@ -198,6 +198,8 @@ module "CloudWatch" {
   targetgroup_test_suffix =  "${module.ecs-cluster.testing_targetgroup_suffix}"
   alarms_email = "${var.alarms_email}"
   protocol = "${var.protocol}"
+  pipeline_jobs =["${module.codepipeline.codepipeline_apiservice_name}","${module.codepipeline.codepipeline_clientapp_name}"]
+  codebuild_projectnames = ["${lookup(local.codebuild_project_name, "apiservice")}","${lookup(local.codebuild_project_name, "clientapp")}"]
 }
 
 module "Route53" {
