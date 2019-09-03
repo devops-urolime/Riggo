@@ -114,6 +114,10 @@ public class Invoice implements Serializable {
         return netFreightCharges;
     }
 
+    public Double getNetFreightChargesDoubleValue() {
+        return netFreightCharges.doubleValue();
+    }
+
     public void setNetFreightCharges(BigDecimal netFreightCharges) {
         this.netFreightCharges = netFreightCharges;
     }

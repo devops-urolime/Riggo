@@ -18,6 +18,7 @@ public class Paths {
 
     public static final String API_VERSION_LOAD = API + VERSION + LOAD;
     public static final String API_VERSION_LOAD_PIPELINE_SUMMARY = API + VERSION + LOAD_PIPELINE_SUMMARY;
+    public static final String API_VERSION_LOAD_SHIPMENT_SUMMARY = API + VERSION + LOAD_SHIPMENT_SUMMARY;
     public static final String API_VERSION_MENUS = API + VERSION + MENUS;
 
     public static final String API_VERSION_LOAD_INVOICE = API + VERSION + LOAD + INVOICE;
