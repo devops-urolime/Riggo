@@ -130,6 +130,22 @@ public class SalesforceRevenovaLoadStatusResolverTest {
     }
 
     @Test
+    public void resolveLoadStatusPendingDocumentsHasDocumentsNull() {
+        //given
+        Map<String, Object> resolverMap = new HashMap<>();
+        resolverMap.put(SalesforceRevenovaLoadStatusResolver.SALES_STATUS, "Won");
+        resolverMap.put(SalesforceRevenovaLoadStatusResolver.LOAD_STATUS, "Delivered");
+        resolverMap.put(SalesforceRevenovaLoadStatusResolver.HAS_DOCUMENTS, null);
+
+
+        //when
+        LoadSubStatus loadSubStatus = new SalesforceRevenovaLoadStatusResolver().resolveLoadStatus(resolverMap);
+
+        //then
+        assertTrue(loadSubStatus == LoadSubStatus.PENDING_DOCUMENTS);
+    }
+
+    @Test
     public void resolveLoadStatusDocumentsReceived() {
         //given
         Map<String, Object> resolverMap = new HashMap<>();

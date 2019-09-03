@@ -114,4 +114,16 @@ public class ShipmentSummaryControllerTest {
         String content = result.getResponse().getContentAsString();
         logger.error(content);
     }
+
+
+    @Test
+    public void shipmentSummaryUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
 }
