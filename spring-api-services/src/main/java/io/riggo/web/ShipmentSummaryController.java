@@ -176,5 +176,6 @@ public class ShipmentSummaryController {
 
         shipmentVizData.setShipments(shipments.intValue());
         shipmentVizData.setTotalCost(new BigDecimal(totalFreightCharges));
+        shipmentVizData.setCostPerMile(new BigDecimal(1.21));
     }
 }

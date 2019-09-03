@@ -7,6 +7,7 @@ public class ShipmentVizData implements Serializable {
 
     private String label;
     private Integer shipments;
+    private BigDecimal costPerMile;
     private BigDecimal totalCost;
     private Integer fiscalMonth;
     private Integer fiscalYear;
@@ -36,6 +37,14 @@ public class ShipmentVizData implements Serializable {
 
     public void setTotalCost(BigDecimal totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public BigDecimal getCostPerMile() {
+        return costPerMile;
+    }
+
+    public void setCostPerMile(BigDecimal costPerMile) {
+        this.costPerMile = costPerMile;
     }
 
     public Integer getFiscalMonth() {
