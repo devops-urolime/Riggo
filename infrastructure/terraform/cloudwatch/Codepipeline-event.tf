@@ -49,7 +49,7 @@ resource "aws_cloudwatch_event_target" "codepipeline-event-target" {
   arn       = "${aws_cloudformation_stack.sns_event_topic.outputs["ARN"]}"
   input_transformer {
       input_paths = {"pipeline-name":"$.detail.pipeline","stage-name":"$.detail.stage","state":"$.detail.state"}
-      input_template = tostring("\"This message is to notify you that the <stage-name> stage in code pipeline <pipeline-name> for qa environment is <state>.\"")
+      input_template = tostring("\"This message is to notify you that the <stage-name> stage in code pipeline <pipeline-name> for ${terraform.workspace} environment is <state>.\"")
   }
 }
 
