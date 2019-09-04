@@ -84,7 +84,7 @@ function* getLoadShipmentSummarySaga(action) {
         action.units,
         action.fiscalMonth,
         action.fiscalYear,
-        action.week,
+        action.fiscalWeek,
         JWT
       );
       yield put({type: GET_LOAD_SHIPMENT_SUMMARY_SUCCESS, shipmentSummary: result});

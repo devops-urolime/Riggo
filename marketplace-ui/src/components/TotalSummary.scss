@@ -1,0 +1,21 @@
+@import 'base.scss';
+
+.TotalSummary{
+    padding: 5px;
+    text-align: center;
+    &__Title{
+        text-transform: lowercase;
+        font-size: 12px !important;
+        &:first-letter{
+            text-transform: uppercase;
+        }
+    }
+
+    &__Legend{
+
+    }
+    &:last-child{
+        padding-bottom: 12px;
+    }
+}
+

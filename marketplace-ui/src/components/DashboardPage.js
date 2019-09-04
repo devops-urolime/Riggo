@@ -14,6 +14,8 @@ import PieVisualization, {
 import BarVisualization, { BAR_DARK2 } from './BarVisualization';
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
+import TotalSummary from './TotalSummary';
+import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
 
 const ROOT_INDEX_BAR_VISUALIZATION = "status";
 const KEYS_DATA_BAR_VISUALIZATION= [
@@ -84,11 +86,17 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
 const digestDataToMultiYAxes = (data) => {
   return (data && data.length > 0 ) ?
     data.map((item) => {
-      const dataToVisualize = item.shipmentData.map((axeInfo) =>{
+      const { shipmentData, units } =  item;
+      const dataToVisualize = shipmentData.map((axeInfo) =>{
          return {
            date: axeInfo.label,
            "Shipment Delivered": axeInfo.shipments,
            "Cost Per Mile": axeInfo.costPerMile,
+           "fiscalMonth": axeInfo.fiscalMonth,
+           "fiscalYear": axeInfo.fiscalYear,
+           "fiscalWeek": axeInfo.fiscalWeek,
+           "offset": axeInfo.offset,
+           "units": units
          };
       });
       return {
@@ -146,10 +154,6 @@ class DashboardPage extends Component {
   componentDidMount() {
     this.props.loadPipeLineSummary();
     this.props.loadStopSummary();
-    this.loadShipments();
-  }
-
-  loadShipments = () =>{
     this.props.loadShipmentSummary(
       this.state.offsetShipment ,
       this.state.viewTypeShipment,
@@ -157,7 +161,7 @@ class DashboardPage extends Component {
       this.state.fiscalYearShipment,
       this.state.weekShipment
     );
-  };
+  }
 
   toggleBarGroup = ()=> {
     this.setState(prevState => ({
@@ -181,12 +185,12 @@ class DashboardPage extends Component {
     return type[idx - 1];
   };
 
-  hasNextHistory = () =>{
-    return this.state.historyNavIndex < this.state.historyNav.length - 1;
+  hasNextHistory = (historyNav, historyNavIndex) =>{
+    return historyNavIndex < historyNav.length - 2;
   };
 
-  hasPrevHistory = () => {
-    return this.state.historyNavIndex > this.state.historyNav.length - 1;
+  hasPrevHistory = (historyNav, historyNavIndex) => {
+    return ((historyNav.length) - historyNavIndex) > -1;
   };
 
   navigateToNextViewType = (item) => {
@@ -195,28 +199,28 @@ class DashboardPage extends Component {
       const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav, { viewTypeShipment, item }];
-        const hasNextHistory = this.hasNextHistory();
-        const hasPrevHistory = this.hasPrevHistory();
+        const historyNavIndex = historyNavUpdate.length - 1 ;
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
         return ({
           viewTypeShipment: nextView,
           historyNav: historyNavUpdate,
-          historyNavIndex: historyNavUpdate.length - 1,
+          historyNavIndex,
           showNext: hasNextHistory,
           showPrev: hasPrevHistory,
         });
       });
-      this.loadShipments(
+      this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
-        item.payload.week
+        item.payload.fiscalWeek
       );
     } else if (this.state.showNext){
       const item = this.state.historyNav[
         this.state.historyNavIndex
       ];
-      console.log(item);
       if (item){
 
       } else {
@@ -227,14 +231,16 @@ class DashboardPage extends Component {
     }
   };
 
-  navigateToPrevViewType = (item) => {
-    const { viewTypeShipment } = this.state;
-    if(item.payload){
+  navigateToPrevViewType = () => {
+    const { viewTypeShipment, historyNav, historyNavIndex } = this.state;
+    const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
+    if(hasPrevHistory){
       const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
+      const item = (historyNav[historyNavIndex]) ? historyNav[historyNavIndex].item: {};
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav.splice(-1, prevState.historyNav.length - 1)];
-        const hasNextHistory = this.hasNextHistory();
-        const hasPrevHistory = this.hasPrevHistory();
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex - 1);
         return ({
           viewTypeShipment: prevView,
           historyNav: historyNavUpdate,
@@ -243,19 +249,20 @@ class DashboardPage extends Component {
           showPrev: hasPrevHistory,
         });
       });
+      if (item.payload){
+        this.props.loadShipmentSummary(
+          item.payload.offset,
+          item.payload.units,
+          item.payload.fiscalMonth,
+          item.payload.fiscalYear,
+          item.payload.fiscalWeek
+        );
+      }
 
-      this.loadShipments(
-        item.payload.offset,
-        prevView,
-        item.payload.fiscalMonth,
-        item.payload.fiscalYear,
-        item.payload.week
-      );
     } else if (this.state.showPrev){
       const item = this.state.historyNav[
         this.state.historyNavIndex
       ];
-      console.log(item);
       if (item){
         let hasPrev = this.state.historyNav.length > 0;
         this.setState({
@@ -263,40 +270,18 @@ class DashboardPage extends Component {
           showPrev: hasPrev,
           historyNavIndex: this.state.historyNavIndex - 1
         });
-        this.loadShipments(
+        this.props.loadShipmentSummary(
           item.offset,
           item.units,
           item.fiscalMonth,
           item.fiscalYear,
-          item.week
+          item.fiscalWeek
         );
       } else {
         this.setState({
           showPrev: false,
         });
       }
-    }
-  };
-
-  updateNavigation = (payload, viewType) =>{
-    switch (viewType) {
-      case SHIPMENT_RESULT_BY_MONTH:
-        this.setState({
-          navViewMonthData: payload
-         });
-        break;
-      case SHIPMENT_RESULT_BY_WEEK:
-        this.setState({
-          navViewWeekData: payload
-         });
-        break;
-      case SHIPMENT_RESULT_BY_DAY:
-        this.setState({
-          navViewDayData: payload
-         });
-        break;
-      default:
-        break;
     }
   };
 
@@ -400,6 +385,21 @@ class DashboardPage extends Component {
                     showPrev={showPrev}
                   />
                 }
+                <LineDivider
+                 orientation={HORIZONTAL_LINE}
+                />
+                <TotalSummary
+                  title="Total Shipments In Period"
+                  legend="382"
+                />
+                <TotalSummary
+                  title="Cost/ml In Period"
+                  legend="$1.89"
+                />
+                <TotalSummary
+                  title="Total Cost In Period"
+                  legend="$371,450"
+                />
               </Paper>
             </Grid>
           </Grid>

@@ -31,13 +31,13 @@ export function loadStopSummary() {
   };
 }
 
-export function loadShipmentSummary(offset, units, fiscalMonth, fiscalYear, week) {
+export function loadShipmentSummary(offset, units, fiscalMonth, fiscalYear, fiscalWeek) {
   return {
     type: GET_LOAD_SHIPMENT_SUMMARY,
     offset,
     units,
     fiscalMonth,
     fiscalYear,
-    week
+    fiscalWeek
   };
 }

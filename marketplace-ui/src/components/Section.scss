@@ -1,0 +1,11 @@
+@import 'base.scss';
+
+
+.Section{
+    margin-top: 20px;
+    &__MuiPaper-root{
+        background-color: $paper-section !important;
+        font-family: $main-font-family !important;
+        color: $general-text !important;
+    }
+}
