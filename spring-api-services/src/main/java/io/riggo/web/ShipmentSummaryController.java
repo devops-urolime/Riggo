@@ -167,7 +167,7 @@ public class ShipmentSummaryController {
     private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<Invoice>> invoices, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
         shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue()+1);
         shipmentVizData.setFiscalYear(periodStartDate.getYear());
-        shipmentVizData.setWeek(fiscalWeek);
+        shipmentVizData.setFiscalWeek(fiscalWeek);
         shipmentVizData.setOffset(offset);
 
         Long shipments = invoices.get().stream()

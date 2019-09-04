@@ -11,7 +11,7 @@ public class ShipmentVizData implements Serializable {
     private BigDecimal totalCost;
     private Integer fiscalMonth;
     private Integer fiscalYear;
-    private Integer week;
+    private Integer fiscalWeek;
     private Integer offset;
 
 
@@ -63,12 +63,12 @@ public class ShipmentVizData implements Serializable {
         this.fiscalYear = fiscalYear;
     }
 
-    public Integer getWeek() {
-        return week;
+    public Integer getFiscalWeek() {
+        return fiscalWeek;
     }
 
-    public void setWeek(Integer week) {
-        this.week = week;
+    public void setFiscalWeek(Integer fiscalWeek) {
+        this.fiscalWeek = fiscalWeek;
     }
 
     public Integer getOffset() {
