@@ -174,8 +174,8 @@ public class ShipmentSummaryControllerTest {
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].title", is("September 2019")))
                 .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalMonth", is(9)))
-                .andExpect(jsonPath("$.data[0].shipmentData[0].week", is(1)))
-                .andExpect(jsonPath("$.data[0].shipmentData[1].week", is(2)))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalWeek", is(1)))
+                .andExpect(jsonPath("$.data[0].shipmentData[1].fiscalWeek", is(2)))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
@@ -229,8 +229,8 @@ public class ShipmentSummaryControllerTest {
                 .andExpect(jsonPath("$.data", hasSize(1)))
                 .andExpect(jsonPath("$.data[0].title", is("September 2019 Week 1")))
                 .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalMonth", is(9)))
-                .andExpect(jsonPath("$.data[0].shipmentData[0].week", is(1)))
-                .andExpect(jsonPath("$.data[0].shipmentData[1].week", is(1)))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalWeek", is(1)))
+                .andExpect(jsonPath("$.data[0].shipmentData[1].fiscalWeek", is(1)))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
