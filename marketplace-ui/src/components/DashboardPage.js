@@ -14,6 +14,8 @@ import PieVisualization, {
 import BarVisualization, { BAR_DARK2 } from './BarVisualization';
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
+import TotalSummary from './TotalSummary';
+import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
 
 const ROOT_INDEX_BAR_VISUALIZATION = "status";
 const KEYS_DATA_BAR_VISUALIZATION= [
@@ -400,6 +402,21 @@ class DashboardPage extends Component {
                     showPrev={showPrev}
                   />
                 }
+                <LineDivider
+                 orientation={HORIZONTAL_LINE}
+                />
+                <TotalSummary
+                  title="Total Shipments In Period"
+                  legend="382"
+                />
+                <TotalSummary
+                  title="Cost/ml In Period"
+                  legend="$1.89"
+                />
+                <TotalSummary
+                  title="Total Cost In Period"
+                  legend="$371,450"
+                />
               </Paper>
             </Grid>
           </Grid>
