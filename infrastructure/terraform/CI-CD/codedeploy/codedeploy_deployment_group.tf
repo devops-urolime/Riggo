@@ -8,7 +8,11 @@ resource "aws_codedeploy_deployment_group" "deployment_group" {
     enabled = "${var.enable_auto_rollback}"
     events  = "${var.rollback_events}"
   }
-
+  trigger_configuration {
+    trigger_events = ["DeploymentStart","DeploymentSuccess","DeploymentFailure","DeploymentStop","DeploymentRollback"]
+    trigger_name = "${terraform.workspace}-Codedeploy-trigger"
+    trigger_target_arn = "${var.sns_trigger_alarm_arn}"
+  }
   blue_green_deployment_config {
     deployment_ready_option {
       action_on_timeout = "${var.action_on_timeout}"

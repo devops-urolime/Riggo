@@ -705,6 +705,12 @@ variable "bluetask_termination_wait_minutes" {
   description = "How long codedeploy wait to terminate blue task after successful deployment"
 }
 
+variable "taskdef_path" {
+  description = "The path of the taskdefinition from the root directory"
+
+}
+
+
 # variable "source_output_artifact_dir" {
 #   description = "source code checkout directory on s3 bucket"
 #   type = "string"

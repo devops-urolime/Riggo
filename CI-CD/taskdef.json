@@ -15,7 +15,7 @@
       ],
       "environment": [
         {
-          "value": "qa",
+          "value": "$SPRING_PROFILES_ACTIVE",
           "name": "SPRING_PROFILES_ACTIVE"
         }
       ],

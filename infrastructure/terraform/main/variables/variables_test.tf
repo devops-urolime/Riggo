@@ -200,7 +200,7 @@ rollback_events = ["DEPLOYMENT_FAILURE"]
 action_on_timeout = "CONTINUE_DEPLOYMENT"
 action_on_blue_tasks = "TERMINATE"
 bluetask_termination_wait_minutes = 0
-
+taskdef_path = "CI-CD/taskdef.json"
 #variables for codepipeline
 artifact = {
 source_output_artifact_dir = "Riggo-source"
