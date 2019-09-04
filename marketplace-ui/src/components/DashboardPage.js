@@ -91,6 +91,9 @@ const digestDataToMultiYAxes = (data) => {
            date: axeInfo.label,
            "Shipment Delivered": axeInfo.shipments,
            "Cost Per Mile": axeInfo.costPerMile,
+           "fiscalMonth": axeInfo.fiscalMonth,
+           "fiscalYear": axeInfo.fiscalYear,
+           "fiscalWeek": axeInfo.fiscalWeek,
          };
       });
       return {
@@ -148,10 +151,6 @@ class DashboardPage extends Component {
   componentDidMount() {
     this.props.loadPipeLineSummary();
     this.props.loadStopSummary();
-    this.loadShipments();
-  }
-
-  loadShipments = () =>{
     this.props.loadShipmentSummary(
       this.state.offsetShipment ,
       this.state.viewTypeShipment,
@@ -159,7 +158,7 @@ class DashboardPage extends Component {
       this.state.fiscalYearShipment,
       this.state.weekShipment
     );
-  };
+  }
 
   toggleBarGroup = ()=> {
     this.setState(prevState => ({
@@ -207,18 +206,20 @@ class DashboardPage extends Component {
           showPrev: hasPrevHistory,
         });
       });
-      this.loadShipments(
+
+      console.log(item);
+
+      this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
-        item.payload.week
+        item.payload.fiscalWeek
       );
     } else if (this.state.showNext){
       const item = this.state.historyNav[
         this.state.historyNavIndex
       ];
-      console.log(item);
       if (item){
 
       } else {
@@ -245,19 +246,17 @@ class DashboardPage extends Component {
           showPrev: hasPrevHistory,
         });
       });
-
-      this.loadShipments(
+      this.props.loadShipmentSummary(
         item.payload.offset,
         prevView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
-        item.payload.week
+        item.payload.fiscalWeek
       );
     } else if (this.state.showPrev){
       const item = this.state.historyNav[
         this.state.historyNavIndex
       ];
-      console.log(item);
       if (item){
         let hasPrev = this.state.historyNav.length > 0;
         this.setState({
@@ -265,40 +264,18 @@ class DashboardPage extends Component {
           showPrev: hasPrev,
           historyNavIndex: this.state.historyNavIndex - 1
         });
-        this.loadShipments(
+        this.props.loadShipmentSummary(
           item.offset,
           item.units,
           item.fiscalMonth,
           item.fiscalYear,
-          item.week
+          item.fiscalWeek
         );
       } else {
         this.setState({
           showPrev: false,
         });
       }
-    }
-  };
-
-  updateNavigation = (payload, viewType) =>{
-    switch (viewType) {
-      case SHIPMENT_RESULT_BY_MONTH:
-        this.setState({
-          navViewMonthData: payload
-         });
-        break;
-      case SHIPMENT_RESULT_BY_WEEK:
-        this.setState({
-          navViewWeekData: payload
-         });
-        break;
-      case SHIPMENT_RESULT_BY_DAY:
-        this.setState({
-          navViewDayData: payload
-         });
-        break;
-      default:
-        break;
     }
   };
 

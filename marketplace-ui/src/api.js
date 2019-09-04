@@ -210,7 +210,7 @@ const shipmentsSummaryMonthlyMock = {
             "costPerMile":1.7,
             "fiscalMonth":7,
             "fiscalYear":2019,
-            "week":0,
+            "fiscalWeek":0,
             "offset": 0
           },
           {
@@ -219,7 +219,7 @@ const shipmentsSummaryMonthlyMock = {
            "costPerMile":8.57,
            "fiscalMonth":7,
            "fiscalYear":2019,
-           "week":0,
+           "fiscalWeek":0,
            "offset": 0
           },
           {
@@ -228,7 +228,7 @@ const shipmentsSummaryMonthlyMock = {
              "costPerMile":3.20,
              "fiscalMonth":7,
              "fiscalYear":2019,
-             "week":0,
+             "fiscalWeek":0,
              "offset": 0
           },
           {
@@ -237,7 +237,7 @@ const shipmentsSummaryMonthlyMock = {
              "costPerMile":4.10,
              "fiscalMonth":7,
              "fiscalYear":2019,
-             "week":0,
+             "fiscalWeek":0,
              "offset": 0
           }
 
@@ -259,7 +259,7 @@ const shipmentsSummaryWeeklyMock = {
                "shipments":30,
                "costPerMile":2.99,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -267,7 +267,7 @@ const shipmentsSummaryWeeklyMock = {
                "shipments":40,
                "costPerMile":1.99,
                "fiscalYear":2019,
-               "week":2,
+               "fiscalWeek":2,
                "offset": 0
             },
             {
@@ -275,7 +275,7 @@ const shipmentsSummaryWeeklyMock = {
                "shipments":50,
                "costPerMile":3.69,
                "fiscalYear":2019,
-               "week":3,
+               "fiscalWeek":3,
                "offset": 0
             },
             {
@@ -283,7 +283,7 @@ const shipmentsSummaryWeeklyMock = {
                "shipments":20,
                "costPerMile":1.99,
                "fiscalYear":2019,
-               "week":4,
+               "fiscalWeek":4,
                "offset": 0
             }
          ]
@@ -305,7 +305,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":1.99,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -314,7 +314,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":1.10,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -323,7 +323,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":2.99,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -332,7 +332,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":1.20,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -341,7 +341,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":3.68,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -350,7 +350,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":1.99,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             },
             {
@@ -359,7 +359,7 @@ const shipmentsSummaryDailyMock = {
                "costPerMile":2.20,
                "fiscalMonth":7,
                "fiscalYear":2019,
-               "week":1,
+               "fiscalWeek":1,
                "offset": 0
             }
          ]
@@ -459,10 +459,10 @@ export const loadStopsSummaryApi = async (JWT) => {
     return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, false);
 };
 
-export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalYear, week, JWT) => {
+export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalYear, fiscalWeek, JWT) => {
     const END_POINT =
       BASE_END_POINT +
       LOAD_SHIPMENT_SUMMARY_END_POINT +
-      `?offset=${offset}&units=${units}&fiscalMonth=${fiscalMonth}&fiscalYear=${fiscalYear}&fiscalWeek=${week}`;
+      `?offset=${offset}&units=${units}&fiscalMonth=${fiscalMonth}&fiscalYear=${fiscalYear}&fiscalWeek=${fiscalWeek}`;
     return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), false);
 };
