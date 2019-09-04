@@ -59,3 +59,7 @@ variable "task_definition" {
 variable "container_name" {
   
 }
+
+variable "taskdef_path" {
+  
+}

@@ -41,3 +41,8 @@ variable "service_name" {
 variable "cluster_name" {
   
 }
+
+
+variable "sns_trigger_alarm_arn" {
+  
+}

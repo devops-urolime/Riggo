@@ -158,6 +158,7 @@ module "ecs-cluster" {
   health_check_grace_period_seconds = "${var.health_check_grace_period_seconds}"
   ec2_health_check_period = "${var.ec2_health_check_period}"
   spring_profile_key            =    "${var.spring_profile_env}"
+  taskdef_path                  =    "${var.taskdef_path}"
 }
 
 
@@ -251,6 +252,7 @@ module "codebuild" {
   # build_output_image_dir = "${lookup(local.apiservices, "build_output_image_dir")}"
   # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
   container_name = "${module.ecs-cluster.container_name}"
+  taskdef_path = "${var.taskdef_path}"
   
 }
 
@@ -291,6 +293,7 @@ module "codedeploy" {
   test_listener = "${module.ecs-cluster.test_listener}"
   target_group_name_blue = "${module.ecs-cluster.target_group_name_blue}"
   target_group_name_green = "${module.ecs-cluster.target_group_name_green}"
+  sns_trigger_alarm_arn = "${module.CloudWatch.arn_alarm_sns}"
   
 
 }

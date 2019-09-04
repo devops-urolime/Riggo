@@ -65,33 +65,29 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
       value = "${var.container_name}"
     }
 
-    environment_variable {
-      name = "DEPLOY_ARTIFACT_NAME"
-      value = "${local.build_deploy_directory}"
-    }
+   
     environment_variable {
       name = "TASKDEF_NAME"
       value = "${var.task_definition}"
     }
+
+   
     environment_variable {
       name = "ECR_PLACEHOLDER"
       value = "${local.placeholder_text}"
     }
 
 
-    environment_variable {
-      name = "IMAGE_ARTIFACT_NAME"
-      value = "${local.build_image_directory}"
-    }
-    dynamic "environment_variable" {
-      for_each = var.environment_variables["apiservices"]
-      content {
-        name  = environment_variable.value.name
-        value = environment_variable.value.value
-      }
-    }
+  
+  #   dynamic "environment_variable" {
+  #     for_each = var.environment_variables["apiservices"]
+  #     content {
+  #       name  = environment_variable.value.name
+  #       value = environment_variable.value.value
+  #     }
+  #   }
     
-  }
+   }
   
   
 

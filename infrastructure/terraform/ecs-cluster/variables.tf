@@ -109,3 +109,7 @@ variable "ec2_health_check_period" {
 variable "spring_profile_key" {
   
 }
+
+variable "taskdef_path" {
+  
+}
