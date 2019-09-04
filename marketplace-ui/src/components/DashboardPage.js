@@ -96,7 +96,8 @@ const digestDataToMultiYAxes = (data) => {
            "fiscalYear": axeInfo.fiscalYear,
            "fiscalWeek": axeInfo.fiscalWeek,
            "offset": axeInfo.offset,
-           "units": units
+           "units": units,
+           "costPerMile": axeInfo.costPerMile
          };
       });
       return {
@@ -212,19 +213,17 @@ class DashboardPage extends Component {
         item.payload.fiscalWeek
       );
     } else if (this.state.showNext){
-      const item = this.state.historyNav[
-        this.state.historyNavIndex
-      ];
+      const nextIndexItem = this.state.historyNavIndex + 1;
+      const item = this.state.historyNav[ nextIndexItem ];
       if(item){
         const nextItem = item.item;
         this.setState(prevState => {
           const historyNavUpdate = (prevState.historyNavIndex >= prevState.historyNav.length) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
-          const historyNavIndex = prevState.historyNavIndex + 1;
-          const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
-          const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
+          const hasNextHistory = this.hasNextHistory(historyNavUpdate, nextIndexItem);
+          const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, nextIndexItem +1);
           return ({
             viewTypeShipment: nextItem.payload.units,
-            historyNavIndex,
+            historyNavIndex: nextIndexItem,
             showNext: hasNextHistory,
             showPrev: hasPrevHistory,
           });
@@ -244,15 +243,16 @@ class DashboardPage extends Component {
     const { historyNav, historyNavIndex } = this.state;
     const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
     if(hasPrevHistory){
-      const item = (historyNav[historyNavIndex]) ? historyNav[historyNavIndex].item: {};
+      const prevIndexItem = historyNavIndex - 1;
+      const item = (historyNav[prevIndexItem]) ? historyNav[prevIndexItem].item: {};
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav];
         const historyNavIndex = (prevState.historyNavIndex > 0 ) ? prevState.historyNavIndex - 1 : prevState.historyNavIndex;
         const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
         const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
         const prevItem = (
-          historyNavUpdate[historyNavIndex] &&
-          historyNavUpdate[historyNavIndex].item) ?  historyNavUpdate[historyNavIndex].item : {};
+          historyNavUpdate[prevIndexItem] &&
+          historyNavUpdate[prevIndexItem].item) ?  historyNavUpdate[prevIndexItem].item : {};
         return ({
           viewTypeShipment: (prevItem.units) ? prevItem.units : SHIPMENT_RESULT_BY_MONTH,
           historyNav: historyNavUpdate,
