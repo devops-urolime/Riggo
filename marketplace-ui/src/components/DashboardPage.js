@@ -86,7 +86,8 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
 const digestDataToMultiYAxes = (data) => {
   return (data && data.length > 0 ) ?
     data.map((item) => {
-      const dataToVisualize = item.shipmentData.map((axeInfo) =>{
+      const { shipmentData, units } =  item;
+      const dataToVisualize = shipmentData.map((axeInfo) =>{
          return {
            date: axeInfo.label,
            "Shipment Delivered": axeInfo.shipments,
@@ -94,6 +95,8 @@ const digestDataToMultiYAxes = (data) => {
            "fiscalMonth": axeInfo.fiscalMonth,
            "fiscalYear": axeInfo.fiscalYear,
            "fiscalWeek": axeInfo.fiscalWeek,
+           "offset": axeInfo.offset,
+           "units": units
          };
       });
       return {
@@ -182,12 +185,12 @@ class DashboardPage extends Component {
     return type[idx - 1];
   };
 
-  hasNextHistory = () =>{
-    return this.state.historyNavIndex < this.state.historyNav.length - 1;
+  hasNextHistory = (historyNav, historyNavIndex) =>{
+    return historyNavIndex < historyNav.length - 2;
   };
 
-  hasPrevHistory = () => {
-    return this.state.historyNavIndex > this.state.historyNav.length - 1;
+  hasPrevHistory = (historyNav, historyNavIndex) => {
+    return ((historyNav.length) - historyNavIndex) > -1;
   };
 
   navigateToNextViewType = (item) => {
@@ -196,17 +199,17 @@ class DashboardPage extends Component {
       const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav, { viewTypeShipment, item }];
-        const hasNextHistory = this.hasNextHistory();
-        const hasPrevHistory = this.hasPrevHistory();
+        const historyNavIndex = historyNavUpdate.length - 1 ;
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
         return ({
           viewTypeShipment: nextView,
           historyNav: historyNavUpdate,
-          historyNavIndex: historyNavUpdate.length - 1,
+          historyNavIndex,
           showNext: hasNextHistory,
           showPrev: hasPrevHistory,
         });
       });
-
       this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
@@ -228,14 +231,16 @@ class DashboardPage extends Component {
     }
   };
 
-  navigateToPrevViewType = (item) => {
-    const { viewTypeShipment } = this.state;
-    if(item.payload){
+  navigateToPrevViewType = () => {
+    const { viewTypeShipment, historyNav, historyNavIndex } = this.state;
+    const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
+    if(hasPrevHistory){
       const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
+      const item = (historyNav[historyNavIndex]) ? historyNav[historyNavIndex].item: {};
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav.splice(-1, prevState.historyNav.length - 1)];
-        const hasNextHistory = this.hasNextHistory();
-        const hasPrevHistory = this.hasPrevHistory();
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex - 1);
         return ({
           viewTypeShipment: prevView,
           historyNav: historyNavUpdate,
@@ -244,13 +249,16 @@ class DashboardPage extends Component {
           showPrev: hasPrevHistory,
         });
       });
-      this.props.loadShipmentSummary(
-        item.payload.offset,
-        prevView,
-        item.payload.fiscalMonth,
-        item.payload.fiscalYear,
-        item.payload.fiscalWeek
-      );
+      if (item.payload){
+        this.props.loadShipmentSummary(
+          item.payload.offset,
+          item.payload.units,
+          item.payload.fiscalMonth,
+          item.payload.fiscalYear,
+          item.payload.fiscalWeek
+        );
+      }
+
     } else if (this.state.showPrev){
       const item = this.state.historyNav[
         this.state.historyNavIndex
