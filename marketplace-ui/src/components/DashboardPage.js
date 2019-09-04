@@ -207,8 +207,6 @@ class DashboardPage extends Component {
         });
       });
 
-      console.log(item);
-
       this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
