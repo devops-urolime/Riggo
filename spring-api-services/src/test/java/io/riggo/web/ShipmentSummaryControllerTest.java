@@ -1,11 +1,8 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.FiscalPeriod;
-import io.riggo.data.domain.Invoice;
-import io.riggo.data.domain.InvoiceStatus;
-import io.riggo.data.domain.LoadSubStatus;
+import io.riggo.data.domain.*;
 import io.riggo.data.services.FiscalPeriodService;
-import io.riggo.data.services.InvoiceService;
+import io.riggo.data.services.InvoiceLoadService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,7 +42,7 @@ public class ShipmentSummaryControllerTest {
     private AuthenticationFacade authenticationFacade;
 
     @MockBean
-    private InvoiceService invoiceService;
+    private InvoiceLoadService invoiceLoadService;
 
     @MockBean
     private FiscalPeriodService fiscalPeriodService;
@@ -74,19 +71,19 @@ public class ShipmentSummaryControllerTest {
         endFiscalPeriod.setFirstDayOfMonth(LocalDate.of(2019, 9 ,1));
         endFiscalPeriod.setQuarterActual(3);
 
-        Invoice invoice = new Invoice();
+        InvoiceLoad invoice = new InvoiceLoad();
         invoice.setQuoteDate(LocalDateTime.of(2019, 5, 2, 0, 0,0 ));
         invoice.setNetFreightCharges(new BigDecimal(11));
 
-        Invoice invoice2 = new Invoice();
+        InvoiceLoad invoice2 = new InvoiceLoad();
         invoice2.setQuoteDate(LocalDateTime.of(2019, 6, 2, 0, 0,0 ));
         invoice2.setNetFreightCharges(new BigDecimal(22));
 
-        Invoice invoice3 = new Invoice();
+        InvoiceLoad invoice3 = new InvoiceLoad();
         invoice3.setQuoteDate(LocalDateTime.of(2019, 7, 2, 0, 0,0 ));
         invoice3.setNetFreightCharges(new BigDecimal(22));
 
-        List<Invoice> invoiceList = new ArrayList<>();
+        List<InvoiceLoad> invoiceList = new ArrayList<>();
         invoiceList.add(invoice);
         invoiceList.add(invoice2);
         invoiceList.add(invoice3);
@@ -100,7 +97,7 @@ public class ShipmentSummaryControllerTest {
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1).minusMonths(3))).willReturn(Optional.of(startFiscalPeriod));
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(endFiscalPeriod));
 
-        given(invoiceService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter(), endFiscalPeriod.getLastDayOfQuarter().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter(), endFiscalPeriod.getLastDayOfQuarter().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY)
                 .contentType(APPLICATION_JSON))
@@ -141,19 +138,19 @@ public class ShipmentSummaryControllerTest {
         startFiscalPeriod.setLastDayOfMonth(LocalDate.of(2019, 9 ,30));
         startFiscalPeriod.setMonthName("September");
 
-        Invoice invoice = new Invoice();
+        InvoiceLoad invoice = new InvoiceLoad();
         invoice.setQuoteDate(LocalDateTime.of(2019, 9, 1, 0, 0,0 ));
         invoice.setNetFreightCharges(new BigDecimal(11));
 
-        Invoice invoice2 = new Invoice();
+        InvoiceLoad invoice2 = new InvoiceLoad();
         invoice2.setQuoteDate(LocalDateTime.of(2019, 9, 2, 0, 0,0 ));
         invoice2.setNetFreightCharges(new BigDecimal(22));
 
-        Invoice invoice3 = new Invoice();
+        InvoiceLoad invoice3 = new InvoiceLoad();
         invoice3.setQuoteDate(LocalDateTime.of(2019, 9, 3, 0, 0,0 ));
         invoice3.setNetFreightCharges(new BigDecimal(22));
 
-        List<Invoice> invoiceList = new ArrayList<>();
+        List<InvoiceLoad> invoiceList = new ArrayList<>();
         invoiceList.add(invoice);
         invoiceList.add(invoice2);
         invoiceList.add(invoice3);
@@ -166,7 +163,7 @@ public class ShipmentSummaryControllerTest {
 
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
 
-        given(invoiceService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth(), startFiscalPeriod.getLastDayOfMonth().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth(), startFiscalPeriod.getLastDayOfMonth().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=weeks")
                 .contentType(APPLICATION_JSON))
@@ -196,19 +193,22 @@ public class ShipmentSummaryControllerTest {
         startFiscalPeriod.setLastDayOfWeek(LocalDate.of(2019, 9 ,7));
         startFiscalPeriod.setMonthName("September");
 
-        Invoice invoice = new Invoice();
+        InvoiceLoad invoice = new InvoiceLoad();
         invoice.setQuoteDate(LocalDateTime.of(2019, 9, 1, 0, 0,0 ));
         invoice.setNetFreightCharges(new BigDecimal(11));
+        invoice.setDistanceMiles(new BigDecimal(12.12));
 
-        Invoice invoice2 = new Invoice();
+        InvoiceLoad invoice2 = new InvoiceLoad();
         invoice2.setQuoteDate(LocalDateTime.of(2019, 9, 2, 0, 0,0 ));
         invoice2.setNetFreightCharges(new BigDecimal(22));
+        invoice2.setDistanceMiles(new BigDecimal(12.12));
 
-        Invoice invoice3 = new Invoice();
+        InvoiceLoad invoice3 = new InvoiceLoad();
         invoice3.setQuoteDate(LocalDateTime.of(2019, 9, 3, 0, 0,0 ));
         invoice3.setNetFreightCharges(new BigDecimal(22));
+        invoice3.setDistanceMiles(new BigDecimal(12.12));
 
-        List<Invoice> invoiceList = new ArrayList<>();
+        List<InvoiceLoad> invoiceList = new ArrayList<>();
         invoiceList.add(invoice);
         invoiceList.add(invoice2);
         invoiceList.add(invoice3);
@@ -221,7 +221,7 @@ public class ShipmentSummaryControllerTest {
 
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
 
-        given(invoiceService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek(), startFiscalPeriod.getLastDayOfWeek().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek(), startFiscalPeriod.getLastDayOfWeek().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
                 .contentType(APPLICATION_JSON))

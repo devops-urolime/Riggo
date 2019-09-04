@@ -4,7 +4,7 @@ import io.riggo.data.domain.*;
 import io.riggo.data.exception.BadRequestException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.FiscalPeriodService;
-import io.riggo.data.services.InvoiceService;
+import io.riggo.data.services.InvoiceLoadService;
 import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.ShipmentVizData;
 import io.riggo.web.response.ShipmentVizDataContainer;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ShipmentSummaryController {
 
     @Autowired
-    private InvoiceService invoiceService;
+    private InvoiceLoadService invoiceLoadService;
 
     @Autowired
     private AuthenticationFacade authenticationFacade;
@@ -50,7 +50,7 @@ public class ShipmentSummaryController {
         if(fiscalWeek == 0){ fiscalWeek = (((now.getDayOfMonth()-1)%7)+1); }
         Integer currentDayOfMonth = now.getDayOfMonth();
 
-        Optional<List<Invoice>> invoices = null;
+        Optional<List<InvoiceLoad>> invoices = null;
         List<Integer> invoiceStatusList = Arrays.asList(new Integer[]{InvoiceStatus.ACCEPTED.getColVal()});
         List<Integer> loadStatusList = Arrays.asList(new Integer[]{LoadSubStatus.DOCUMENTS_RECEIVED.getColVal(), LoadSubStatus.PENDING_DOCUMENTS.getColVal(), LoadSubStatus.INVOICED.getColVal()});
         LocalDate startDate = null;
@@ -92,10 +92,10 @@ public class ShipmentSummaryController {
         if(startDate != null && endDate != null)
         {
             if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
-                invoices = invoiceService.findInvoicesBySite(authenticationFacade.getSiteId(), invoiceStatusList, loadStatusList, startDate, endDate);
+                invoices = invoiceLoadService.findInvoicesBySite(authenticationFacade.getSiteId(), invoiceStatusList, loadStatusList, startDate, endDate);
             }
             else if(authenticationFacade.isShipperExecutive()) {
-                invoices = invoiceService.findInvoicesBySiteUser(authenticationFacade.getSiteId(), authenticationFacade.getUsername(), invoiceStatusList, loadStatusList, startDate, endDate);
+                invoices = invoiceLoadService.findInvoicesBySiteUser(authenticationFacade.getSiteId(), authenticationFacade.getUsername(), invoiceStatusList, loadStatusList, startDate, endDate);
             }
         }else{
             throw new BadRequestException();
@@ -164,7 +164,7 @@ public class ShipmentSummaryController {
         throw new ResourceNotFoundException(ResourceType.SHIPMENT_SUMMARY, 0);
     }
 
-    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<Invoice>> invoices, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
+    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<InvoiceLoad>> invoices, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
         shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue()+1);
         shipmentVizData.setFiscalYear(periodStartDate.getYear());
         shipmentVizData.setFiscalWeek(fiscalWeek);
@@ -180,10 +180,20 @@ public class ShipmentSummaryController {
                 .filter(invoice ->
                         invoice.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
                                 invoice.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
-                ).collect(Collectors.summingDouble(Invoice::getNetFreightChargesDoubleValue));
+                ).collect(Collectors.summingDouble(InvoiceLoad::getNetFreightChargesDoubleValue));
+
+        Double totalMiles = invoices.get().stream()
+                .filter(invoice ->
+                        invoice.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
+                                invoice.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
+                ).collect(Collectors.summingDouble(InvoiceLoad::getDistanceMilesDoubleValue));
 
         shipmentVizData.setShipments(shipments.intValue());
         shipmentVizData.setTotalCost(new BigDecimal(totalFreightCharges));
-        shipmentVizData.setCostPerMile(new BigDecimal(1.21));
+        shipmentVizData.setTotalMiles(new BigDecimal(totalMiles));
+        if(totalMiles > 0.0)
+        {
+            shipmentVizData.setCostPerMile(new BigDecimal(totalFreightCharges/totalMiles));
+        }
     }
 }
