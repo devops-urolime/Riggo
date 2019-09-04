@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,6 +58,7 @@ public class ShipmentSummaryController {
 
         Optional<FiscalPeriod> startFiscalPeriod = null;
         Optional<FiscalPeriod> endFiscalPeriod = null;
+        String vizTitle = "";
 
         if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.MONTHS.getDisplayName()))
         {
@@ -65,6 +67,7 @@ public class ShipmentSummaryController {
             if(startFiscalPeriod.isPresent() && endFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfQuarter();
                 endDate = endFiscalPeriod.get().getLastDayOfQuarter().plusDays(1);
+                vizTitle = startFiscalPeriod.get().getFiscalQuarter() + " - " + endFiscalPeriod.get().getFiscalQuarter();
             }
         }
         else if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.WEEKS.getDisplayName()))
@@ -73,14 +76,16 @@ public class ShipmentSummaryController {
             if(startFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfMonth();
                 endDate = startFiscalPeriod.get().getLastDayOfMonth().plusDays(1);
+                vizTitle = startFiscalPeriod.get().getMonthName() + " " +  startFiscalPeriod.get().getYear_actual();
             }
         }
         else if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.DAYS.getDisplayName()))
         {
-            startFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, fiscalWeek*7).minusMonths(offset*1));
+            startFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, ((fiscalWeek-1)*7)+1));
             if(startFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfWeek();
                 endDate = startFiscalPeriod.get().getLastDayOfWeek().plusDays(1);
+                vizTitle = startFiscalPeriod.get().getMonthName() + " " + startFiscalPeriod.get().getYear_actual() + " Week " + fiscalWeek;
             }
         }
 
@@ -101,7 +106,7 @@ public class ShipmentSummaryController {
         if (invoices != null && invoices.isPresent()) {
             ShipmentVizDataContainer shipmentVizDataContainer = new ShipmentVizDataContainer();
             List<ShipmentVizData> shipmentVizDataList = new ArrayList<>();
-            shipmentVizDataContainer.setTitle(startFiscalPeriod.get().getFiscalQuarter() + " - " + endFiscalPeriod.get().getFiscalQuarter());
+            shipmentVizDataContainer.setTitle(vizTitle);
             shipmentVizDataContainer.setUnits(units);
 
             if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.MONTHS.getDisplayName())) {
@@ -113,37 +118,40 @@ public class ShipmentSummaryController {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
                         shipmentVizData.setLabel(periodStartDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + periodStartDate.getYear());
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, 0, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, periodStartDate.getMonthValue(), 0, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
                 shipmentVizDataContainer.setShipmentData(shipmentVizDataList);
             }
             if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.WEEKS.getDisplayName())) {
-                for(int i = 0; i < 4; i++) {
+                for(int i = 0; i < 5; i++) {
                     LocalDate periodStartDate = startFiscalPeriod.get().getFirstDayOfMonth().plusWeeks(i);
                     LocalDate periodEndDate = startFiscalPeriod.get().getFirstDayOfMonth().plusWeeks(i+1);
+                    if(periodEndDate.getMonthValue() > periodStartDate.getMonthValue())
+                    {
+                        periodEndDate = periodEndDate.minusDays(periodEndDate.getDayOfMonth()-1);
+                    }
                     if(periodStartDate.isBefore(endDate)) {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
                         shipmentVizData.setLabel("Week " + (i+1));
                         shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue());
                         shipmentVizData.setFiscalYear(periodStartDate.getYear());
-                        shipmentVizData.setWeek(i+1);
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, fiscalWeek, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, periodStartDate.getMonthValue(), i+1, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
             }
             if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.DAYS.getDisplayName())) {
                 for(int i = 0; i < 7; i++) {
-                    LocalDate periodStartDate = startFiscalPeriod.get().getFirstDayOfMonth().plusDays(i);
-                    LocalDate periodEndDate = startFiscalPeriod.get().getFirstDayOfMonth().plusDays(i+1);
+                    LocalDate periodStartDate = startFiscalPeriod.get().getFirstDayOfWeek().plusDays(i);
+                    LocalDate periodEndDate = startFiscalPeriod.get().getFirstDayOfWeek().plusDays(i+1);
                     if(periodStartDate.isBefore(endDate)) {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
-                        shipmentVizData.setLabel(periodStartDate.getMonth() + " " + periodStartDate.getDayOfMonth());
+                        shipmentVizData.setLabel(periodStartDate.format(DateTimeFormatter.ofPattern("MM/dd/YYYY")));
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, fiscalWeek, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).atTime(23, 59, 59, 999999999), periodEndDate.atTime(0,0,0), invoices, periodStartDate.getMonthValue(), fiscalWeek, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
@@ -156,8 +164,8 @@ public class ShipmentSummaryController {
         throw new ResourceNotFoundException(ResourceType.SHIPMENT_SUMMARY, 0);
     }
 
-    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<Invoice>> invoices, Integer fiscalWeek, Integer offset){
-        shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue());
+    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<Invoice>> invoices, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
+        shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue()+1);
         shipmentVizData.setFiscalYear(periodStartDate.getYear());
         shipmentVizData.setWeek(fiscalWeek);
         shipmentVizData.setOffset(offset);
