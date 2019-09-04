@@ -31,7 +31,7 @@ $navigate-arrow-size: 19px;
 
 .NavigateNext{
     font-size: $navigate-arrow-size !important;
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) !important;
     display: block;
     margin: 0 auto;
     cursor: pointer;
