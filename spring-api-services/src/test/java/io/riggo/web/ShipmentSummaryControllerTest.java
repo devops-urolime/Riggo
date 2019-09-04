@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,10 +53,9 @@ public class ShipmentSummaryControllerTest {
 
     private static Logger logger = LoggerFactory.getLogger(ShipmentSummaryControllerTest.class);
 
-    @WithMockUser(value = "spring", authorities = {"read:invoice"})
+    @WithMockUser(value = "spring")
     @Test
-    public void getSummaryHappyPathSuperAdmin() throws Exception {
-
+    public void getSummaryHappyPathSuperAdminMonths() throws Exception {
         Integer fiscalYear = 2019;
         Integer fiscalMonth = 9;
         Integer startFiscalMonth = 6;
@@ -94,7 +94,6 @@ public class ShipmentSummaryControllerTest {
         List<Integer> invoiceStatusList = Arrays.asList(new Integer[]{InvoiceStatus.ACCEPTED.getColVal()});
         List<Integer> loadStatusList = Arrays.asList(new Integer[]{LoadSubStatus.DOCUMENTS_RECEIVED.getColVal(), LoadSubStatus.PENDING_DOCUMENTS.getColVal(), LoadSubStatus.INVOICED.getColVal()});
 
-
         given(authenticationFacade.isSuperAdmin()).willReturn(true);
         given(authenticationFacade.getSiteId()).willReturn(100);
 
@@ -107,8 +106,9 @@ public class ShipmentSummaryControllerTest {
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
-                //.andExpect(jsonPath("$.data[0].subStatuses[0].id", is(loadPipeline.getId())))
-                //.andExpect(jsonPath("$.data[0].subStatuses[0].count", is(loadPipeline.getCount())))
+                .andExpect(jsonPath("$.data[0].title", is("Q2 2019 - Q3 2019")))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalMonth", is(4)))
+                .andExpect(jsonPath("$.data[0].shipmentData[1].fiscalMonth", is(5)))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
@@ -125,5 +125,115 @@ public class ShipmentSummaryControllerTest {
 
         String content = result.getResponse().getContentAsString();
         logger.debug(content);
+    }
+
+
+    @WithMockUser(value = "spring")
+    @Test
+    public void getSummaryHappyPathSuperAdminWeeks() throws Exception {
+        Integer fiscalYear = 2019;
+        Integer fiscalMonth = 9;
+
+        FiscalPeriod startFiscalPeriod = new FiscalPeriod();
+        startFiscalPeriod.setYear_actual(fiscalYear);
+        startFiscalPeriod.setMonthActual(fiscalMonth);
+        startFiscalPeriod.setFirstDayOfMonth(LocalDate.of(2019, 9 ,1));
+        startFiscalPeriod.setLastDayOfMonth(LocalDate.of(2019, 9 ,30));
+        startFiscalPeriod.setMonthName("September");
+
+        Invoice invoice = new Invoice();
+        invoice.setQuoteDate(LocalDateTime.of(2019, 9, 1, 0, 0,0 ));
+        invoice.setNetFreightCharges(new BigDecimal(11));
+
+        Invoice invoice2 = new Invoice();
+        invoice2.setQuoteDate(LocalDateTime.of(2019, 9, 2, 0, 0,0 ));
+        invoice2.setNetFreightCharges(new BigDecimal(22));
+
+        Invoice invoice3 = new Invoice();
+        invoice3.setQuoteDate(LocalDateTime.of(2019, 9, 3, 0, 0,0 ));
+        invoice3.setNetFreightCharges(new BigDecimal(22));
+
+        List<Invoice> invoiceList = new ArrayList<>();
+        invoiceList.add(invoice);
+        invoiceList.add(invoice2);
+        invoiceList.add(invoice3);
+
+        List<Integer> invoiceStatusList = Arrays.asList(new Integer[]{InvoiceStatus.ACCEPTED.getColVal()});
+        List<Integer> loadStatusList = Arrays.asList(new Integer[]{LoadSubStatus.DOCUMENTS_RECEIVED.getColVal(), LoadSubStatus.PENDING_DOCUMENTS.getColVal(), LoadSubStatus.INVOICED.getColVal()});
+
+        given(authenticationFacade.isSuperAdmin()).willReturn(true);
+        given(authenticationFacade.getSiteId()).willReturn(100);
+
+        given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
+
+        given(invoiceService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth(), startFiscalPeriod.getLastDayOfMonth().plusDays(1))).willReturn(Optional.of(invoiceList));
+
+        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=weeks")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].title", is("September 2019")))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalMonth", is(9)))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].week", is(1)))
+                .andExpect(jsonPath("$.data[0].shipmentData[1].week", is(2)))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.error(content);
+    }
+
+
+    @WithMockUser(value = "spring")
+    @Test
+    public void getSummaryHappyPathSuperAdminDays() throws Exception {
+        Integer fiscalYear = 2019;
+        Integer fiscalMonth = 9;
+
+        FiscalPeriod startFiscalPeriod = new FiscalPeriod();
+        startFiscalPeriod.setYear_actual(fiscalYear);
+        startFiscalPeriod.setMonthActual(fiscalMonth);
+        startFiscalPeriod.setFirstDayOfWeek(LocalDate.of(2019, 9 ,1));
+        startFiscalPeriod.setLastDayOfWeek(LocalDate.of(2019, 9 ,7));
+        startFiscalPeriod.setMonthName("September");
+
+        Invoice invoice = new Invoice();
+        invoice.setQuoteDate(LocalDateTime.of(2019, 9, 1, 0, 0,0 ));
+        invoice.setNetFreightCharges(new BigDecimal(11));
+
+        Invoice invoice2 = new Invoice();
+        invoice2.setQuoteDate(LocalDateTime.of(2019, 9, 2, 0, 0,0 ));
+        invoice2.setNetFreightCharges(new BigDecimal(22));
+
+        Invoice invoice3 = new Invoice();
+        invoice3.setQuoteDate(LocalDateTime.of(2019, 9, 3, 0, 0,0 ));
+        invoice3.setNetFreightCharges(new BigDecimal(22));
+
+        List<Invoice> invoiceList = new ArrayList<>();
+        invoiceList.add(invoice);
+        invoiceList.add(invoice2);
+        invoiceList.add(invoice3);
+
+        List<Integer> invoiceStatusList = Arrays.asList(new Integer[]{InvoiceStatus.ACCEPTED.getColVal()});
+        List<Integer> loadStatusList = Arrays.asList(new Integer[]{LoadSubStatus.DOCUMENTS_RECEIVED.getColVal(), LoadSubStatus.PENDING_DOCUMENTS.getColVal(), LoadSubStatus.INVOICED.getColVal()});
+
+        given(authenticationFacade.isSuperAdmin()).willReturn(true);
+        given(authenticationFacade.getSiteId()).willReturn(100);
+
+        given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
+
+        given(invoiceService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek(), startFiscalPeriod.getLastDayOfWeek().plusDays(1))).willReturn(Optional.of(invoiceList));
+
+        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data", hasSize(1)))
+                .andExpect(jsonPath("$.data[0].title", is("September 2019 Week 1")))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].fiscalMonth", is(9)))
+                .andExpect(jsonPath("$.data[0].shipmentData[0].week", is(1)))
+                .andExpect(jsonPath("$.data[0].shipmentData[1].week", is(1)))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.error(content);
     }
 }
