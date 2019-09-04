@@ -42,7 +42,10 @@ public class Load implements Serializable {
     private Boolean teamReq;
     private Boolean foodGradeTrailerReq;
     private Boolean tempControlReq;
+
+    @Column(name = "expected_delivery_date")
     private LocalDate expectedDeliveryDate;
+
     private Integer driver;
     private Boolean locationBasedSvcsReq;
 
@@ -205,8 +208,6 @@ public class Load implements Serializable {
         this.tempControlReq = tempControlReq;
     }
 
-    @Basic
-    @Column(name = "expected_delivery_date")
     public LocalDate getExpectedDeliveryDate() {
         return expectedDeliveryDate;
     }

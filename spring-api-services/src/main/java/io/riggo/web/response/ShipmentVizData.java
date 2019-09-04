@@ -9,6 +9,7 @@ public class ShipmentVizData implements Serializable {
     private Integer shipments;
     private BigDecimal costPerMile;
     private BigDecimal totalCost;
+    private BigDecimal totalMiles;
     private Integer fiscalMonth;
     private Integer fiscalYear;
     private Integer fiscalWeek;
@@ -77,5 +78,13 @@ public class ShipmentVizData implements Serializable {
 
     public void setOffset(Integer offset) {
         this.offset = offset;
+    }
+
+    public BigDecimal getTotalMiles() {
+        return totalMiles;
+    }
+
+    public void setTotalMiles(BigDecimal totalMiles) {
+        this.totalMiles = totalMiles;
     }
 }
