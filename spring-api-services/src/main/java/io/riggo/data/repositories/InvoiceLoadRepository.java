@@ -28,7 +28,7 @@ public interface InvoiceLoadRepository extends CrudRepository<InvoiceLoad, Integ
             "WHERE i.status IN :invoiceStatusList AND site.id = :siteId " +
             "AND l.loadStatus IN :loadStatusList " +
             "AND l.expectedDeliveryDate >= :expectedDeliveryDateStart AND l.expectedDeliveryDate <= :expectedDeliveryDateEnd " +
-            "GROUP BY i.id")
+            "GROUP BY i.id, l.distanceMiles")
     Optional<List<InvoiceLoad>> findInvoicesBySite(
             @Param("siteId") Integer siteId,
             @Param("invoiceStatusList") List<Integer> invoiceStatusList,
@@ -53,7 +53,8 @@ public interface InvoiceLoadRepository extends CrudRepository<InvoiceLoad, Integ
             "JOIN io.riggo.data.domain.ShipperUser su ON s.id = su.shipperId AND su.userId = u.id " +
             "WHERE i.status IN :invoiceStatusList AND site.id = :siteId " +
             "AND u.email = :email AND l.loadStatus IN :loadStatusList " +
-            "AND l.expectedDeliveryDate >= :expectedDeliveryDateStart AND l.expectedDeliveryDate <= :expectedDeliveryDateEnd")
+            "AND l.expectedDeliveryDate >= :expectedDeliveryDateStart AND l.expectedDeliveryDate <= :expectedDeliveryDateEnd " +
+            "GROUP BY i.id, l.distanceMiles")
     Optional<List<InvoiceLoad>> findInvoicesBySiteUser(
             @Param("siteId") Integer siteId,
             @Param("email") String email,
