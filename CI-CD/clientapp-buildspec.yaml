@@ -1,8 +1,12 @@
 version: 0.2
 
-#env:
-  #variables:
-     # key: "value"
+env:
+  variables:
+      REACT_APP_DOMAIN_AUTH_CONFIG: "riggo-qa.auth0.com"
+      REACT_APP_CLIENT_ID_AUTH_CONFIG: "7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv"
+      REACT_APP_AUDIENCE_ID_AUTH_CONFIG: "load-resource-api"
+      REACT_APP_CALL_BACK_URL_AUTH_CONFIG: "https://riggo.riggoqa.net/callback"
+      REACT_APP_MOCK_ALL_DATA: "true"
      # key: "value"
   #parameter-store:
      # key: "value"

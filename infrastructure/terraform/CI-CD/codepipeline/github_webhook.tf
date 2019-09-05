@@ -35,7 +35,8 @@ resource "aws_codepipeline_webhook" "codepipeline_Webhook" {
 }
 
 locals {
-  webhook_secret = "super-secret"
+  webhook_secret = "${data.external.github_access_token.result.github_access_token}"
   application_names = ["apiserver","clientapp"]
   pipeline_names = ["${aws_codepipeline.codepipeline_apiservice.name}","${aws_codepipeline.codepipeline_clientapp.name}"]
 }
+

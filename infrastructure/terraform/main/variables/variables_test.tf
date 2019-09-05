@@ -118,6 +118,8 @@ health_checkpath = "/favicon.ico"
 TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
+taskdef_path = "CI-CD/taskdef.json"
+
 #Variables for route53
 service_discovery_ttl = "60"
 
@@ -188,8 +190,8 @@ alarms_email = ["muhasin.mohammed@urolime.com"]
 compute_type = "BUILD_GENERAL1_SMALL"
 codebuild_image = "aws/codebuild/standard:2.0"
 buildspec_path = {
-
-  clientapp  = "CI-CD/clientapp-buildspec.yaml"
+  #PATH is from root of the respository.
+  clientapp  = "CI-CD/clientapp-buildspec.yaml" 
   apiservice = "CI-CD/apiservices-buildspec.yaml"
 }
 
@@ -200,7 +202,7 @@ rollback_events = ["DEPLOYMENT_FAILURE"]
 action_on_timeout = "CONTINUE_DEPLOYMENT"
 action_on_blue_tasks = "TERMINATE"
 bluetask_termination_wait_minutes = 0
-taskdef_path = "CI-CD/taskdef.json"
+# taskdef_path = "CI-CD/taskdef.json"
 #variables for codepipeline
 artifact = {
 source_output_artifact_dir = "Riggo-source"
@@ -208,9 +210,9 @@ build_output_image_artifact_dir = "Riggo-image"
 build_output_deploy_artifact_dir = "Riggo-deploy"
 image_placeholder_text = "<IMAGE1_NAME>"
   }
-
+github_organization_name = "rig-go"
 github_repository_name = "riggo"
 github_branch_name = {
-  clientapp = "client-app"
-  apiservices = "api-services"
+  clientapp = "test-client-app"
+  apiservices = "test-api-services"
 }

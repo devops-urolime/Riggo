@@ -64,13 +64,13 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
       value = "${var.cloudfront_distribution_id}"
     }
     
-     dynamic "environment_variable" {
-      for_each = var.environment_variables["clientapp"]
-      content {
-        name  = environment_variable.value.name
-        value = environment_variable.value.value
-      }
-    }
+    #  dynamic "environment_variable" {
+    #   for_each = var.environment_variables["clientapp"]
+    #   content {
+    #     name  = environment_variable.value.name
+    #     value = environment_variable.value.value
+    #   }
+    # }
     
   }
 

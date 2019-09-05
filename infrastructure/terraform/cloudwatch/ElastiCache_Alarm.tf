@@ -16,7 +16,7 @@ locals {
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis_cpu_utilization_alarm" {
-  count = "${var.elasticache_nodes}"
+  # count = "${var.elasticache_nodes}"
   alarm_name          = "${terraform.workspace}-REDIS-cpu-utilization-alarm"
   alarm_description   = "Redis cluster CPU utilization"
   comparison_operator = "GreaterThanThreshold"
@@ -39,7 +39,7 @@ resource "aws_cloudwatch_metric_alarm" "redis_cpu_utilization_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "redis_freeable_memory_alarm" {
-  count = "${var.elasticache_nodes}"
+  # count = "${var.elasticache_nodes}"
   alarm_name          = "${terraform.workspace}-REDIS-freeable-memory-alarm"
   alarm_description   = "Redis cluster freeable memory alarm"
   comparison_operator = "LessThanThreshold"
