@@ -19,10 +19,6 @@ variable "cloudfront_distribution_id" {
   
 }
 
-variable "environment_variables" {
-  
-}
-
 
 variable "codepipeline_artifact_bucket" {
   
