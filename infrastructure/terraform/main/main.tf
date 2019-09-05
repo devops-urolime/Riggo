@@ -233,7 +233,7 @@ module "lambda" {
 
 module "codebuild" {
   source = "../CI-CD/CodeBuild"
-  environment_variables = "${var.environment_variables}"
+  # environment_variables = "${var.environment_variables}"
   # private_subnet1_arn = "${var.private_subnet1_arn}"
   # private_subnet2_arn = "${var.private_subnet2_arn}"
   # private_subnet1_id

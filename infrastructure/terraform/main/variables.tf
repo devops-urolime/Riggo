@@ -664,11 +664,6 @@ variable "codebuild_image" {
   type = "string"
 }
 
-variable "environment_variables" {
-  
- description = "application related environment variables"
- type = "map"
-}
 
 # variable "apiservice_environment_variables" {
   
