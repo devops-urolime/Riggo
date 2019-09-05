@@ -1,22 +1,20 @@
 package io.riggo.data.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "invoice")
 
-public class Invoice implements Serializable {
+public class InvoiceLoad implements Serializable {
     private static final long serialVersionUID = 7156526077883281623L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Integer id;
 
     @Column(name = "ext_sys_id")
@@ -49,23 +47,26 @@ public class Invoice implements Serializable {
     @Column(name = "customer_quote_total")
     private BigDecimal customerQuoteTotal;
 
-    @Transient
-    @Column(name = "created_at")
-    private Date createdAt;
+    @Column(name = "distance_miles")
+    private BigDecimal distanceMiles;
 
-    @Transient
-    @Column(name = "updated_at")
-    private Date updatedAt;
 
-    @Transient
-    @Column(name = "deleted")
-    private Date deleted;
+    public InvoiceLoad(){}
 
-    @Transient
-    private String loadExtSysId;
-
-//    @ManyToOne
-//    private Load load;
+    public InvoiceLoad(Integer id, String extSysId, Integer loadId, LocalDateTime quoteDate, Integer status, String comments, BigDecimal netFreightCharges, BigDecimal fuelSurcharge, BigDecimal accessorialCharges, BigDecimal transportationTotal, BigDecimal customerQuoteTotal, BigDecimal distanceMiles) {
+        this.id = id;
+        this.extSysId = extSysId;
+        this.loadId = loadId;
+        this.quoteDate = quoteDate;
+        this.status = status;
+        this.comments = comments;
+        this.netFreightCharges = netFreightCharges;
+        this.fuelSurcharge = fuelSurcharge;
+        this.accessorialCharges = accessorialCharges;
+        this.transportationTotal = transportationTotal;
+        this.customerQuoteTotal = customerQuoteTotal;
+        this.distanceMiles = distanceMiles;
+    }
 
     public Integer getId() {
         return id;
@@ -119,10 +120,10 @@ public class Invoice implements Serializable {
         return netFreightCharges;
     }
 
-    @JsonIgnore
     public Double getNetFreightChargesDoubleValue() {
-        return netFreightCharges.doubleValue();
+        return netFreightCharges == null ? 0.0 : netFreightCharges.doubleValue();
     }
+
 
     public void setNetFreightCharges(BigDecimal netFreightCharges) {
         this.netFreightCharges = netFreightCharges;
@@ -160,35 +161,17 @@ public class Invoice implements Serializable {
         this.customerQuoteTotal = customerQuoteTotal;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public BigDecimal getDistanceMiles() {
+        return distanceMiles;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setDistanceMiles(BigDecimal distanceMiles) {
+        this.distanceMiles = distanceMiles;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public Double getDistanceMilesDoubleValue() {
+        return distanceMiles == null ? 0.0 : distanceMiles.doubleValue();
     }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Date getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Date deleted) {
-        this.deleted = deleted;
-    }
-
-    public String getLoadExtSysId() {
-        return loadExtSysId;
-    }
-
-    public void setLoadExtSysId(String loadExtSysId) {
-        this.loadExtSysId = loadExtSysId;
-    }
 }
+

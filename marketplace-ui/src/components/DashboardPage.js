@@ -185,12 +185,12 @@ class DashboardPage extends Component {
     return type[idx - 1];
   };
 
-  hasNextHistory = (historyNav, historyNavIndex) =>{
-    return historyNavIndex < historyNav.length - 2;
+  hasNextHistory = (historyNav) =>{
+    return !historyNav.length > 0;
   };
 
-  hasPrevHistory = (historyNav, historyNavIndex) => {
-    return ((historyNav.length) - historyNavIndex) > -1;
+  hasPrevHistory = (historyNav) => {
+    return historyNav.length > 0;
   };
 
   navigateToNextViewType = (item) => {
@@ -200,8 +200,8 @@ class DashboardPage extends Component {
       this.setState(prevState => {
         const historyNavUpdate = [...prevState.historyNav, { viewTypeShipment, item }];
         const historyNavIndex = historyNavUpdate.length - 1 ;
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate);
         return ({
           viewTypeShipment: nextView,
           historyNav: historyNavUpdate,
@@ -232,19 +232,23 @@ class DashboardPage extends Component {
   };
 
   navigateToPrevViewType = () => {
-    const { viewTypeShipment, historyNav, historyNavIndex } = this.state;
+    const { historyNav, historyNavIndex } = this.state;
     const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
     if(hasPrevHistory){
-      const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
       const item = (historyNav[historyNavIndex]) ? historyNav[historyNavIndex].item: {};
       this.setState(prevState => {
-        const historyNavUpdate = [...prevState.historyNav.splice(-1, prevState.historyNav.length - 1)];
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex - 1);
+        prevState.historyNav.pop();
+        const historyNavUpdate = [...prevState.historyNav];
+        const historyNavIndex = historyNavUpdate.length - 1 ;
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate);
+        const prevItem = (
+          historyNavUpdate[historyNavIndex] &&
+          historyNavUpdate[historyNavIndex].item) ?  historyNavUpdate[historyNavIndex].item : {};
         return ({
-          viewTypeShipment: prevView,
+          viewTypeShipment: (prevItem.units) ? prevItem.units : SHIPMENT_RESULT_BY_MONTH,
           historyNav: historyNavUpdate,
-          historyNavIndex: historyNavUpdate.length - 2,
+          historyNavIndex,
           showNext: hasNextHistory,
           showPrev: hasPrevHistory,
         });
@@ -381,7 +385,7 @@ class DashboardPage extends Component {
                     onClickBack={this.navigateToPrevViewType}
                     onClickNext={this.navigateToNextViewType}
                     rootClass="ShipmentsVisualization"
-                    showNext={showNext}
+                    showNext={false}
                     showPrev={showPrev}
                   />
                 }
