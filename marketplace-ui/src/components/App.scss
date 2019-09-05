@@ -4,17 +4,16 @@
     text-align: center;
 }
 
-$mobile-device-min-height: 1800px;
-$large-device-min-height: 1800px;
+$mobile-device-min-height: 100%;
+$large-device-min-height: 100%;
 .App-layout{
     background: $app-background;
-    height: 100%;
     color: $general-text;
-    min-height: $mobile-device-min-height;
+    min-height: $mobile-device-min-height !important;
     @media (min-width: $md-min-width) {
-        min-height: $large-device-min-height;
+        min-height: $large-device-min-height !important;
     }
     @media (min-width: $xl-min-width) {
-        min-height: $large-device-min-height;
+        min-height: $large-device-min-height !important;
     }
 }

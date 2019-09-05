@@ -5,7 +5,6 @@ import CardSummary from './CardSummary';
 import './DashboardPage.scss';
 import Grid from '@material-ui/core/Grid';
 import TitleSection from './TitleSection';
-import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 import PieVisualization, {
   DARK2,
@@ -16,6 +15,7 @@ import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
 import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
+import Section from './Section';
 
 const ROOT_INDEX_BAR_VISUALIZATION = "status";
 const KEYS_DATA_BAR_VISUALIZATION= [
@@ -84,27 +84,46 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
 };
 
 const digestDataToMultiYAxes = (data) => {
-  return (data && data.length > 0 ) ?
-    data.map((item) => {
-      const { shipmentData, units } =  item;
-      const dataToVisualize = shipmentData.map((axeInfo) =>{
-         return {
-           date: axeInfo.label,
-           "Shipment Delivered": axeInfo.shipments,
-           "Cost Per Mile": axeInfo.costPerMile,
-           "fiscalMonth": axeInfo.fiscalMonth,
-           "fiscalYear": axeInfo.fiscalYear,
-           "fiscalWeek": axeInfo.fiscalWeek,
-           "offset": axeInfo.offset,
-           "units": units,
-           "costPerMile": axeInfo.costPerMile
-         };
-      });
-      return {
-        title: item.title,
-        data: dataToVisualize
-      };
-    }) : [] ;
+  let result = [];
+  if(data && data.length > 0 ) {
+    const reducerTotalCostInPeriod = (accumulator, item) => {
+      return accumulator + item.totalCost;
+    };
+    const reducerTotalCostPerMileInPeriod = (accumulator, item) => {
+      return accumulator + item.costPerMile;
+    };
+    const reducerTotalShipmentsInPeriod = (accumulator, item) => {
+      return accumulator + item.shipments;
+    };
+    result = data.map((item) => {
+          const { shipmentData, units } =  item;
+          const totalCostPerMileInPeriod =  shipmentData.reduce(reducerTotalCostPerMileInPeriod, 0);
+          const totalShipmentsInPeriod =  shipmentData.reduce(reducerTotalShipmentsInPeriod, 0);
+          const totalCostInPeriod =  shipmentData.reduce(reducerTotalCostInPeriod, 0);
+          const dataToVisualize = shipmentData.map((axeInfo) =>{
+             return {
+               date: axeInfo.label,
+               "Shipment Delivered": axeInfo.shipments,
+               "Cost Per Mile": axeInfo.costPerMile,
+               "fiscalMonth": axeInfo.fiscalMonth,
+               "fiscalYear": axeInfo.fiscalYear,
+               "fiscalWeek": axeInfo.fiscalWeek,
+               "offset": axeInfo.offset,
+               "units": units,
+               "costPerMile": axeInfo.costPerMile,
+               "totalCost": axeInfo.totalCost
+             };
+          });
+          return {
+            title: item.title,
+            data: dataToVisualize,
+            totalCostPerMileInPeriod,
+            totalShipmentsInPeriod,
+            totalCostInPeriod
+          };
+        })
+  }
+  return result;
 };
 
 const getTimingEffect = (index) => {
@@ -285,14 +304,12 @@ class DashboardPage extends Component {
     const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
-    const { isBarGroupMode, showNext, showPrev, historyNav, historyNavIndex } = this.state;
+    const {
+      isBarGroupMode,
+      showNext,
+      showPrev,
+    } = this.state;
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
-    console.log(historyNav);
-    console.log("Total history: "+(historyNav.length));
-    console.log("Current index: "+ historyNavIndex);
-    console.log(this.state.historyNav[
-      this.state.historyNavIndex
-    ]);
       return (
         <Grid
           container
@@ -301,46 +318,24 @@ class DashboardPage extends Component {
           alignItems="center"
           className="DashboardPage"
         >
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
-            <Grid item xs={12}>
-              <TitleSection label="Status"/>
-            </Grid>
-          </Grid>
-          <Grid
-            spacing={0}
-            container
-            direction="row"
-            justify="center"
-            alignItems="center"
-            className="CardSummarySection"
-          >
-          { pipeLineSummaryCard &&
-            pipeLineSummaryCard.map((item, index) => {
-            const configGrow =  getConfigGrow(index) ;
-            return (
-              <Grow {...configGrow}  key={`card-summary-grow-${index}`}>
-                <Grid xs={4} key={`card-summary-${index}`} item>
-                    <CardSummary number={item.number} label={item.label}/>
-                </Grid>
-              </Grow>
-            );
-          })}
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-          >
-            <Grid item xs={11}>
-              <Paper className="DashboardPage__MuiPaper-root" onClick={() => this.toggleBarGroup()}>
+          <Section
+            top={ () => <TitleSection label="Status"/> }
+            content={ ()=>
+            <>
+              { pipeLineSummaryCard &&
+                pipeLineSummaryCard.map((item, index) => {
+                const configGrow =  getConfigGrow(index) ;
+                return (
+                  <Grid xs={4} key={`card-summary-${index}`} item>
+                    <Grow {...configGrow}  key={`card-summary-grow-${index}`}>
+                      <CardSummary number={item.number} label={item.label}/>
+                    </Grow>
+                  </Grid>
+                );
+              })}
+              <Grid xs={12} item>
                 <BarVisualization
+                  onClickRoot={() => this.toggleBarGroup()}
                   data={pipeLineSummaryBar}
                   colorsScheme={BAR_DARK2}
                   rootClass="StatusVisualization"
@@ -348,116 +343,72 @@ class DashboardPage extends Component {
                   indexBy={ROOT_INDEX_BAR_VISUALIZATION}
                   keys={KEYS_DATA_BAR_VISUALIZATION}
                 />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
-            <Grid item xs={12}>
-              <TitleSection label="Shipments"/>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            className="DashboardPage"
-          >
-            <Grid item xs={11}>
-              <Paper className="DashboardPage__MuiPaper-root">
-                {
-                  isShipmentData &&
-                  <MultiYAxesVisualization
-                    title={shipmentSummaryMultiYAxes[0].title}
-                    data={shipmentSummaryMultiYAxes[0].data}
-                    onClickBar={this.navigateToNextViewType}
-                    onClickBack={this.navigateToPrevViewType}
-                    onClickNext={this.navigateToNextViewType}
-                    rootClass="ShipmentsVisualization"
-                    showNext={showNext}
-                    showPrev={showPrev}
-                  />
-                }
-                <LineDivider
-                 orientation={HORIZONTAL_LINE}
-                />
-                <TotalSummary
-                  title="Total Shipments In Period"
-                  legend="382"
-                />
-                <TotalSummary
-                  title="Cost/ml In Period"
-                  legend="$1.89"
-                />
-                <TotalSummary
-                  title="Total Cost In Period"
-                  legend="$371,450"
-                />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
-            <Grid item xs={12}>
-              <TitleSection label="On Time Performance - Pickup"/>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            className="DashboardPage"
-          >
-            <Grid item xs={11}>
-              <Paper className="DashboardPage__MuiPaper-root">
+              </Grid>
+            </>
+            }
+          />
+          <Section
+            top={() => <TitleSection label="Shipments"/>}
+            content={ () => {
+              return isShipmentData &&
+               shipmentSummaryMultiYAxes.map((summaryItem, idx) =>{
+                 return(
+                   <Grid item xs={12} key={`shipment-viz-${idx}`}>
+                     <MultiYAxesVisualization
+                       title={summaryItem.title}
+                       data={summaryItem.data}
+                       onClickBar={this.navigateToNextViewType}
+                       onClickBack={this.navigateToPrevViewType}
+                       onClickNext={this.navigateToNextViewType}
+                       rootClass="ShipmentsVisualization"
+                       showNext={showNext}
+                       showPrev={showPrev}
+                     />
+                     <LineDivider
+                      orientation={HORIZONTAL_LINE}
+                     />
+                     <TotalSummary
+                       title="Total Shipments In Period"
+                       legend={`${summaryItem.totalShipmentsInPeriod}`}
+                     />
+                     <TotalSummary
+                       title="Cost/ml In Period"
+                       legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+                     />
+                     <TotalSummary
+                       title="Total Cost In Period"
+                       legend={`$${summaryItem.totalCostInPeriod}`}
+                     />
+                   </Grid>
+                )
+               });
+              }
+            }
+          />
+          <Section
+            top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
+            content={()=>
+              <Grid item xs={12}>
                 <PieVisualization
                   data={stopSummaryPickUpPie}
                   rootClass="PerformancePickUpVisualization"
                   colorsScheme={NIVO}
                 />
-              </Paper>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-          >
-            <Grid item xs={12}>
-              <TitleSection label="On Time Performance - Delivery"/>
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            className="DashboardPage"
-          >
-            <Grid item xs={11}>
-              <Paper className="DashboardPage__MuiPaper-root">
+              </Grid>
+            }
+          />
+          <Section
+            top={()=> <TitleSection label="On Time Performance - Delivery"/> }
+            content={() =>
+              <Grid item xs={12}>
                 <PieVisualization
                   data={stopSummaryDeliveryPie}
                   rootClass="PerformancePickUpVisualization"
                   colorsScheme={DARK2}
                 />
-              </Paper>
-            </Grid>
-          </Grid>
+              </Grid>
+            }
+          />
         </Grid>
       );
   }

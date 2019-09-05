@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid/Grid';
 import Paper from '@material-ui/core/Paper/Paper';
 import './Section.scss';
+import { HORIZONTAL_LINE } from './LineDivider';
+import LineDivider from './LineDivider';
 
 
 const Section = ({ top, content }) =>{
@@ -25,9 +27,19 @@ const Section = ({ top, content }) =>{
           >
             <Grid item xs={12}>
               {top()}
+              <LineDivider
+                orientation={HORIZONTAL_LINE}
+              />
             </Grid>
           </Grid>
-          {content()}
+          <Grid
+            container
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
+            {content()}
+          </Grid>
         </Paper>
       </Grid>
     </Grid>
