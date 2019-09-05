@@ -193,7 +193,9 @@ class DashboardPage extends Component {
     if(item.payload){
       const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
       this.setState(prevState => {
-        const historyNavUpdate = (prevState.historyNavIndex >= prevState.historyNav.length) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
+        const historyNavUpdate = (
+          prevState.historyNavIndex >= prevState.historyNav.length
+        ) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
         const historyNavIndex = prevState.historyNavIndex + 1 ;
         const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
         const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
@@ -213,13 +215,16 @@ class DashboardPage extends Component {
         item.payload.fiscalWeek
       );
     } else if (this.state.showNext){
-      const nextIndexItem = this.state.historyNavIndex + 1;
+      const nextIndexItem = (
+        this.state.historyNav.length + 1 >= this.state.historyNavIndex &&
+        this.state.historyNavIndex !== (this.state.historyNav.length - 1)
+      ) ? this.state.historyNavIndex + 1 : this.state.historyNavIndex;
       const item = this.state.historyNav[ nextIndexItem ];
       if(item){
         const nextItem = item.item;
         this.setState(prevState => {
           const historyNavUpdate = (prevState.historyNavIndex >= prevState.historyNav.length) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
-          const hasNextHistory = this.hasNextHistory(historyNavUpdate, nextIndexItem);
+          const hasNextHistory = this.hasNextHistory(historyNavUpdate, nextIndexItem +1);
           const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, nextIndexItem +1);
           return ({
             viewTypeShipment: nextItem.payload.units,
@@ -282,7 +287,12 @@ class DashboardPage extends Component {
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const { isBarGroupMode, showNext, showPrev, historyNav, historyNavIndex } = this.state;
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
-
+    console.log(historyNav);
+    console.log("Total history: "+(historyNav.length));
+    console.log("Current index: "+ historyNavIndex);
+    console.log(this.state.historyNav[
+      this.state.historyNavIndex
+    ]);
       return (
         <Grid
           container
