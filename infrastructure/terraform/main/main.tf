@@ -274,6 +274,7 @@ module "codepipeline" {
   # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
   # placeholder_text = "${lookup(local.apiservices, "placeholder_text")}"
    artifactory_directory = "${local.artifact}"
+   github_organization_name = "${var.github_organization_name}"
   
   
 

@@ -38,3 +38,7 @@ variable "codedeploy_application_deploymentgroupname" {
 variable "artifactory_directory" {
   
 }
+
+variable "github_organization_name" {
+  
+}

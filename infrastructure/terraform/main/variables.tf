@@ -354,6 +354,10 @@ variable "name_ecs_ami" {
 
 }
 
+variable "taskdef_path" {
+  description = "The path of the taskdefinition from the root directory"
+
+}
 
 variable "ecs_instance_type" {
 
@@ -705,10 +709,7 @@ variable "bluetask_termination_wait_minutes" {
   description = "How long codedeploy wait to terminate blue task after successful deployment"
 }
 
-variable "taskdef_path" {
-  description = "The path of the taskdefinition from the root directory"
 
-}
 
 
 # variable "source_output_artifact_dir" {
@@ -732,6 +733,8 @@ variable "taskdef_path" {
   
 # }
 
+#Variables for Codepipeline.
+
 variable "github_repository_name" {
   description = "respository name in github"
   type = "string"
@@ -741,6 +744,13 @@ variable "github_branch_name" {
   description = "branch of the repository"
   type = "map"
 }
+
+variable "github_organization_name" {
+  description = "Organization name in the github"
+  type ="string"
+  
+}
+
 
 # variable "apiservice_source_output_artifact_dir" {
 #   description = "source code checkout directory on s3 bucket"

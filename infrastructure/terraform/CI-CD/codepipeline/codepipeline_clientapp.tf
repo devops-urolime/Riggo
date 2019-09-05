@@ -33,9 +33,9 @@ resource "aws_codepipeline" "codepipeline_clientapp" {
       output_artifacts = ["${local.source_directory}"]
 
       configuration = {
-        Owner  = "rig-go"
+        Owner  = "${var.github_organization_name}"
         Repo   = "${var.github_repository_name}"
-        Branch = "${terraform.workspace}-${lookup(var.github_branch_name, "clientapp")}"
+        Branch = "${lookup(var.github_branch_name, "clientapp")}"
         PollForSourceChanges = "false"
         OAuthToken = "${data.external.github_access_token.result.github_access_token}"
         

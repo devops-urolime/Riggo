@@ -15,7 +15,7 @@ provider "aws" {
 
 provider "github" {
   token        = "${data.external.github_access_token.result.github_access_token}"
-  organization = "rig-go"
+  organization = "${var.github_organization_name}"
 }
 
 data "external" "github_access_token" {
