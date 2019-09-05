@@ -25,9 +25,23 @@ resource "aws_ecs_task_definition" "riggo-ecs-TD" {
   #depends_on = ["null_resource.efs_url_update"]
 }
 
+
+
+
 resource "null_resource" "task_definition_file" {
+  count = "${! fileexists("${path.module}/../../../${var.taskdef_path}") ? 1 : 0}"
 depends_on = ["aws_ecs_task_definition.riggo-ecs-TD"]
+
+#  triggers = {
+#     # policy_sha1 = "${sha1(file("../../../${var.taskdef_path}"))}"
+#     files = "${! fileexists("${path.module}/../../../${var.taskdef_path}")}"
+#   } 
+  
+  
+
+
   provisioner "local-exec" {
-    command = "aws ecs describe-task-definition --task-definition ${aws_ecs_task_definition.riggo-ecs-TD.family} |   jq '.taskDefinition' > ../../../CI-CD/taskdef.json"
+   
+    command = "FILE=../../../${var.taskdef_path};aws ecs describe-task-definition --task-definition ${aws_ecs_task_definition.riggo-ecs-TD.family} |   jq '.taskDefinition' > $FILE"
   }
 }
