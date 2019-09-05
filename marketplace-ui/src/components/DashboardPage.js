@@ -96,7 +96,8 @@ const digestDataToMultiYAxes = (data) => {
            "fiscalYear": axeInfo.fiscalYear,
            "fiscalWeek": axeInfo.fiscalWeek,
            "offset": axeInfo.offset,
-           "units": units
+           "units": units,
+           "costPerMile": axeInfo.costPerMile
          };
       });
       return {
@@ -177,20 +178,14 @@ class DashboardPage extends Component {
     return type[idx + 1];
   };
 
-  prevViewType = (current, type) =>{
-    let idx = type.indexOf(current);
-    if (idx === 0) {
-      return type[type.length - 1];
-    }
-    return type[idx - 1];
+  hasNextHistory = (historyNav, historyNavIndex) =>{
+    const size = historyNav.length;
+    return historyNavIndex < size;
   };
 
-  hasNextHistory = (historyNav) =>{
-    return !historyNav.length > 0;
-  };
-
-  hasPrevHistory = (historyNav) => {
-    return historyNav.length > 0;
+  hasPrevHistory = (historyNav, historyNavIndex) => {
+    const size = historyNav.length;
+    return historyNavIndex <= size && historyNavIndex !== 0;
   };
 
   navigateToNextViewType = (item) => {
@@ -198,10 +193,12 @@ class DashboardPage extends Component {
     if(item.payload){
       const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
       this.setState(prevState => {
-        const historyNavUpdate = [...prevState.historyNav, { viewTypeShipment, item }];
-        const historyNavIndex = historyNavUpdate.length - 1 ;
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate);
+        const historyNavUpdate = (
+          prevState.historyNavIndex >= prevState.historyNav.length
+        ) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
+        const historyNavIndex = prevState.historyNavIndex + 1 ;
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
         return ({
           viewTypeShipment: nextView,
           historyNav: historyNavUpdate,
@@ -218,15 +215,31 @@ class DashboardPage extends Component {
         item.payload.fiscalWeek
       );
     } else if (this.state.showNext){
-      const item = this.state.historyNav[
-        this.state.historyNavIndex
-      ];
-      if (item){
-
-      } else {
-        this.setState({
-          showNext: false,
+      const nextIndexItem = (
+        this.state.historyNav.length + 1 >= this.state.historyNavIndex &&
+        this.state.historyNavIndex !== (this.state.historyNav.length - 1)
+      ) ? this.state.historyNavIndex + 1 : this.state.historyNavIndex;
+      const item = this.state.historyNav[ nextIndexItem ];
+      if(item){
+        const nextItem = item.item;
+        this.setState(prevState => {
+          const historyNavUpdate = (prevState.historyNavIndex >= prevState.historyNav.length) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
+          const hasNextHistory = this.hasNextHistory(historyNavUpdate, nextIndexItem +1);
+          const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, nextIndexItem +1);
+          return ({
+            viewTypeShipment: nextItem.payload.units,
+            historyNavIndex: nextIndexItem,
+            showNext: hasNextHistory,
+            showPrev: hasPrevHistory,
+          });
         });
+        this.props.loadShipmentSummary(
+          nextItem.payload.offset,
+          nextItem.payload.units,
+          nextItem.payload.fiscalMonth,
+          nextItem.payload.fiscalYear,
+          nextItem.payload.fiscalWeek
+        );
       }
     }
   };
@@ -235,16 +248,16 @@ class DashboardPage extends Component {
     const { historyNav, historyNavIndex } = this.state;
     const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
     if(hasPrevHistory){
-      const item = (historyNav[historyNavIndex]) ? historyNav[historyNavIndex].item: {};
+      const prevIndexItem = historyNavIndex - 1;
+      const item = (historyNav[prevIndexItem]) ? historyNav[prevIndexItem].item: {};
       this.setState(prevState => {
-        prevState.historyNav.pop();
         const historyNavUpdate = [...prevState.historyNav];
-        const historyNavIndex = historyNavUpdate.length - 1 ;
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate);
+        const historyNavIndex = (prevState.historyNavIndex > 0 ) ? prevState.historyNavIndex - 1 : prevState.historyNavIndex;
+        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
+        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
         const prevItem = (
-          historyNavUpdate[historyNavIndex] &&
-          historyNavUpdate[historyNavIndex].item) ?  historyNavUpdate[historyNavIndex].item : {};
+          historyNavUpdate[prevIndexItem] &&
+          historyNavUpdate[prevIndexItem].item) ?  historyNavUpdate[prevIndexItem].item : {};
         return ({
           viewTypeShipment: (prevItem.units) ? prevItem.units : SHIPMENT_RESULT_BY_MONTH,
           historyNav: historyNavUpdate,
@@ -262,30 +275,6 @@ class DashboardPage extends Component {
           item.payload.fiscalWeek
         );
       }
-
-    } else if (this.state.showPrev){
-      const item = this.state.historyNav[
-        this.state.historyNavIndex
-      ];
-      if (item){
-        let hasPrev = this.state.historyNav.length > 0;
-        this.setState({
-          viewTypeShipment: item.viewTypeShipment,
-          showPrev: hasPrev,
-          historyNavIndex: this.state.historyNavIndex - 1
-        });
-        this.props.loadShipmentSummary(
-          item.offset,
-          item.units,
-          item.fiscalMonth,
-          item.fiscalYear,
-          item.fiscalWeek
-        );
-      } else {
-        this.setState({
-          showPrev: false,
-        });
-      }
     }
   };
 
@@ -296,8 +285,14 @@ class DashboardPage extends Component {
     const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
-    const { isBarGroupMode, showNext, showPrev } = this.state;
+    const { isBarGroupMode, showNext, showPrev, historyNav, historyNavIndex } = this.state;
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
+    console.log(historyNav);
+    console.log("Total history: "+(historyNav.length));
+    console.log("Current index: "+ historyNavIndex);
+    console.log(this.state.historyNav[
+      this.state.historyNavIndex
+    ]);
       return (
         <Grid
           container
@@ -385,7 +380,7 @@ class DashboardPage extends Component {
                     onClickBack={this.navigateToPrevViewType}
                     onClickNext={this.navigateToNextViewType}
                     rootClass="ShipmentsVisualization"
-                    showNext={false}
+                    showNext={showNext}
                     showPrev={showPrev}
                   />
                 }
