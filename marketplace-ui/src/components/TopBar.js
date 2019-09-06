@@ -22,11 +22,11 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
 }));
-const MenuAppBar = ({isLogin, login, logout, title, onMenuClick}) => {
+const MenuAppBar = ({isLogin, login, logout, title, onMenuClick, positionAppBar}) => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar className="TopBar" position="static">
+      <AppBar className="TopBar" position={positionAppBar}>
         <Toolbar>
           {isLogin &&
            <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton}
@@ -61,7 +61,7 @@ MenuAppBar.propTypes = {
   onMenuClick: PropTypes.func,
 };
 
-const TopBar = ({title, onMenuClick, isLogin, history}) => {
+const TopBar = ({title, onMenuClick, isLogin, history, positionAppBar}) => {
   const login = () => {
     history.push(APP_PATH_LOGIN);
   };
@@ -72,12 +72,14 @@ const TopBar = ({title, onMenuClick, isLogin, history}) => {
       logout={logout}
       login={login}
       isLogin={isLogin}
+      positionAppBar={positionAppBar}
     />
   );
 };
 
 TopBar.propTypes = {
   title: PropTypes.string,
+  positionAppBar: PropTypes.string,
   onMenuClick: PropTypes.func,
   isLogin: PropTypes.bool,
   history: PropTypes.object,
