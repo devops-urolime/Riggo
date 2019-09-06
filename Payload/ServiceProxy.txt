@@ -17,11 +17,11 @@ the HTTP service**
 public string clientSecret ='Ucs3BK6GbhvQ4ALpYL5k_tz-8TGvYAwHrcFsL6COXi2b1ekz1jK0lXPxvui4BR1m';
 public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
 */
-    public static Integer errorcode ;
+    public static Integer errorCode ;
     public static integer calloutForGetAccessToken = 0;
     public HttpResponse callRestService(String endPointURL, String methodName, String requestBody,String objectName,String accessToken){
         String response=null;
-        Boolean isTokenRefereshed = false;
+        Boolean doesTokenReferesh = false;
         //string accessToken = null;
         HttpResponse httpResponse=null;
         try { 
@@ -30,26 +30,32 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
             if(accessToken == null){
             	accessToken = getAccessTokenFromConfiguration(); 
             }
+            system.debug('--calloutForGetAccessToken---'+calloutForGetAccessToken);
             httpResponse=initiateHTTPCall(endPointURL,methodName,requestBody,accessToken,objectName); 
             response = httpResponse.getBody();
-            errorcode = httpResponse.getStatusCode();
-            if(errorcode == 401 || errorcode == 403){
+            errorCode = httpResponse.getStatusCode();
+            system.debug('--errorCode---'+errorCode);
+            if(errorCode == 401 || errorCode == 403){
+                system.debug('--errorCode---'+errorCode);
                 accessToken =  refreshAccessToken(); 
-                isTokenRefereshed = true;
+                system.debug('--accessToken---'+accessToken);
+                doesTokenReferesh = true;
                 // Again calling end point url with valid token
                  if(calloutForGetAccessToken <= 5){
+                     system.debug('---Calling--'+calloutForGetAccessToken);
                     callRestService(endPointURL,methodName,requestBody,objectName,accessToken);
                 }else{
-                    if(errorcode == 401 || errorcode == 403){
+                    if(errorCode == 401 || errorCode == 403){
                         APIExceptionHandler.erroLogCreation(null,httpResponse);   
                     }
                 }
+                errorCode = null;
             }
         } catch(Exception e) {
             system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in callRestService():'+e.getMessage());
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:callRestService'+response);
-        if(isTokenRefereshed){
+        if(doesTokenReferesh){
             Auth0_API_Token__c authAPITokenupdate = [select id,Client_Key__c,Client_Secret__c,End_Point__c,Token__c from Auth0_API_Token__c where Enable__c = true limit 1];
             authAPITokenupdate.Token__c = accessToken;
             authTokenUpdate(authAPITokenupdate);
@@ -115,6 +121,8 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
                 httpConnection=new Http();
                 httpResponse = new HttpResponse();
                 httpRequest= new HttpRequest();
+                system.debug('--endPoint--'+endPoint);
+                system.debug('--endPointURL--'+endPointURL);
                 httpRequest.setEndpoint(endPoint+endPointURL);
                 httpRequest.setEndpoint(endPoint+endPointURL);
                 httpRequest.setMethod(methodName);    
@@ -125,7 +133,7 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
                 if(requestBody !='' && requestBody!=null){
                     httpRequest.setBody(requestBody);
                 }
-                system.debug('-httpRequest-'+httpRequest);
+                    system.debug('-httpRequest-'+httpRequest);
                 httpResponse = httpConnection.send(httpRequest);
                 system.debug('--httpResponse--'+httpResponse);
                 if(httpResponse!=null){            		
