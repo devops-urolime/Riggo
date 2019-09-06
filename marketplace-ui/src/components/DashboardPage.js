@@ -89,17 +89,19 @@ const digestDataToMultiYAxes = (data) => {
     const reducerTotalCostInPeriod = (accumulator, item) => {
       return accumulator + item.totalCost;
     };
-    const reducerTotalCostPerMileInPeriod = (accumulator, item) => {
-      return accumulator + item.costPerMile;
+    const reducerTotalMilesInPeriod = (accumulator, item) => {
+      return accumulator + item.totalMiles;
     };
     const reducerTotalShipmentsInPeriod = (accumulator, item) => {
       return accumulator + item.shipments;
     };
     result = data.map((item) => {
           const { shipmentData, units } =  item;
-          const totalCostPerMileInPeriod =  shipmentData.reduce(reducerTotalCostPerMileInPeriod, 0);
           const totalShipmentsInPeriod =  shipmentData.reduce(reducerTotalShipmentsInPeriod, 0);
           const totalCostInPeriod =  shipmentData.reduce(reducerTotalCostInPeriod, 0);
+          const totalMilesInPeriod =  shipmentData.reduce(reducerTotalMilesInPeriod, 0);
+          const totalCostPerMileInPeriod = (totalMilesInPeriod > 0 ) ?
+                totalCostInPeriod / totalMilesInPeriod : 0;
           const dataToVisualize = shipmentData.map((axeInfo) =>{
              return {
                date: axeInfo.label,
@@ -372,12 +374,12 @@ class DashboardPage extends Component {
                        legend={`${summaryItem.totalShipmentsInPeriod}`}
                      />
                      <TotalSummary
-                       title="Cost/ml In Period"
-                       legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-                     />
-                     <TotalSummary
                        title="Total Cost In Period"
                        legend={`$${summaryItem.totalCostInPeriod}`}
+                     />
+                     <TotalSummary
+                       title="Cost/ml In Period"
+                       legend={`$${summaryItem.totalCostPerMileInPeriod}`}
                      />
                    </Grid>
                 )
