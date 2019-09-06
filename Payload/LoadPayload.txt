@@ -1,5 +1,5 @@
 public class LoadPayload {
-    public string getSavePayload(ID loadId,String triggerAction,String methodName,String marketplaceExId){ 
+    public string getSavePayload(ID loadId,String triggerAction,String methodName,String marketplaceId){ 
         system.debug('loadId'+loadId);   
         
         String payload  = '';
@@ -79,13 +79,13 @@ public class LoadPayload {
                                           rtms__Master_BOL_Option__c, rig_Expected_TTT__c, rig_Previous_Cost__c, riggoh_Required_Temperature__c, rig_Lead_Source__c, Pickup_Location__c, Delivery_Location__c, rigPostedRate__c, rig_Completed_Date__c, rig_Load_URL__c, rig_Team_Required__c, rtms__Pickup_Delivery_Status__c, rtms__Carrier_Portal__c, rtms__EDI_Provider__c, Send_Status_Updates__c, rig_Email_Automation__c, rig_Load_Board__c FROM rtms__Load__c  
                                           where Id =: loadId]; 
             
-            system.debug('marketplaceExId'+marketplaceExId);
+            system.debug('marketplaceId'+marketplaceId);
             payload = '{"LoadDetails":';
                 for(rtms__Load__c ld : ListOfLoead){  
                     payload = payload + '{'+ 
                         '"Id": "'+ld.Id+'",';
-                         if(methodName == 'PUT' && marketplaceExId != '' && marketplaceExId != null){	
-                            payload = payload +'"MarketplaceExposedId": "'+marketplaceExId+'",';
+                         if(methodName == 'PUT' && marketplaceId != '' && marketplaceId != null){	
+                            payload = payload +'"MarketplaceExposedId": "'+marketplaceId+'",';
                          }else{
                              payload = payload +'"MarketplaceExposedId": "null",';
                          }
@@ -104,7 +104,7 @@ public class LoadPayload {
                         	'"billToShippingCity": "'+ld.rtms__Bill_To__r.ShippingCity+'",'+
                         	'"billToShippingPostalCode": '+ld.rtms__Bill_To__r.ShippingPostalCode+','+
                         	'"billToShippingState": "'+ld.rtms__Bill_To__r.ShippingState+'",'+
-                        	'"billToShippingCountry" "'+ld.rtms__Bill_To__r.ShippingCountry+'"'+ 
+                        	'"billToShippingCountry": "'+ld.rtms__Bill_To__r.ShippingCountry+'"'+ 
                         '},'+            
                         '"rtms__Bill_of_Lading_Number__c": "'+ld.rtms__Bill_of_Lading_Number__c+'",'+
                         '"rtms__Carrier_Invoice_Total__c": '+ld.rtms__Carrier_Invoice_Total__c+','+

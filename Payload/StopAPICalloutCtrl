@@ -7,8 +7,8 @@ This class contains the methods to call HTTP Rest web service and error handler 
 
 //========================
 /*
-Class Name  : StopAPICalloutCtrl
-Note		: We are using this class for the calling webserive api to post Stop object to market place using rest api.
+Class Name  : StopAPICalloutCtrls
+Note		: We are using this class for the calling webserive api to post Stop  object to market place using rest api.
 */
 public class StopAPICalloutCtrl {
     /*********************************************************************
@@ -18,30 +18,78 @@ triggerAction  - To identify the event for the Stop object either Insert update 
 **********************************************************************/
     
     @future(callout=true)
-    public static void makePostCallout(Set<Id> stopSet ,String triggerAction) { 
-        String methodDefine = 'POST';
-        if(triggerAction == 'Update'){
-            methodDefine = 'PUT';
-        }
-        responeClass resResult=null;
-        ServiceProxy prox = new ServiceProxy(); 
-        StopPayload palyloadCls = new StopPayload();
-        // Get the Array Stop payload by json formate.
-        string LoadPayloadBody=palyloadCls.getSavePayload(stopSet,triggerAction); 
-        system.debug('--STOPS payload---'+LoadPayloadBody);
-        HttpResponse httpResponse=null;
-        HttpResponse = prox.callRestService('/load', methodDefine, LoadPayloadBody,'Stops',null);
-        String response =  httpResponse.getBody();
-        system.debug('--response'+response);
+    public static void makePostCallout(Set<Id> stopIdSet ,String triggerAction) { 
         
-        // if there is any exception we are creating exception record in Error Log object
-        if(response!= null){
-            string StatusCode = string.valueof(httpResponse.getStatusCode());
-            if(response!= null && StatusCode != '200'){
-                APIExceptionHandler.erroLogCreation(null,httpResponse);
+        List<rtms__Stop__c> ListOfStops =[Select Id,rtms__Load__r.Id FROM rtms__Stop__c where Id IN :stopIdSet];
+        Set<Id> loadIdSet = new Set<Id>();
+        Map<Id, Set<Id>> StopSet = new Map<Id, set<Id>>();
+
+        for(rtms__Stop__c li : ListOfStops){  
+            loadIdSet.add(li.rtms__Load__r.Id);
+            
+            if(StopSet.containsKey(li.rtms__Load__r.Id)) {
+                set<Id> getStopIdSet = StopSet.get(li.rtms__Load__r.Id);
+                getStopIdSet.add(li.Id);
+                StopSet.put(li.rtms__Load__r.Id, getStopIdSet);
+            } else {
+                StopSet.put(li.rtms__Load__r.Id, new set<Id> { li.Id });
             }
+                    
+        } 
+        for(Id ldId : loadIdSet){
+            WrapperClassForAPI.WrapperforMarketPlac wrappMarket = null;
+            String methodDefine = 'POST';
+            string marketplaceId = '';
+            string extSysId = '';
+            
+            Boolean isMarketplaceIdAvailable = true;
+            if(triggerAction == 'Update'){
+                methodDefine = 'PUT';
+            } 
+            system.debug('--ldId---'+ldId);
+        	wrappMarket = GetMarketPlaceDetails.getMarketPlaceDetails(ldId,triggerAction);
+                system.debug('--wrappMarket--'+wrappMarket);
+                if(wrappMarket != null){
+                    isMarketplaceIdAvailable = wrappMarket.isMarketplaceIdAvailable;
+                    marketplaceId = wrappMarket.marketplaceId;
+                    extSysId = wrappMarket.extSysId;
+                }
+            
+             if(isMarketplaceIdAvailable){
+                responeClass resResult=null;
+                StopPayload palyloadCls = new StopPayload();
+                // Get the load payload by json formate.
+                set<Id> getStopId = StopSet.get(ldId);
+                string stopPayloadBody=palyloadCls.getSavePayload(getStopId,triggerAction); 
+                system.debug('--stop Payload---'+stopPayloadBody);
+                
+                // Calling webserive to push the load object  Passing parameters like end pint url, Method Name and Load payload
+                HttpResponse httpResponse=null;
+                ServiceProxy proxy = new ServiceProxy(); 
+                 if(extSysId != null && extSysId != ''){
+                     system.debug('----inside if');
+                    HttpResponse = proxy.callRestService('/load/'+extSysId+'/stop', methodDefine, stopPayloadBody,'Stop',null);     
+                 }else{
+                     // without extSysId id /api/v1/load/stop
+                     system.debug('----inside else');
+                     HttpResponse = proxy.callRestService('/load/stop', methodDefine, stopPayloadBody,'Stop',null);
+                 }
+                
+                 if(httpResponse != null){
+                    String response =  httpResponse.getBody();
+                    system.debug('--response'+response);
+                    
+                    // if there is any exception we are creating exception record in Error Log object
+                    if(response!= null){
+                        string StatusCode = string.valueof(httpResponse.getStatusCode());
+                        if(response!= null && StatusCode != '200'){
+                            APIExceptionHandler.erroLogCreation(null,httpResponse);
+                        }
+                    }
+                 }
+            }    
         }
-    }    
+    }
     public class responeClass{
         public string id{get;set;}
         public string message{get;set;}

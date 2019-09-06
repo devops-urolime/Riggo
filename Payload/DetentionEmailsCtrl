@@ -45,6 +45,7 @@ public class DetentionEmailsCtrl {
                     Delete st.Detention_Emails__r;
                     string timezone  = timezonemap.get(st.rtms__Location2__c);
                     integer detentiontime = 0;
+                    Datetime detentionEmailTimebased = null;
                     if(detentionPolicyinminutesMap.containskey(st.rtms__Load__c)){
                         detentiontime  =   integer.valueof(detentionPolicyinminutesMap.get(st.rtms__Load__c));
                     }
@@ -70,11 +71,26 @@ public class DetentionEmailsCtrl {
                                 (Integer.valueOf(st.rtms__Appointment_Time__c.split(':')[0]) + hoursCalBasedOntimeZone),
                                 (Integer.valueof(st.rtms__Appointment_Time__c.split(':')[1]) + detentiontime), 
                                 0, 0));
+                        system.debug('--dtEm.Expected_DateTime__c--'+dtEm.Expected_DateTime__c);
+                        system.debug('--System.NOW()--'+System.NOW());
+                        
+                        if(dtEm.Detention_Email_Send_DateTime__c != null){
+                            detentionEmailTimebased = DateTime.newInstance(
+                            st.rtms__Expected_Date__c, 
+                            Time.newInstance(
+                                (Integer.valueOf(st.rtms__Appointment_Time__c.split(':')[0]) + hoursCalBasedOntimeZone),
+                                (Integer.valueof(st.rtms__Appointment_Time__c.split(':')[1]) + detentiontime+1), 
+                                0, 0));
+                        }
+                        
+                        if(detentionEmailTimebased >= System.NOW()){
+                            system.debug('--System.NOW()--'+System.NOW());
                         dtEm.Stop__c = st.Id;
                         dtEm.Load__c = st.rtms__Load__c;
                         dtEm.LoadStatus__c = st.LoadStatus__c;
                         dtEm.Carrier_Sales_Rep_Email__c = st.Carrier_Sales_Rep_Email__c;
                         detEmailList.add(dtEm);
+                        }
                     } 
                 }
             }

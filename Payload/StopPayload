@@ -1,6 +1,6 @@
 public class StopPayload {
     public string getSavePayload(Set<Id> StopSetId,String triggerAction){ 
-        system.debug('LineItemSet'+StopSetId);   
+        system.debug('stop'+StopSetId);   
         List<rtms__Stop__c> stopList = null;
         String payload  = '';
         if(triggerAction == 'Insert' || triggerAction == 'Update' ){
