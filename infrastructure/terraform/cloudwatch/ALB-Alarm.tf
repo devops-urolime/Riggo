@@ -39,6 +39,8 @@ resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-TEST" {
   }
 
   #alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  ok_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
+  insufficient_data_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
 
-  insufficient_data_actions = []
+  # insufficient_data_actions = []
 }
