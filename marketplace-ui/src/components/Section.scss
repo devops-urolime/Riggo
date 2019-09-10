@@ -3,6 +3,8 @@
 
 .Section{
     margin-top: 20px;
+    padding-right: 8px;
+    padding-left: 8px;
     &__MuiPaper-root{
         background-color: $paper-section !important;
         font-family: $main-font-family !important;

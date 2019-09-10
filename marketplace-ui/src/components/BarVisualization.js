@@ -34,7 +34,7 @@ export const SAMPLE_DATA_BAR = [
 
 export const BAR_DARK2 = "dark2";
 
-const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, keys}) => {
+const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, keys, onClickRoot}) => {
   const customLabelFormat = (d) => {
     return (!groupMode) ? `${d.id} ${d.value}` : `${d.value}`
   };
@@ -72,7 +72,7 @@ const BarVisualization = ({ data, rootClass, colorsScheme, groupMode, indexBy, k
     configBar['groupMode'] = "grouped";
   }
   return (
-    <div className={"BarVisualization " +rootClass}>
+    <div className={"BarVisualization " +rootClass} onClick={onClickRoot}>
       <ResponsiveBar
           {...configBar}
       />
@@ -87,6 +87,7 @@ BarVisualization.propTypes = {
   colorsScheme: PropTypes.string,
   groupMode: PropTypes.bool,
   indexBy: PropTypes.string,
+  onClickRoot: PropTypes.func,
 };
 
 export default BarVisualization;
