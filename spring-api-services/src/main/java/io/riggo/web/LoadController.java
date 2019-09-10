@@ -204,7 +204,7 @@ public class LoadController {
                 location.setAddressId(address.getId());
             }
 
-            if (checkLocationExists.isPresent()) {
+            if (checkLocationExists != null && checkLocationExists.isPresent()) {
                 BeanUtils.copyProperties(checkLocationExists.get(), location, SalesforceRevenovaConstants.POST_PUT_LOAD_STOP_LOCATION_IGNORE_PROPERTIES);
             }
             locationService.save(location);
