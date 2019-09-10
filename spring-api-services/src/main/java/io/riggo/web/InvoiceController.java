@@ -70,8 +70,8 @@ public class InvoiceController {
             Optional<Invoice> invoiceFromDb = invoiceService.findByExtSysId(invoice.getExtSysId());
             validateLoadExists(invoice, authenticationFacade.getSiteId());
             if (invoiceFromDb.isPresent()) {
-                BeanUtils.copyProperties(invoice, invoiceFromDb.get(), SalesforceRevenovaConstants.POST_PUT_INVOICE_IGNORE_PROPERTIES);
-                invoiceService.save(invoiceFromDb.get());
+                BeanUtils.copyProperties(invoiceFromDb.get(), invoice, SalesforceRevenovaConstants.POST_PUT_INVOICE_IGNORE_PROPERTIES);
+                invoiceService.save(invoice);
             }else{
                 invoiceService.save(invoice);
             }
