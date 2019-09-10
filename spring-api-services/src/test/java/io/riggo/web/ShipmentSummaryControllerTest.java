@@ -97,7 +97,7 @@ public class ShipmentSummaryControllerTest {
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1).minusMonths(3))).willReturn(Optional.of(startFiscalPeriod));
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(endFiscalPeriod));
 
-        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter(), endFiscalPeriod.getLastDayOfQuarter().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter().atStartOfDay(), endFiscalPeriod.getLastDayOfQuarter().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY)
                 .contentType(APPLICATION_JSON))
@@ -163,7 +163,7 @@ public class ShipmentSummaryControllerTest {
 
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
 
-        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth(), startFiscalPeriod.getLastDayOfMonth().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth().atStartOfDay(), startFiscalPeriod.getLastDayOfMonth().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=weeks")
                 .contentType(APPLICATION_JSON))
@@ -221,7 +221,7 @@ public class ShipmentSummaryControllerTest {
 
         given(fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1))).willReturn(Optional.of(startFiscalPeriod));
 
-        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek(), startFiscalPeriod.getLastDayOfWeek().plusDays(1))).willReturn(Optional.of(invoiceList));
+        given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek().atStartOfDay(), startFiscalPeriod.getLastDayOfWeek().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
                 .contentType(APPLICATION_JSON))

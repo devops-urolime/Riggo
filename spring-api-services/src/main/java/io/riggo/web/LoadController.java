@@ -6,29 +6,22 @@ import io.riggo.data.exception.ResourceAlreadyExistsException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.*;
 import io.riggo.web.integration.SalesforceRevenovaConstants;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutLoad;
-import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.LoadAPIResponse;
 import io.riggo.web.response.LoadResponse;
-import io.riggo.web.response.NestedBaseAPIResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @RestController
@@ -56,16 +49,7 @@ public class LoadController {
     private AddressService addressService;
 
     @Autowired
-    private LoadLineItemService loadLineItemService;
-
-    @Autowired
     private SalesforceRevenovaRequestBodyParserPostPutLoad salesforceRevenovaRequestBodyParserPostPutLoad;
-
-    @Autowired
-    private SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem salesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
-
-    @Autowired
-    private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
     @Autowired
     private AuthenticationFacade authenticationFacade;
@@ -181,7 +165,6 @@ public class LoadController {
         }
     }
 
-
     private void persistLoadStop(LoadStop loadStop, Integer loadId)
     {
         Location location = loadStop.getLocation();
@@ -212,81 +195,11 @@ public class LoadController {
         }
 
         if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
-            Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(loadStop.getExtSysId());
+            Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
             if (!checkFirstStopExists.isPresent()) {
                 loadStop.setLoadId(loadId);
                 loadStopService.save(loadStop);
             }
         }
-    }
-
-
-    @PatchMapping(value = "/load", produces = "application/json")
-    public NestedBaseAPIResponse<?> patchLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
-        if(dataHashMap.containsKey("LineItems")) {
-            List<LoadLineItem> loadLineItemList = salesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem.resolveLoadLineItemsList(dataHashMap);
-
-            List<BaseAPIResponse<LoadLineItem>> loadLineItemsBaseAPIResponses = loadLineItemList
-                .stream()
-                .map(loadLineItem -> {
-                    BaseAPIResponse<LoadLineItem> loadLineItemBaseAPIResponse = new BaseAPIResponse<>();
-                    if(StringUtils.isNotBlank(loadLineItem.getLoadExtSysId())){
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if(optionalLoad.isPresent()) {
-                            if(StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
-                                Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId());
-                                if (loadLineItemFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadLineItem, loadLineItemFromDb, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
-                                }
-                                loadLineItemBaseAPIResponse.addData(loadLineItem);
-                                return loadLineItemBaseAPIResponse;
-                            }
-                        }
-                    }
-                    loadLineItemBaseAPIResponse.setStatus(HttpStatus.NOT_FOUND.value());
-                    loadLineItemBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, loadLineItem.getLoadExtSysId()).getMessage());
-                    return loadLineItemBaseAPIResponse;
-            }).collect(Collectors.toList());
-
-            NestedBaseAPIResponse<LoadLineItem> loadLineItemNestedBaseAPIResponse = new NestedBaseAPIResponse<>();
-            loadLineItemNestedBaseAPIResponse.setSuccess(Math.toIntExact(loadLineItemsBaseAPIResponses.stream().filter(loadLineItemBaseAPIResponse -> loadLineItemBaseAPIResponse.getStatus() == 200).count()));
-            loadLineItemNestedBaseAPIResponse.setFailures((loadLineItemsBaseAPIResponses.size() + 1) - loadLineItemNestedBaseAPIResponse.getSuccess());
-            loadLineItemNestedBaseAPIResponse.setData(loadLineItemsBaseAPIResponses);
-
-            return loadLineItemNestedBaseAPIResponse;
-        }
-        else if(dataHashMap.containsKey("LoadStops")){
-            List<LoadStop> loadStopList = salesforceRevenovaRequestBodyParserForPatchLoadStop.resolveLoadStopsList(dataHashMap);
-            List<BaseAPIResponse<LoadStop>> loadStopListBaseAPIResponses = loadStopList
-                .stream()
-                .map(loadStop -> {
-                    BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
-                    if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent()) {
-                            if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
-                                Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId());
-                                if (loadStopFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadStop, loadStopFromDb, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
-                                }
-                                loadStopBaseAPIResponse.addData(loadStop);
-                                return loadStopBaseAPIResponse;
-                            }
-                        }
-                    }
-
-                    loadStopBaseAPIResponse.setStatus(HttpStatus.NOT_FOUND.value());
-                    loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, loadStop.getLoadExtSysId()).getMessage());
-                    return loadStopBaseAPIResponse;
-                }).collect(Collectors.toList());
-
-            NestedBaseAPIResponse<LoadStop> loadStopNestedBaseAPIResponse = new NestedBaseAPIResponse<>();
-            loadStopNestedBaseAPIResponse.setSuccess(Math.toIntExact(loadStopListBaseAPIResponses.stream().filter(loadLineItemBaseAPIResponse -> loadLineItemBaseAPIResponse.getStatus() == 200).count()));
-            loadStopNestedBaseAPIResponse.setFailures((loadStopListBaseAPIResponses.size() + 1) - loadStopNestedBaseAPIResponse.getSuccess());
-            loadStopNestedBaseAPIResponse.setData(loadStopListBaseAPIResponses);
-
-            return loadStopNestedBaseAPIResponse;
-        }
-        throw new ResourceNotFoundException();
     }
 }

@@ -6,7 +6,7 @@ import io.riggo.data.repositories.InvoiceLoadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +18,7 @@ public class InvoiceLoadService {
 
     public Optional<List<InvoiceLoad>> findInvoicesBySite(
             Integer siteId, List<Integer> invoiceStatusList, List<Integer> loadStatusList,
-            LocalDate expectedDeliveryDateStart, LocalDate expectedDeliveryDateEnd
+            LocalDateTime expectedDeliveryDateStart, LocalDateTime expectedDeliveryDateEnd
     ){
         try {
             return invoiceLoadRepository.findInvoicesBySite(siteId, invoiceStatusList, loadStatusList, expectedDeliveryDateStart, expectedDeliveryDateEnd);
@@ -30,8 +30,8 @@ public class InvoiceLoadService {
 
     public Optional<List<InvoiceLoad>> findInvoicesBySiteUser(
             Integer siteId,  String email, List<Integer> invoiceStatusList,
-            List<Integer> loadStatusList, LocalDate expectedDeliveryDateStart,
-            LocalDate expectedDeliveryDateEnd
+            List<Integer> loadStatusList, LocalDateTime expectedDeliveryDateStart,
+            LocalDateTime expectedDeliveryDateEnd
     ){
         try {
             return invoiceLoadRepository.findInvoicesBySiteUser(siteId, email, invoiceStatusList, loadStatusList, expectedDeliveryDateStart, expectedDeliveryDateEnd);

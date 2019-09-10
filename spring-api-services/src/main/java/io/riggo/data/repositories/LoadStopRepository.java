@@ -11,9 +11,8 @@ import java.util.Optional;
 @Repository
 public interface LoadStopRepository extends CrudRepository<LoadStop, Integer> {
 
-    @Override
-    Iterable<LoadStop> findAll();
-
-    @Query("select l from LoadStop l where l.extSysId = :extSysId")
-    Optional<LoadStop> findByExtSysId(@Param("extSysId") String extSysId);
+    @Query("SELECT ls FROM LoadStop ls " +
+            "JOIN Load l ON l.id = ls.loadId " +
+            "WHERE ls.extSysId = :extSysId AND l.siteId = :siteId")
+    Optional<LoadStop> findByExtSysId(@Param("extSysId") String extSysId, @Param("siteId") Integer siteId);
 }
