@@ -134,8 +134,8 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         load.setHazMat(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rtms__Hazardous_Materials__c", loadDetailsMap));
         load.setModeName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("ModeName", modeMap));
         load.setOrderDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Order_Date__c", loadDetailsMap));
-        load.setExpectedShipDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("riggoh_Formatted_Expected_Ship_Date__c", loadDetailsMap));
-        load.setExpectedDeliveryDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("riggoh_Formatted_Expected_Delivery_Date__c", loadDetailsMap ));
+        load.setExpectedShipDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Expected_Ship_Date2__c", loadDetailsMap));
+        load.setExpectedDeliveryDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Expected_Delivery_Date2__c", loadDetailsMap ));
         load.setLoadUrl(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rig_Load_URL__c", loadDetailsMap));
 
         return load;

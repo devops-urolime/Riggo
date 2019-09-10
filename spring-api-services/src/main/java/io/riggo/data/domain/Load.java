@@ -25,7 +25,7 @@ public class Load implements Serializable {
     private String extSysTenantId;
 
     @Column(name = "expected_ship_date", columnDefinition = "DATE")
-    private LocalDate expectedShipDate;
+    private LocalDateTime expectedShipDate;
 
     @Column(name = "site_id")
     private Integer siteId;
@@ -44,7 +44,7 @@ public class Load implements Serializable {
     private Boolean tempControlReq;
 
     @Column(name = "expected_delivery_date")
-    private LocalDate expectedDeliveryDate;
+    private LocalDateTime expectedDeliveryDate;
 
     private Integer driver;
     private Boolean locationBasedSvcsReq;
@@ -105,11 +105,11 @@ public class Load implements Serializable {
         this.extSysTenantId = extSysTenantId;
     }
 
-    public LocalDate getExpectedShipDate() {
+    public LocalDateTime getExpectedShipDate() {
         return expectedShipDate;
     }
 
-    public void setExpectedShipDate(LocalDate expectedShipDate) {
+    public void setExpectedShipDate(LocalDateTime expectedShipDate) {
         this.expectedShipDate = expectedShipDate;
     }
 
@@ -208,11 +208,11 @@ public class Load implements Serializable {
         this.tempControlReq = tempControlReq;
     }
 
-    public LocalDate getExpectedDeliveryDate() {
+    public LocalDateTime getExpectedDeliveryDate() {
         return expectedDeliveryDate;
     }
 
-    public void setExpectedDeliveryDate(LocalDate expectedDeliveryDate) {
+    public void setExpectedDeliveryDate(LocalDateTime expectedDeliveryDate) {
         this.expectedDeliveryDate = expectedDeliveryDate;
     }
 
