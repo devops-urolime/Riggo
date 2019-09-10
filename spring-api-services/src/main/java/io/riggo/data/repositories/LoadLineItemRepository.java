@@ -12,9 +12,8 @@ import java.util.Optional;
 @Repository
 public interface LoadLineItemRepository extends CrudRepository<LoadLineItem, Long> {
 
-    @Query("select l from LoadLineItem l where l.loadId = :loadId")
-    Optional<List<LoadLineItem>> findByLoadId(@Param("loadId") Integer loadId);
-
-    @Query("select l from LoadLineItem l where l.extSysId = :extSysId")
-    Optional<LoadLineItem> findByExtSysId(@Param("extSysId") String extSysId);
+    @Query("select lli from LoadLineItem lli " +
+            "JOIN Load l ON l.id = lli.loadId " +
+            "WHERE lli.extSysId = :extSysId AND l.siteId = :siteId")
+    Optional<LoadLineItem> findByExtSysId(@Param("extSysId") String extSysId, @Param("siteId") Integer siteId);
 }

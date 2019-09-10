@@ -13,6 +13,7 @@ public class Paths {
 
     public static final String LOADID_PARAM = "/{loadid}";
     public static final String INVOICE = "/invoice";
+    public static final String STOP = "/stop";
 
 
 
@@ -23,4 +24,7 @@ public class Paths {
 
     public static final String API_VERSION_LOAD_INVOICE = API + VERSION + LOAD + INVOICE;
     public static final String API_VERSION_LOAD_LOADID_PARAM_INVOICE = API + VERSION + LOAD + LOADID_PARAM + INVOICE;
+
+    public static final String API_VERSION_LOAD_STOP = API + VERSION + LOAD + STOP;
+    public static final String API_VERSION_LOAD_LOADID_PARAM_STOP = API + VERSION + LOAD + LOADID_PARAM + STOP;
 }

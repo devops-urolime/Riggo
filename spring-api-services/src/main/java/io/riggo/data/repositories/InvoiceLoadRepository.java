@@ -1,13 +1,12 @@
 package io.riggo.data.repositories;
 
-import io.riggo.data.domain.Invoice;
 import io.riggo.data.domain.InvoiceLoad;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +32,8 @@ public interface InvoiceLoadRepository extends CrudRepository<InvoiceLoad, Integ
             @Param("siteId") Integer siteId,
             @Param("invoiceStatusList") List<Integer> invoiceStatusList,
             @Param("loadStatusList") List<Integer> loadStatusList,
-            @Param("expectedDeliveryDateStart") LocalDate expectedDeliveryDateStart,
-            @Param("expectedDeliveryDateEnd") LocalDate expectedDeliveryDateEnd
+            @Param("expectedDeliveryDateStart") LocalDateTime expectedDeliveryDateStart,
+            @Param("expectedDeliveryDateEnd") LocalDateTime expectedDeliveryDateEnd
     );
 
     @Query("SELECT NEW io.riggo.data.domain.InvoiceLoad(i.id as id," +
@@ -60,7 +59,7 @@ public interface InvoiceLoadRepository extends CrudRepository<InvoiceLoad, Integ
             @Param("email") String email,
             @Param("invoiceStatusList") List<Integer> invoiceStatusList,
             @Param("loadStatusList") List<Integer> loadStatusList,
-            @Param("expectedDeliveryDateStart") LocalDate expectedDeliveryDateStart,
-            @Param("expectedDeliveryDateEnd") LocalDate expectedDeliveryDateEnd
+            @Param("expectedDeliveryDateStart") LocalDateTime expectedDeliveryDateStart,
+            @Param("expectedDeliveryDateEnd") LocalDateTime expectedDeliveryDateEnd
     );
 }

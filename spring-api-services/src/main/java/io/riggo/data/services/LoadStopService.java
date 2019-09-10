@@ -40,9 +40,9 @@ public class LoadStopService{
     }
 
 
-    public Optional<LoadStop> findByExtSysId(String extSysId) {
+    public Optional<LoadStop> findByExtSysId(String extSysId, Integer siteId) {
         try {
-            return loadStopRepository.findByExtSysId(extSysId);
+            return loadStopRepository.findByExtSysId(extSysId, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }

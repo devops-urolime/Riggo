@@ -34,18 +34,9 @@ public class LoadLineItemService {
     }
 
 
-    public Optional<List<LoadLineItem>> findByLoadId(Integer loadId) {
+    public Optional<LoadLineItem> findByExtSysId(String extSysId, Integer siteId) {
         try {
-            return loadLineItemRepository.findByLoadId(loadId);
-        } catch (Exception e) {
-            throw new RiggoDataAccessException(e);
-        }
-    }
-
-
-    public Optional<LoadLineItem> findByExtSysId(String extSysId) {
-        try {
-            return loadLineItemRepository.findByExtSysId(extSysId);
+            return loadLineItemRepository.findByExtSysId(extSysId, siteId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
