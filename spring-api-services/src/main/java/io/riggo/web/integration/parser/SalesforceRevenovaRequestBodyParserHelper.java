@@ -75,7 +75,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
     public LocalDateTime getMapValueAsLocalDateTime(String key, Map<String, Object> map) {
         String value = MapUtils.getString(map, key);
-        if (StringUtils.isBlank(value)) {
+        if (StringUtils.isBlank(value) || StringUtils.equalsIgnoreCase(value, "null")) {
             return null;
         }
         return LocalDateTime.parse(value, dateTimeFormatter);
@@ -85,11 +85,10 @@ public class SalesforceRevenovaRequestBodyParserHelper {
     public LocalDateTime getMapValueAsLocalDateTimeFrom2Keys(String dateKey, String timeKey, Map<String, Object> map) {
         String dateValue = MapUtils.getString(map, dateKey);
         String timeValue = MapUtils.getString(map, timeKey);
-        if (StringUtils.isBlank(dateValue)) {
+        if (StringUtils.isBlank(dateValue) || StringUtils.equalsIgnoreCase(dateValue, "null")) {
             return null;
         }
-        if(StringUtils.isBlank(timeValue))
-        {
+        if(StringUtils.isBlank(timeValue) || StringUtils.equalsIgnoreCase(timeValue, "null")) {
             timeValue = "00:00:00";
         }
         return LocalDateTime.parse(dateValue + " " + timeValue, dateTimeFormatter);
@@ -98,7 +97,7 @@ public class SalesforceRevenovaRequestBodyParserHelper {
 
     public LocalDate getMapValueAsLocalDate(String key, Map<String, Object> map) {
         String value = MapUtils.getString(map, key);
-        if (StringUtils.isBlank(value)) {
+        if (StringUtils.isBlank(value) || StringUtils.equalsIgnoreCase(value, "null")) {
             return null;
         }
         return LocalDate.parse(value, dateFormatter);
