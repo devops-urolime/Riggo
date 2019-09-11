@@ -1,34 +1,47 @@
-resource "aws_api_gateway_rest_api" "riggo-api-gateway" {
-  name = "Riggo Platform ${terraform.workspace}"
-  #description = "API to access riggo"
-  body = "${data.template_file.riggo_api_swagger.rendered}"
-  endpoint_configuration {
-    types = [
-    "REGIONAL"]
-  }
+# resource "aws_api_gateway_rest_api" "riggo-api-gateway" {
+#   name = "Riggo Platform qa"
+#   #description = "API to access riggo"
+#   body = "${data.template_file.riggo_api_swagger.rendered}"
+#   endpoint_configuration {
+#     types = [
+#     "REGIONAL"]
+#   }
   
-  lifecycle {
-   ignore_changes = [ body,description ]
-  }
- }
+#   lifecycle {
+#    ignore_changes = [description]
+#   }
+#  }
 
-data "template_file" "riggo_api_swagger" {
-  template = "${file("${path.module}/swagger-saas.yaml")}"
+# data "template_file" "riggo_api_swagger" {
+#   template = "${file("${path.module}/swagger.yaml")}"
 
-  vars = {
+#   vars = {
 
-    name = "Riggo Platform ${terraform.workspace}"
-    authorizerUri = "${var.authorize_uri}"
-    authorizerArn = "${var.authorizerArn}"
+#     name = "Riggo Platform ${terraform.workspace}"
+#     basePath = "${terraform.workspace}"
+#     ELB_ENDPOINT = "${var.elb_endpoint}"
+#     authorizerUri = "${var.authorize_uri}"
+#     authorizerArn = "${var.authorizerArn}"
+#     region = "${data.aws_region.current.name}"
 
-  }
+#   }
 
-}
+# }
 
 resource "aws_api_gateway_deployment" "riggo-api-gateway-deployment" {
-  rest_api_id = "${aws_api_gateway_rest_api.riggo-api-gateway.id}"
+  rest_api_id = "${data.aws_api_gateway_rest_api.rest_api.id}"
   stage_name  = "${terraform.workspace}"
+
+  variables = {
+    "elb_url" = "${var.elb_endpoint}"
+  }
 }
+
+data "aws_api_gateway_rest_api" "rest_api" {
+  name = "${var.rest_api_name}"
+}
+
+# data "aws_region" "current" {}
 
 
 # resource "aws_api_gateway_stage" "stage" {

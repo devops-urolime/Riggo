@@ -180,3 +180,7 @@ github_branch_name = {
   clientapp = "uat-client-app"
   apiservices = "uat-api-services"
 }
+
+#variables for api gateway
+
+rest_api_name = "Riggo Platform API"

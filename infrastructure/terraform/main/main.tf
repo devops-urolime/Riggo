@@ -100,7 +100,8 @@ module "api-gateway" {
   # cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
   authorizerArn = "${module.iam.lambda_invoke}"
   authorize_uri         = "${module.lambda.authorize_uri}"    
-
+  elb_endpoint = "${module.ecs-cluster.elb_endpoint}"
+  rest_api_name = "${var.rest_api_name}"
 }
 
 
@@ -338,6 +339,7 @@ codebuild_project_name = {
   clientapp = "${module.codebuild.codebuild_project_name_clientapp}"
   apiservice = "${module.codebuild.codebuild_project_name_apiservice}"
 }
+
 }
 
 
