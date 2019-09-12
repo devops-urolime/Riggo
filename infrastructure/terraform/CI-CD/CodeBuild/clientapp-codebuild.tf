@@ -9,17 +9,17 @@ data "aws_region" "current" {}
 #   }
 
 # }
-data "aws_security_groups" "security_groups" {
-    filter {
-    name   = "tag:Name"
-    values = ["*-${terraform.workspace}-ECSinstance"]
-  }
+# data "aws_security_groups" "security_groups" {
+#     filter {
+#     name   = "tag:Name"
+#     values = ["*-${terraform.workspace}-ECSinstance"]
+#   }
 
-  filter {
-    name   = "vpc-id"
-    values = ["${var.vpc_id}"]
-  }
-}
+#   filter {
+#     name   = "vpc-id"
+#     values = ["${var.vpc_id}"]
+#   }
+# }
 
 locals  {
   
@@ -95,7 +95,8 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
          
     
 
-    security_group_ids = "${data.aws_security_groups.security_groups.ids}"
+    #security_group_ids = "${data.aws_security_groups.security_groups.ids}"
+    security_group_ids = "${var.ECS_securitygroup_ids}"
     #   "${var.privatesecurity_group_id}"
          
     

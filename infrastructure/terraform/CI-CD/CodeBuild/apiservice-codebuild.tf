@@ -113,7 +113,8 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
          
     
 
-    security_group_ids = "${data.aws_security_groups.security_groups.ids}"
+    #security_group_ids = "${data.aws_security_groups.security_groups.ids}"
+    security_group_ids = "${var.ECS_securitygroup_ids}"
     #   "${var.privatesecurity_group_id}"
          
     

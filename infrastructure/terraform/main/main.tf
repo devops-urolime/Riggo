@@ -254,6 +254,7 @@ module "codebuild" {
   # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
   container_name = "${module.ecs-cluster.container_name}"
   taskdef_path = "${var.taskdef_path}"
+  ECS_securitygroup_ids = ["${module.ecs-cluster.ECS_instance_SG}"]
   
 }
 

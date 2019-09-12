@@ -13,7 +13,8 @@ resource "aws_ecs_service" "riggo-ecs-service" {
 
   depends_on = [
     "aws_lb.ecs-lb",
-    "aws_lb_listener.front_end"
+    "aws_lb_listener.front_end",
+    "aws_lb_listener.testing-listener"
   ]
   #"aws_autoscaling_attachment.ecs-targetgroup-attachment"
   #iam_role   = "${aws_iam_role.ecs-service-role.arn}"

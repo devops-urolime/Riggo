@@ -57,3 +57,7 @@ output "container_name" {
 output "elb_endpoint" {
   value = "${aws_lb.ecs-lb.dns_name}"
 }
+
+output "ECS_instance_SG" {
+  value = "${aws_security_group.ecs-instance-SG.id}"
+}
