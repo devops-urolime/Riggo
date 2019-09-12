@@ -59,3 +59,7 @@ variable "container_name" {
 variable "taskdef_path" {
   
 }
+
+variable "ECS_securitygroup_ids" {
+  
+}

@@ -775,6 +775,10 @@ variable "artifact" {
   
 }
 
-# variable "codebuild_project_name" {
+# variables for api gateway
+variable "rest_api_name" {
+  type = "string"
+  description = "name of the rest api gateway"
   
-# }
+}
+

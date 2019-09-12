@@ -100,7 +100,8 @@ module "api-gateway" {
   # cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
   authorizerArn = "${module.iam.lambda_invoke}"
   authorize_uri         = "${module.lambda.authorize_uri}"    
-
+  elb_endpoint = "${module.ecs-cluster.elb_endpoint}"
+  rest_api_name = "${var.rest_api_name}"
 }
 
 
@@ -253,6 +254,7 @@ module "codebuild" {
   # build_output_deploy_dir = "${lookup(local.apiservices, "build_output_deploy_dir")}"
   container_name = "${module.ecs-cluster.container_name}"
   taskdef_path = "${var.taskdef_path}"
+  ECS_securitygroup_ids = ["${module.ecs-cluster.ECS_instance_SG}"]
   
 }
 
@@ -338,6 +340,7 @@ codebuild_project_name = {
   clientapp = "${module.codebuild.codebuild_project_name_clientapp}"
   apiservice = "${module.codebuild.codebuild_project_name_apiservice}"
 }
+
 }
 
 

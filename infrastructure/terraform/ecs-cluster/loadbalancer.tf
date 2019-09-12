@@ -125,6 +125,8 @@ resource "aws_lb" "ecs-lb" {
 }
 
 resource "aws_lb_listener" "front_end" {
+  # depends_on = [
+  # "aws_lb.ecs-lb"]
   load_balancer_arn = "${aws_lb.ecs-lb.id}"
   port              = "80"
   protocol          = "HTTP"
@@ -141,6 +143,8 @@ lifecycle {
 }
 
 resource "aws_lb_listener" "testing-listener" {
+  # depends_on = [
+  # "aws_lb.ecs-lb"]
   load_balancer_arn = "${aws_lb.ecs-lb.id}"
   port              = "8080"
   protocol          = "HTTP"

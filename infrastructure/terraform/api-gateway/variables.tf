@@ -17,3 +17,11 @@ variable "authorize_uri" {
   
 }
 
+variable "elb_endpoint" {
+  
+}
+
+
+variable "rest_api_name" {
+  
+}

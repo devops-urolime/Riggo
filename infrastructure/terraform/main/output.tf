@@ -130,5 +130,9 @@ output "elasticache_endpoint" {
 }
 
 
+#output from api gateway
 
+output "Invoke_Url" {
+  value = "${module.api-gateway.invoke_url}"
+}
 
