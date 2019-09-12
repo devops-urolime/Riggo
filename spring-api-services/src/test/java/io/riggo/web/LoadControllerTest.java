@@ -85,7 +85,7 @@ public class LoadControllerTest {
         given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
 
 
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD + "/1")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andExpect(jsonPath("$.load.id").value(IsNull.nullValue()))
@@ -98,14 +98,7 @@ public class LoadControllerTest {
 
     @Test
     public void getLoadByIdUnauthenticated() throws Exception {
-        Load load = new Load();
-        load.setId(1);
-        load.setSiteId(100);
-        load.setName("load");
-
-        given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
-
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD + "/1")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -154,7 +147,7 @@ public class LoadControllerTest {
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
         given(loadService.save(load)).willReturn(load);
 
-        MvcResult result = mvc.perform(post(Paths.API_VERSION_LOAD)
+        MvcResult result = mvc.perform(post(Paths.API_VERSION + Paths.LOAD)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -205,7 +198,7 @@ public class LoadControllerTest {
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.of(load));
         given(loadService.save(load)).willReturn(load);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -228,7 +221,7 @@ public class LoadControllerTest {
 
         given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
 
-        mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
+        mvc.perform(get(Paths.API_VERSION + Paths.LOAD + "/1")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();
