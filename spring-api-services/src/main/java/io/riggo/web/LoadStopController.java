@@ -3,7 +3,6 @@ package io.riggo.web;
 import io.riggo.data.domain.Load;
 import io.riggo.data.domain.LoadStop;
 import io.riggo.data.domain.ResourceType;
-import io.riggo.data.exception.ResourceAlreadyExistsException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.LoadService;
 import io.riggo.data.services.LoadStopService;
@@ -45,20 +44,19 @@ public class LoadStopController {
     private AuthenticationFacade authenticationFacade;
 
 
-
-//    @PostMapping(value = "/load/stop", produces = "application/json")
-//    @PreAuthorize("hasAuthority('write:load')")
-//    public NestedBaseAPIResponse<?> postLoadStop(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
-//        return saveLoadStop(dataHashMap, true);
-//    }
-
-    @PutMapping(value = "/load/stop", produces = "application/json")
+    @PutMapping(value = Paths.LOAD_STOP, produces = "application/json")
     @PreAuthorize("hasAuthority('write:load')")
-    public NestedBaseAPIResponse<?> putLoadStop(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
-        return saveLoadStop(dataHashMap);
+    public NestedBaseAPIResponse<?> putLoadStop(@RequestBody Map<String, Object> dataHashMap){
+        return saveLoadStop(dataHashMap, null);
     }
 
-    private NestedBaseAPIResponse<LoadStop> saveLoadStop(Map<String, Object> dataHashMap){
+    @PutMapping(value = Paths.LOAD_LOADID_PARAM_STOP, produces = "application/json")
+    @PreAuthorize("hasAuthority('write:load')")
+    public NestedBaseAPIResponse<?> putLoadStop(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap){
+        return saveLoadStop(dataHashMap, loadId);
+    }
+
+    private NestedBaseAPIResponse<LoadStop> saveLoadStop(Map<String, Object> dataHashMap, Integer loadId){
         List<LoadStop> loadStopList = salesforceRevenovaRequestBodyParserForPatchLoadStop.resolveLoadStopsList(dataHashMap);
         List<BaseAPIResponse<LoadStop>> loadStopListBaseAPIResponses = loadStopList
                 .stream()
@@ -66,11 +64,11 @@ public class LoadStopController {
                     BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
                         Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent()) {
+                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId() == loadId)) {
                             if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
                                 Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadStopFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadStop, loadStopFromDb, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
+                                    BeanUtils.copyProperties(loadStopFromDb, loadStop, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
                                 }
                                 loadStopService.save(loadStop);
                                 loadStopBaseAPIResponse.addData(loadStop);
@@ -80,7 +78,11 @@ public class LoadStopController {
                     }
 
                     loadStopBaseAPIResponse.setStatus(HttpStatus.NOT_FOUND.value());
-                    loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, loadStop.getLoadExtSysId()).getMessage());
+                    if(loadId != null) {
+                        loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, 1).getMessage());
+                    }else{
+                        loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, loadStop.getLoadExtSysId()).getMessage());
+                    }
                     return loadStopBaseAPIResponse;
                 }).collect(Collectors.toList());
         NestedBaseAPIResponse<LoadStop> loadStopNestedBaseAPIResponse = new NestedBaseAPIResponse<>();
@@ -89,5 +91,4 @@ public class LoadStopController {
         loadStopNestedBaseAPIResponse.setData(loadStopListBaseAPIResponses);
         return loadStopNestedBaseAPIResponse;
     }
-
 }

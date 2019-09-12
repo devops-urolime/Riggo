@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,19 +43,20 @@ public class LoadLineItemController {
     @Autowired
     private AuthenticationFacade authenticationFacade;
 
-
-    @PostMapping(value = "/load/line-item", produces = "application/json")
-    public NestedBaseAPIResponse<?> postLoadLineItem(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
-        return saveLoadLineItem(dataHashMap);
-    }
-
-    @PutMapping(value = "/load/line-item", produces = "application/json")
+    @PutMapping(value = Paths.LOAD_LINE_ITEM, produces = "application/json")
+    @PreAuthorize("hasAuthority('write:load')")
     public NestedBaseAPIResponse<?> putLoadLineItem(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
-        return saveLoadLineItem(dataHashMap);
+        return saveLoadLineItem(dataHashMap, null);
     }
 
-    private NestedBaseAPIResponse<LoadLineItem> saveLoadLineItem(Map<String, Object> dataHashMap) {
 
+    @PutMapping(value = Paths.LOAD_LOADID_PARAM_LINE_ITEM, produces = "application/json")
+    @PreAuthorize("hasAuthority('write:load')")
+    public NestedBaseAPIResponse<?> putLoadLineItem(@RequestBody Map<String, Object> dataHashMap, @PathVariable final Integer loadId) throws ResourceNotFoundException{
+        return saveLoadLineItem(dataHashMap, loadId);
+    }
+
+    private NestedBaseAPIResponse<LoadLineItem> saveLoadLineItem(Map<String, Object> dataHashMap, Integer loadId) {
         List<LoadLineItem> loadLineItemList = salesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem.resolveLoadLineItemsList(dataHashMap);
         List<BaseAPIResponse<LoadLineItem>> loadLineItemsBaseAPIResponses = loadLineItemList
                 .stream()
@@ -62,12 +64,13 @@ public class LoadLineItemController {
                     BaseAPIResponse<LoadLineItem> loadLineItemBaseAPIResponse = new BaseAPIResponse<>();
                     if (StringUtils.isNotBlank(loadLineItem.getLoadExtSysId())) {
                         Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent()) {
+                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId() == loadId)) {
                             if (StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
                                 Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadLineItemFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadLineItem, loadLineItemFromDb, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
+                                    BeanUtils.copyProperties(loadLineItemFromDb, loadLineItem, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
                                 }
+                                loadLineItemService.save(loadLineItem);
                                 loadLineItemBaseAPIResponse.addData(loadLineItem);
                                 return loadLineItemBaseAPIResponse;
                             }
@@ -80,7 +83,7 @@ public class LoadLineItemController {
 
         NestedBaseAPIResponse<LoadLineItem> loadLineItemNestedBaseAPIResponse = new NestedBaseAPIResponse<>();
         loadLineItemNestedBaseAPIResponse.setSuccess(Math.toIntExact(loadLineItemsBaseAPIResponses.stream().filter(loadLineItemBaseAPIResponse -> loadLineItemBaseAPIResponse.getStatus() == 200).count()));
-        loadLineItemNestedBaseAPIResponse.setFailures((loadLineItemsBaseAPIResponses.size() + 1) - loadLineItemNestedBaseAPIResponse.getSuccess());
+        loadLineItemNestedBaseAPIResponse.setFailures((loadLineItemsBaseAPIResponses.size()) - loadLineItemNestedBaseAPIResponse.getSuccess());
         loadLineItemNestedBaseAPIResponse.setData(loadLineItemsBaseAPIResponses);
 
         return loadLineItemNestedBaseAPIResponse;

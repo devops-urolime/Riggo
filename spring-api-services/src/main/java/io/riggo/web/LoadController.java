@@ -80,7 +80,7 @@ public class LoadController {
     }
 
 
-    @PostMapping(path = "/load", produces = "application/json")
+    @PostMapping(path = Paths.LOAD, produces = "application/json")
     @PreAuthorize("hasAuthority('write:load')")
     public LoadAPIResponse postLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceAlreadyExistsException {
         //TODO: resolve parsers based on site and integration
@@ -127,7 +127,7 @@ public class LoadController {
     }
 
 
-    @PutMapping(value = "/load", produces = "application/json")
+    @PutMapping(value = Paths.LOAD, produces = "application/json")
     @PreAuthorize("hasAuthority('write:load')")
     public LoadAPIResponse updateLoad(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         Load resolvedLoad = salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(dataHashMap);
