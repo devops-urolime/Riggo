@@ -63,16 +63,6 @@ public class LoadStopControllerTest {
         load.setName("load");
         load.setExtSysId("1");
 
-        Shipper shipper = new Shipper();
-        shipper.setId(1);
-        shipper.setName("shipper");
-        shipper.setExtSysId("1");
-
-        EquipmentType equipmentType = new EquipmentType();
-        equipmentType.setId(1);
-        equipmentType.setName("equipmentType");
-        equipmentType.setExtSysId("1");
-
         LoadStop firstStop = new LoadStop();
         firstStop.setId(1);
         firstStop.setName("firstStop");
@@ -100,11 +90,11 @@ public class LoadStopControllerTest {
         given(loadStopService.save(firstStop)).willReturn(firstStop);
         given(loadStopService.save(lastStop)).willReturn(lastStop);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_STOP)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_STOP)
                 .content(jsonLoad)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-     //TODO:           .andExpect(jsonPath("$.failures", is(2)))
+                .andExpect(jsonPath("$.success", is(2)))
                 .andReturn();
 
         String content = result.getResponse().getContentAsString();
@@ -114,22 +104,12 @@ public class LoadStopControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:load"})
     @Test
-    public void putInsertLoadStopWithoutLoadExtSysId() throws Exception {
+    public void putInsertLoadStopWithFailures() throws Exception {
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
         load.setName("load");
         load.setExtSysId("1");
-
-        Shipper shipper = new Shipper();
-        shipper.setId(1);
-        shipper.setName("shipper");
-        shipper.setExtSysId("1");
-
-        EquipmentType equipmentType = new EquipmentType();
-        equipmentType.setId(1);
-        equipmentType.setName("equipmentType");
-        equipmentType.setExtSysId("1");
 
         LoadStop firstStop = new LoadStop();
         firstStop.setId(1);
@@ -147,13 +127,9 @@ public class LoadStopControllerTest {
 
         given(salesforceRevenovaRequestBodyParserForPatchLoadStop.resolveLoadStopsList(any(Map.class))).willReturn(loadStopList);
         given(authenticationFacade.getSiteId()).willReturn(100);
-
-        //TODO: Finish
-        //given(loadStopService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
-
         given(loadService.save(load)).willReturn(load);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION_LOAD_STOP)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_STOP)
                 .content(jsonLoad)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -164,6 +140,57 @@ public class LoadStopControllerTest {
         logger.debug(content);
     }
 
+
+    @WithMockUser(value = "spring")
+    @Test
+    public void unauthorized() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_STOP)
+                .content(jsonLoad)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+    @WithMockUser(value = "spring")
+    @Test
+    public void unauthorizededWithLoadId() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.STOP)
+                .content(jsonLoad)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isForbidden())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+    @Test
+    public void unauthenticated() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_STOP)
+                .content(jsonLoad)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
+
+
+    @Test
+    public void unauthenticatedWithLoadId() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.STOP)
+                .content(jsonLoad)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+        logger.debug(content);
+    }
 
 
     private final String jsonLoad = "{\n"+

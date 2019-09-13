@@ -60,7 +60,7 @@ public class LoadPipelineSummaryControllerTest {
         given(authenticationFacade.getSiteId()).willReturn(100);
         given(loadPipelineService.findPipelineSummaryBySiteId(100)).willReturn(java.util.Optional.of(loadPipelines));
 
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_PIPELINE_SUMMARY)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(3)))
@@ -75,7 +75,7 @@ public class LoadPipelineSummaryControllerTest {
 
     @Test
     public void getPipelineSummaryUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD + "/1")
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD + "/1")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -88,7 +88,7 @@ public class LoadPipelineSummaryControllerTest {
     @WithMockUser(value = "spring1")
     @Test
     public void getPipelineSummaryRequiresReadLoadPipelinePermission() throws Exception {
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_PIPELINE_SUMMARY)
+        MvcResult result = mvc.perform(get(Paths.API_VERSION  + Paths.LOAD_PIPELINE_SUMMARY)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
                 .andReturn();

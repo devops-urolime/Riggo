@@ -99,7 +99,7 @@ public class ShipmentSummaryControllerTest {
 
         given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter().atStartOfDay(), endFiscalPeriod.getLastDayOfQuarter().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY)
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
@@ -115,7 +115,7 @@ public class ShipmentSummaryControllerTest {
 
     @Test
     public void shipmentSummaryUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY)
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -165,7 +165,7 @@ public class ShipmentSummaryControllerTest {
 
         given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth().atStartOfDay(), startFiscalPeriod.getLastDayOfMonth().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=weeks")
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY + "?units=weeks")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
@@ -223,7 +223,7 @@ public class ShipmentSummaryControllerTest {
 
         given(invoiceLoadService.findInvoicesBySite(100, invoiceStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek().atStartOfDay(), startFiscalPeriod.getLastDayOfWeek().atStartOfDay().plusDays(1))).willReturn(Optional.of(invoiceList));
 
-        MvcResult result = mvc.perform(get(Paths.API_VERSION_LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
+        MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))

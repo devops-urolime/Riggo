@@ -19,12 +19,12 @@ INSERT INTO load(id, ext_sys_id, site_id, shipper_id, carrier, driver, load_stat
 
 
 /* load_line_item */
-INSERT INTO load_line_item(id, load_id) VALUES (1, 1);
-INSERT INTO load_line_item(id, load_id) VALUES (2, 1);
+INSERT INTO load_line_item(id, load_id, ext_sys_id) VALUES (1, 1, 'extSysId1');
+INSERT INTO load_line_item(id, load_id, ext_sys_id) VALUES (2, 1, 'extSysId2');
 
 /* load_stop */
-INSERT INTO load_stop(id, load_id, arrival_status, type) VALUES (1, 1, 1, 1);
-INSERT INTO load_stop(id, load_id, arrival_status, type) VALUES (2, 1, 2, 2);
+INSERT INTO load_stop(id, load_id, arrival_status, type, ext_sys_id) VALUES (1, 1, 1, 1, 'extSysId1');
+INSERT INTO load_stop(id, load_id, arrival_status, type, ext_sys_id) VALUES (2, 1, 2, 2, 'extSysId2');
 
 
 /* invoice */

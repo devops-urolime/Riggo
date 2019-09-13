@@ -42,7 +42,7 @@ public class InvoiceController {
     private AuthenticationFacade authenticationFacade;
 
 
-    @PutMapping(value = "/load/invoice", produces = "application/json")
+    @PutMapping(value = Paths.LOAD_INVOICE, produces = "application/json")
     @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> putInvoice(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         List<Invoice> invoiceList = processPutInvoice(dataHashMap);
@@ -52,7 +52,7 @@ public class InvoiceController {
     }
 
 
-    @PutMapping(value = "/load/{loadId}/invoice", produces = "application/json")
+    @PutMapping(value = Paths.LOAD_LOADID_PARAM_INVOICE, produces = "application/json")
     @PreAuthorize("hasAuthority('write:loadInvoice')")
     public BaseAPIResponse<Invoice> putInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap)  throws ResourceNotFoundException{
         validateLoad(loadId, authenticationFacade.getSiteId());
