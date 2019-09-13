@@ -52,8 +52,7 @@ resource "aws_api_gateway_stage" "stage" {
   }
 
   variables = {
-    # "elb_url" = "${var.elb_endpoint}"
-    elb_url = "Riggo-ECS-uat-1677762182.us-west-2.elb.amazonaws.com"
+     "elb_url" = "${var.elb_endpoint}"
   }
 }
 
