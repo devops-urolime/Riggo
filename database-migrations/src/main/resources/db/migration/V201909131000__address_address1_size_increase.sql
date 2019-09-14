@@ -1,0 +1,3 @@
+-- ADD UNIQUE CONSTRAINT
+ALTER TABLE address ALTER COLUMN address_1 TYPE varchar(120);
+
