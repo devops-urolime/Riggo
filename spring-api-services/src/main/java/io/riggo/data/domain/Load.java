@@ -100,9 +100,6 @@ public class Load implements Serializable {
     @Column(name = "haz_mat" )
     private Boolean hazMat;
 
-    @Column(name = "load_status_req" )
-    private Boolean loadStatusReq;
-
     @Column(name = "mode_name"  )
     private String modeName;
 
@@ -320,14 +317,6 @@ public class Load implements Serializable {
 
     public void setHazMat(Boolean hazMat) {
         this.hazMat = hazMat;
-    }
-
-    public Boolean getLoadStatusReq() {
-        return loadStatusReq;
-    }
-
-    public void setLoadStatusReq(Boolean loadStatusReq) {
-        this.loadStatusReq = loadStatusReq;
     }
 
     public String getModeName() {

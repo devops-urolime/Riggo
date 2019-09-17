@@ -111,6 +111,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         load.setTransportMode(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Mode_Name__c", loadDetailsMap));
         load.setPostedRate(salesforceRevenovaRequestBodyParserHelper.getMapValueIntegerAsBigDecimal("rigPostedRate__c", loadDetailsMap));
         load.setInsuranceAmt(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Insurance_Amount__c", loadDetailsMap));
+        load.setSalesStatus(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Sales_Status__c", loadDetailsMap));
 
         HashMap<String, Object> loadStatusMaps = new HashMap<>();
         Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
@@ -142,6 +143,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         load.setLoadUrl(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rig_Load_URL__c", loadDetailsMap));
         load.setReferenceNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__EDI_Reference_Numbers__c", loadDetailsMap));
         load.setBillOfLadingNo(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Bill_of_Lading_Number__c", loadDetailsMap));
+        load.setDistanceMiles(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Distance_Miles__c", loadDetailsMap));
 
         return load;
     }
