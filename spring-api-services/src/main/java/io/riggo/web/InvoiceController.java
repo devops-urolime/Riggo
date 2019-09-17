@@ -3,7 +3,7 @@ package io.riggo.web;
 import io.riggo.data.domain.Invoice;
 import io.riggo.data.domain.Load;
 import io.riggo.data.domain.ResourceType;
-import io.riggo.data.exception.ResourceAlreadyExistsException;
+import io.riggo.data.exception.BadRequestException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.InvoiceService;
 import io.riggo.data.services.LoadService;
@@ -11,6 +11,7 @@ import io.riggo.web.integration.SalesforceRevenovaConstants;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutInvoice;
 import io.riggo.web.response.BaseAPIResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -54,13 +55,16 @@ public class InvoiceController {
 
     @PutMapping(value = Paths.LOAD_LOADID_PARAM_INVOICE, produces = "application/json")
     @PreAuthorize("hasAuthority('write:loadInvoice')")
-    public BaseAPIResponse<Invoice> putInvoiceWithLoadId(@PathVariable final Integer loadId, @RequestBody Map<String, Object> dataHashMap)  throws ResourceNotFoundException{
-        validateLoad(loadId, authenticationFacade.getSiteId());
-        List<Invoice> invoiceList = processPutInvoice(dataHashMap);
+    public BaseAPIResponse<Invoice> putInvoiceWithLoadId(@PathVariable final String loadId, @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, BadRequestException{
+        if(NumberUtils.isDigits(loadId)) {
+            validateLoad(NumberUtils.toInt(loadId), authenticationFacade.getSiteId());
+            List<Invoice> invoiceList = processPutInvoice(dataHashMap);
 
-        BaseAPIResponse baseApiResponse = new BaseAPIResponse();
-        baseApiResponse.setData(invoiceList);
-        return baseApiResponse;
+            BaseAPIResponse baseApiResponse = new BaseAPIResponse();
+            baseApiResponse.setData(invoiceList);
+            return baseApiResponse;
+        }
+        throw new BadRequestException();
     }
 
 
