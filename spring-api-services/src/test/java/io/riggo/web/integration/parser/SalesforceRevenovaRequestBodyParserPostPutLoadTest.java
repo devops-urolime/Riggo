@@ -88,7 +88,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoadTest {
 
     @Test
     public void resolveShipper() {
-        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
+        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap, 100);
 
         assertTrue(StringUtils.equals(shipper.getExtSysId(), "001g000001ywr1BAAQ"));
         assertTrue(StringUtils.equals(shipper.getName(), "DK Shipper"));
