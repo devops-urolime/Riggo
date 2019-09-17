@@ -4,7 +4,8 @@ spring_profile_env = "uat"
 #General Variables
 keyname = "RiggoKeyPair-uat"
 cidr_block = "0.0.0.0/0"
-
+hosted_zone_name = "riggostaging.net"
+wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
 
 #variables for RDS
 read_capacity  = "20"
@@ -87,6 +88,8 @@ taskdef_path = "CI-CD/uat-taskdef.json"
 
 #Variables for route53
 service_discovery_ttl = "60"
+
+
 
 #variables for Lambda
 
@@ -184,3 +187,4 @@ github_branch_name = {
 #variables for api gateway
 
 rest_api_name = "Riggo Platform API"
+basepath_apigateway = "v1"
