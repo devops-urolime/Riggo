@@ -96,7 +96,7 @@ public class LoadController {
             throw new ResourceAlreadyExistsException(ResourceType.LOAD, checkLoadExists.get().getId());
         }
 
-        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
+        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap, authenticationFacade.getSiteId());
         persistShipper(shipper, load, authenticationFacade.getSiteId());
 
         EquipmentType equipmentType = salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(dataHashMap);
@@ -141,7 +141,7 @@ public class LoadController {
         }
         resolvedLoad.setSiteId(authenticationFacade.getSiteId());
 
-        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap);
+        Shipper shipper = salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(dataHashMap, authenticationFacade.getSiteId());
         persistShipper(shipper, resolvedLoad, authenticationFacade.getSiteId());
 
         //

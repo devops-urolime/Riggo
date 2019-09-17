@@ -3,13 +3,11 @@ package io.riggo.data.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "load")
 public class Load implements Serializable {
-
 
     private static final long serialVersionUID = -4133343645808769934L;
 
@@ -35,18 +33,35 @@ public class Load implements Serializable {
 
     @Column(name = "transport_mode")
     private String transportMode;
+
+    @Column(name = "posted_rate")
     private BigDecimal postedRate;
+
+    @Column(name = "insurance_amt")
     private BigDecimal insuranceAmt;
+
+    @Column(name = "equipment_type_id")
     private Integer equipmentTypeId;
+
+    @Column(name = "load_status")
     private Integer loadStatus;
+
+    @Column(name = "team_req")
     private Boolean teamReq;
+
+    @Column(name = "food_grade_trailer_req")
     private Boolean foodGradeTrailerReq;
+
+    @Column(name = "temp_control_req")
     private Boolean tempControlReq;
 
     @Column(name = "expected_delivery_date")
     private LocalDateTime expectedDeliveryDate;
 
+    @Column(name = "driver")
     private Integer driver;
+
+    @Column(name = "location_based_svcs_req")
     private Boolean locationBasedSvcsReq;
 
     @Transient
@@ -61,20 +76,46 @@ public class Load implements Serializable {
     @Column(name = "deleted")
     private LocalDateTime deleted;
 
+    @Column(name = "reference_number")
     private String referenceNumber;
+
+    @Column(name = "bill_of_lading_no")
     private String billOfLadingNo;
+
+    @Column(name = "name")
     private String name;
-    private BigDecimal invoiceTotal;
+
+    @Column(name = "carrier_quote_total")
     private BigDecimal carrierQuoteTotal;
+
+    @Column(name = "carrier_invoice_total")
     private BigDecimal carrierInvoiceTotal;
+
+    @Column(name = "customer_quote_total")
     private BigDecimal customerQuoteTotal;
-    private BigDecimal customerTransportTotal;
+
+    @Column(name = "customer_invoice_total")
+    private BigDecimal customerInvoiceTotal;
+
+    @Column(name = "haz_mat" )
     private Boolean hazMat;
+
+    @Column(name = "load_status_req" )
     private Boolean loadStatusReq;
+
+    @Column(name = "mode_name"  )
     private String modeName;
+
+    @Column(name = "order_date")
     private LocalDateTime orderDate;
+
+    @Column(name = "sales_status" )
     private String salesStatus;
+
+    @Column(name = "load_url")
     private String loadUrl;
+
+    @Column(name = "shipper_id")
     private Integer shipperId;
 
     @Column(name = "distance_miles")
@@ -137,8 +178,6 @@ public class Load implements Serializable {
         this.transportMode = transportMode;
     }
 
-    @Basic
-    @Column(name = "posted_rate")
     public BigDecimal getPostedRate() {
         return postedRate;
     }
@@ -147,8 +186,6 @@ public class Load implements Serializable {
         this.postedRate = postedRate;
     }
 
-    @Basic
-    @Column(name = "insurance_amt")
     public BigDecimal getInsuranceAmt() {
         return insuranceAmt;
     }
@@ -157,9 +194,6 @@ public class Load implements Serializable {
         this.insuranceAmt = insuranceAmt;
     }
 
-
-    @Basic
-    @Column(name = "equipment_type_id")
     public Integer getEquipmentTypeId() {
         return equipmentTypeId;
     }
@@ -168,8 +202,6 @@ public class Load implements Serializable {
         this.equipmentTypeId = equipmentTypeId;
     }
 
-    @Basic
-    @Column(name = "load_status")
     public Integer getLoadStatus() {
         return loadStatus;
     }
@@ -178,8 +210,6 @@ public class Load implements Serializable {
         this.loadStatus = loadStatus;
     }
 
-    @Basic
-    @Column(name = "team_req")
     public Boolean getTeamReq() {
         return teamReq;
     }
@@ -188,8 +218,6 @@ public class Load implements Serializable {
         this.teamReq = teamReq;
     }
 
-    @Basic
-    @Column(name = "food_grade_trailer_req")
     public Boolean getFoodGradeTrailerReq() {
         return foodGradeTrailerReq;
     }
@@ -198,8 +226,6 @@ public class Load implements Serializable {
         this.foodGradeTrailerReq = foodGradeTrailerReq;
     }
 
-    @Basic
-    @Column(name = "temp_control_req")
     public Boolean getTempControlReq() {
         return tempControlReq;
     }
@@ -216,8 +242,6 @@ public class Load implements Serializable {
         this.expectedDeliveryDate = expectedDeliveryDate;
     }
 
-    @Basic
-    @Column(name = "driver")
     public Integer getDriver() {
         return driver;
     }
@@ -226,9 +250,6 @@ public class Load implements Serializable {
         this.driver = driver;
     }
 
-
-    @Basic
-    @Column(name = "location_based_svcs_req")
     public Boolean getLocationBasedSvcsReq() {
         return locationBasedSvcsReq;
     }
@@ -237,8 +258,6 @@ public class Load implements Serializable {
         this.locationBasedSvcsReq = locationBasedSvcsReq;
     }
 
-    @Basic
-    @Column(name = "reference_number")
     public String getReferenceNumber() {
         return referenceNumber;
     }
@@ -247,9 +266,6 @@ public class Load implements Serializable {
         this.referenceNumber = referenceNumber;
     }
 
-
-    @Basic
-    @Column(name = "bill_of_lading_no")
     public String getBillOfLadingNo() {
         return billOfLadingNo;
     }
@@ -258,8 +274,6 @@ public class Load implements Serializable {
         this.billOfLadingNo = billOfLadingNo;
     }
 
-    @Basic
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -268,18 +282,14 @@ public class Load implements Serializable {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "invoice_total")
-    public BigDecimal getInvoiceTotal() {
-        return invoiceTotal;
+    public BigDecimal getCustomerInvoiceTotal() {
+        return customerInvoiceTotal;
     }
 
-    public void setInvoiceTotal(BigDecimal invoiceTotal) {
-        this.invoiceTotal = invoiceTotal;
+    public void setCustomerInvoiceTotal(BigDecimal customerInvoiceTotal) {
+        this.customerInvoiceTotal = customerInvoiceTotal;
     }
 
-    @Basic
-    @Column(name = "carrier_quote_total")
     public BigDecimal getCarrierQuoteTotal() {
         return carrierQuoteTotal;
     }
@@ -288,8 +298,6 @@ public class Load implements Serializable {
         this.carrierQuoteTotal = carrierQuoteTotal;
     }
 
-    @Basic
-    @Column(name = "carrier_invoice_total")
     public BigDecimal getCarrierInvoiceTotal() {
         return carrierInvoiceTotal;
     }
@@ -298,8 +306,6 @@ public class Load implements Serializable {
         this.carrierInvoiceTotal = carrierInvoiceTotal;
     }
 
-    @Basic
-    @Column(name = "customer_quote_total")
     public BigDecimal getCustomerQuoteTotal() {
         return customerQuoteTotal;
     }
@@ -308,18 +314,6 @@ public class Load implements Serializable {
         this.customerQuoteTotal = customerQuoteTotal;
     }
 
-    @Basic
-    @Column(name = "customer_transport_total")
-    public BigDecimal getCustomerTransportTotal() {
-        return customerTransportTotal;
-    }
-
-    public void setCustomerTransportTotal(BigDecimal customerTransportTotal) {
-        this.customerTransportTotal = customerTransportTotal;
-    }
-
-    @Basic
-    @Column(name = "haz_mat" )
     public Boolean getHazMat() {
         return hazMat;
     }
@@ -328,8 +322,6 @@ public class Load implements Serializable {
         this.hazMat = hazMat;
     }
 
-    @Basic
-    @Column(name = "load_status_req" )
     public Boolean getLoadStatusReq() {
         return loadStatusReq;
     }
@@ -338,8 +330,6 @@ public class Load implements Serializable {
         this.loadStatusReq = loadStatusReq;
     }
 
-    @Basic
-    @Column(name = "mode_name"  )
     public String getModeName() {
         return modeName;
     }
@@ -348,8 +338,6 @@ public class Load implements Serializable {
         this.modeName = modeName;
     }
 
-    @Basic
-    @Column(name = "order_date")
     public LocalDateTime getOrderDate() {
         return orderDate;
     }
@@ -358,8 +346,6 @@ public class Load implements Serializable {
         this.orderDate = orderDate;
     }
 
-    @Basic
-    @Column(name = "sales_status" )
     public String getSalesStatus() {
         return salesStatus;
     }
@@ -368,8 +354,6 @@ public class Load implements Serializable {
         this.salesStatus = salesStatus;
     }
 
-    @Basic
-    @Column(name = "load_url")
     public String getLoadUrl() {
         return loadUrl;
     }
@@ -378,9 +362,6 @@ public class Load implements Serializable {
         this.loadUrl = loadUrl;
     }
 
-
-    @Basic
-    @Column(name = "shipper_id")
     public Integer getShipperId() {
         return shipperId;
     }

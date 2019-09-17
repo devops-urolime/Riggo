@@ -112,7 +112,6 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         load.setPostedRate(salesforceRevenovaRequestBodyParserHelper.getMapValueIntegerAsBigDecimal("rigPostedRate__c", loadDetailsMap));
         load.setInsuranceAmt(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Insurance_Amount__c", loadDetailsMap));
 
-
         HashMap<String, Object> loadStatusMaps = new HashMap<>();
         Map<String, Object> firstStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("FirstStop", loadDetailsMap);
         Map<String, Object> lastStopMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("LastStop", loadDetailsMap);
@@ -130,23 +129,30 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         load.setFoodGradeTrailerReq(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("food_grade_trailer_required__c", loadDetailsMap));
         load.setTempControlReq(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rtms__Temperature_Controlled__c", loadDetailsMap));
         load.setName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Name", loadDetailsMap));
-        load.setInvoiceTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Carrier_Invoice_Total__c", loadDetailsMap));
+        load.setCarrierQuoteTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Carrier_Quote_Total__c", loadDetailsMap));
+        load.setCarrierInvoiceTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Carrier_Invoice_Total__c", loadDetailsMap));
+        load.setCustomerQuoteTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Customer_Quote_Total__c", loadDetailsMap));
+        load.setCustomerInvoiceTotal(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("rtms__Customer_Invoice_Total__c", loadDetailsMap));
+
         load.setHazMat(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("rtms__Hazardous_Materials__c", loadDetailsMap));
         load.setModeName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("ModeName", modeMap));
         load.setOrderDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Order_Date__c", loadDetailsMap));
         load.setExpectedShipDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Expected_Ship_Date2__c", loadDetailsMap));
         load.setExpectedDeliveryDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("rtms__Expected_Delivery_Date2__c", loadDetailsMap ));
         load.setLoadUrl(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rig_Load_URL__c", loadDetailsMap));
+        load.setReferenceNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__EDI_Reference_Numbers__c", loadDetailsMap));
+        load.setBillOfLadingNo(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("rtms__Bill_of_Lading_Number__c", loadDetailsMap));
 
         return load;
     }
 
 
     @Override
-    public Shipper resolveShipper(Map<String, Object> dataHashMap) {
+    public Shipper resolveShipper(Map<String, Object> dataHashMap, Integer siteId) {
         Map<String, Object> loadDetailsMap = getLoadDetailsMap(dataHashMap);
         Map<String, Object> customerMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("Customer", loadDetailsMap);
         Shipper shipper = new Shipper();
+        shipper.setSiteId(siteId);
         shipper.setExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("CustomerId", customerMap));
         shipper.setName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("CustomerName", customerMap));
         return shipper;
