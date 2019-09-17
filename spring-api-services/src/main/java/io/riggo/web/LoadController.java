@@ -2,6 +2,7 @@ package io.riggo.web;
 
 import com.google.common.hash.Hashing;
 import io.riggo.data.domain.*;
+import io.riggo.data.exception.BadRequestException;
 import io.riggo.data.exception.ResourceAlreadyExistsException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.*;
@@ -10,6 +11,7 @@ import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPu
 import io.riggo.web.response.LoadAPIResponse;
 import io.riggo.web.response.LoadResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -58,14 +60,16 @@ public class LoadController {
     @GetMapping(value = Paths.LOAD + "/{id}")//., produces = "application/json")
     @ResponseBody
     @PreAuthorize("hasAuthority('read:load')")
-    @Cacheable(value = "loads", key = "#p0", unless = "#result == null")
-    public LoadResponse getLoadById(@PathVariable("id") Integer id) throws ResourceNotFoundException{
-        Optional<Load> load = loadService.findById(id, authenticationFacade.getSiteId());
-        if(load.isPresent()) {
-            return new LoadResponse(load.get());
-        }else{
+    //@Cacheable(value = "loads", key = "#p0", unless = "#result == null")
+    public LoadResponse getLoadById(@PathVariable("id") String id) throws ResourceNotFoundException, BadRequestException{
+        if(NumberUtils.isDigits(id)){
+            Optional<Load> load = loadService.findById(NumberUtils.toInt(id), authenticationFacade.getSiteId());
+            if(load.isPresent()) {
+                return new LoadResponse(load.get());
+            }
             throw new ResourceNotFoundException(ResourceType.LOAD, id);
         }
+        throw new BadRequestException();
     }
 
 
