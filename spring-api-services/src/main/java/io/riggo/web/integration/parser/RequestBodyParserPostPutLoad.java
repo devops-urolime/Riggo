@@ -15,7 +15,7 @@ public interface RequestBodyParserPostPutLoad {
 
     Load resolveLoad(Map<String, Object> dataHashMap);
 
-    Shipper resolveShipper(Map<String, Object> dataHashMap);
+    Shipper resolveShipper(Map<String, Object> dataHashMap, Integer siteId);
 
     EquipmentType resolveEquipmentType(Map<String, Object> dataHashMap);
 }

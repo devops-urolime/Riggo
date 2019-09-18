@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -137,9 +138,11 @@ public class LoadControllerTest {
         lastStop.setId(1);
         lastStop.setName("firstStop");
         lastStop.setExtSysId("1");
+        Integer siteId = 100;
 
+        given(authenticationFacade.getSiteId()).willReturn(siteId);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(any(Map.class))).willReturn(load);
-        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class))).willReturn(shipper);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class), eq(100))).willReturn(shipper);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(any(Map.class))).willReturn(equipmentType);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
@@ -188,9 +191,11 @@ public class LoadControllerTest {
         lastStop.setName("firstStop");
         lastStop.setExtSysId("1");
 
-        given(authenticationFacade.getSiteId()).willReturn(100);
+        Integer siteId = 100;
+
+        given(authenticationFacade.getSiteId()).willReturn(siteId);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLoad(any(Map.class))).willReturn(load);
-        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class))).willReturn(shipper);
+        given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveShipper(any(Map.class),eq(siteId))).willReturn(shipper);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveEquipmentType(any(Map.class))).willReturn(equipmentType);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveFirstStop(any(Map.class))).willReturn(firstStop);
         given(salesforceRevenovaRequestBodyParserPostPutLoad.resolveLastStop(any(Map.class))).willReturn(lastStop);
