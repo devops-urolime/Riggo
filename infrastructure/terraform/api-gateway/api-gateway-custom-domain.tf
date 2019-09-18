@@ -1,5 +1,5 @@
 resource "aws_api_gateway_domain_name" "custom" {
-  certificate_arn = "${var.custom_name_cert}"
+  regional_certificate_arn = "${var.custom_name_cert}"
   domain_name     = "api.${var.hosted_zone_name}"
 
   endpoint_configuration {
