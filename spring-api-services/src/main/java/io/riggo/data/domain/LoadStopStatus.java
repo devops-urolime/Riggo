@@ -9,7 +9,7 @@ import java.util.Map;
 public enum LoadStopStatus {
     EN_ROUTE(1, "En Route"),
     ARRIVED(2, "Arrived"),
-    DEPARTED(2, "Departed"),
+    DEPARTED(3, "Departed"),
     ;
 
     private final String displayName;

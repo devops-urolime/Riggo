@@ -68,7 +68,7 @@ public class LoadStopController {
                             if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
                                 Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadStopFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadStopFromDb, loadStop, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
+                                    BeanUtils.copyProperties(loadStopFromDb, loadStop, SalesforceRevenovaConstants.PUT_LOAD_STOP_IGNORE_PROPERTIES);
                                 }
                                 loadStopService.save(loadStop);
                                 loadStopBaseAPIResponse.addData(loadStop);
