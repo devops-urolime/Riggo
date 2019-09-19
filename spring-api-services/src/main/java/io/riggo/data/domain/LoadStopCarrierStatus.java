@@ -7,6 +7,7 @@ import java.util.Map;
 
 @SuppressWarnings("MagicNumber")
 public enum LoadStopCarrierStatus {
+    NO_STATUS(0, "No Status", LoadStopStatus.NO_STATUS),
     NO_ISSUES(1, "No Issues", LoadStopStatus.EN_ROUTE),
     DELAYED_BY_WEATHER(2, "Delayed By Weather", LoadStopStatus.EN_ROUTE),
     DELAYED_BY_TRAFFIC(3, "Delayed By Traffic", LoadStopStatus.EN_ROUTE),

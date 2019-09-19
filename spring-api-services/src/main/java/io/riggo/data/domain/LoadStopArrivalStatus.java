@@ -8,6 +8,7 @@ import java.util.Map;
 
 @SuppressWarnings("MagicNumber")
 public enum LoadStopArrivalStatus {
+    NO_STATUS(0, "No Status"),
     EARLY(1, "Early"),
     DELAYED(2, "Late"),
     ;
