@@ -26,10 +26,10 @@ public class LoadLineItem implements Serializable {
     @Column(name = "ext_sys_tenant_id")
     private String extSysTenantId;
 
-    @Column(name = "pickup_stop")  //references load_stop.id
+    @Column(name = "pickup_stop")
     private Integer pickupStop;
 
-    @Column(name = "delivery_stop")  //references load_stop.id
+    @Column(name = "delivery_stop")
     private Integer deliveryStop;
 
     @Column(name = "weight")
@@ -38,10 +38,10 @@ public class LoadLineItem implements Serializable {
     @Column(name = "haz_mat")
     private Boolean hazMat;
 
-    @Column(name = "rank")  //references load_stop.id
-    private Integer rank;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "load_id")  //references load.id
+    @Column(name = "load_id")
     private Integer loadId;
 
     @Transient
@@ -129,12 +129,12 @@ public class LoadLineItem implements Serializable {
         this.hazMat = hazMat;
     }
 
-    public Integer getRank() {
-        return rank;
+    public String getName() {
+        return name;
     }
 
-    public void setRank(Integer rank) {
-        this.rank = rank;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getLoadId() {

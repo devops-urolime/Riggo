@@ -1,0 +1,3 @@
+-- ADD UNIQUE CONSTRAINT
+ALTER TABLE load_line_item DROP COLUMN rank;
+ALTER TABLE load_line_item ADD COLUMN name VARCHAR(80);

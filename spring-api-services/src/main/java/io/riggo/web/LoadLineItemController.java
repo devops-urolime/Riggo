@@ -49,7 +49,6 @@ public class LoadLineItemController {
         return saveLoadLineItem(dataHashMap, null);
     }
 
-
     @PutMapping(value = Paths.LOAD_LOADID_PARAM_LINE_ITEM, produces = "application/json")
     @PreAuthorize("hasAuthority('write:load')")
     public NestedBaseAPIResponse<?> putLoadLineItem(@RequestBody Map<String, Object> dataHashMap, @PathVariable final Integer loadId) throws ResourceNotFoundException{
@@ -68,7 +67,10 @@ public class LoadLineItemController {
                             if (StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
                                 Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadLineItemFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadLineItemFromDb, loadLineItem, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
+                                    BeanUtils.copyProperties(loadLineItemFromDb.get(), loadLineItem, SalesforceRevenovaConstants.PUT_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
+                                }
+                                if(optionalLoad.isPresent()) {
+                                    loadLineItem.setLoadId(optionalLoad.get().getId());
                                 }
                                 loadLineItemService.save(loadLineItem);
                                 loadLineItemBaseAPIResponse.addData(loadLineItem);
