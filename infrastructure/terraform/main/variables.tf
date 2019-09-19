@@ -5,14 +5,14 @@
 
 #General variables
 
-variable "wildcard_hostedzone_cert_arn" {
-  description = "ARN of the certificate for the the hosted zone"
+# variable "wildcard_hostedzone_cert_arn" {
+#   description = "ARN of the certificate for the the hosted zone"
   
-}
+# }
 
-variable "hosted_zone_name" {
-  description = "The hosted zone name created for each environment"
-}
+# variable "hosted_zone_name" {
+#   description = "The hosted zone name created for each environment"
+# }
 #variables for RDS
 variable "read_capacity" {
   # default = "20"
@@ -798,6 +798,6 @@ variable "rest_api_name" {
   
 }
 
-variable "basepath_apigateway" {
-  description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
-}
+# variable "basepath_apigateway" {
+#   description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
+# }

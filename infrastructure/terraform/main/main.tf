@@ -102,9 +102,9 @@ module "api-gateway" {
   authorize_uri         = "${module.lambda.authorize_uri}"    
   elb_endpoint = "${module.Route53.elb_custom_endpoint}"
   rest_api_name = "${var.rest_api_name}"
-  custom_name_cert = "${var.wildcard_hostedzone_cert_arn}"
-  hosted_zone_name = "${var.hosted_zone_name}"
-  basepath_apigateway = "${var.basepath_apigateway}"
+  # custom_name_cert = "${var.wildcard_hostedzone_cert_arn}"
+  # hosted_zone_name = "${var.hosted_zone_name}"
+  # basepath_apigateway = "${var.basepath_apigateway}"
 } 
 
 
@@ -214,12 +214,12 @@ module "Route53" {
   cluster_name          = "${module.ecs-cluster.ecs_cluster_name}"
   vpc_id                = "${module.VPC.vpc_id}"
   service_discovery_ttl = "${var.service_discovery_ttl}"
-  hosted_zone_name      = "${var.hosted_zone_name}"
-  elb_dns_name          = "${module.ecs-cluster.elb_endpoint}"
-  elb_dns_zone_id       = "${module.ecs-cluster.elb_hosted_zone_id}"
-  api_custom_domain_name = "${module.api-gateway.custom_domain_name}"
-  api_regional_domain_name = "${module.api-gateway.regional_domain_name}"
-  api_regional_zone_id = "${module.api-gateway.regional_zone_id}"
+  # hosted_zone_name      = "${var.hosted_zone_name}"
+  # elb_dns_name          = "${module.ecs-cluster.elb_endpoint}"
+  # elb_dns_zone_id       = "${module.ecs-cluster.elb_hosted_zone_id}"
+  # api_custom_domain_name = "${module.api-gateway.custom_domain_name}"
+  # api_regional_domain_name = "${module.api-gateway.regional_domain_name}"
+  # api_regional_zone_id = "${module.api-gateway.regional_zone_id}"
 }
 
 module "iam" {

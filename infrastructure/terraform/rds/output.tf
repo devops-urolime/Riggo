@@ -92,6 +92,10 @@ output "db_instance_password" {
   value       = "${local.db_instance_password}"
 }
 
+output "db_database_name" {
+  value = "${aws_db_instance.db.name}"
+}
+
 output "db_instance_port" {
   description = "The database port"
   value       = "${local.db_instance_port}"

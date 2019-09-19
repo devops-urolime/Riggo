@@ -11,27 +11,27 @@ variable "service_discovery_ttl" {
 }
 
 
-variable "hosted_zone_name" {
+# variable "hosted_zone_name" {
   
-}
+# }
 
-variable "elb_dns_name" {
+# variable "elb_dns_name" {
   
-}
+# }
 
-variable "elb_dns_zone_id" {
+# variable "elb_dns_zone_id" {
   
-}
+# }
 
-variable "api_custom_domain_name" {
+# variable "api_custom_domain_name" {
   
-}
+# }
 
-variable "api_regional_domain_name" {
+# variable "api_regional_domain_name" {
   
-}
+# }
 
 
-variable "api_regional_zone_id" {
+# variable "api_regional_zone_id" {
   
-}
+# }
