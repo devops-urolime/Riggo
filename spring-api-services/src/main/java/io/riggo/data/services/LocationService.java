@@ -39,9 +39,9 @@ public class LocationService {
     }
 
 
-    public Optional<Location> findByExtSysId(String extSysId) {
+    public Optional<Location> findLocationByExtSysIdLoadStopExtSysIdLoadId(String extSysId, String loadStopExtSysId, Integer loadId) {
         try {
-            return locationRepository.findByExtSysId(extSysId);
+            return locationRepository.findLocationByExtSysIdLoadStopExtSysIdLoadId(extSysId, loadStopExtSysId, loadId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }

@@ -4,6 +4,7 @@ import io.riggo.data.domain.Address;
 import io.riggo.data.domain.LoadStop;
 import io.riggo.data.domain.Location;
 import io.riggo.web.integration.exception.PayloadParseException;
+import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStopArrivalStatusResolver;
 import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStopCarrierStatusResolver;
 import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStopStatusResolver;
 import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStopTypeResolver;
@@ -32,7 +33,11 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
     private SalesforceRevenovaLoadStopStatusResolver salesforceRevenovaLoadStopStatusResolver;
 
     @Autowired
-    private SalesforceRevenovaLoadStopStatusResolver salesforceRevenovaLoadStopCarrierStatusResolver;
+    private SalesforceRevenovaLoadStopCarrierStatusResolver salesforceRevenovaLoadStopCarrierStatusResolver;
+
+    @Autowired
+    private SalesforceRevenovaLoadStopArrivalStatusResolver salesforceRevenovaLoadStopArrivalStatusResolver;
+
 
 
     @Override
@@ -43,7 +48,31 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
             loadStop.setLoadExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Load__c", loadStopMap));
             loadStop.setExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Id", loadStopMap));
             loadStop.setName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("StopName", loadStopMap));
+
+            Map<String, Object> loadStopTypeResolverMap = new HashMap<>();
+            loadStopTypeResolverMap.put(SalesforceRevenovaLoadStopTypeResolver.STOP_TYPE, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__P_D__c", loadStopMap));
+            loadStop.setType(salesforceRevenovaLoadStopTypeResolver.resolveLoadStopType(loadStopTypeResolverMap).getColVal());
+
+            loadStop.setStopNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("Stoprtms__Number__c", loadStopMap));
             loadStop.setShippingReceivingHours(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Shipping_Receiving_Hours__c", loadStopMap));
+            loadStop.setExpectedDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("Stoprtms__Expected_Date__c", loadStopMap));
+            loadStop.setAppointmentRequired(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("Stoprtms__Appointment_Required__c", loadStopMap));
+            loadStop.setAppointmentTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Appointment_Time__c", loadStopMap));
+            loadStop.setArrivalDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("Stoprtms__Arrival_Date__c", loadStopMap));
+            loadStop.setDepartureDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTimeFrom2Keys ("Stoprtms__Departure_Date__c", "Stoprtms__Departure_Time__c", loadStopMap));
+
+
+            Map<String, Object> loadStopStatusResolverMap = new HashMap<>();
+            loadStopStatusResolverMap.put(SalesforceRevenovaLoadStopStatusResolver.LOAD_STOP_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Stop_Status__c", loadStopMap));
+            loadStop.setStopStatus(salesforceRevenovaLoadStopStatusResolver.resolveLoadStopStatus(loadStopStatusResolverMap).getColVal());
+
+            Map<String, Object> loadStopCarrierStatusResolverMap = new HashMap<>();
+            loadStopCarrierStatusResolverMap.put(SalesforceRevenovaLoadStopCarrierStatusResolver.LOAD_STOP_CARRIER_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Carrier_Status2__c", loadStopMap));
+            loadStop.setCarrierStatus(salesforceRevenovaLoadStopCarrierStatusResolver.resolveLoadStopCarrierStatus(loadStopCarrierStatusResolverMap).getColVal());
+
+            Map<String, Object> loadStopArrivalStatusResolverMap = new HashMap<>();
+            loadStopArrivalStatusResolverMap.put(SalesforceRevenovaLoadStopArrivalStatusResolver.LOAD_STOP_ARRIVAL_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Arrival_Status__c", loadStopMap));
+            loadStop.setArrivalStatus(salesforceRevenovaLoadStopArrivalStatusResolver.resolveLoadStopArrivalStatus(loadStopArrivalStatusResolverMap).getColVal());
 
             Location location = new Location();
             Map<String, Object> locationMap = salesforceRevenovaRequestBodyParserHelper.getMapValueAsMap("StopLocation", loadStopMap);
@@ -58,28 +87,6 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
             location.setAddress(address);
             loadStop.setLocation(location);
 
-            loadStop.setStopNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("Stoprtms__Number__c", loadStopMap));
-
-            Map<String, Object> loadStopTypeResolverMap = new HashMap<>();
-            loadStopTypeResolverMap.put(SalesforceRevenovaLoadStopTypeResolver.STOP_TYPE, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__P_D__c", loadStopMap));
-            loadStop.setType(salesforceRevenovaLoadStopTypeResolver.resolveLoadStopType(loadStopTypeResolverMap).getColVal());
-
-            loadStop.setExpectedDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("Stoprtms__Expected_Date__c", loadStopMap));
-            loadStop.setAppointmentRequired(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("Stoprtms__Appointment_Required__c", loadStopMap));
-            loadStop.setAppointmentTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Appointment_Time__c", loadStopMap));
-
-            Map<String, Object> loadStopStatusResolverMap = new HashMap<>();
-            loadStopStatusResolverMap.put(SalesforceRevenovaLoadStopStatusResolver.LOAD_STOP_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Stop_Status__c", loadStopMap));
-            loadStop.setStopStatus(salesforceRevenovaLoadStopStatusResolver.resolveLoadStopStatus(loadStopStatusResolverMap).getColVal());
-
-            Map<String, Object> loadStopCarrierStatusResolverMap = new HashMap<>();
-            loadStopCarrierStatusResolverMap.put(SalesforceRevenovaLoadStopCarrierStatusResolver.LOAD_STOP_CARRIER_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Carrier_Status2__c", loadStopMap));
-            loadStop.setCarrierStatus(salesforceRevenovaLoadStopCarrierStatusResolver.resolveLoadStopStatus(loadStopCarrierStatusResolverMap).getColVal());
-
-            //TODO: arrivalStatus
-            //TODO: departureStatus
-            loadStop.setArrivalDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("Stoprtms__Arrival_Date__c", loadStopMap));
-            loadStop.setDepartureDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTimeFrom2Keys ("Stoprtms__Departure_Date__c", "Stoprtms__Departure_Time__c", loadStopMap));
             return loadStop;
         }).collect(Collectors.toList());
     }

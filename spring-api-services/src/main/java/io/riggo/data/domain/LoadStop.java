@@ -56,9 +56,6 @@ public class LoadStop implements Serializable {
     @Column(name = "arrival_status")
     private Integer arrivalStatus;
 
-    @Column(name = "departure_status")
-    private Integer departureStatus;
-
     @Column(name = "arrival_date")
     private LocalDate arrivalDate;
 
@@ -214,14 +211,6 @@ public class LoadStop implements Serializable {
 
     public void setArrivalStatus(Integer arrivalStatus) {
         this.arrivalStatus = arrivalStatus;
-    }
-
-    public Integer getDepartureStatus() {
-        return departureStatus;
-    }
-
-    public void setDepartureStatus(Integer departureStatus) {
-        this.departureStatus = departureStatus;
     }
 
     public LocalDate getArrivalDate() {
