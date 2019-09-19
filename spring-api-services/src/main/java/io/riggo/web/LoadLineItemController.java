@@ -63,7 +63,7 @@ public class LoadLineItemController {
                     BaseAPIResponse<LoadLineItem> loadLineItemBaseAPIResponse = new BaseAPIResponse<>();
                     if (StringUtils.isNotBlank(loadLineItem.getLoadExtSysId())) {
                         Optional<Load> optionalLoad = loadService.findByExtSysId(loadLineItem.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId() == loadId)) {
+                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId().intValue() == loadId.intValue())) {
                             if (StringUtils.isNotBlank(loadLineItem.getExtSysId())) {
                                 Optional<LoadLineItem> loadLineItemFromDb = loadLineItemService.findByExtSysId(loadLineItem.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadLineItemFromDb.isPresent()) {
