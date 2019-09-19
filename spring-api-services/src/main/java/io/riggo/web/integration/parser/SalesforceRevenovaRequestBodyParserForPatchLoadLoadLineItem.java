@@ -31,12 +31,13 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem impleme
             loadLineItem.setPickupStopExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Lineitemrtms__Pickup_Stop__c", loadLineItemMap));
             loadLineItem.setLoadExtSysId(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Lineitemrtms__Load__c", loadLineItemMap));
             loadLineItem.setWeight(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBigDecimal("Lineitemrtms__Weight__c", loadLineItemMap));
+            loadLineItem.setName(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("name", loadLineItemMap));
             return loadLineItem;
         }).collect(Collectors.toList());
     }
 
     private List<Map<String, Object>> getLoadLineItemsArray(Map<String, Object> dataHashMap) {
-        List<Map<String, Object>> lineItemsArray = (ArrayList<Map<String, Object>>) dataHashMap.get("LineItem");
+        List<Map<String, Object>> lineItemsArray = (ArrayList<Map<String, Object>>) dataHashMap.get("LineItems");
         if (lineItemsArray != null) {
             return lineItemsArray;
         }

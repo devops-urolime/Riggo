@@ -191,14 +191,22 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
     }
 
     private Integer getFirstStopCarrierStatus(Map<String, Object> firstStopMap) {
-        LoadStopStatus loadStopStatus = getLoadStopStatus(firstStopMap, "FirstStoprtms__Carrier_Status2__c");
-        return loadStopStatus != null ? loadStopStatus.getColVal() : null;
+        LoadStopCarrierStatus loadStopCarrierStatus = getLoadStopCarrierStatus(firstStopMap, "FirstStoprtms__Carrier_Status2__c");
+        return loadStopCarrierStatus != null ? loadStopCarrierStatus.getColVal() : null;
     }
 
     private LoadStopStatus getLoadStopStatus(Map<String, Object> firstStopMap, String key) {
         String firstStopStopStatusValue = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString(key, firstStopMap);
         if(firstStopStopStatusValue != null) {
             return LoadStopStatus.fromDisplayName(firstStopStopStatusValue);
+        }
+        return null;
+    }
+
+    private LoadStopCarrierStatus getLoadStopCarrierStatus(Map<String, Object> firstStopMap, String key) {
+        String firstStopStopStatusValue = salesforceRevenovaRequestBodyParserHelper.getMapValueAsString(key, firstStopMap);
+        if(firstStopStopStatusValue != null) {
+            return LoadStopCarrierStatus.fromDisplayName(firstStopStopStatusValue);
         }
         return null;
     }

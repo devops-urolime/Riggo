@@ -11,7 +11,9 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends CrudRepository<Location, Integer> {
 
-    @Query("select l from Location l where l.extSysId = :extSysId")
-    Optional<Location> findByExtSysId(@Param("extSysId") String extSysId);
+    @Query("SELECT l FROM Location l " +
+            "JOIN LoadStop ls ON ls.locationId = l.id " +
+            "WHERE l.extSysId = :extSysId AND ls.extSysId = :loadStopExtSysId AND ls.id = :loadId")
+    Optional<Location> findLocationByExtSysIdLoadStopExtSysIdLoadId(@Param("extSysId") String extSysId, @Param("loadStopExtSysId") String loadStopExtSysId,  @Param("loadId") Integer loadId);
 
 }

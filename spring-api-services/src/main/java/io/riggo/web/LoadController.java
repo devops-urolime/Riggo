@@ -176,7 +176,7 @@ public class LoadController {
             Optional<Location> checkLocationExists = null;
             Optional<Address> checkAddressExists = null;
             if (StringUtils.isNotBlank(location.getExtSysId())) {
-                checkLocationExists = locationService.findByExtSysId(location.getExtSysId());
+                checkLocationExists = locationService.findLocationByExtSysIdLoadStopExtSysIdLoadId(location.getExtSysId(), loadStop.getExtSysId(), loadId);
                 if (checkLocationExists.isPresent() && checkLocationExists.get().getAddressId() != null) {
                     checkAddressExists = addressService.findById(checkLocationExists.get().getAddressId());
                 }
@@ -200,10 +200,10 @@ public class LoadController {
 
         if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
             Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
-            if (!checkFirstStopExists.isPresent()) {
-                loadStop.setLoadId(loadId);
-                loadStopService.save(loadStop);
+            if (checkFirstStopExists.isPresent()) {
+                BeanUtils.copyProperties(checkFirstStopExists.get(), loadStop, SalesforceRevenovaConstants.POST_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
             }
+            loadStopService.save(loadStop);
         }
     }
 }

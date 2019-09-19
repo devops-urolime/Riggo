@@ -7,9 +7,10 @@ import java.util.Map;
 
 @SuppressWarnings("MagicNumber")
 public enum LoadStopStatus {
+    NO_STATUS(0, "No Status"),
     EN_ROUTE(1, "En Route"),
     ARRIVED(2, "Arrived"),
-    DEPARTED(2, "Departed"),
+    DEPARTED(3, "Departed"),
     ;
 
     private final String displayName;

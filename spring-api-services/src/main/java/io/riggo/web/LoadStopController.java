@@ -64,11 +64,11 @@ public class LoadStopController {
                     BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
                     if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
                         Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId() == loadId)) {
+                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId().intValue() == loadId.intValue())) {
                             if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
                                 Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
                                 if (loadStopFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadStopFromDb, loadStop, SalesforceRevenovaConstants.PATCH_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
+                                    BeanUtils.copyProperties(loadStopFromDb, loadStop, SalesforceRevenovaConstants.PUT_LOAD_STOP_IGNORE_PROPERTIES);
                                 }
                                 loadStopService.save(loadStop);
                                 loadStopBaseAPIResponse.addData(loadStop);
