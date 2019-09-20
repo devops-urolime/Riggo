@@ -69,8 +69,9 @@ public class LoadLineItemController {
                                 if (loadLineItemFromDb.isPresent()) {
                                     BeanUtils.copyProperties(loadLineItemFromDb.get(), loadLineItem, SalesforceRevenovaConstants.PUT_LOAD_LINE_ITEM_IGNORE_PROPERTIES);
                                 }
-                                if(optionalLoad.isPresent()) {
-                                    loadLineItem.setLoadId(optionalLoad.get().getId());
+                                if(loadLineItem.getLoadId() == null) {
+                                    if(loadId != null){ loadLineItem.setLoadId(loadId); }
+                                    if(optionalLoad.isPresent()) { loadLineItem.setLoadId(optionalLoad.get().getId()); }
                                 }
                                 loadLineItemService.save(loadLineItem);
                                 loadLineItemBaseAPIResponse.addData(loadLineItem);
