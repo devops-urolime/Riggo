@@ -35,22 +35,47 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
             response = httpResponse.getBody();
             errorCode = httpResponse.getStatusCode();
             system.debug('--errorCode---'+errorCode);
-            if(errorCode == 401 || errorCode == 403){
+            if(errorCode == 401 ){
                 system.debug('--errorCode---'+errorCode);
                 accessToken =  refreshAccessToken(); 
                 system.debug('--accessToken---'+accessToken);
                 doesTokenReferesh = true;
                 // Again calling end point url with valid token
-                 if(calloutForGetAccessToken <= 5){
+                 if(calloutForGetAccessToken < 5){
                      system.debug('---Calling--'+calloutForGetAccessToken);
                     callRestService(endPointURL,methodName,requestBody,objectName,accessToken);
                 }else{
-                    if(errorCode == 401 || errorCode == 403){
-                        APIExceptionHandler.erroLogCreation(null,httpResponse);   
+                    if(errorCode == 401){
+                        APIExceptionHandler.erroLogCreation(null,httpResponse,requestBody);   
                     }
                 }
                 errorCode = null;
             }
+            if(errorCode == 403){
+                String status = httpResponse.getStatus();
+                if(status != null){
+                    if(status.contains('Access is denied')){
+                        APIExceptionHandler.erroLogCreation(null,httpResponse,requestBody);
+                    }else{
+                        APIExceptionHandler.erroLogCreation(null,httpResponse,requestBody);
+                    }
+                    //string.valueof(http.getStatusCode());
+                }else{
+                    //status is null
+                    APIExceptionHandler.erroLogCreation(null,httpResponse,requestBody);
+                }
+                // write out error to ErrorLog.
+                // write out response to the ErrorLog for each case.
+                // 3 cases : Ed will provide you sample responses from each case. 
+                //    403 is provided by the API Services
+                //            write to LOG REFRESHTOKEN API Service returned a 403.  
+                //    403 is provided by the API Gateway as a glomar response.
+                //            write to LOG REFRESHTOKEN API Gateway glomar returned a 403.
+		// ELSE no matched case
+                //     write to LOG No matched case.
+            }
+            
+            
         } catch(Exception e) {
             system.debug(LoggingLevel.ERROR,'Error when initiating the http Request in callRestService():'+e.getMessage());
         }
@@ -143,7 +168,7 @@ public string setEndpoint = 'https://riggo-staging.auth0.com/oauth/token';
                 }	      		
             }       		
         }catch(Exception e) {
-            APIExceptionHandler.erroLogCreation(e,httpResponse);
+            APIExceptionHandler.erroLogCreation(e,httpResponse,null);
         }
         system.debug(LoggingLevel.DEBUG,'ServiceProxy:initiateHTTPCall'+response);
         return HttpResponse;    
