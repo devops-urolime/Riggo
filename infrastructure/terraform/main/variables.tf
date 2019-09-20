@@ -2,6 +2,17 @@
 #   description = "Region for the VPC"
 #   default = "default"
 # }
+
+#General variables
+
+# variable "wildcard_hostedzone_cert_arn" {
+#   description = "ARN of the certificate for the the hosted zone"
+  
+# }
+
+# variable "hosted_zone_name" {
+#   description = "The hosted zone name created for each environment"
+# }
 #variables for RDS
 variable "read_capacity" {
   # default = "20"
@@ -460,6 +471,8 @@ variable "spring_profile_env" {
 }
 
 
+
+
 #Variables for route53
 
 variable "service_discovery_ttl" {
@@ -468,6 +481,9 @@ variable "service_discovery_ttl" {
   # default     = "60"
 
 }
+
+
+
 
 #variables for Api Gateway
 
@@ -782,3 +798,6 @@ variable "rest_api_name" {
   
 }
 
+# variable "basepath_apigateway" {
+#   description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
+# }

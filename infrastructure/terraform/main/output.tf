@@ -76,6 +76,10 @@ output "rds_instance_endpoint" {
   value = "${module.RDS.db_instance_endpoint}"
 }
 
+output "db_database_name" {
+  value = "${module.RDS.db_database_name}"
+}
+
 output "db_instance_username" {
   value = "${module.RDS.db_instance_username}"
 }

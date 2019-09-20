@@ -61,3 +61,7 @@ output "elb_endpoint" {
 output "ECS_instance_SG" {
   value = "${aws_security_group.ecs-instance-SG.id}"
 }
+
+output "elb_hosted_zone_id" {
+  value = "${aws_lb.ecs-lb.zone_id}"
+}
