@@ -25,7 +25,7 @@ const SubStatuses = ({items}) => {
   return items.map((statusItem, idx2) =>{
      return(
        <div className={`SubStatusBox SubStatus${5-(idx2+1)}`} key={`sub-stack-box-${idx2}`}>
-         <Typography className="CardSummary__label" variant="body2" component="p">
+         <Typography className="SubStatusBox__label" variant="body2" component="p">
            {statusItem.name}, {statusItem.count}
          </Typography>
        </div>

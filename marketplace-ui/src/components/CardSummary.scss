@@ -6,10 +6,11 @@
     color: $card-text !important;
     &__number {
       font-weight: bolder !important;
+      font-size: 28px !important;
     }
     &__label{
         text-transform: lowercase;
-        font-size: 14px !important;
+        font-size: 18px !important;
         &:first-letter{
             text-transform: uppercase;
         }

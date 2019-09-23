@@ -5,12 +5,16 @@
 }
 
 .TitleStack{
-    font-size: 20px !important;
+    font-size: 18px !important;
     line-height: 27px !important;
+    margin-bottom: 6px !important;
 }
 .SubStatusBox{
     color: $primaryDark;
     padding: 5px 5px 5px 15px;
+    &__label{
+        font-size: 14px;
+    }
 }
 .SubStatus1{
     background-color: $stack-sub-status-color-1;
