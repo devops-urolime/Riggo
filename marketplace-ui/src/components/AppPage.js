@@ -28,7 +28,7 @@ class AppPage extends Component{
   render(){
     const { menu, defaultMenu, isLogin} = this.props;
     const {openMenu} = this.state;
-    const TopBarWrapper = () => <TopBar positionAppBar="static" title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>;
+    const TopBarWrapper = ({positionAppBar}) => <TopBar positionAppBar={positionAppBar} title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>;
     const MainContentWrapper = () =>
         <MainContent>
           {
@@ -44,14 +44,12 @@ class AppPage extends Component{
      <div className="App-layout">
          <Grid container spacing={0}>
             <Hidden xsDown implementation="js">
-              <Grid item xs={2}>
-              </Grid>
-              <Grid item xs={10}>
-                 <TopBarWrapper />
+              <Grid item xs={12}>
+                 <TopBarWrapper positionAppBar="fixed"/>
               </Grid>
             </Hidden>
             <Hidden smUp implementation="js">
-              <Grid item xs={12}>
+              <Grid item xs={2}>
                  <SideBar
                    menu={menu}
                    defaultMenu={defaultMenu}
