@@ -7,14 +7,12 @@ import Typography from '@material-ui/core/Typography';
 const CardSummary = ({number, label}) => {
   return (
     <div className="CardSummary CardSummary__MuiPaper-root">
-      <CardContent>
         <Typography className="CardSummary__number" variant="h5" component="h2">
           {number}
         </Typography>
         <Typography className="CardSummary__label" variant="body2" component="p">
           {label}
         </Typography>
-      </CardContent>
     </div>
   );
 };
