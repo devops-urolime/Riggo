@@ -10,7 +10,8 @@ import java.util.Map;
 public enum LoadStopArrivalStatus {
     NO_STATUS(0, "No Status"),
     EARLY(1, "Early"),
-    DELAYED(2, "Late"),
+    ON_TIME(2, "On Time"),
+    DELAYED(3, "Late"),
     ;
 
     private final String displayName;

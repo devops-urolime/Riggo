@@ -88,8 +88,15 @@ public class SalesforceRevenovaRequestBodyParserHelper {
         if (StringUtils.isBlank(dateValue) || StringUtils.equalsIgnoreCase(dateValue, "null")) {
             return null;
         }
+        if(dateValue.length() > 10){
+            dateValue = StringUtils.substring(dateValue,0,10);
+        }
         if(StringUtils.isBlank(timeValue) || StringUtils.equalsIgnoreCase(timeValue, "null")) {
             timeValue = "00:00:00";
+        }
+        if(timeValue.length() == 5)
+        {
+            timeValue = timeValue + ":00";
         }
         return LocalDateTime.parse(dateValue + " " + timeValue, dateTimeFormatter);
     }
