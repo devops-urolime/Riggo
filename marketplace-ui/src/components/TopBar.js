@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Icon, { EXIT_ICON, MENU_ICON, USER_ACCOUNT_ICON } from './Icon';
+import Icon, { EXIT_ICON, USER_ACCOUNT_ICON } from './Icon';
 import './TopBar.scss';
 import { withRouter } from 'react-router-dom';
 import { APP_PATH_LOGIN } from '../config';
