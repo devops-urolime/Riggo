@@ -31,6 +31,7 @@ const Section = ({ top, content }) =>{
           </Grid>
           <Grid
             container
+            spacing={4}
             direction="row"
             justify="center"
             alignItems="center"

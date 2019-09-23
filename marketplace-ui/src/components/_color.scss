@@ -4,7 +4,10 @@
 $primary: #0d103a;
 $primaryDark: #1D1E2F;
 $primaryLight: #ffffff;
-$secondaryDark: #6d50e7;
+$secondaryDark: #6d50e8;
+$secondaryDarkSub1: #8b73ed;
+$secondaryDarkSub2: #a796f2;
+$secondaryDarkSub3: #c5b9f7;
 $secondaryLight: #eee6fb;
 $secondaryLighter: #23263B;
 $neutralDark: #51525a;
@@ -28,4 +31,8 @@ $menu-background-color: $primary;
 $menu-text-color: $primaryLight;
 $side-bar-background-color: $primary;
 $divider-section-color: $neutralLight;
+$stack-sub-status-color-1: $secondaryDark;
+$stack-sub-status-color-2: $secondaryDarkSub1;
+$stack-sub-status-color-3: $secondaryDarkSub2;
+$stack-sub-status-color-4: $secondaryDarkSub3;
 

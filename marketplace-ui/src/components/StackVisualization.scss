@@ -1,0 +1,29 @@
+@import 'base.scss';
+
+.StackVisualization{
+
+}
+
+.TitleStack{
+    font-size: 20px !important;
+    line-height: 27px !important;
+}
+.SubStatusBox{
+    color: $primaryDark;
+    padding: 5px 5px 5px 15px;
+}
+.SubStatus1{
+    background-color: $stack-sub-status-color-1;
+    color: $primaryLight;
+}
+.SubStatus2{
+    background-color: $stack-sub-status-color-2;
+}
+.SubStatus3{
+    background-color: $stack-sub-status-color-3;
+}
+.SubStatus4{
+    background-color: $stack-sub-status-color-4;
+}
+
+
