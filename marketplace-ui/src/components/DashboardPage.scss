@@ -15,45 +15,15 @@ $SectionsVisualizationWidthLg: 860px;
 
 .ShipmentsVisualization{
     height: 290px;
-    width: $SectionsVisualizationWidth;
     padding-top: 10px;
-    @media (min-width: $md-min-width) {
-        width: $SectionsVisualizationWidthMd;
-    }
-    @media (min-width: $lg-min-width) {
-        width: $SectionsVisualizationWidthLg;
-    }
-    @media (min-width: $xl-min-width) {
-        width: $SectionsVisualizationWidthXl;
-    }
 }
 
 .StatusVisualization{
     height: 250px;
-    width: $SectionsVisualizationWidth;
-    @media (min-width: $md-min-width) {
-        width: $SectionsVisualizationWidthMd;
-    }
-    @media (min-width: $lg-min-width) {
-        width: $SectionsVisualizationWidthLg;
-    }
-    @media (min-width: $xl-min-width) {
-        width: $SectionsVisualizationWidthXl;
-    }
 }
 
 .PerformancePickUpVisualization{
     height: 350px;
-    width: $SectionsVisualizationWidth;
-    @media (min-width: $md-min-width) {
-        width: $SectionsVisualizationWidthMd;
-    }
-    @media (min-width: $lg-min-width) {
-        width: $SectionsVisualizationWidthLg;
-    }
-    @media (min-width: $xl-min-width) {
-        width: $SectionsVisualizationWidthXl;
-    }
 }
 
 

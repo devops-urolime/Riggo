@@ -1,28 +1,38 @@
 
 
 // Main Palette of Colors
-$primary: #272E4D;
+$primary: #0d103a;
 $primaryDark: #1D1E2F;
-$primaryLight: #2549AB;
-$secondaryDark: #000000;
-$secondaryLight: #266FF1;
+$primaryLight: #ffffff;
+$secondaryDark: #6d50e8;
+$secondaryDarkSub1: #8b73ed;
+$secondaryDarkSub2: #a796f2;
+$secondaryDarkSub3: #c5b9f7;
+$secondaryLight: #eee6fb;
 $secondaryLighter: #23263B;
-$neutralDark: #fff;
+$neutralDark: #51525a;
 $neutralDarker: transparent;
-$neutralLight: #3F4664;
+$neutralLight: #46464d;
 
 // Component Colors
-$app-background: $primaryDark;
+$app-background: $secondaryLight;
 $general-text: $neutralDark;
 $general-text-tooltip: $secondaryDark;
-$card-background: $primaryLight;
+$card-background: $secondaryDark;
+$card-text: $primaryLight;
 $icon-fill-color: $neutralDark;
-$top-bar-color: $primary;
+$top-bar-color: $primaryLight;
 $login-overlay-color: $primaryDark;
 $login-btn-color: $secondaryLight;
 $input-border-color: $neutralLight;
 $input-background-color: $neutralDarker;
-$paper-section: $secondaryLighter;
-$menu-background-color: $secondaryLight;
-$side-bar-background-color: $secondaryLight;
+$paper-section: $primaryLight;
+$menu-background-color: $primary;
+$menu-text-color: $primaryLight;
+$side-bar-background-color: $primary;
+$divider-section-color: $neutralLight;
+$stack-sub-status-color-1: $secondaryDark;
+$stack-sub-status-color-2: $secondaryDarkSub1;
+$stack-sub-status-color-3: $secondaryDarkSub2;
+$stack-sub-status-color-4: $secondaryDarkSub3;
 
