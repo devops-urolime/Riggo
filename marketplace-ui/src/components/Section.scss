@@ -9,5 +9,11 @@
         background-color: $paper-section !important;
         font-family: $main-font-family !important;
         color: $general-text !important;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .MuiDivider-root{
+        background: $divider-section-color;
+        margin-bottom: 25px;
     }
 }
