@@ -44,7 +44,6 @@ class AppPage extends Component{
      <div className="App-layout">
          <Grid container spacing={0}>
             <Hidden xsDown implementation="js">
-              <Grid item xs={12} />
               <Grid item xs={12}>
                  <TopBarWrapper positionAppBar="fixed"/>
               </Grid>

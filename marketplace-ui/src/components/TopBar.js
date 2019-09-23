@@ -28,12 +28,6 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick, positionAppBar}
     <div className={classes.root}>
       <AppBar className="TopBar" position={positionAppBar}>
         <Toolbar>
-          {isLogin &&
-           <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton}
-                       color="inherit" aria-label="Menu">
-             <Icon name={MENU_ICON}/>
-           </IconButton>
-          }
           <Typography variant="h6" className={classes.title}>
             {isLogin && title}
           </Typography>
