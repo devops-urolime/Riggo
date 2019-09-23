@@ -77,11 +77,6 @@ class AppPage extends Component{
               <MainContentWrapper/>
             </Grid>
            </Hidden>
-           <Hidden smDown implementation="js">
-             <Grid item xs={12}>
-               <MainContentWrapper/>
-             </Grid>
-           </Hidden>
          </Grid>
      </div>
     );
