@@ -11,7 +11,7 @@ const Section = ({ top, content }) =>{
     <Grid
       container
       spacing={0}
-      direction="column"
+      direction="row"
       alignItems="center"
       className="Section"
     >
