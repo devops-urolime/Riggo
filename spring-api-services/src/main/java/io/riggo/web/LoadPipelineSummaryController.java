@@ -36,7 +36,7 @@ public class LoadPipelineSummaryController {
     @ResponseBody
     public BaseAPIResponse<LoadPipelineData> getPipelineSummary() throws ResourceNotFoundException{
         Optional<List<LoadPipeline>> loadPipelineList = null;
-        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
+        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() || authenticationFacade.isMachine()) {
             loadPipelineList = loadPipelineService.findPipelineSummaryBySiteId(authenticationFacade.getSiteId());
         }
         else if(authenticationFacade.isShipperExecutive())

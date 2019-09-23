@@ -1,0 +1,1 @@
+ALTER TABLE equipment_type ADD CONSTRAINT unique_equipment_type_ext_sys_id_site_id UNIQUE (ext_sys_id, site_id);
