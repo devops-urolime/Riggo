@@ -19,13 +19,13 @@ const getPolicyDocument = (effect, resource) => {
 
 // extract and return the Bearer Token from the Lambda event parameters
 const getToken = (params) => {
-    if (!params.type || params.type !== 'TOKEN') {
-        throw new Error('Expected "event.type" parameter to have value "TOKEN"');
+    if (!params.headers.Authorization) {
+        throw new Error('Expected Authorization header to have value "TOKEN"');
     }
 
-    const tokenString = params.authorizationToken;
+    const tokenString = params.headers.Authorization;
     if (!tokenString) {
-        throw new Error('Expected "event.authorizationToken" parameter to be set');
+        throw new Error('Expected "headers.Authorization" parameter to be set');
     }
 
     const match = tokenString.match(/^Bearer (.*)$/);
@@ -34,11 +34,6 @@ const getToken = (params) => {
     }
     return match[1];
 }
-
-const jwtOptions = {
-    audience: process.env.AUDIENCE,
-    issuer: process.env.TOKEN_ISSUER
-};
 
 module.exports.authenticate = (params) => {
     console.log(params);
@@ -53,14 +48,17 @@ module.exports.authenticate = (params) => {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 10, // Default value
-        jwksUri: process.env.JWKS_URI
+        jwksUri: params.stageVariables.AUTH0_JWKS_URI
     });
 
     const getSigningKey = util.promisify(client.getSigningKey);
     return getSigningKey(decoded.header.kid)
         .then((key) => {
             const signingKey = key.publicKey || key.rsaPublicKey;
-            return jwt.verify(token, signingKey, jwtOptions);
+            return jwt.verify(token, signingKey, {
+                audience: params.stageVariables.AUTH0_AUDIENCE,
+                issuer: params.stageVariables.AUTH0_TOKEN_ISSUER
+            });
         })
         .then((decoded)=> ({
             principalId: decoded.sub,
