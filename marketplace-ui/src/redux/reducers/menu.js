@@ -1,4 +1,4 @@
-import { GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
+import { GET_MENU_SUCCESS, SET_CURRENT_MENU, SET_DEFAULT_MENU } from '../actions/menu';
 import { createSelector } from 'reselect';
 
 const initState = {
@@ -18,6 +18,11 @@ export default function(state = initState, action) {
       return {
         ...state,
         defaultMenu: action.menuItem
+      };
+    case SET_CURRENT_MENU:
+      return {
+        ...state,
+        current: action.menu
       };
     default:
       return state;

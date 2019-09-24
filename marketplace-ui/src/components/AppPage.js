@@ -18,15 +18,17 @@ class AppPage extends Component{
   closeMenu(){
     this.setState({openMenu:false});
   }
+  onClickMenuItem(menuItem){
+    this.props.saveCurrentMenu(menuItem);
+  }
   openMenu(){
     this.setState({openMenu:true});
   }
   componentDidMount() {
-    const {loadMenu } = this.props;
-    loadMenu();
+    this.props.loadMenu();
   }
   render(){
-    const { menu, defaultMenu, isLogin} = this.props;
+    const { menu, defaultMenu, isLogin, currentMenu} = this.props;
     const {openMenu} = this.state;
     const TopBarWrapper = ({positionAppBar}) => <TopBar positionAppBar={positionAppBar} title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>;
     const MainContentWrapper = () =>
@@ -70,7 +72,9 @@ class AppPage extends Component{
                   defaultMenu={defaultMenu}
                   isOpen={true}
                   handleClose={()=> this.closeMenu()}
+                  onClickMenuItem={(item) => this.onClickMenuItem(item)}
                   variant="permanent"
+                  currentMenu={currentMenu}
                 />
              </Grid>
            </Hidden>
@@ -87,8 +91,10 @@ class AppPage extends Component{
 
 AppPage.propTypes = {
   loadMenu: PropTypes.func,
+  saveCurrentMenu: PropTypes.func,
   menu: PropTypes.array,
   defaultMenu: PropTypes.object,
+  currentMenu: PropTypes.object,
   isLogin: PropTypes.bool,
 };
 

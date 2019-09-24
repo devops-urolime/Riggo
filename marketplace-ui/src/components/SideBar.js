@@ -8,7 +8,7 @@ import Icon, { MENU_ICON } from './Icon';
 
 class SideBar extends Component {
   render(){
-    const {isOpen, handleClose, menu, defaultMenu, variant} = this.props;
+    const {isOpen, handleClose, onClickMenuItem, menu, defaultMenu, variant, currentMenu} = this.props;
     return (
         <div>
           <Drawer
@@ -21,7 +21,15 @@ class SideBar extends Component {
               <Icon name={MENU_ICON}/>
             </nav>
             <Divider />
-            <MenuContent onClick={handleClose} menu={menu} defaultMenu={defaultMenu}/>
+            <MenuContent
+              menu={menu}
+              defaultMenu={defaultMenu}
+              onClickMenuItem={(menuItem)=>{
+                handleClose();
+                onClickMenuItem(menuItem);
+              }}
+              currentMenu={currentMenu}
+            />
           </Drawer>
         </div>
       );
@@ -31,8 +39,10 @@ class SideBar extends Component {
 SideBar.propTypes = {
   isOpen: PropTypes.bool,
   handleClose: PropTypes.func,
+  onClickMenuItem: PropTypes.func,
   menu: PropTypes.array,
   defaultMenu: PropTypes.object,
+  currentMenu: PropTypes.object,
   variant: PropTypes.string,
 };
 
