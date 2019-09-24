@@ -3,4 +3,7 @@
 .MenuContent{
     background: $menu-background-color !important;
     color: $menu-text-color;
+    .MuiListItemIcon-root{
+        min-width: 38px;
+    }
 }

@@ -13,9 +13,10 @@ public class SalesforceRevenovaLoadStopCarrierStatusResolver implements LoadStop
 
     @Override
     public LoadStopCarrierStatus resolveLoadStopCarrierStatus(Map<String, Object> parameters) {
-        if(StringUtils.isNotBlank((String) parameters.get(LOAD_STOP_CARRIER_STATUS))) {
-            return LoadStopCarrierStatus.fromDisplayName((String) parameters.get(LOAD_STOP_CARRIER_STATUS));
+        LoadStopCarrierStatus loadStopCarrierStatus = null;
+        if(StringUtils.isNotBlank((String) parameters.get(LOAD_STOP_CARRIER_STATUS))){
+            loadStopCarrierStatus = LoadStopCarrierStatus.fromDisplayName((String) parameters.get(LOAD_STOP_CARRIER_STATUS));
         }
-        return LoadStopCarrierStatus.NO_STATUS;
+        return loadStopCarrierStatus != null ? loadStopCarrierStatus : LoadStopCarrierStatus.NO_STATUS;
     }
 }

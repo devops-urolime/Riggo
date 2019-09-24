@@ -42,15 +42,18 @@ class AppPage extends Component{
     ;
     return (
      <div className="App-layout">
-         <Grid container spacing={0}>
+         <Grid
+           container
+           spacing={0}
+           justify="flex-end"
+         >
             <Hidden xsDown implementation="js">
-              <Grid item xs={12} />
               <Grid item xs={12}>
                  <TopBarWrapper positionAppBar="fixed"/>
               </Grid>
             </Hidden>
             <Hidden smUp implementation="js">
-              <Grid item xs={2}>
+              <Grid item xs={1}>
                  <SideBar
                    menu={menu}
                    defaultMenu={defaultMenu}

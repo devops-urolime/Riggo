@@ -33,7 +33,6 @@ const SubStatuses = ({items}) => {
    });
 };
 const StackVisualization = ({data, rootClass}) => {
-   console.log(data);
    return (
        <Grid
          container

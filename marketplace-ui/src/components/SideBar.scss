@@ -13,9 +13,15 @@
     }
     &__Header{
        display: flex;
-        padding: 0 8px;
-        align-items: center;
-        justify-content: flex-start;
+    }
+    .MuiDivider-root{
+        background-color: #4d5176;
+        margin-left: 17px;
+        margin-right: 12px;
+        min-width: 161px;
+    }
+    svg{
+        height: 64px;
     }
 }
 

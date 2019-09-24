@@ -347,30 +347,34 @@ class DashboardPage extends Component {
               }
             }
           />
-          <Section
-            top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
-            content={()=>
-              <Grid item xs={12}>
-                <PieVisualization
-                  data={stopSummaryPickUpPie}
-                  rootClass="PerformancePickUpVisualization"
-                  colorsScheme={NIVO}
-                />
-              </Grid>
-            }
-          />
-          <Section
-            top={()=> <TitleSection label="On Time Performance - Delivery"/> }
-            content={() =>
-              <Grid item xs={12}>
-                <PieVisualization
-                  data={stopSummaryDeliveryPie}
-                  rootClass="PerformancePickUpVisualization"
-                  colorsScheme={DARK2}
-                />
-              </Grid>
-            }
-          />
+          <Grid item xs={6}>
+            <Section
+              top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
+              content={()=>
+                <Grid item xs={12}>
+                  <PieVisualization
+                    data={stopSummaryPickUpPie}
+                    rootClass="PerformancePickUpVisualization"
+                    colorsScheme={NIVO}
+                  />
+                </Grid>
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Section
+              top={()=> <TitleSection label="On Time Performance - Delivery"/> }
+              content={() =>
+                <Grid item xs={12}>
+                  <PieVisualization
+                    data={stopSummaryDeliveryPie}
+                    rootClass="PerformancePickUpVisualization"
+                    colorsScheme={DARK2}
+                  />
+                </Grid>
+              }
+            />
+          </Grid>
         </Grid>
       );
   }

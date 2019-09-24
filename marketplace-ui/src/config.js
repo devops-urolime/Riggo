@@ -1,4 +1,4 @@
-export const BASE_END_POINT='https://o0de6p7v3h.execute-api.us-west-2.amazonaws.com/qa';
+export const BASE_END_POINT= process.env.REACT_APP_BASE_END_POINT;
 export const EMPTY_JWT_ERROR_MESSAGE='There is no JWT access token to make calls to the APIs';
 export const STATUS_401_ERROR_MESSAGE='Calls to the API return 401 Unauthorized';
 export const STATUS_400_ERROR_MESSAGE='Calls to the API return 400 Bad Request';
