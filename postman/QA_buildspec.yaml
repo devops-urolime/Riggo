@@ -10,7 +10,7 @@ phases:
   build:
     commands:
       - cd postman
-      - newman run -r html,cli sample_service.postman_collection -e QA.postman_environment.json  --reporter-html-export report.html
+      - newman run -r html,cli RiggoAPI.postman_collection.json -e QA.postman_environment.json  --reporter-html-export report.html
 
 artifacts:
   files:
