@@ -13,7 +13,7 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
+import LineDivider, { VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 
