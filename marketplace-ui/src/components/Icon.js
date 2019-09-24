@@ -56,10 +56,10 @@ const getIcon = (name) => {
       );
     case MENU_ICON:
       return (
-        <svg width="204" height="134" viewBox="0 0 204 134" fill="none"
+        <svg width="104" height="134" viewBox="0 0 204 134" fill="none"
                              xmlns="http://www.w3.org/2000/svg"
                              xmlnsXlink="http://www.w3.org/1999/xlink">
-          <rect width="204" height="134" fill="url(#pattern0)"/>
+          <rect width="214" height="144" fill="url(#pattern0)"/>
           <defs>
             <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1"
                      height="1">
