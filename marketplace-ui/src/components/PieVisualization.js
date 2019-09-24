@@ -55,14 +55,14 @@ const PieVisualization = ({ data, rootClass, colorsScheme}) => {
     <div className={"PieVisualization " +rootClass}>
       <ResponsivePie
               tooltip= {customLabelFormat}
-              colors={{ scheme: colorsScheme }}
+              colors={["#6756e0","#5ac36e","#2411bf"]}
               data={data}
               margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
               sortByValue={true}
-              innerRadius={0.75}
+              innerRadius={0.50}
               padAngle={0.7}
               enableRadialLabels={false}
-              sliceLabel={(item) => `${item.value}`}
+              sliceLabel={(item) => `${item.value}%`}
               slicesLabelsSkipAngle={10}
               slicesLabelsTextColor="#333333"
               animate={true}

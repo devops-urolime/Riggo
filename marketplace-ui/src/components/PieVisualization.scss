@@ -1,7 +1,10 @@
 @import 'base.scss';
 
 .PieVisualization{
-    text{
+    g g:nth-of-type(1) g text{
+        fill: $primaryLight !important;
+    }
+    g g:nth-of-type(2) text{
         fill: $general-text !important;
     }
     div > div > div {

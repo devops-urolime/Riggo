@@ -13,12 +13,13 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
+import LineDivider, { VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
+const NO_STATUS = "No Status";
 
 const digestDataToCardVisualization = (data) => {
   return data.map((item) => {
@@ -46,7 +47,7 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
   if (isData){
     const data = dataToDigest[0].data;
     const totalAmount =  data.reduce(reducerTotal, 0);
-    result = data.map((item) => {
+    result = data.filter((itemData) => itemData.name !== NO_STATUS).map((item) => {
      return {
        id: item.name,
        label: item.name,
