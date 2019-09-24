@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
 import './SideBar.scss';
-import Icon, { LOGO_MAIN_LOGIN, MENU_ICON } from './Icon';
+import Icon, { MENU_ICON } from './Icon';
 
 class SideBar extends Component {
   render(){
