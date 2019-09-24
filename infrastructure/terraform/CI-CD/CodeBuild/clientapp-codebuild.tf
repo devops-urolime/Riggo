@@ -64,6 +64,10 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
       value = "${var.cloudfront_distribution_id}"
     }
     
+    environment_variable {
+      name = "REACT_APP_BASE_END_POINT"
+      value = "${var.apigateway_invoke_url}"
+    }
     #  dynamic "environment_variable" {
     #   for_each = var.environment_variables["clientapp"]
     #   content {

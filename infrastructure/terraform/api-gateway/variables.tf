@@ -26,6 +26,20 @@ variable "rest_api_name" {
   
 }
 
+variable "authorizer_auth0_audience" {
+  
+}
+
+variable "authorizer_auth0_jwks_uri" {
+  
+}
+
+variable "authorizer_auth0_token_issuer" {
+  
+}
+
+
+
 # variable "custom_name_cert" {
   
 # }

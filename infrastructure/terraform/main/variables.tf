@@ -798,6 +798,24 @@ variable "rest_api_name" {
   
 }
 
+
+variable "authorizer_auth0_audience" {
+  type = "string"
+  description = "api gateway authorizers AUTH0 AUDIENCE stage variable for lambda authorizer"
+  
+}
+
+variable "authorizer_auth0_jwks_uri" {
+  type = "string"
+  description = "api gateway authorizers AUTH0 JWKS URI stage variable for lambda function"
+}
+
+variable "authorizer_auth0_token_issuer" {
+  type = "string"
+  description = "api gateway authorizers AUTH0 TOKEN ISSSUER stage variable for lambda function"
+}
+
+
 # variable "basepath_apigateway" {
 #   description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
 # }

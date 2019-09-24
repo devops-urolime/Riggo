@@ -187,4 +187,9 @@ github_branch_name = {
 #variables for api gateway
 
 rest_api_name = "Riggo Platform API"
+
+#stage variables for lambda authorizer
+authorizer_auth0_audience = "load-resource-api"
+authorizer_auth0_jwks_uri = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+authorizer_auth0_token_issuer = "https://riggo-staging.auth0.com/"
 # basepath_apigateway = "v1"

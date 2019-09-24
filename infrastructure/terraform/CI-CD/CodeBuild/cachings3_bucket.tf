@@ -10,14 +10,14 @@ resource "aws_s3_bucket" "codebuild_caching_s3_bucket" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "codebuild_caching_s3_bucket" {
+resource "aws_s3_bucket_public_access_block" "codebuild_caching_s3_bucket-denied" {
 
-  bucket = "${aws_s3_bucket_public_access_block.codebuild_caching_s3_bucket.id}"
+  bucket = "${aws_s3_bucket.codebuild_caching_s3_bucket.id}"
 
   block_public_acls = true
   block_public_policy = true
   ignore_public_acls      = true
   restrict_public_buckets = true
   depends_on = [
-  "aws_s3_bucket_public_access_block.codebuild_caching_s3_bucket"]
+  "aws_s3_bucket.codebuild_caching_s3_bucket"]
 }

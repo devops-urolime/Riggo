@@ -53,6 +53,10 @@ resource "aws_api_gateway_stage" "stage" {
 
   variables = {
      "elb_url" = "${var.elb_endpoint}"
+     "AUTH0_AUDIENCE" = "${var.authorizer_auth0_audience}"
+     "AUTH0_JWKS_URI" = "${var.authorizer_auth0_jwks_uri}"
+     "AUTH0_TOKEN_ISSUER" = "${var.authorizer_auth0_token_issuer}"
+     "ENV" = "${terraform.workspace}"
   }
 }
 
