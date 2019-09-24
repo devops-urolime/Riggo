@@ -8,6 +8,23 @@
   span{
     font-size: 11px;
   }
+  .recharts-bar-rectangle path{
+    fill: $multiAxesVisualizationBarColor !important;
+  }
+  .recharts-legend-item.legend-item-0 .recharts-symbols{
+    fill: $multiAxesVisualizationBarColor !important;
+  }
+  .recharts-line-curve{
+    stroke: $multiAxesVisualizationLineColor !important;
+  }
+  .recharts-legend-item.legend-item-1 .recharts-symbols{
+    fill: $multiAxesVisualizationLineColor !important;
+  }
+  .recharts-default-legend{
+      margin-left: 8% !important;
+      padding-top: 10px !important;
+      position: absolute;
+  }
 }
 
 .TitleVisualization{

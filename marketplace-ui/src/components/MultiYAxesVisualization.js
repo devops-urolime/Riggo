@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ComposedChart, Line, Bar, XAxis, YAxis, Legend, ResponsiveContainer
 } from 'recharts';
-
 import './MultiYAxesVisualization.scss';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -83,20 +82,18 @@ const MultiYAxesVisualization = ({
             <YAxis yAxisId="right" orientation="right" />
             <Legend
               iconType="square"
-              align="center"
+              align="left"
             />
             <Bar
               yAxisId="left"
               dataKey="Shipment Delivered"
-              barSize={20}
-              fill="#FECEA8"
+              barSize={60}
               onClick={onClickBar}
             />
             <Line
               yAxisId="right"
               type="monotone"
               dataKey="Cost Per Mile"
-              stroke="#E84B5E"
             />
           </ComposedChart>
       </ResponsiveContainer>
