@@ -316,32 +316,40 @@ class DashboardPage extends Component {
                shipmentSummaryMultiYAxes.map((summaryItem, idx) =>{
                  return(
                    <Grid item xs={12} key={`shipment-viz-${idx}`}>
-                     <MultiYAxesVisualization
-                       title={summaryItem.title}
-                       data={summaryItem.data}
-                       onClickBar={this.navigateToNextViewType}
-                       onClickBack={this.navigateToPrevViewType}
-                       onClickNext={this.navigateToNextViewType}
-                       rootClass="ShipmentsVisualization"
-                       showNext={showNext}
-                       showPrev={showPrev}
-                     />
-                     <LineDivider
-                      orientation={HORIZONTAL_LINE}
-                     />
-                     <TotalSummary
-                       title="Total Shipments In Period"
-                       legend={`${summaryItem.totalShipmentsInPeriod}`}
-                     />
-                     <TotalSummary
-                       title="Total Cost In Period"
-                       legend={`$${summaryItem.totalCostInPeriod}`}
-                     />
-                     <TotalSummary
-                       title="Cost/ml In Period"
-                       legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-                     />
-                   </Grid>
+                     <Grid
+                       container
+                       spacing={0}
+                       direction="row"
+                       alignItems="center"
+                     >
+                        <Grid xs={9} item>
+                           <MultiYAxesVisualization
+                             title={summaryItem.title}
+                             data={summaryItem.data}
+                             onClickBar={this.navigateToNextViewType}
+                             onClickBack={this.navigateToPrevViewType}
+                             onClickNext={this.navigateToNextViewType}
+                             rootClass="ShipmentsVisualization"
+                             showNext={showNext}
+                             showPrev={showPrev}
+                           />
+                        </Grid>
+                        <Grid xs={3} item>
+                            <TotalSummary
+                            title="Total Shipments In Period"
+                            legend={`${summaryItem.totalShipmentsInPeriod}`}
+                            />
+                            <TotalSummary
+                            title="Total Cost In Period"
+                            legend={`$${summaryItem.totalCostInPeriod}`}
+                            />
+                            <TotalSummary
+                            title="Cost/ml In Period"
+                            legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+                            />
+                        </Grid>
+                    </Grid>
+                  </Grid>
                 )
                });
               }
