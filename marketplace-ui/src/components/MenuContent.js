@@ -14,7 +14,7 @@ const translateUrlCode = (urlCode) => {
   return (url) ? url : APP_PATH_DASHBOARD;
 };
 
-const MenuContent = ({ menu, history, onClick }) => {
+const MenuContent = ({ menu, history, onClickMenuItem, currentMenu }) => {
   return (
       <List className="MenuContent">
         {
@@ -22,10 +22,15 @@ const MenuContent = ({ menu, history, onClick }) => {
           menu.map((menuItem, idx) => {
             const {name, icon, url } = menuItem;
             return (
-              <ListItem onClick={()=> {
-                history.push(translateUrlCode(url));
-                onClick();
-              }} key={`menu-item-custom-${idx}`} button>
+              <ListItem
+                onClick={()=> {
+                  history.push(translateUrlCode(url));
+                  onClickMenuItem(menuItem);
+                }}
+                className={( currentMenu && currentMenu.id === menuItem.id) ? "MenuContent--active":""}
+                key={`menu-item-custom-${idx}`}
+                button
+              >
                 <ListItemIcon>
                   <Icon name={icon}/>
                 </ListItemIcon>
@@ -41,8 +46,8 @@ const MenuContent = ({ menu, history, onClick }) => {
 MenuContent.propTypes = {
   menu: PropTypes.array,
   history: PropTypes.object,
-  defaultMenu: PropTypes.object,
-  onClick: PropTypes.func,
+  currentMenu: PropTypes.object,
+  onClickMenuItem: PropTypes.func,
 };
 
 export default withRouter(MenuContent);
