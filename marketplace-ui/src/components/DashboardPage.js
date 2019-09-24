@@ -13,7 +13,7 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
+import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 
@@ -322,7 +322,7 @@ class DashboardPage extends Component {
                        direction="row"
                        alignItems="center"
                      >
-                        <Grid xs={9} item>
+                        <Grid xs={8} item>
                            <MultiYAxesVisualization
                              title={summaryItem.title}
                              data={summaryItem.data}
@@ -333,6 +333,9 @@ class DashboardPage extends Component {
                              showNext={showNext}
                              showPrev={showPrev}
                            />
+                        </Grid>
+                        <Grid xs={1} item>
+                          <LineDivider orientation={VERTICAL_LINE}/>
                         </Grid>
                         <Grid xs={3} item>
                             <TotalSummary

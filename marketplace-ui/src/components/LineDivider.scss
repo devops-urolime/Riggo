@@ -1,15 +1,15 @@
 @import 'base.scss';
 
 .LineDivider{
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    margin: 12px 10px;
-    opacity: 0.3;
+    border: none;
+    margin: 0 40px;
+
     &--horizontal{
-        border-bottom: 1px solid #FFFFFF;
+        border-bottom: 1px solid #ccc;
     }
     &--vertical{
-
+        border-right: 1px solid #ccc;
+        height: 290px;
+        padding: 1px;
     }
 }
