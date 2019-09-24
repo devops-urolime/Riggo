@@ -59,7 +59,7 @@ const menuMockData = {
           "parentMenuId": 0,
           "urlCode":"billing",
           "rank": 4,
-          "icon": "reports"
+          "icon": "billing"
         }
     ]
 };
