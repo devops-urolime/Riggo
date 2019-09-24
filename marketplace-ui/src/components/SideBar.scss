@@ -10,6 +10,7 @@
     }
     .MuiPaper-root{
         background: $side-bar-background-color !important;
+        border: 0;
     }
     &__Header{
        display: flex;
