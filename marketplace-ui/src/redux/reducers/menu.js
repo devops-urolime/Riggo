@@ -17,7 +17,8 @@ export default function(state = initState, action) {
     case SET_DEFAULT_MENU:
       return {
         ...state,
-        defaultMenu: action.menuItem
+        defaultMenu: action.menuItem,
+        current: action.menuItem
       };
     case SET_CURRENT_MENU:
       return {
