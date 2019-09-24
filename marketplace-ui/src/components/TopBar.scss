@@ -3,4 +3,12 @@
 .TopBar{
   background: $top-bar-color !important;
   padding-left: 17% !important;
+  .Icon__Shape{
+      fill: $primary;
+  }
+  .MuiIconButton-label{
+    padding-top: 10px;
+  }
 }
+
+
