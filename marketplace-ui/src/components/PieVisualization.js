@@ -59,10 +59,10 @@ const PieVisualization = ({ data, rootClass, colorsScheme}) => {
               data={data}
               margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
               sortByValue={true}
-              innerRadius={0.75}
+              innerRadius={0.50}
               padAngle={0.7}
               enableRadialLabels={false}
-              sliceLabel={(item) => `${item.value}`}
+              sliceLabel={(item) => `${item.value}%`}
               slicesLabelsSkipAngle={10}
               slicesLabelsTextColor="#333333"
               animate={true}
