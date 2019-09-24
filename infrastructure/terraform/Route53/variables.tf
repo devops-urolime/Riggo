@@ -11,9 +11,24 @@ variable "service_discovery_ttl" {
 }
 
 
-# variable "hosted_zone_name" {
+variable "hosted_zone_name" {
   
-# }
+}
+
+variable "cloudfront_alias_name" {
+  
+}
+
+variable "cloudfront_domain_name" {
+  
+}
+
+variable "cloudfront_zone_id" {
+  
+}
+
+
+
 
 # variable "elb_dns_name" {
   
