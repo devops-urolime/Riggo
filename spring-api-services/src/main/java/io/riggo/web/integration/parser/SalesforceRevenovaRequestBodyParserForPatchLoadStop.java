@@ -58,7 +58,7 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
             loadStop.setExpectedDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("Stoprtms__Expected_Date__c", loadStopMap));
             loadStop.setAppointmentRequired(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("Stoprtms__Appointment_Required__c", loadStopMap));
             loadStop.setAppointmentTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Appointment_Time__c", loadStopMap));
-            loadStop.setArrivalDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDate("Stoprtms__Arrival_Date__c", loadStopMap));
+            loadStop.setArrivalDate(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("Stoprtms__Arrival_Date__c", loadStopMap));
             loadStop.setDepartureDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTimeFrom2Keys ("Stoprtms__Departure_Date__c", "Stoprtms__Departure_Time__c", loadStopMap));
 
 
@@ -71,7 +71,7 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
             loadStop.setCarrierStatus(salesforceRevenovaLoadStopCarrierStatusResolver.resolveLoadStopCarrierStatus(loadStopCarrierStatusResolverMap).getColVal());
 
             Map<String, Object> loadStopArrivalStatusResolverMap = new HashMap<>();
-            loadStopArrivalStatusResolverMap.put(SalesforceRevenovaLoadStopArrivalStatusResolver.LOAD_STOP_ARRIVAL_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Arrival_Status__c", loadStopMap));
+            loadStopArrivalStatusResolverMap.put(SalesforceRevenovaLoadStopArrivalStatusResolver.LOAD_STOP_ARRIVAL_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("Stoprtms__Status__c", loadStopMap));
             loadStop.setArrivalStatus(salesforceRevenovaLoadStopArrivalStatusResolver.resolveLoadStopArrivalStatus(loadStopArrivalStatusResolverMap).getColVal());
 
             Location location = new Location();

@@ -1,8 +1,56 @@
 {
-    "type" : "TOKEN",
-    "authorizationToken" : "Bearer 111eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IlFrUkJOelpETWpFeU1ESkNNRFpGTWpSRE1UYzRSVVpCTWtVNU56ZzFNemc0UmpZMFEwWTFNdyJ9eyJpc3MiOiJodHRwczovL3JpZ2dvLXN0YWdpbmcuYXV0aDAuY29tLyIsInN1YiI6IkVab2RkNFlXc1BPN0ZQNkpSell5ZU1VajhZY0J2Yno1QGNsaWVudHMiLCJhdWQiOiJsb2FkLXJlc291cmNlLWFwaSIsImlhdCI6MTU2MDUyNzU1MCwiZXhwIjoxNTYwNjEzOTUwLCJhenAiOiJFWm9kZDRZV3NQTzdGUDZKUnpZeWVNVWo4WWNCdmJ6NSIsInNjb3BlIjoicmVhZDpsb2FkIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.LCbmL4dQQJeKGTH0maN8dhnFzfD7tu6wxHsZRHIOQiawC7PY5b8bPsx8m8AezlpILxa5PxemUW-SfNgqYh_3EZaN2aDdtfCmCpA32x7HkvLIfJTXRgsee0HsCGk4xPwFsEBpaWtzGciIUsRYngLsxfT4lCvwUlbD6X8U75-aD910vqoQ3pKjyYikg6w3Iq4HirYNTaMwgXSFJ0CyAFs8QEx-MJbQCEBkdC2cuonLmjYuMBUrQcISuMAGWMCScGvZi54Vg2YxjeyoUkfxwckxrrj7Q71MEzd84hbHjA5M4a4Wzhhcu6WZ_obXjj11-RACKvgFkGiscl-B1Tk3GatB_A"
-
-,
-
-    "methodArn":"arn:aws:execute-api:us-west-2:845657178663:iwspihms22/*/GET/load"
+    "type": "REQUEST",
+    "methodArn": "arn:aws:execute-api:us-west-2:845657178663:o0de6p7v3h/ESTestInvoke-stage/GET/",
+    "resource": "/",
+    "path": "/",
+    "httpMethod": "GET",
+    "headers": {
+        "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik9EQkZSa0pFTmprelJqTXdOVU0xTVRSRVF6WXpORU0wTjBFM1FUSkJNVGd3UkRjeE9UQTJOdyJ9.eyJodHRwczovL2F1dGgucmlnZ29xYS5jb20vc2l0ZUlkIjoiMTAwIiwiaHR0cHM6Ly9hdXRoLnJpZ2dvcWEuY29tL2VtYWlsIjoiZWR3YXJkK2FwaTFAcmlnZ28uaW8iLCJodHRwczovL2F1dGgucmlnZ29xYS5jb20vZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJodHRwczovL2F1dGgucmlnZ29xYS5jb20vL3JvbGVzIjpbInN1cGVyLWFkbWluIl0sImlzcyI6Imh0dHBzOi8vcmlnZ28tcWEuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDVkNTE5Yzc3MWNmMmZkMGU3NDJiYzZjMCIsImF1ZCI6WyJsb2FkLXJlc291cmNlLWFwaSIsImh0dHBzOi8vcmlnZ28tcWEuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU2OTI3MTYxNCwiZXhwIjoxNTY5Mjc4ODE0LCJhenAiOiI3bkFZNEdWSkdCWFFRaDB1dTNUZjlhMVlTUHU1VHd1diIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgcmVhZDpsb2FkIHJlYWQ6bG9hZFBpcGVsaW5lIHdyaXRlOmxvYWQgd3JpdGU6bG9hZEludm9pY2UgcmVhZDptZW51IiwicGVybWlzc2lvbnMiOlsicmVhZDpsb2FkIiwicmVhZDpsb2FkUGlwZWxpbmUiLCJyZWFkOm1lbnUiLCJ3cml0ZTpsb2FkIiwid3JpdGU6bG9hZEludm9pY2UiXX0.BsFRCG6pKZzeXdXDZ2YgL7Oy5sG2RoG5Pk4jHpxYn7-o4JpXFINDhN-Tve2-ZJOv6RvfurOdoIE97eU8FF9_xkaNiIFHFaTkyLtC2n6STXq4SaJJXBOKlx5TZoUBj04Fn-hjK37v_irZmeiBICw4KVSuI6hMxDKPoospA6QWSGhKbMETEgM3HKmsxzdVsl2giZyMb27Z_uhBXJ-l7j-liFy6vS1LuzvVq88OQewMmhvp8HbvCbM3GnEnr5iTuxb84yc4sDAbsLHYJaLcHxRnepd60Lr01AiEW-R_eMxsGQzZFKrRN8A8s_UOozoGhLpgvaSD3UlHFtopG2pJaPO91A"
+    },
+    "multiValueHeaders": {
+        "Authorization": [
+            "Bearer sdfsdfsdfsdfsdf"
+        ]
+    },
+    "queryStringParameters": {},
+    "multiValueQueryStringParameters": {},
+    "pathParameters": {},
+    "stageVariables": {
+        "AUTH0_TOKEN_ISSUER": "https://riggo-qa.auth0.com/",
+        "ENV": "qa",
+        "AUTH0_AUDIENCE": "load-resource-api",
+        "AUTH0_JWKS_URI": "https://riggo-qa.auth0.com/.well-known/jwks.json"
+    },
+    "requestContext": {
+        "resourceId": "test-invoke-resource-id",
+        "resourcePath": "/",
+        "httpMethod": "GET",
+        "extendedRequestId": "Ae2MpG9hvHcFhGQ=",
+        "requestTime": "23/Sep/2019:17:42:02 +0000",
+        "path": "/",
+        "accountId": "845657178663",
+        "protocol": "HTTP/1.1",
+        "stage": "test-invoke-stage",
+        "domainPrefix": "testPrefix",
+        "requestTimeEpoch": 1569260522455,
+        "requestId": "9300e440-b64d-4a12-9e83-4f41086a5b4e",
+        "identity": {
+            "cognitoIdentityPoolId": null,
+            "cognitoIdentityId": null,
+            "apiKey": "test-invoke-api-key",
+            "principalOrgId": null,
+            "cognitoAuthenticationType": null,
+            "userArn": "arn:aws:iam::845657178663:user/Edward",
+            "apiKeyId": "test-invoke-api-key-id",
+            "userAgent": "aws-internal/3 aws-sdk-java/1.11.590 Linux/4.9.184-0.1.ac.235.83.329.metal1.x86_64 OpenJDK_64-Bit_Server_VM/25.212-b03 java/1.8.0_212 vendor/Oracle_Corporation",
+            "accountId": "845657178663",
+            "caller": "AIDA4JZIYQITWEIKQUFUN",
+            "sourceIp": "test-invoke-source-ip",
+            "accessKey": "ASIA4JZIYQITUJIV5OVJ",
+            "cognitoAuthenticationProvider": null,
+            "user": "AIDA4JZIYQITWEIKQUFUN"
+        },
+        "domainName": "testPrefix.testDomainName",
+        "apiId": "o0de6p7v3h"
+    }
 }

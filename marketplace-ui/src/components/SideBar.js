@@ -8,11 +8,11 @@ import Icon, { LOGO_ICON } from './Icon';
 
 class SideBar extends Component {
   render(){
-    const {isOpen, handleClose, menu, defaultMenu} = this.props;
+    const {isOpen, handleClose, menu, defaultMenu, variant} = this.props;
     return (
         <div>
           <Drawer
-            variant="persistent"
+            variant={variant}
             anchor="left"
             open={isOpen}
             className="SideBar-menu"
@@ -33,6 +33,7 @@ SideBar.propTypes = {
   handleClose: PropTypes.func,
   menu: PropTypes.array,
   defaultMenu: PropTypes.object,
+  variant: PropTypes.string,
 };
 
 export default SideBar;

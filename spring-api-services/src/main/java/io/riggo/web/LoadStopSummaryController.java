@@ -38,7 +38,7 @@ public class LoadStopSummaryController {
     //@Cacheable(value = "menus", key = "#m0", unless = "#result == null")
     public BaseAPIResponse<LoadStopSummaryData> getPipelineSummary() throws ResourceNotFoundException{
         Optional<List<LoadStopSummary>> loadStopSummaryList = null;
-        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
+        if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() || authenticationFacade.isMachine()) {
             loadStopSummaryList = loadStopService.findStopSummaryBySiteId(authenticationFacade.getSiteId());
         }
         else if(authenticationFacade.isShipperExecutive())
