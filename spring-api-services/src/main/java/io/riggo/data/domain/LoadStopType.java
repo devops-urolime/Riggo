@@ -7,6 +7,7 @@ import java.util.Map;
 
 @SuppressWarnings("MagicNumber")
 public enum LoadStopType {
+    NO_TYPE(0, "No Type"),
     PICKUP(1, "Pickup"),
     DELIVERY(2, "Delivery"),
     ;

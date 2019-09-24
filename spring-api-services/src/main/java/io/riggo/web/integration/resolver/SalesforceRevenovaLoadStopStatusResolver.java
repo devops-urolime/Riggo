@@ -13,9 +13,10 @@ public class SalesforceRevenovaLoadStopStatusResolver implements LoadStopStatusR
 
     @Override
     public LoadStopStatus resolveLoadStopStatus(Map<String, Object> parameters) {
-        if(StringUtils.isNotBlank((String) parameters.get(LOAD_STOP_STATUS))) {
-            return LoadStopStatus.fromDisplayName((String) parameters.get(LOAD_STOP_STATUS));
+        LoadStopStatus loadStopStatus = null;
+        if(StringUtils.isNotBlank((String) parameters.get(LOAD_STOP_STATUS))){
+            loadStopStatus = LoadStopStatus.fromDisplayName((String) parameters.get(LOAD_STOP_STATUS));
         }
-        return LoadStopStatus.NO_STATUS;
+        return loadStopStatus != null ? loadStopStatus : LoadStopStatus.NO_STATUS;
     }
 }

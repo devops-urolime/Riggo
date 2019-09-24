@@ -13,9 +13,10 @@ public class SalesforceRevenovaLoadStopArrivalStatusResolver implements LoadStop
 
     @Override
     public LoadStopArrivalStatus resolveLoadStopArrivalStatus(Map<String, Object> parameters) {
+        LoadStopArrivalStatus loadStopArrivalStatus = null;
         if(StringUtils.isNotBlank((String) parameters.get(LOAD_STOP_ARRIVAL_STATUS))){
-            return LoadStopArrivalStatus.fromDisplayName((String) parameters.get(LOAD_STOP_ARRIVAL_STATUS));
+            loadStopArrivalStatus = LoadStopArrivalStatus.fromDisplayName((String) parameters.get(LOAD_STOP_ARRIVAL_STATUS));
         }
-        return LoadStopArrivalStatus.NO_STATUS;
+        return loadStopArrivalStatus != null ? loadStopArrivalStatus : LoadStopArrivalStatus.NO_STATUS;
     }
 }
