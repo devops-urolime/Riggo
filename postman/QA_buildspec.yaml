@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - npm install newman --global
+  build:
+    commands:
+      - cd postman
+      - newman run -r html,cli sample_service.postman_collection -e QA.postman_environment.json  --reporter-html-export report.html
+
+artifacts:
+  files:
+    - report.html
+  base-directory: 'postman'
