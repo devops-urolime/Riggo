@@ -10,40 +10,15 @@ import PieVisualization, {
   DARK2,
   NIVO
 } from './PieVisualization';
-import BarVisualization, { BAR_DARK2 } from './BarVisualization';
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
 import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
 import Section from './Section';
-
-const ROOT_INDEX_BAR_VISUALIZATION = "status";
-const KEYS_DATA_BAR_VISUALIZATION= [
-    "Quoted",
-    "Booked",
-    "Dispatched",
-    "@Pickup",
-    "In transit",
-    "@Delivery",
-    "Pending Docs",
-    "Docs Received",
-    "Invoiced"
-];
+import StackVisualization from './StackVisualization';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
-
-const digestDataToBarVisualization = (data) => {
-  const COLOR_SUB_FIX = "Color";
-  return data.map( item => {
-    const setOfData = { status: item.name.toString() };
-    item.subStatuses.forEach( (subItem) => {
-        setOfData[subItem.name.toString() ] = subItem.count;
-        setOfData[subItem.name.toString() + COLOR_SUB_FIX] = "hsl(9, 87%, 67%)";
-    });
-    return setOfData;
-  });
-};
 
 const digestDataToCardVisualization = (data) => {
   return data.map((item) => {
@@ -160,7 +135,6 @@ class DashboardPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isBarGroupMode: true,
       viewTypeShipment: SHIPMENT_RESULT_BY_MONTH,
       offsetShipment: SHIPMENT_OFFSET_DEFAULT,
       fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
@@ -184,12 +158,6 @@ class DashboardPage extends Component {
       this.state.weekShipment
     );
   }
-
-  toggleBarGroup = ()=> {
-    this.setState(prevState => ({
-      isBarGroupMode: !prevState.isBarGroupMode
-    }));
-  };
 
   nextViewType = (current, type) => {
     let idx = type.indexOf(current);
@@ -301,13 +269,11 @@ class DashboardPage extends Component {
 
   render(){
     const { pipeLineSummary, stopSummary, shipmentSummary } = this.props;
-    const pipeLineSummaryBar = digestDataToBarVisualization(pipeLineSummary);
     const pipeLineSummaryCard = digestDataToCardVisualization(pipeLineSummary);
     const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const {
-      isBarGroupMode,
       showNext,
       showPrev,
     } = this.state;
@@ -336,14 +302,8 @@ class DashboardPage extends Component {
                 );
               })}
               <Grid xs={12} item>
-                <BarVisualization
-                  onClickRoot={() => this.toggleBarGroup()}
-                  data={pipeLineSummaryBar}
-                  colorsScheme={BAR_DARK2}
-                  rootClass="StatusVisualization"
-                  groupMode={isBarGroupMode}
-                  indexBy={ROOT_INDEX_BAR_VISUALIZATION}
-                  keys={KEYS_DATA_BAR_VISUALIZATION}
+                <StackVisualization
+                  data={pipeLineSummary}
                 />
               </Grid>
             </>

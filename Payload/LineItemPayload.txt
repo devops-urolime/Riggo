@@ -3,7 +3,7 @@ public class LineItemPayLoad {
         system.debug('LineItemSet'+LineItemSet);   
         List<rtms__LineItem__c> ListOfLineItem = null;
         String payload  = '';
-        if(triggerAction == 'Insert' || triggerAction == 'Update' ){
+        if(triggerAction == 'Insert' || triggerAction == 'Update'  || triggerAction == 'Update Batch' ){
             List<rtms__LineItem__c> ListOfLineItemList =[Select Id,rtms__Load__r.Id FROM rtms__LineItem__c where Id IN :LineItemSet];
            	Set<Id> loadId = new Set<Id>();
             for(rtms__LineItem__c li : ListOfLineItemList){  
@@ -83,7 +83,7 @@ public class LineItemPayLoad {
             payLoad = payLoad +']}';	
                         
         }
-        if(triggerAction == 'Delete'){
+    /*    if(triggerAction == 'Delete'){
             system.debug('--delete--');
             Integer lineItemRecords = 1;	
             payload = '{"LineItem": [';
@@ -97,7 +97,7 @@ public class LineItemPayLoad {
             } 
             payLoad = payLoad +']}';
             
-        }
+        }*/
         return payload;
     }
     

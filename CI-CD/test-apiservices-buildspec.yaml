@@ -1,0 +1,39 @@
+version: 0.2
+env:
+  variables:
+    APPSPEC_PATH: "CI-CD/appspec_template.yaml"
+    TASKDEF_PATH: "CI-CD/test-taskdef.json"
+    REPOSITORY_URL: "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-uat"
+    SPRING_PROFILES_ACTIVE: "uat"
+phases:
+  install:
+    runtime-versions:
+        java: openjdk11
+        docker: 18
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region $AWS_REGION --no-include-email)
+  build:
+    commands:
+      - echo Starting Maven build....
+      - cd spring-api-services && ./gradlew build
+      - sleep 2s
+      - ls -la build/libs
+      - echo Building docker image........
+      - docker build -t $REPOSITORY_URL:latest .
+  post_build:
+    commands:
+      - if [ $CODEBUILD_BUILD_SUCCEEDING = 1 ]; then echo Build completed on `date`; echo Pushing Docker image to ECR $REPOSITORY_URL ; docker push $REPOSITORY_URL:latest ; echo Writing image definitions file...; printf '{"ImageURI":"%s"}' $REPOSITORY_URL:latest > imageDetail.json; echo Image push completed on `date`;FILE=../$TASKDEF_PATH;if  [ -f "$FILE" ];then cp $FILE taskdef.json.template;echo $FILE exist and copied to workspace on `date`;envsubst < taskdef.json.template > taskdef.json;else echo $FILE does not exist, so creating dynamically......;aws ecs describe-task-definition --task-definition $TASKDEF_NAME |   jq '.taskDefinition' > taskdef.json;fi;echo changing the image placeholder in taskdef.json;cat taskdef.json |  jq --arg IMAGE $ECR_PLACEHOLDER '.containerDefinitions[].image = $IMAGE' > task.json && mv task.json taskdef.json;echo replacing the environments in appspec.yaml;cp ../$APPSPEC_PATH . && envsubst < appspec_template.yaml > appspec.yaml; else echo Build failed ignoring deployment;fi
+      - echo Deployment completed on `date`
+artifacts:
+  files:
+    - appspec.yaml
+    - taskdef.json
+    - imageDetail.json
+  base-directory: 'spring-api-services'
+cache:
+  paths:
+     - '/root/.gradle/wrapper/**/*'
+     - '/root/.gradle/caches/**/*'

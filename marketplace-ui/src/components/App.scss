@@ -10,6 +10,7 @@ $large-device-min-height: 100%;
     background: $app-background;
     color: $general-text;
     min-height: $mobile-device-min-height !important;
+    padding-top: 80px;
     @media (min-width: $md-min-width) {
         min-height: $large-device-min-height !important;
     }

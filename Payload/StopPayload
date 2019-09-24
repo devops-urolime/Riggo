@@ -3,7 +3,7 @@ public class StopPayload {
         system.debug('stop'+StopSetId);   
         List<rtms__Stop__c> stopList = null;
         String payload  = '';
-        if(triggerAction == 'Insert' || triggerAction == 'Update' ){
+        if(triggerAction == 'Insert' || triggerAction == 'Update'   || triggerAction == 'Update Batch' ){
             List<rtms__Stop__c> ListOfstop =[Select Id,rtms__Load__r.Id FROM rtms__Stop__c where Id IN :StopSetId];
            	Set<Id> loadId = new Set<Id>();
             for(rtms__Stop__c li : ListOfstop){  
@@ -75,7 +75,7 @@ public class StopPayload {
 							'"Stoprtms__Departure_Time__c": "'+st.rtms__Departure_Time__c+'",'+
 							'"Stoprtms__EDI_Provider__c": "'+st.rtms__EDI_Provider__c+'",'+
 							'"Stoprtms__Geolocation__c": "'+st.rtms__Geolocation__c+'",'+
-							'"Stoprtms__Instructions__c": "'+st.rtms__Instructions__c+'",'+
+							'"Stoprtms__Instructions__c": "'+convertedString(st.rtms__Instructions__c)+'",'+
 							'"Stoprtms__Is_Dropoff__c": "'+st.rtms__Is_Dropoff__c+'",'+
 							'"Stoprtms__Is_Pickup__c": "'+st.rtms__Is_Pickup__c+'",'+
 							'"Stoprtms__Kilometers_Away__c": "'+st.rtms__Kilometers_Away__c+'",'+
@@ -112,7 +112,7 @@ public class StopPayload {
             } 
             payLoad = payLoad +']}';	
         }
-         if(triggerAction == 'Delete'){
+        /* if(triggerAction == 'Delete'){
             system.debug('--delete--');
             Integer lineItemRecords = 1;	
             payload = '{"LineItem": [';
@@ -126,7 +126,7 @@ public class StopPayload {
             } 
             payLoad = payLoad +']}';
             
-        }
+        }*/
         return payload;
     }
     private string convertedString(String LoadFildName){
@@ -135,6 +135,7 @@ public class StopPayload {
             LoadFildName = LoadFildName.replace('\\n', ' ');		// remove LF	
             LoadFildName = LoadFildName.replace('\\r', ' ');		// remove CR
             LoadFildName = LoadFildName.replace('\\', ' ');		// remove slashes		
+            LoadFildName = LoadFildName.replace('"',''); // Remve double quotes
             LoadFildName = LoadFildName.normalizeSpace();	// Remove all repeating white space
         }
         return LoadFildName;

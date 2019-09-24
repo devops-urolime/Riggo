@@ -4,7 +4,8 @@ spring_profile_env = "uat"
 #General Variables
 keyname = "RiggoKeyPair-uat"
 cidr_block = "0.0.0.0/0"
-
+hosted_zone_name = "riggostaging.net"
+# wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
 
 #variables for RDS
 read_capacity  = "20"
@@ -32,7 +33,7 @@ allowed_methods = ["GET","HEAD"]
 cloudfront_root_object = "index.html"
 cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/c1f02af2-b09b-40ce-b010-4e0141f72c65"
 cloudfront_ssl_protocol_ver = "TLSv1.1_2016"
-cname_alias = "*.riggostaging.net"
+cname_alias = "riggo.riggostaging.net"
 error_caching_min_ttl = {
   403 = "300"
   404 = "300"
@@ -87,6 +88,8 @@ taskdef_path = "CI-CD/uat-taskdef.json"
 
 #Variables for route53
 service_discovery_ttl = "60"
+
+
 
 #variables for Lambda
 
@@ -184,3 +187,4 @@ github_branch_name = {
 #variables for api gateway
 
 rest_api_name = "Riggo Platform API"
+# basepath_apigateway = "v1"

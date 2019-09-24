@@ -1,27 +1,20 @@
 @import 'base.scss';
 
 .CardSummary{
-    width: 95px;
-    height: 124px;
     background: $card-background !important;
-    text-align: center;
-    color: $general-text !important;
-    margin: 0 auto;
+    text-align: left;
+    color: $card-text !important;
+    padding: 12px 12px 12px 12px;
     &__number {
-
+      font-weight: bolder !important;
+      font-size: 28px !important;
     }
     &__label{
         text-transform: lowercase;
-        font-size: 12px !important;
+        font-size: 18px !important;
         &:first-letter{
             text-transform: uppercase;
         }
-    }
-    @media (min-width: $md-min-width) {
-        width: 200px;
-    }
-    @media (min-width: $xl-min-width) {
-        width: 300px;
     }
     &__MuiPaper-root{
         background-color: $card-background !important;

@@ -113,3 +113,7 @@ variable "spring_profile_key" {
 variable "taskdef_path" {
   
 }
+
+# variable "alb_acm_cert" {
+  
+# }

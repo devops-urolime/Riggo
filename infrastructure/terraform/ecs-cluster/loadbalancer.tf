@@ -130,6 +130,8 @@ resource "aws_lb_listener" "front_end" {
   load_balancer_arn = "${aws_lb.ecs-lb.id}"
   port              = "80"
   protocol          = "HTTP"
+  # ssl_policy        = "ELBSecurityPolicy-2016-08"
+  # certificate_arn   = "${var.alb_acm_cert}"
 
   default_action {
     target_group_arn = "${aws_lb_target_group.ecs-lb-targetgroup.arn}"
