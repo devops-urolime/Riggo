@@ -10,9 +10,9 @@
   
 # }
 
-# variable "hosted_zone_name" {
-#   description = "The hosted zone name created for each environment"
-# }
+variable "hosted_zone_name" {
+  description = "The hosted zone name created for each environment"
+}
 #variables for RDS
 variable "read_capacity" {
   # default = "20"

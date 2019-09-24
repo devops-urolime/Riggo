@@ -14,5 +14,8 @@ output "s3_bucket_region" {
   value = "${aws_s3_bucket.s3-cloudfront.region}"
 }
 
+output "cloudfront_hosted_zone_id" {
+  value = "${aws_cloudfront_distribution.s3_distribution.hosted_zone_id}"
+}
 
 

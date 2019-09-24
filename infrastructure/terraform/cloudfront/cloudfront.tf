@@ -1,6 +1,6 @@
 locals {
-  s3_origin_id = "s3-${var.client_app_name}"
-  # s3_origin_id = "${aws_s3_bucket.s3-cloudfront.bucket}"
+  # s3_origin_id = "s3-${var.client_app_name}"
+  s3_origin_id = "${aws_s3_bucket.s3-cloudfront.bucket}"
 }
 
 resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
@@ -133,7 +133,7 @@ dynamic "custom_error_response" {
   }
 
  lifecycle {
-   ignore_changes = [aliases,custom_error_response,custom_error_response,viewer_certificate]
+   ignore_changes = [custom_error_response,custom_error_response,viewer_certificate]
   }
 
 }

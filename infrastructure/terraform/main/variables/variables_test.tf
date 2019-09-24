@@ -1,45 +1,11 @@
-
 #Application variables
-spring_profile_env = "qa"
-
-#environment variables
-
-environment_variables ={
-      clientapp = [ 
-      {
-        name  = "REACT_APP_DOMAIN_AUTH_CONFIG"
-        value = "riggo-qa.auth0.com"
-      },
-      {
-        name  = "REACT_APP_CLIENT_ID_AUTH_CONFIG"
-        value = "7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv"
-      },
-      {
-        name = "REACT_APP_AUDIENCE_ID_AUTH_CONFIG"
-        value = "load-resource-api"
-
-      },
-      {
-        name = "REACT_APP_CALL_BACK_URL_AUTH_CONFIG"
-        value = "https://riggo.riggoqa.net/callback"
-      },
-      {
-        name = "REACT_APP_MOCK_ALL_DATA"
-        value = "true"
-      }
-],
-apiservices = [
-      {
-        name  = "REPOSITORY_URL"
-        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-test"
-      }
-]
-}
+spring_profile_env = "uat"
 
 #General Variables
 keyname = "RiggoKeyPair-test"
 cidr_block = "0.0.0.0/0"
-
+hosted_zone_name = "riggostaging.net"
+wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
 
 #variables for RDS
 read_capacity  = "20"
@@ -65,9 +31,9 @@ origin_path = ""
 cached_methods = ["GET","HEAD"]
 allowed_methods = ["GET","HEAD"]
 cloudfront_root_object = "index.html"
-cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/155bca16-2b02-4a3e-bdec-f17da6f3b058"
+cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/c1f02af2-b09b-40ce-b010-4e0141f72c65"
 cloudfront_ssl_protocol_ver = "TLSv1.1_2016"
-cname_alias = "test.riggoqa.net"
+cname_alias = "test.riggostaging.net"
 error_caching_min_ttl = {
   403 = "300"
   404 = "300"
@@ -86,11 +52,11 @@ response_page_path = {
 
 #Variables for VPC
 
-vpc_cidr = "10.0.0.0/16"
-public_subnet_cidr = "10.0.1.0/24"
-private_subnet_cidr = "10.0.2.0/24"
-az2_public_subnet_cidr = "10.0.3.0/24"
-az2_private_subnet_cidr = "10.0.4.0/24"
+vpc_cidr = "10.10.0.0/16"
+public_subnet_cidr = "10.10.1.0/24"
+private_subnet_cidr = "10.10.2.0/24"
+az2_public_subnet_cidr = "10.10.3.0/24"
+az2_private_subnet_cidr = "10.10.4.0/24"
 from_port = "5432"
 to_port = "5432"
 
@@ -118,10 +84,12 @@ health_checkpath = "/favicon.ico"
 TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
-taskdef_path = "CI-CD/taskdef.json"
+taskdef_path = "CI-CD/test-taskdef.json"
 
 #Variables for route53
 service_discovery_ttl = "60"
+
+
 
 #variables for Lambda
 
@@ -136,8 +104,7 @@ lambda_timeout = "30"
 
 cpu_utilization_high_threshold = "65"
 cpu_utilization_high_evaluation_periods = "1"
-cpu_utilization_high_period = "60"
-
+cpu_utilization_high_period = "120"
 
 
 #Variables for Cloudwatch ECS/Memory
@@ -183,7 +150,7 @@ alb_unhealthy_host_count_threshold = "1"
 
 #variables for SNS
 
-alarms_email = ["muhasin.mohammed@urolime.com"]
+alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
 
 #variables for codebuild
 
@@ -191,8 +158,8 @@ compute_type = "BUILD_GENERAL1_SMALL"
 codebuild_image = "aws/codebuild/standard:2.0"
 buildspec_path = {
   #PATH is from root of the respository.
-  clientapp  = "CI-CD/clientapp-buildspec.yaml" 
-  apiservice = "CI-CD/apiservices-buildspec.yaml"
+  clientapp  = "CI-CD/test-clientapp-buildspec.yaml"
+  apiservice = "CI-CD/test-apiservices-buildspec.yaml"
 }
 
 #Variables for  Codedeploy
@@ -216,3 +183,8 @@ github_branch_name = {
   clientapp = "test-client-app"
   apiservices = "test-api-services"
 }
+
+#variables for api gateway
+
+rest_api_name = "Riggo Platform API"
+basepath_apigateway = "v1"

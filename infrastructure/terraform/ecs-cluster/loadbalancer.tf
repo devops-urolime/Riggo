@@ -1,7 +1,7 @@
 resource "aws_security_group_rule" "lb_http_ingress" {
   type      = "ingress"
-  from_port = "443"
-  to_port   = "443"
+  from_port = "80"
+  to_port   = "80"
   protocol  = "tcp"
   cidr_blocks = [
   "${var.cidr_blocks}"]
@@ -128,10 +128,10 @@ resource "aws_lb_listener" "front_end" {
   # depends_on = [
   # "aws_lb.ecs-lb"]
   load_balancer_arn = "${aws_lb.ecs-lb.id}"
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = "${var.alb_acm_cert}"
+  port              = "80"
+  protocol          = "HTTP"
+  # ssl_policy        = "ELBSecurityPolicy-2016-08"
+  # certificate_arn   = "${var.alb_acm_cert}"
 
   default_action {
     target_group_arn = "${aws_lb_target_group.ecs-lb-targetgroup.arn}"
