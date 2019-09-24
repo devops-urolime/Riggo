@@ -20,14 +20,14 @@ const MenuContent = ({ menu, history, onClick }) => {
         {
           menu &&
           menu.map((menuItem, idx) => {
-            const {name, url } = menuItem;
+            const {name, icon, url } = menuItem;
             return (
               <ListItem onClick={()=> {
                 history.push(translateUrlCode(url));
                 onClick();
               }} key={`menu-item-custom-${idx}`} button>
                 <ListItemIcon>
-                  <Icon name={name}/>
+                  <Icon name={icon}/>
                 </ListItemIcon>
                 <ListItemText primary={name} />
               </ListItem>
