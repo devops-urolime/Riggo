@@ -2,17 +2,20 @@
 
 .TotalSummary{
     padding: 5px;
-    text-align: center;
+    text-align: left;
     &__Title{
         text-transform: lowercase;
-        font-size: 12px !important;
+        font-size: 16px !important;
+        margin-bottom: 5px !important;
         &:first-letter{
             text-transform: uppercase;
         }
     }
 
     &__Legend{
-
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        margin-bottom: 14px !important;
     }
     &:last-child{
         padding-bottom: 12px;
