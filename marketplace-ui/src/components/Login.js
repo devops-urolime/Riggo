@@ -186,12 +186,8 @@ class Login extends Component{
                   </Grid>
                   <Grid item xs={gridWidth}>
                     <div className="ButtonGroup">
-                      <p className="SignUp" role="link" onClick={() => this.toggleLogin()} >
-                        {
-                          (!isSingUp) ?
-                            "Don't have an account? Sign Up":
-                            "I already have an account"
-                        }
+                      <p className="SignUp" role="link"  >
+
                       </p>
                     </div>
                   </Grid>
