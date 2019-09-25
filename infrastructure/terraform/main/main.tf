@@ -270,6 +270,7 @@ module "codebuild" {
   container_name = "${module.ecs-cluster.container_name}"
   taskdef_path = "${var.taskdef_path}"
   ECS_securitygroup_ids = ["${module.ecs-cluster.ECS_instance_SG}"]
+  apigateway_invoke_url = "${module.api-gateway.invoke_url}"
   
 }
 

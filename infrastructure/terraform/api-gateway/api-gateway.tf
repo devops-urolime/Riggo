@@ -58,6 +58,10 @@ resource "aws_api_gateway_stage" "stage" {
      "AUTH0_TOKEN_ISSUER" = "${var.authorizer_auth0_token_issuer}"
      "ENV" = "${terraform.workspace}"
   }
+
+  lifecycle {
+    ignore_changes = [deployment_id]
+  }
 }
 
 resource "aws_api_gateway_method_settings" "settings" {
