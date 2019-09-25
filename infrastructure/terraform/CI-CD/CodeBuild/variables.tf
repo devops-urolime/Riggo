@@ -63,3 +63,7 @@ variable "taskdef_path" {
 variable "ECS_securitygroup_ids" {
   
 }
+
+variable "apigateway_invoke_url" {
+  
+}

@@ -102,6 +102,9 @@ module "api-gateway" {
   authorize_uri         = "${module.lambda.authorize_uri}"    
   elb_endpoint = "${module.ecs-cluster.elb_endpoint}"
   rest_api_name = "${var.rest_api_name}"
+  authorizer_auth0_audience = "${var.authorizer_auth0_audience}"
+  authorizer_auth0_jwks_uri = "${var.authorizer_auth0_jwks_uri}"
+  authorizer_auth0_token_issuer = "${var.authorizer_auth0_token_issuer}"
   # custom_name_cert = "${var.wildcard_hostedzone_cert_arn}"
   # hosted_zone_name = "${var.hosted_zone_name}"
   # basepath_apigateway = "${var.basepath_apigateway}"
@@ -267,6 +270,7 @@ module "codebuild" {
   container_name = "${module.ecs-cluster.container_name}"
   taskdef_path = "${var.taskdef_path}"
   ECS_securitygroup_ids = ["${module.ecs-cluster.ECS_instance_SG}"]
+  apigateway_invoke_url = "${module.api-gateway.invoke_url}"
   
 }
 
