@@ -15,7 +15,13 @@ $neutralDark: #51525a;
 $neutralDarker: transparent;
 $neutralLight: #46464d;
 
+// Alter dark theme color
+$primaryDarkAlter: #1D1E2F;
+$secondaryLightAlter: #266FF1;
+$generalTextColorAlter: #fff;
+
 // Component Colors
+$main-login-overlay-color: $primaryDarkAlter;
 $app-background: $secondaryLight;
 $general-text: $neutralDark;
 $general-text-tooltip: $secondaryDark;
@@ -23,8 +29,8 @@ $card-background: $secondaryDark;
 $card-text: $primaryLight;
 $icon-fill-color: $primaryLight;
 $top-bar-color: $primaryLight;
-$login-overlay-color: $primaryDark;
-$login-btn-color: $secondaryLight;
+$login-overlay-color: $primaryDarkAlter;
+$login-btn-color: $secondaryLightAlter;
 $input-border-color: $neutralLight;
 $input-background-color: $neutralDarker;
 $paper-section: $primaryLight;

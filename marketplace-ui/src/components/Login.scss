@@ -2,9 +2,9 @@
 
 
 .MainLoginOverlay{
-    background: $app-background;
+    background: $main-login-overlay-color;
     font-family: $main-font-family !important;
-    color: $general-text;
+    color: $generalTextColorAlter;
     height: 100%;
     min-height: 550px;
 }
@@ -12,7 +12,7 @@
 .MuiPaper-root{
     background-color: $login-overlay-color !important;
     font-family: $main-font-family !important;
-    color: $general-text !important;
+    color: $generalTextColorAlter !important;
 }
 
 .SecondaryLoginOverlay{
@@ -24,7 +24,7 @@
 .MainLogo{
     display: block;
     margin: 0 auto;
-    height: 63px;
+    height: 163px;
 }
 .InputGroup{
     margin: 0 auto 8px;
@@ -71,8 +71,8 @@
 }
 
 .MuiOutlinedInput-root{
-    color: $general-text !important;
-    caret-color: $general-text !important;
+    color: $generalTextColorAlter !important;
+    caret-color: $generalTextColorAlter !important;
     background-color: $input-background-color !important;
     fieldset {
         border-color: $input-border-color !important;
@@ -82,11 +82,11 @@
     }
 }
 .MuiInputLabel-root{
-    color: $general-text !important;
+    color: $generalTextColorAlter !important;
 }
 .Login-btn.MuiButtonBase-root{
     background-color: $login-btn-color !important;
-    color: $general-text !important;
+    color: $generalTextColorAlter !important;
     height: 52px;
     font-size: 22px !important;
     line-height: 30px !important;
