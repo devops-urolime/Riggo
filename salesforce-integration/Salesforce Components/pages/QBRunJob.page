@@ -1,0 +1,45 @@
+<apex:page controller="QBRunJobController" >
+
+    <apex:stylesheet value=""/> 
+    <apex:sectionHeader title="QuickBooks" subtitle="QuickBooks Batch Job"/>
+    <apex:outputPanel id="messagePanel">
+        <apex:pageMessages />
+    </apex:outputPanel>
+
+    <apex:form >
+
+        <apex:pageBlock > 
+ 
+        <apex:pageBlockButtons location="bottom"> 
+            <apex:commandButton value="Submit QuickBooks Batch Job" action="{!doRun}"   disabled="{!jobIsRunning}" /> 
+        </apex:pageBlockButtons> 
+
+        <br></br>  
+        
+        <apex:outputText >
+            Prepares Quickbooks iif file.    
+            File is stored in the <b>{!config.Save_To_Folder__c}</b> document folder
+ 
+        </apex:outputText> 
+        
+        <br></br> <br></br> <br></br> <br></br>
+
+        <apex:actionPoller action="{!doRefreshJobStatus}" reRender="messagePanel,statusPanel" interval="5" status="status1"/>        
+        <apex:outputPanel id="statusPanel"   rendered="{!jobIsRunning}">
+            <apex:actionStatus id="status1" />
+            <apex:pageBlockSection columns="1">
+                <apex:outputField value="{!job.Status}"/>
+                <apex:outputField value="{!job.TotalJobItems}"/>
+                <apex:outputField value="{!job.JobItemsProcessed}"/>
+                <apex:outputField value="{!job.NumberOfErrors}"/>  
+            </apex:pageBlockSection>
+        </apex:outputPanel>
+
+ 
+
+        </apex:pageBlock>
+    </apex:form>
+
+
+
+</apex:page>

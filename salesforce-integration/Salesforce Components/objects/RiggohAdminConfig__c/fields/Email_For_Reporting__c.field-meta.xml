@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Email_For_Reporting__c</fullName>
+    <description>This email will be used to get scheduler reports.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>This email will be used to get scheduler reports.</inlineHelpText>
+    <label>Email For Reporting</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Email</type>
+    <unique>false</unique>
+</CustomField>

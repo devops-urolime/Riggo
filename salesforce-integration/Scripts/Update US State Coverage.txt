@@ -1,0 +1,32 @@
+List<rtms__TransportationProfile__c> tpl = [select id, rtms__US_State_Coverage__c, 
+                                                  (select id, rig_DestinationState__c from Preferred_Lanes__r)
+                                           from rtms__TransportationProfile__c
+                                            where rtms__US_State_Coverage__c ='' and RecordType.Name='Carrier (Ground)'];
+system.debug(tpl.size());
+/*integer i=0;
+for(rtms__TransportationProfile__c tp : tpl){
+        if(tp.Preferred_Lanes__r.size() == 0)
+            i++;
+}    system.debug(i);*/
+
+set<string> ds = new set<string>();
+string temp = '';
+for(rtms__TransportationProfile__c tp : tpl){
+    for(rig_PreferredLane__c pl : tp.Preferred_Lanes__r ){  
+        if(pl.rig_DestinationState__c.contains(';')){
+            ds = new Set<String>(pl.rig_DestinationState__c.split(';'));
+        }else{
+            ds.add(pl.rig_DestinationState__c);
+        }
+         //ds.add(pl.rig_DestinationState__c);
+    }
+    system.debug(ds);
+    for(string t : ds){
+        temp = temp + t+';';
+    }
+    temp = temp.removeEnd(';');
+    system.debug(temp);
+    tp.rtms__US_State_Coverage__c = temp;
+    temp = '';
+}
+update tpl;

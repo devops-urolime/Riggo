@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>max@riggoh.com</contactEmail>
+    <label>Truckstop API</label>
+    <oauthConfig>
+        <callbackUrl>http://localhost:8080</callbackUrl>
+        <certificate>MIICwTCCAamgAwIBAgIEOOITPjANBgkqhkiG9w0BAQsFADARMQ8wDQYDVQQDEwZSaWdnb2gwHhcNMTgxMDExMTM1MjU0WhcNMTkwMTA5MTM1MjU0WjARMQ8wDQYDVQQDEwZSaWdnb2gwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvAW1G6sFFsQOSeFyKP+ajpqPCUu5DA409rFoqlF8ajF5diinsic03avztj4QIjTkqZy4ioFZoQ+cre/X+UvzGelyoS+r+TM+fCMkrxTr2DkfJrtk0pAn4EUjHNE5yQVWEauyF46Lzn1S5/Ack8XqQBZCQH496I4cM3RXfFE7Vj9PYkXxFeXwXNyM9TruXiddb5KyOa2kobk2IDT27rwBTsGCgzbqzqnCwYJbdE64jU/eukODnV9kgCmpbtRl+H+gQYUhxaikEdiP1k8sJNZ+qlg9EezmJHhCKLufURav+M0MHGeHpxTL03UykydQQFgNCyahTySgWOVw6I8pcbXqdAgMBAAGjITAfMB0GA1UdDgQWBBRfXLOQKOG6rZCa3T5S72SCzuPB1jANBgkqhkiG9w0BAQsFAAOCAQEAJoUe1C6hrIX+Ef3RF814inOKwApdang3FIG5RegoPtIP7cqzmUljwuMMp/a9Jvtlr11r0uCrDKthEn9O2d6m53i8cguB9E0Y6U/v5Cq6vBGfXTuW+mEoKGU3WCQOU3HlB3+pSPuGifR4xWwQXwhWcBpAkBI8AUBkaP8cx+r/Ce/evpBu+85t/UFVWd95Z1naf/xqxaUahstax0/nT9PPyqjPMir6n0avOnkjSzyFBb54Jz9SlW3u9JW7fvg5Lalu1JnVLm5X6KQ2XMG3hbk+4LPXj2B/O3Gx7jwbqDcgZtDXoCnlKlEMp5xHGehqb452ycLFBRlX3ZYZFUeaJZV48w==</certificate>
+        <consumerKey>3MVG9PbQtiUzNgN5HOnTahCd6GUNQvxC6c0kvvzJKJNsAee7z3AGKj.k1DPlNnQxQ.kgXjEX_Qtk6DGaGZDlu</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <scopes>Basic</scopes>
+        <scopes>Api</scopes>
+        <scopes>Web</scopes>
+        <scopes>Full</scopes>
+        <scopes>Chatter</scopes>
+        <scopes>CustomApplications</scopes>
+        <scopes>RefreshToken</scopes>
+        <scopes>OpenID</scopes>
+        <scopes>CustomPermissions</scopes>
+        <scopes>Wave</scopes>
+        <scopes>Eclair</scopes>
+    </oauthConfig>
+    <profileName>General Admin</profileName>
+    <profileName>Super User</profileName>
+    <profileName>Chatter Free User</profileName>
+    <profileName>Standard Guest</profileName>
+    <profileName>Standard Platform User</profileName>
+    <profileName>Macropoint Profile</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>Application Profile</profileName>
+    <profileName>Marketing User</profileName>
+    <profileName>Solution Manager</profileName>
+    <profileName>Guest License User</profileName>
+    <profileName>Carrier Admin</profileName>
+    <profileName>Contract Manager</profileName>
+    <profileName>TMS Profile</profileName>
+    <profileName>Customer Admin</profileName>
+    <profileName>Chatter External User</profileName>
+    <profileName>Chatter Moderator User</profileName>
+    <profileName>Read Only</profileName>
+    <profileName>Standard User</profileName>
+</ConnectedApp>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Equipment_Type__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <externalId>false</externalId>
+    <label>Equipment Type</label>
+    <lookupFilter>
+        <active>true</active>
+        <filterItems>
+            <field>rtms__EquipmentType__c.OwnerId</field>
+            <operation>equals</operation>
+            <valueField>$User.Id</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>rtms__EquipmentType__c</referenceTo>
+    <relationshipLabel>Additional Equipments</relationshipLabel>
+    <relationshipName>Additional_Equipments</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

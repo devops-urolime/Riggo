@@ -1,0 +1,36 @@
+#ajax_load {
+	position: fixed;
+	top: 40%;
+	left: 30%;
+	width: 40%;
+	padding: 12px 0;
+	text-align: center;
+}
+
+.nav-panel {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+}
+.nav-panel-40 {
+    width: 40%;
+}
+.nav-panel-buttons {
+    width: 100%;
+}
+
+.nav-panel-filters {
+    float: right;
+    background-color: bisque;
+}
+
+.nav-panel-filters .nav-panel {
+    border: unset;
+}
+
+.row-action {
+    padding-left: 10px;
+    padding-right: 10px;
+}

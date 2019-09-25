@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <body>&lt;img align=&quot;left&quot; src=&quot;https://c.na50.content.force.com/servlet/servlet.FileDownload?file=rtms__TMS_Logos/RigGoh_home_logo_199.jpg&quot; border=&quot;0&quot; alt=&quot;&quot;&gt;&lt;/img&gt;</body>
+    <pageComponentType>imageOrNote</pageComponentType>
+</HomePageComponent>

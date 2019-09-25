@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>leon@riggoh.com</contactEmail>
+    <label>Teiid Integration</label>
+    <oauthConfig>
+        <callbackUrl>https://localhost/_callback</callbackUrl>
+        <certificate>MIIEhzCCA2+gAwIBAgIOAWvvO9+rAAAAAGAdUEAwDQYJKoZIhvcNAQELBQAwgYQxHDAaBgNVBAMME0FQSV9KV1RfSW50ZWdyYXRpb24xGDAWBgNVBAsMDzAwRDZBMDAwMDAzOGhJcTEXMBUGA1UECgwOU2FsZXNmb3JjZS5jb20xFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xCzAJBgNVBAgMAkNBMQwwCgYDVQQGEwNVU0EwHhcNMTkwNzE0MDY0NjQ2WhcNMjAwNzE0MDAwMDAwWjCBhDEcMBoGA1UEAwwTQVBJX0pXVF9JbnRlZ3JhdGlvbjEYMBYGA1UECwwPMDBENkEwMDAwMDM4aElxMRcwFQYDVQQKDA5TYWxlc2ZvcmNlLmNvbTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzELMAkGA1UECAwCQ0ExDDAKBgNVBAYTA1VTQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJyVwMdPPMTBWkN+1VBDTycS7VTEdmR6OQY/UdFVqHyx7Wct5PqOp5OJCfCrQMim8W+aZWC8WcnbbcyAF51VSnbq7JuuqYj87HyRmeJ4yzr/w8O8l2jR+7LxmKyZsw7bXRJrixVRus4zseo2ujYgyox1MypUBJyTd5y+Zwu0rffYcTcl3pHGbNjUb6RhsztIEhNTp9D84c+Uc5HSE4cfumIKWNbQY8bFuFZPz6/8UB8Zlv7BtP+kUYh98pn2/d95TQ9toC7XU0MPSGmD2wuecSF4su6HtP5OztEdtUbWss1ER6AFwtJWzeuYmnme/9GRONMP8nmA5awqv0xWbTPemNMCAwEAAaOB9DCB8TAdBgNVHQ4EFgQUpTm6VU/1OosXTdby2xpdSjTG/SMwDwYDVR0TAQH/BAUwAwEB/zCBvgYDVR0jBIG2MIGzgBSlObpVT/U6ixdN1vLbGl1KNMb9I6GBiqSBhzCBhDEcMBoGA1UEAwwTQVBJX0pXVF9JbnRlZ3JhdGlvbjEYMBYGA1UECwwPMDBENkEwMDAwMDM4aElxMRcwFQYDVQQKDA5TYWxlc2ZvcmNlLmNvbTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzELMAkGA1UECAwCQ0ExDDAKBgNVBAYTA1VTQYIOAWvvO9+rAAAAAGAdUEAwDQYJKoZIhvcNAQELBQADggEBAE+5gxc2lGI00BPHOp5at/lZJ4y8eBUz79mSisCE46L6S0DcVipN+yNGhLR9jEjvcu/+D8p8IXRUSaMsbvVszFH+RPqUyJXmzmREKiVx/tZCAWEnRkr3PFHpe8W7wlB7xXrGoHxfJlQte4/EakOZ1r0SUXWnaC8xStflvC1mmRtYBUXIjzZsrfV4jh6sZ5oKYmhmyf7D+5vwSg2CigUD1QHoM9MrtfirGS/6vGsb4GADMhRhrcGXqGBaD/PrmysohrJRDPipWzkZ8pj081cLLt59eBzGig6TLhUNLWFo1anj44r988/EMQsHlqtMqM8rlSY8gj3SogMrGUFNEMqBrS0=</certificate>
+        <consumerKey>3MVG9PbQtiUzNgN5HOnTahCd6GUNQvxC6c0kvkx8jvKTeivalJqfPZVZnMis9FRlMNC7Rx1aK0XBEUQ.TCKuH</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <scopes>Api</scopes>
+        <scopes>Full</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <profileName>System Administrator</profileName>
+</ConnectedApp>
