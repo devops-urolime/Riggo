@@ -11,7 +11,7 @@ phases:
   build:
     commands:
       - cd postman
-      - newman run -r html,cli RiggoAPI.postman_collection.json -e QA.postman_environment.json  --reporter-html-export report-$(Get-Date -UFormat "%Y%m%d-%H%M%S").html
+      - newman run -r html,cli RiggoAPI.postman_collection.json -e QA.postman_environment.json  --reporter-html-export report-$(date +"%Y-%m-%d %H-%M-%S").html
 
 artifacts:
   files:
