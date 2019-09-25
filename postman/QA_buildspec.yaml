@@ -11,9 +11,9 @@ phases:
   build:
     commands:
       - cd postman
-      - newman run -r html,cli RiggoAPI.postman_collection.json -e QA.postman_environment.json  --reporter-html-export report-$(date +"%Y-%m-%d %H-%M-%S").html
+      - newman run -r html,cli RiggoAPI.postman_collection.json -e QA.postman_environment.json  --reporter-html-export report-$CODEBUILD_BUILD_ID.html
 
 artifacts:
   files:
-    - report-*.html
+    - report-$CODEBUILD_BUILD_ID.html
   base-directory: 'postman'
