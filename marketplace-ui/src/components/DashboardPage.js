@@ -13,12 +13,13 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { HORIZONTAL_LINE } from './LineDivider';
+import LineDivider, { VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
+const NO_STATUS = "No Status";
 
 const digestDataToCardVisualization = (data) => {
   return data.map((item) => {
@@ -46,7 +47,7 @@ const digestDataToPieVisualization = (data, rootDataProp) => {
   if (isData){
     const data = dataToDigest[0].data;
     const totalAmount =  data.reduce(reducerTotal, 0);
-    result = data.map((item) => {
+    result = data.filter((itemData) => itemData.name !== NO_STATUS).map((item) => {
      return {
        id: item.name,
        label: item.name,
@@ -316,32 +317,43 @@ class DashboardPage extends Component {
                shipmentSummaryMultiYAxes.map((summaryItem, idx) =>{
                  return(
                    <Grid item xs={12} key={`shipment-viz-${idx}`}>
-                     <MultiYAxesVisualization
-                       title={summaryItem.title}
-                       data={summaryItem.data}
-                       onClickBar={this.navigateToNextViewType}
-                       onClickBack={this.navigateToPrevViewType}
-                       onClickNext={this.navigateToNextViewType}
-                       rootClass="ShipmentsVisualization"
-                       showNext={showNext}
-                       showPrev={showPrev}
-                     />
-                     <LineDivider
-                      orientation={HORIZONTAL_LINE}
-                     />
-                     <TotalSummary
-                       title="Total Shipments In Period"
-                       legend={`${summaryItem.totalShipmentsInPeriod}`}
-                     />
-                     <TotalSummary
-                       title="Total Cost In Period"
-                       legend={`$${summaryItem.totalCostInPeriod}`}
-                     />
-                     <TotalSummary
-                       title="Cost/ml In Period"
-                       legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-                     />
-                   </Grid>
+                     <Grid
+                       container
+                       spacing={0}
+                       direction="row"
+                       alignItems="center"
+                     >
+                        <Grid xs={8} item>
+                           <MultiYAxesVisualization
+                             title={summaryItem.title}
+                             data={summaryItem.data}
+                             onClickBar={this.navigateToNextViewType}
+                             onClickBack={this.navigateToPrevViewType}
+                             onClickNext={this.navigateToNextViewType}
+                             rootClass="ShipmentsVisualization"
+                             showNext={showNext}
+                             showPrev={showPrev}
+                           />
+                        </Grid>
+                        <Grid xs={1} item>
+                          <LineDivider orientation={VERTICAL_LINE}/>
+                        </Grid>
+                        <Grid xs={3} item>
+                            <TotalSummary
+                            title="Total Shipments In Period"
+                            legend={`${summaryItem.totalShipmentsInPeriod}`}
+                            />
+                            <TotalSummary
+                            title="Total Cost In Period"
+                            legend={`$${summaryItem.totalCostInPeriod}`}
+                            />
+                            <TotalSummary
+                            title="Cost/ml In Period"
+                            legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+                            />
+                        </Grid>
+                    </Grid>
+                  </Grid>
                 )
                });
               }
