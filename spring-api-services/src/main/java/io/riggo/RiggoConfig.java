@@ -1,8 +1,7 @@
 package io.riggo;
 
 import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
-import io.riggo.config.Auth0Properties;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,8 +21,10 @@ import java.util.Collections;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class RiggoConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private Auth0Properties auth0Properties;
+    @Value(value = "${auth0.apiAudience}")
+    private String apiAudience;
+    @Value(value = "${auth0.issuer}")
+    private String issuer;
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -42,7 +43,7 @@ public class RiggoConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors();
         JwtWebSecurityConfigurer
-                .forRS256(auth0Properties.getApiAudience(), auth0Properties.getIssuer())
+                .forRS256(apiAudience, issuer)
                 .configure(http)
                 .authorizeRequests()
                 .antMatchers("/api/v1/**").authenticated()

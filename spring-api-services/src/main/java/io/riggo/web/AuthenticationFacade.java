@@ -17,11 +17,6 @@ public class AuthenticationFacade {
 
     @Autowired
     private Auth0Properties auth0Properties;
-    public final static String EMAIL_CLAIM_KEY = "https://auth.riggoqa.com/email";
-    public final static String SITEID_CLAIM_KEY = "https://auth.riggoqa.com/siteId";
-    public final static String ROLES_CLAIM_KEY = "https://auth.riggoqa.com//roles";
-    public final static String CLIENT_ID = "A0WB2oszcFXbz0IB2PhREmDgSopOhGYp@clients";
-
 
     public String getUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

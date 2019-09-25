@@ -1,10 +1,10 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.*;
-import io.riggo.data.services.*;
+import io.riggo.data.domain.Load;
+import io.riggo.data.domain.LoadLineItem;
+import io.riggo.data.services.LoadLineItemService;
+import io.riggo.data.services.LoadService;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutLoad;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
