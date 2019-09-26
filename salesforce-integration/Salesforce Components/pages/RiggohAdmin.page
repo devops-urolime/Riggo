@@ -1,0 +1,297 @@
+<!--
+ - Created by Viktor S. Yaremenko on 3/29/2019.
+ -->
+
+<apex:page id="RiggohAdmin" controller="RiggohAdminCtrl" docType="html-5.0"
+           readOnly="false">
+    <style>
+label.rig-label {
+    width: 100px;
+    display: inline-block;
+    padding-right: 5px;
+    text-align: right;
+    font-weight: bold;
+}
+label.rig-label-big {
+    width: 210px;
+    display: inline-block;
+    padding-right: 5px;
+    text-align: right;
+    font-weight: bold;
+}
+.rig-header {
+    line-height: 2rem;
+    font-size: unset;
+    background-color: #94b9d1;
+    background-image: unset;
+}
+    </style>
+    <!-- Chainalitics -->
+    <apex:panelBar >
+        <apex:panelBarItem label="Chainalitics" headerClass="rig-header">
+            <apex:form >
+                <apex:pageBlock mode="edit">
+                    <apex:pageBlockSection columns="2" title="Get Report">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Date from:" for="chaina_rangeStart" styleClass="rig-label"/>
+                                <apex:input type="date" value="{!chaina_rangeStart}" id="chaina_rangeStart" styleClass="rangeData"
+                                            onChange="chaina_changeText();"/>
+                                0:00:00
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Date to:" for="chaina_rangeEnd" styleClass="rig-label"/>
+                                <apex:input type="date" value="{!chaina_rangeEnd}" id="chaina_rangeEnd" styleClass="rangeData"
+                                            onChange="chaina_changeText();"/>
+                                23:59:59
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Save to OneDrive:" for="chaina_isSaveToExternal"
+                                                  styleClass="rig-label-big"/>
+                                <apex:inputCheckbox value="{!chaina_isSaveToExternal}" id="chaina_isSaveToExternal"/>
+                                <apex:outputPanel layout="block">
+                                    <label class="rig-label-big">File Mask:</label>
+                                    <div>riggoh_export_4_chainalytics_from_[<span id="chaina_Range">YYYY-MM-DD</span>-00-00-00]UTC_TO[<span id="chaina_Range">YYYY-MM-DD</span>-23-59-00]_UTC.CSV</div>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:commandButton action="{!chaina_getReport}" value="Get Report" reRender="chaina_reportStatusLink"
+                                                    status="chaina_reportStatus"/>
+                                <apex:actionStatus startText="Generating" id="chaina_reportStatus"/>
+                                <apex:outputPanel layout="block" id="chaina_reportStatusLink"
+                                                  style="display: inline-block; margin-left: 15px;">
+                                    <apex:outputLink value="{!chaina_genDocumentUrl}"
+                                                     rendered="{!IF(NOT(ISBLANK(chaina_genDocumentUrl)),true,false)}"
+                                                     target="_blank"
+                                                     style="padding-left: 10px;">Salesforce Document
+                                    </apex:outputLink>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:form>
+
+            <apex:form >
+                <apex:pageBlock mode="edit" id="chaina_cronSettings">
+                    <apex:pageBlockSection columns="2" title="Scheduler settings">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Run Day:" for="chaina_cronRunDay" styleClass="rig-label"/>
+                                <apex:selectList value="{!chaina_cronRunDay}" id="chaina_cronRunDay" size="1">
+                                    <apex:selectOption itemValue="1" itemLabel="Sunday"/>
+                                    <apex:selectOption itemValue="2" itemLabel="Monday"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Send Generated Report to Email:" for="chaina_isCronSendEmail"
+                                                  styleClass="rig-label-big"/>
+                                <apex:inputCheckbox value="{!chaina_isCronSendEmail}" id="chaina_isCronSendEmail"/>
+                                <apex:input type="email" value="{!chaina_cronEmailAddress}" id="chaina_cronEmailAddress"/>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Data Range:" for="chaina_cronRangeDays" styleClass="rig-label"/>
+                                <apex:selectList value="{!chaina_cronRangeDays}" id="chaina_cronRangeDays" size="1">
+                                    <apex:selectOption itemValue="7" itemLabel="Week"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:outputLabel value="Save Generated Report to Onedrive:" for="chaina_isCronSaveToExternal"
+                                                  styleClass="rig-label-big"/>
+                                <apex:inputCheckbox value="{!chaina_isCronSaveToExternal}" id="chaina_isCronSaveToExternal"/>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block">
+                                <apex:commandButton action="{!chaina_resetToDefault}" value="Reset to Default"
+                                                    reRender="chaina_cronSettings"/>
+                                <apex:commandButton action="{!chaina_setCron}" value="Set Cron" status="chaina_cronStatus"
+                                                    reRender="chaina_cronLog"/>
+                                <apex:actionStatus startText="Set the scheduler." stopText="{!chaina_cronLogContent}"
+                                                   id="chaina_cronStatus"/>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputPanel layout="block" id="chaina_cronLog">
+                                <apex:outputPanel layout="block">
+                                    <label class="rig-label-big" style="vertical-align: top;">Cron Current State:</label>
+                                    <div style="display: inline-block;"><apex:outputText escape="false" value="{!chaina_CurrentCronState}" /></div>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:form>
+        </apex:panelBarItem>
+    <!-- Chainalitics^ -->
+
+    <!-- DAT -->
+    <apex:panelBarItem label="DAT" headerClass="rig-header">
+        <apex:form >
+            <apex:pageBlock mode="edit">
+                <apex:pageBlockSection columns="2" title="Get Report">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Date from:" for="dat_rangeStart" styleClass="rig-label"/>
+                            <apex:input type="date" value="{!dat_rangeStart}" id="dat_rangeStart" styleClass="rangeData"/>
+                            0:00:00
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Date to:" for="dat_rangeEnd" styleClass="rig-label"/>
+                            <apex:input type="date" value="{!dat_rangeEnd}" id="dat_rangeEnd" styleClass="rangeData"/>
+                            23:59:59
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Save to DAT FTP:" for="dat_isSaveToExternal"
+                                              styleClass="rig-label-big"/>
+                            <apex:inputCheckbox value="{!dat_isSaveToExternal}" id="dat_isSaveToExternal"/>
+                            <apex:outputPanel layout="block">
+                                <label class="rig-label-big">File Mask:</label>
+                                <!--<div>riggoh_export_4_dat_from_[<span id="dat_Range">YYYY-MM-DD</span>-00-00-00]UTC_TO[<span id="dat_Range">YYYY-MM-DD</span>-23-59-00]_UTC.CSV</div>-->
+                                <div>rates-233137-362295.csv</div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:commandButton action="{!dat_getReport}" value="Get Report" reRender="dat_reportStatusLink"
+                                                status="dat_reportStatus"/>
+                            <apex:actionStatus startText="Generating" id="dat_reportStatus"/>
+                            <apex:outputPanel layout="block" id="dat_reportStatusLink"
+                                              style="display: inline-block; margin-left: 15px;">
+                                <apex:outputLink value="{!dat_genDocumentUrl}"
+                                                 rendered="{!IF(NOT(ISBLANK(dat_genDocumentUrl)),true,false)}"
+                                                 target="_blank"
+                                                 style="padding-left: 10px;">Salesforce Document
+                                </apex:outputLink>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+
+        <apex:form >
+            <apex:pageBlock mode="edit" id="dat_cronSettings">
+                <apex:pageBlockSection columns="2" title="Scheduler settings">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Run Day:" for="dat_cronRunDay" styleClass="rig-label"/>
+                            <apex:selectList value="{!dat_cronRunDay}" id="dat_cronRunDay" size="1">
+                                <apex:selectOption itemValue="1" itemLabel="Sunday"/>
+                                <apex:selectOption itemValue="2" itemLabel="Monday"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Send Generated Report to Email:" for="dat_isCronSendEmail"
+                                              styleClass="rig-label-big"/>
+                            <apex:inputCheckbox value="{!dat_isCronSendEmail}" id="dat_isCronSendEmail"/>
+                            <apex:input type="email" value="{!dat_cronEmailAddress}" id="dat_cronEmailAddress"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Data Range:" for="dat_cronRangeDays" styleClass="rig-label"/>
+                            <apex:selectList value="{!dat_cronRangeDays}" id="dat_cronRangeDays" size="1">
+                                <apex:selectOption itemValue="0" itemLabel="Dayly"/>
+                            </apex:selectList>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Save Generated Report to Google Drive (DAT):" for="dat_isCronSaveToExternal"
+                                              styleClass="rig-label-big"/>
+                            <apex:inputCheckbox value="{!dat_isCronSaveToExternal}" id="dat_isCronSaveToExternal"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:outputLabel value="Google Drive Folder ID" for="dat_externalFolder"
+                                              styleClass="rig-label-big"/>
+
+                            <apex:inputText value="{!dat_externalFolder}" id="dat_externalFolder" />
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block">
+                            <apex:commandButton action="{!dat_resetToDefault}" value="Reset to Default"
+                                                reRender="dat_cronSettings"/>
+                            <apex:commandButton action="{!dat_setCron}" value="Set Cron" status="dat_cronStatus"
+                                                reRender="dat_cronLog"/>
+                            <apex:actionStatus startText="Set the scheduler." stopText="{!dat_cronLogContent}"
+                                               id="dat_cronStatus"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                    <apex:pageBlockSectionItem >
+                        <apex:outputPanel layout="block" id="dat_cronLog">
+                            <apex:outputPanel layout="block">
+                                <label class="rig-label-big" style="vertical-align: top;">Cron Current State:</label>
+                                <div style="display: inline-block;"><apex:outputText escape="false" value="{!dat_CurrentCronState}" /></div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>
+
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+    </apex:panelBarItem>
+    <!-- DAT^ -->
+    </apex:panelBar>
+
+
+    <script>
+    /*FIXME class name*/
+function chaina_changeText(){
+    document.getElementById("chaina_Range").innerText = document.getElementsByClassName("rangeData")[0].value;
+    document.getElementById("chaina_Range").innerText = document.getElementsByClassName("rangeData")[1].value;
+}
+/*function dat_changeText(){
+    document.getElementById("dat_Range").innerText = document.getElementsByClassName("rangeData")[0].value;
+    document.getElementById("dat_Range").innerText = document.getElementsByClassName("rangeData")[1].value;
+}*/
+
+changeText();
+changeTextDat();
+    </script>
+</apex:page>

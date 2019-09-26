@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Detention_Email_Alert_1</fullName>
+        <ccEmails>operations@riggo.io;mitul.t@urolime.com</ccEmails>
+        <description>Detention Email Alert</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Carrier_Sales_Rep_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Detention_Email</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>Email_Sent</fullName>
+        <field>Email_Sent__c</field>
+        <formula>NOW()</formula>
+        <name>Email Sent</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <rules>
+        <fullName>Detention Email</fullName>
+        <active>true</active>
+        <booleanFilter>1 AND 2 AND 3 AND 4 AND 5</booleanFilter>
+        <criteriaItems>
+            <field>Detention_Email__c.Detention_Email_Send_DateTime__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Detention_Email__c.LoadStatus__c</field>
+            <operation>notEqual</operation>
+            <value>Unassigned,Cancelled,Declined,Expired</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Detention_Email__c.LoadStatus__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Detention_Email__c.SendDetentionEmail__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>rtms__Stop__c.rtms__Stop_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Departed</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+        <workflowTimeTriggers>
+            <actions>
+                <name>Detention_Email_Alert_1</name>
+                <type>Alert</type>
+            </actions>
+            <actions>
+                <name>Email_Sent</name>
+                <type>FieldUpdate</type>
+            </actions>
+            <offsetFromField>Detention_Email__c.Expected_DateTime__c</offsetFromField>
+            <timeLength>1</timeLength>
+            <workflowTimeTriggerUnit>Hours</workflowTimeTriggerUnit>
+        </workflowTimeTriggers>
+    </rules>
+</Workflow>

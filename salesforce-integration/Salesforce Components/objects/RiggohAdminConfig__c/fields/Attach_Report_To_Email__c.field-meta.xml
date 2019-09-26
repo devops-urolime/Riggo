@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Attach_Report_To_Email__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Should we save generated report to External system: OneDrive etc.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Should we save generated report to External system: OneDrive etc.</inlineHelpText>
+    <label>Attach Report To Email</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

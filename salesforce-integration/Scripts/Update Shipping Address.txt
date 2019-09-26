@@ -1,0 +1,15 @@
+List<Account> accts = [SELECT BillingStreet,BillingCity,BillingPostalCode,BillingState,BillingCountry,
+                              Id,rtms__TMS_Type__c,
+                              ShippingStreet,ShippingCity,ShippingPostalCode,ShippingState,ShippingCountry 
+                       FROM Account 
+                       where rtms__TMS_Type__c='Carrier (Ground)' 
+                       and ShippingState='' 
+                       and BillingState!=''];
+for(account acc : accts){
+    acc.ShippingStreet = acc.BillingStreet;
+    acc.ShippingCity = acc.BillingCity;
+    acc.ShippingPostalCode = acc.BillingPostalCode;
+    acc.ShippingState = acc.BillingState;
+    acc.ShippingCountry = acc.BillingCountry;
+}
+update accts;

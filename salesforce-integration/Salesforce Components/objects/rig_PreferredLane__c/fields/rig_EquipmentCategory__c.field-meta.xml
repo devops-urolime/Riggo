@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>rig_EquipmentCategory__c</fullName>
+    <externalId>false</externalId>
+    <label>Equipment Category</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Van</fullName>
+                <default>false</default>
+                <label>Van</label>
+            </value>
+            <value>
+                <fullName>Flatbed</fullName>
+                <default>false</default>
+                <label>Flatbed</label>
+            </value>
+            <value>
+                <fullName>Reefer</fullName>
+                <default>false</default>
+                <label>Reefer</label>
+            </value>
+            <value>
+                <fullName>Specialized</fullName>
+                <default>false</default>
+                <label>Specialized</label>
+            </value>
+            <value>
+                <fullName>Ocean/Intermodal</fullName>
+                <default>false</default>
+                <label>Ocean/Intermodal</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

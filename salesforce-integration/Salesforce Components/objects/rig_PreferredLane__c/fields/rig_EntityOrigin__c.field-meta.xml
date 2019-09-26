@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>rig_EntityOrigin__c</fullName>
+    <defaultValue>&quot;ui&quot;</defaultValue>
+    <description>where this entity came from? Was it created by a human through UI (default)? Imported from another source like carrierList? when? purpose to be able to identify entities from different bulk API imports for rollback</description>
+    <externalId>false</externalId>
+    <inlineHelpText>where this entity came from? Was it created by a human through UI (default)? Imported from another source like carrierList? when? purpose to be able to identify entities from different bulk API imports for rollback</inlineHelpText>
+    <label>Entity Origin</label>
+    <length>128</length>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

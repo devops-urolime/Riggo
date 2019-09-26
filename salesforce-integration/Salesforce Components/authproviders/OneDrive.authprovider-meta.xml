@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
+    <authorizeUrl>https://login.microsoftonline.com/common/oauth2/v2.0/authorize</authorizeUrl>
+    <consumerKey>b0efe37d-ecb5-4224-b61f-6fe61502a199</consumerKey>
+    <consumerSecret>+jo8ErKhTdpJESFoE+LF1965vEMMkcnl</consumerSecret>
+    <defaultScopes>user.read offline_access</defaultScopes>
+    <friendlyName>OneDrive</friendlyName>
+    <includeOrgIdInIdentifier>false</includeOrgIdInIdentifier>
+    <providerType>MicrosoftACS</providerType>
+    <sendAccessTokenInHeader>false</sendAccessTokenInHeader>
+    <sendClientCredentialsInHeader>false</sendClientCredentialsInHeader>
+    <tokenUrl>https://login.microsoftonline.com/common/oauth2/v2.0/token</tokenUrl>
+</AuthProvider>

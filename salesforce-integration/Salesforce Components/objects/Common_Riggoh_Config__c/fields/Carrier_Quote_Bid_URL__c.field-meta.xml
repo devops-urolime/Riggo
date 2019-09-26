@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Carrier_Quote_Bid_URL__c</fullName>
+    <defaultValue>&quot;https://carrier.riggoh.com/carrier-quote-bid/&quot;</defaultValue>
+    <description>Load Details URL</description>
+    <externalId>false</externalId>
+    <label>Carrier Quote Bid URL</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Url</type>
+</CustomField>

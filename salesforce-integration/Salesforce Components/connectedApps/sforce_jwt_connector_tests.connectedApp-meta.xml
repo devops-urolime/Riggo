@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>revenova.support@riggoh.com</contactEmail>
+    <contactPhone>+972545441097</contactPhone>
+    <description>an app for the integration test of the sforce-jwt-connector lib by Max. code https://git.riggoh.name/tools/unit-tests/sforce-jwt-connector-tests</description>
+    <label>sforce_jwt_connector_tests</label>
+    <oauthConfig>
+        <callbackUrl>http:/localhost:8080</callbackUrl>
+        <certificate>MIIDiDCCAnACCQDIf8SADWfoZzANBgkqhkiG9w0BAQsFADCBhTELMAkGA1UEBhMCSUwxDzANBgNVBAgMBklzcmFlbDEPMA0GA1UEBwwGR2FhdG9uMQ8wDQYDVQQKDAZSaWdnb2gxDDAKBgNVBAsMA1JuRDEUMBIGA1UEAwwLQm9yaXMgRGFpY2gxHzAdBgkqhkiG9w0BCQEWEGJvcmlzQHJpZ2dvaC5jb20wHhcNMTgxMTIyMTI0NzAzWhcNMTgxMjIyMTI0NzAzWjCBhTELMAkGA1UEBhMCSUwxDzANBgNVBAgMBklzcmFlbDEPMA0GA1UEBwwGR2FhdG9uMQ8wDQYDVQQKDAZSaWdnb2gxDDAKBgNVBAsMA1JuRDEUMBIGA1UEAwwLQm9yaXMgRGFpY2gxHzAdBgkqhkiG9w0BCQEWEGJvcmlzQHJpZ2dvaC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDOv+fm1zdqwTTYnfFftvRI2wnXeGVVS9oEv/qP08jtDLWlVMVxkpCRQBF/HcorHwyGuhWQ4FBd+6FVxOf6R5lovr0BzK0JUI9CfjKauCbw+r/iahOr/d+mJvbl8TuexFsmOm7SKcMMTs3LQAKvkhJVmObvRso2Sq6owiQK6hI3zh761wWhyVZEZljw/Iz0bzfqqRvE5iLCCv/Z0qvrRVyothoieY5gx6t1wKsWX+tCnWV9LJH4cPz9i69dLvC+oT99+99sY0kU9fWUxng4fy33WaFG+3dgEhfNw0XaMFELj7vjoZgEVwDXF7vE0fK6x8Qw5qEeVYswwjVOI+Rpel8HAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAI9iuThn53x8/of4d1mUlJwlCxzaXyH3en4l8Zvd+FOF7Okitwgytptxa1NmWkL4QmDqP+fwZWgGLYHQo7QqLgQ2a8Y9SNEhra7N5kyhVL1jVeTSdgfMNZGXD1NB4M6GEVzRR+0W8xZMx8nxsXKERTXaFuUK+cd5F1/crb33iF2t42eow9e+L4XW4+VSMavoFjUQvAUGvno/6GXi5YFpanxvJ1euY9DSpswncwZC5C7/SYmK9PP+/HkAFYVnMX4ClL9PenPyEo3EO864SV9km/dPbMnPiufNPWuMhp+zw62bhejL5h6rIN04+NgjfSfXgN5OCJzTIs46L+B7RPAR8Lw=</certificate>
+        <consumerKey>3MVG9PbQtiUzNgN5HOnTahCd6GUNQvxC6c0kvoH5Km2GJyVdEp6SxuG_XY6UhHNVtVuQG.2iZBIt09bJd5xdT</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <scopes>Full</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <profileName>General Admin</profileName>
+    <profileName>Super User</profileName>
+    <profileName>Chatter Free User</profileName>
+    <profileName>Standard Guest</profileName>
+    <profileName>Standard Platform User</profileName>
+    <profileName>Macropoint Profile</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>Application Profile</profileName>
+    <profileName>Marketing User</profileName>
+    <profileName>Solution Manager</profileName>
+    <profileName>Guest License User</profileName>
+    <profileName>Carrier Admin</profileName>
+    <profileName>Contract Manager</profileName>
+    <profileName>TMS Profile</profileName>
+    <profileName>Customer Admin</profileName>
+    <profileName>Chatter External User</profileName>
+    <profileName>Chatter Moderator User</profileName>
+    <profileName>Read Only</profileName>
+    <profileName>Standard User</profileName>
+</ConnectedApp>
