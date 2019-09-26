@@ -23,9 +23,13 @@ public class AuthenticationFacade {
         return JWT.decode(((AuthenticationJsonWebToken) authentication).getToken()).getClaim(auth0Properties.getEmailClaimKey()).asString();
     }
 
+    //TODO: Auth0 has hardcoded the siteId - we should be able to add it to MetaData in Auth0 and pull it for the rule.
     public Integer getSiteId(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String siteId = JWT.decode(((AuthenticationJsonWebToken) authentication).getToken()).getClaim(auth0Properties.getSiteIdClaimKey()).asString();
+        if(siteId == null && isMachine()){
+            return 100;
+        }
         return NumberUtils.toInt(siteId);
     }
 
