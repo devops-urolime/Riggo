@@ -9,9 +9,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "invoice")
-
-public class Invoice implements Serializable {
+@Table(name = "quote")
+public class Quote implements Serializable {
     private static final long serialVersionUID = 7156526077883281623L;
 
     @Id

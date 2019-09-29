@@ -1,10 +1,10 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.Invoice;
+import io.riggo.data.domain.Quote;
 import io.riggo.data.domain.Load;
-import io.riggo.data.services.InvoiceService;
+import io.riggo.data.services.QuoteService;
 import io.riggo.data.services.LoadService;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutInvoice;
+import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutQuote;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -30,10 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(InvoiceController.class)
-public class InvoiceControllerTest {
+@WebMvcTest(QuoteController.class)
+public class QuoteControllerTest {
 
-    private static Logger logger = LoggerFactory.getLogger(InvoiceControllerTest.class);
+    private static Logger logger = LoggerFactory.getLogger(QuoteControllerTest.class);
 
     @Autowired
     private MockMvc mvc;
@@ -42,29 +42,29 @@ public class InvoiceControllerTest {
     private LoadService loadService;
 
     @MockBean
-    private InvoiceService invoiceService;
+    private QuoteService quoteService;
 
     @MockBean
-    private SalesforceRevenovaRequestBodyParserPostPutInvoice salesforceRevenovaRequestBodyParserPostPutInvoice;
+    private SalesforceRevenovaRequestBodyParserPostPutQuote salesforceRevenovaRequestBodyParserPostPutQuote;
 
     @MockBean
     private AuthenticationFacade authenticationFacade;
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInsertInvoiceHappyPath() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putInsertQuoteHappyPath() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
+        given(quoteService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/quote")
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -77,8 +77,8 @@ public class InvoiceControllerTest {
 
 
     @Test
-    public void postInvoiceUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(post(Paths.API_VERSION + Paths.LOAD_INVOICE)
+    public void postQuoteUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(post(Paths.API_VERSION + Paths.LOAD_QUOTE)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -90,8 +90,8 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    public void putInsertInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
-        mvc.perform(put(Paths.API_VERSION + Paths.LOAD_INVOICE)
+    public void putInsertQuoteRequireWriteLoadInvoicePermission() throws Exception {
+        mvc.perform(put(Paths.API_VERSION + Paths.LOAD_QUOTE)
                 .contentType(APPLICATION_JSON)
                 .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
@@ -102,25 +102,25 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInsertInvoiceUnrecognizedLoad() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putInsertQuoteUnrecognizedLoad() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
 
 
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -133,25 +133,25 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInsertInvoiceWithParamHappyPath() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putInsertQuoteWithParamHappyPath() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
 
         given(authenticationFacade.getSiteId()).willReturn(100);
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
         given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
-        given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(quoteService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/1/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/1/quote")
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -164,8 +164,8 @@ public class InvoiceControllerTest {
 
 
     @Test
-    public void postInvoiceWithParamUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/1/invoice")
+    public void postQuoteWithParamUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(post(Paths.API_VERSION + "/load/1/quote")
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -177,8 +177,8 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    public void putInsertInvoicedWithRequireWriteLoadInvoicePermission() throws Exception {
-        mvc.perform(put(Paths.API_VERSION + "/load/1/invoice")
+    public void putInsertQuoteWithRequireWriteLoadInvoicePermission() throws Exception {
+        mvc.perform(put(Paths.API_VERSION + "/load/1/quote")
                 .contentType(APPLICATION_JSON)
                 .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
@@ -191,24 +191,24 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInsertInvoiceWithParamUnrecognizedLoad() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putInsertQuoteWithParamUnrecognizedLoad() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
 
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/1/invoice")
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + "/load/1/quote")
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -222,18 +222,18 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInvoiceHappyPath() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putQuoteHappyPath() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
-        given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(quoteService.findByExtSysId("1")).willReturn(java.util.Optional.of(quote));
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD_QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -246,8 +246,8 @@ public class InvoiceControllerTest {
 
 
     @Test
-    public void putInvoiceUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_INVOICE)
+    public void putQuoteUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_QUOTE)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -259,8 +259,8 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    public void putInvoicedRequireWriteLoadInvvoicePermission() throws Exception {
-        mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_INVOICE)
+    public void putQuoteRequireWriteLoadQuotePermission() throws Exception {
+        mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_QUOTE)
                 .contentType(APPLICATION_JSON)
                 .content(jsonPostLoadFor200))
                 .andExpect(status().isForbidden())
@@ -270,24 +270,24 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInvoiceUnrecognizedLoad() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putQuoteUnrecognizedLoad() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
 
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION+ Paths.LOAD_QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -300,13 +300,13 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInvoiceWithParamHappyPath() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putQuoteWithParamHappyPath() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setSiteId(100);
@@ -314,10 +314,10 @@ public class InvoiceControllerTest {
 
         given(authenticationFacade.getSiteId()).willReturn(100);
         given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
-        given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.of(invoice));
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(quoteService.findByExtSysId("1")).willReturn(java.util.Optional.of(quote));
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -330,8 +330,8 @@ public class InvoiceControllerTest {
 
 
     @Test
-    public void putInvoiceWithParamUnauthenticated() throws Exception {
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.INVOICE)
+    public void putQuoteWithParamUnauthenticated() throws Exception {
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.QUOTE)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
                 .andReturn();
@@ -343,8 +343,8 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring")
     @Test
-    public void putInvoicedWithRequireWriteLoadInvoicePermission() throws Exception {
-        mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.INVOICE)
+    public void putQuoteWithRequireWriteLoadInvoicePermission() throws Exception {
+        mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isForbidden())
@@ -354,24 +354,24 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInvoiceWithParamInvoiceNotFound() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putQuoteWithParamInvoiceNotFound() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setSiteId(100);
         load.setId(1);
 
         given(loadService.findById(1, 100)).willReturn(java.util.Optional.of(load));
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
-        given(invoiceService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
+        given(quoteService.findByExtSysId("1")).willReturn(java.util.Optional.empty());
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -384,24 +384,24 @@ public class InvoiceControllerTest {
 
     @WithMockUser(value = "spring", authorities = {"write:loadInvoice"})
     @Test
-    public void putInvoiceWithParamUnrecognizedLoad() throws Exception {
-        List<Invoice> invoiceList = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(1);
-        invoice.setExtSysId("1");
-        invoice.setLoadExtSysId("1");
-        invoice.setLoadId(1);
-        invoiceList.add(invoice);
+    public void putQuoteWithParamUnrecognizedLoad() throws Exception {
+        List<Quote> quoteList = new ArrayList<>();
+        Quote quote = new Quote();
+        quote.setId(1);
+        quote.setExtSysId("1");
+        quote.setLoadExtSysId("1");
+        quote.setLoadId(1);
+        quoteList.add(quote);
 
         Load load = new Load();
         load.setId(1);
         load.setSiteId(100);
 
-        given(invoiceService.findById(1)).willReturn(java.util.Optional.of(invoice));
+        given(quoteService.findById(1)).willReturn(java.util.Optional.of(quote));
         given(loadService.findByExtSysId("1", 100)).willReturn(java.util.Optional.empty());
-        given(salesforceRevenovaRequestBodyParserPostPutInvoice.resolveInvoice(any(Map.class))).willReturn(invoiceList);
+        given(salesforceRevenovaRequestBodyParserPostPutQuote.resolveQuote(any(Map.class))).willReturn(quoteList);
 
-        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.INVOICE)
+        MvcResult result = mvc.perform(put(Paths.API_VERSION + Paths.LOAD + "/1" + Paths.QUOTE)
                 .content(jsonPostLoadFor200)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -413,7 +413,7 @@ public class InvoiceControllerTest {
 
 
     private static String jsonPostLoadFor200 = "{\n" +
-            "\t\"Invoice\" : {\n" +
+            "\t\"Quote\" : {\n" +
             "\t\t\"id\" : \"a0jg000000ExlfrAsq\",\n" +
             "\t\t\"quote_date\" : \"2019-08-09 13:05:19\",\n" +
             "\t\t\"status\" : \"Accepted\",\n" +

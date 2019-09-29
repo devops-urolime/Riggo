@@ -9,9 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "invoice")
+@Table(name = "quote")
 
-public class InvoiceLoad implements Serializable {
+public class QuoteLoad implements Serializable {
     private static final long serialVersionUID = 7156526077883281623L;
 
     @Id
@@ -51,9 +51,9 @@ public class InvoiceLoad implements Serializable {
     private BigDecimal distanceMiles;
 
 
-    public InvoiceLoad(){}
+    public QuoteLoad(){}
 
-    public InvoiceLoad(Integer id, String extSysId, Integer loadId, LocalDateTime quoteDate, Integer status, String comments, BigDecimal netFreightCharges, BigDecimal fuelSurcharge, BigDecimal accessorialCharges, BigDecimal transportationTotal, BigDecimal customerQuoteTotal, BigDecimal distanceMiles) {
+    public QuoteLoad(Integer id, String extSysId, Integer loadId, LocalDateTime quoteDate, Integer status, String comments, BigDecimal netFreightCharges, BigDecimal fuelSurcharge, BigDecimal accessorialCharges, BigDecimal transportationTotal, BigDecimal customerQuoteTotal, BigDecimal distanceMiles) {
         this.id = id;
         this.extSysId = extSysId;
         this.loadId = loadId;

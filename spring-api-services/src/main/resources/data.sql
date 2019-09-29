@@ -28,7 +28,7 @@ INSERT INTO load_stop(id, load_id, arrival_status, type, ext_sys_id) VALUES (2, 
 
 
 /* invoice */
-INSERT INTO invoice(id, ext_sys_id, load_id, quote_date, status) VALUES (1, 'extSysId1', 7, '2019-07-15 00:00:00', 3);
+INSERT INTO quote(id, ext_sys_id, load_id, quote_date, status) VALUES (1, 'extSysId1', 7, '2019-07-15 00:00:00', 3);
 
 
 /* shipper */
