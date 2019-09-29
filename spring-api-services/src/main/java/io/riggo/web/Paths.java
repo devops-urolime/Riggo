@@ -14,7 +14,7 @@ public class Paths {
     public static final String SHIPMENTS_SUMMARY = "/shipments/summary";
     public static final String STOP_SUMMARY = "/stop/summary";
 
-    public static final String INVOICE = "/invoice";
+    public static final String QUOTE = "/quote";
     public static final String STOP = "/stop";
     public static final String LINE_ITEM = "/line-item";
 
@@ -23,8 +23,8 @@ public class Paths {
     public static final String LOAD_STOP_SUMMARY = LOAD + STOP_SUMMARY;
     public static final String LOAD_LOADID_PARAM = LOAD + LOADID_PARAM;
 
-    public static final String LOAD_INVOICE = LOAD + INVOICE;
-    public static final String LOAD_LOADID_PARAM_INVOICE = LOAD + LOADID_PARAM + INVOICE;
+    public static final String LOAD_QUOTE = LOAD + QUOTE;
+    public static final String LOAD_LOADID_PARAM_QUOTE = LOAD + LOADID_PARAM + QUOTE;
 
     public static final String LOAD_STOP = LOAD + STOP;
     public static final String LOAD_LOADID_PARAM_STOP = LOAD + LOADID_PARAM + STOP;

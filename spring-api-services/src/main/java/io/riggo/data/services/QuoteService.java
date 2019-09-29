@@ -1,44 +1,41 @@
 package io.riggo.data.services;
 
-import io.riggo.data.domain.Invoice;
-import io.riggo.data.domain.InvoiceLoad;
+import io.riggo.data.domain.Quote;
 import io.riggo.data.exception.RiggoDataAccessException;
-import io.riggo.data.repositories.InvoiceRepository;
+import io.riggo.data.repositories.QuoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class InvoiceService {
+public class QuoteService {
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private QuoteRepository quoteRepository;
 
 
-    public Invoice save(Invoice invoice) {
+    public Quote save(Quote quote) {
         try {
-            return invoiceRepository.save(invoice);
+            return quoteRepository.save(quote);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Optional<Invoice> findById(Integer id) {
+    public Optional<Quote> findById(Integer id) {
         try {
-            return invoiceRepository.findById(id);
+            return quoteRepository.findById(id);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }
     }
 
 
-    public Optional<Invoice> findByExtSysId(String extSysId) {
+    public Optional<Quote> findByExtSysId(String extSysId) {
         try {
-            return invoiceRepository.findByExtSysId(extSysId);
+            return quoteRepository.findByExtSysId(extSysId);
         } catch (Exception e) {
             throw new RiggoDataAccessException(e);
         }

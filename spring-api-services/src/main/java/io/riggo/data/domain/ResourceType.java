@@ -13,7 +13,7 @@ public enum ResourceType
     SHIPPER(2, "Shipper"),
     LOAD_PIPELINE(3, "Load Pipeline"),
     LOAD_STOP_SUMMARY(4, "Load Stop Summary"),
-    INVOICE(5, "Invoice"),
+    QUOTE(5, "Quote"),
     SHIPMENT_SUMMARY(6, "Shipment Summary"),
     ;
 
