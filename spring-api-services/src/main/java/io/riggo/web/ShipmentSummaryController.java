@@ -90,7 +90,7 @@ public class ShipmentSummaryController {
 
         if(startDate != null && endDate != null)
         {
-            if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
+            if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() || authenticationFacade.isMachine() ) {
                 quotes = quoteLoadService.findQuotesBySite(authenticationFacade.getSiteId(), quoteStatusList, loadStatusList, startDate, endDate);
             }
             else if(authenticationFacade.isShipperExecutive()) {
