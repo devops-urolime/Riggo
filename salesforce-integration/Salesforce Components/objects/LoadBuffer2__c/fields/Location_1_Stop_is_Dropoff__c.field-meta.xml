@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Location_1_Stop_is_Dropoff__c</fullName>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <label>Location 1 Stop is Dropoff</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

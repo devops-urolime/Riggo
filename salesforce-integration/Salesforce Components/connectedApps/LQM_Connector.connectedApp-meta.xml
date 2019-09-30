@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>dev@riggoh.com</contactEmail>
+    <label>LQM Connector</label>
+    <oauthConfig>
+        <callbackUrl>https://marketing-automation.now.sh</callbackUrl>
+        <certificate>MIIDEDCCAfgCCQCEVrqPXQ2/6DANBgkqhkiG9w0BAQsFADBKMQswCQYDVQQGEwJVUzESMBAGA1UECAwJQW55IFN0YXRlMREwDwYDVQQHDAhOZXcgWW9yazEUMBIGA1UECgwLQmFsIEJsYSBMdGQwHhcNMTgwNjI2MTYwNDA2WhcNMTgwNzI2MTYwNDA2WjBKMQswCQYDVQQGEwJVUzESMBAGA1UECAwJQW55IFN0YXRlMREwDwYDVQQHDAhOZXcgWW9yazEUMBIGA1UECgwLQmFsIEJsYSBMdGQwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDKiw9W85lCFWhQm/U7HTGAhkl1Xhwr0eiXNpD4VbD0Qei8fv3B7oHcnJx7v+PAy5ZlEqLQZzveGKPX85UIUptcrnkuZvrisJ3Yv7qvWRNuMFOqp25wajD96h1qpaKGi/onREhBqMs4srp8/A+XlQx4jpx/UUyMZuvDLPD2/9X4xFY+IrPbykTY/g3fVk526TaT37HYj781H1u0/GHwdT73NVvHiFGntvk901LxLIJPcuPjGpGVYwt4tHvWszOrDi8FvzCAACoNrVhtqWaG9UvqIEL5XpOhXH17F08SjQgQ6g2hfBO5rncvccX/DjVDJ5Iovd3d/mlhzGjJ0OVOZb7RAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAEf9FyVJd3iujhM29K1/2QBB4k31S4qCStar1WmH/FYYR7cwJNouGkxQ5r2DM91Ab2b2lpxKHQ6P8BrHvEswLwhrltUnJvW2DmFcK6nEYtskeXec0pDimfYWL8NT8EvRXeCfnocLeuwqGmlB1xU5X9Yd4du7cSGUiww147+u1I/U9J9EzztZG6h2U9JU4GUTo/mvFdLzzP+HCr9QKf8b4UpJlaAgK5E0fM1U1J25pnRZqDuUB4bgTtLYMqzOMlIbJ58X7/MzJb2rma03OkIkGLg3ru1pRzW1yFQoWpLFbeIsFzP4ug+/xkR4TX82cBRCy+xIj7WdqlzBexbZQh1ZRgk=</certificate>
+        <consumerKey>3MVG9PbQtiUzNgN5HOnTahCd6GYTiEsuRsTyxSUWHBt.m.MxR53emviWpz9JKAvRJEEmg6ZoQhEdT8k8mSc1g</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <scopes>Full</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <profileName>General Admin</profileName>
+    <profileName>Super User</profileName>
+    <profileName>Chatter Free User</profileName>
+    <profileName>Standard Guest</profileName>
+    <profileName>Standard Platform User</profileName>
+    <profileName>Macropoint Profile</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>Application Profile</profileName>
+    <profileName>Marketing User</profileName>
+    <profileName>Solution Manager</profileName>
+    <profileName>Guest License User</profileName>
+    <profileName>Carrier Admin</profileName>
+    <profileName>Contract Manager</profileName>
+    <profileName>TMS Profile</profileName>
+    <profileName>Customer Admin</profileName>
+    <profileName>Chatter External User</profileName>
+    <profileName>Chatter Moderator User</profileName>
+    <profileName>Read Only</profileName>
+    <profileName>Standard User</profileName>
+</ConnectedApp>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>boris@riggoh.com</contactEmail>
+    <contactPhone>+972545441097</contactPhone>
+    <description>SW dev experiments for future integration</description>
+    <iconUrl>https://login.salesforce.com/logos/Custom/Bug_Primary/icon.svg</iconUrl>
+    <infoUrl>http://www.riggoh.com/about</infoUrl>
+    <label>Boris Experiments</label>
+    <logoUrl>https://login.salesforce.com/logos/Custom/Bug_Primary/logo.png</logoUrl>
+    <oauthConfig>
+        <callbackUrl>http://localhost:8080/
+http://localhost:8080/login
+https://localhost:8443/
+https://localhost:8443/login</callbackUrl>
+        <consumerKey>3MVG9PbQtiUzNgN5HOnTahCd6GYTiEsuRsTyxxmtrBqzmt4ApFU7hXOh_vNyK3Gl.LOMGEe5xWA==</consumerKey>
+        <isAdminApproved>false</isAdminApproved>
+        <scopes>Full</scopes>
+    </oauthConfig>
+</ConnectedApp>

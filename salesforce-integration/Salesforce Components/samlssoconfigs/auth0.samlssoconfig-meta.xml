@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SamlSsoConfig xmlns="http://soap.sforce.com/2006/04/metadata">
+    <identityLocation>SubjectNameId</identityLocation>
+    <identityMapping>Username</identityMapping>
+    <issuer>urn:riggoh-shipper.auth0.com</issuer>
+    <loginUrl>https://riggoh-shipper.auth0.com/samlp/BXwHXdtYP0Q0J9uP7YLrRI5AWltHYfax</loginUrl>
+    <name>auth0</name>
+    <oauthTokenEndpoint>https://riggoh-prod--stage2.my.salesforce.com/services/oauth2/token?so=00D4B0000009yrn</oauthTokenEndpoint>
+    <redirectBinding>false</redirectBinding>
+    <requestSignatureMethod>1</requestSignatureMethod>
+    <requestSigningCertId>0P16A000003bAO9</requestSigningCertId>
+    <salesforceLoginUrl>https://riggoh-prod--stage2.my.salesforce.com?so=00D4B0000009yrn</salesforceLoginUrl>
+    <samlEntityId>https://saml.saleforce.com</samlEntityId>
+    <samlVersion>SAML2_0</samlVersion>
+    <singleLogoutBinding>PostBinding</singleLogoutBinding>
+    <singleLogoutUrl>https://riggoh-shipper.auth0.com/logout</singleLogoutUrl>
+    <userProvisioning>false</userProvisioning>
+    <validationCert>MIIDCzCCAfOgAwIBAgIJb2O7w8WE9HevMA0GCSqGSIb3DQEBCwUAMCMxITAfBgNVBAMTGHJpZ2dvaC1zaGlwcGVyLmF1dGgwLmNvbTAeFw0xODA0MTAwNzQ2MzRaFw0zMTEyMTgwNzQ2MzRaMCMxITAfBgNVBAMTGHJpZ2dvaC1zaGlwcGVyLmF1dGgwLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMuAOCoy0jxFZnZD8wBNAniQRVceAXy3CqwWoqQTxY2C69kvfgbIBFrxzl2dapznO7JaFNV7hzw194OsMUI5ukVVr3Ap4lTu/3EaqA2gVFsQu6uU18fPPzAYz02pNUkwXl/RKJ0Gc5cM4gBfw+XB9YJJ10TW52vKssiyN502A4JvgxtgFVv/JlS1Foo+RsF/PvIZM91bd0iaPqAMOVkQsCmrejbty4wPHLtLTAlScddnxOaURa1U7FePqO9IKARHm9A6WdFzGpGNP4+67SmkoWthBvPCjyfThCsF40dUuKrNExluO0FXP56Uk174iL5kIIh61unTWq/zKQpxbQCCByUCAwEAAaNCMEAwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQULSLrMjhSiwVk84b8WIRVNzTFa+kwDgYDVR0PAQH/BAQDAgKEMA0GCSqGSIb3DQEBCwUAA4IBAQA9f7tf7XMlOT9mWVG/Va86h4UTNwUPq4ylaD6GIE7lAjTCPJYQbiBvpwHJnFsi+BRIZC/qO07/2GEQU2gyf4qnY8WDF3tdCGBqD6igSGiK5NK+cRnwSTtpK5O/qN4C25D3U2c+FVmTBPcCyTMbUjNBToHHmY9jGmtuT0dQhz00wdfe7m8Fi3ganm2O8AGVQLeReBuLNbu8rTfnmEZtiUO6fji+B8s5ZYjT1PJwi8VWf9EvNTqHS/QM4q6d9Ijs0Q2RH8+J4Efw87pEFjQuaFEXnCR4cCyl2ulb+WU/WcpDi9GCmH1NFKX8VVLnVWrfk+NWVb9SXBXhnloYY44rNT+T</validationCert>
+</SamlSsoConfig>

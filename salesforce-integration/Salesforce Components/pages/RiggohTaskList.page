@@ -1,0 +1,160 @@
+<!--
+ - Created by Viktor S. Yaremenko on 12/1/2018.
+ -->
+
+<apex:page id="RiggohTaskList" controller="RiggohTaskList" tabStyle="Task" docType="html-5.0">
+
+
+    <apex:stylesheet value="{!URLFOR($Resource.RiggohCommon, '/css/main.css')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RiggohCommon, '/js/lib/jquery/jquery-3.3.1.min.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RiggohCommon, '/js/task-list.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RiggohCommon, '/js/lib/spin.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.RiggohCommon, '/js/lib/jquery.spin.js')}"/>
+
+    <div id="ajax_load" style="display: none;"></div>
+
+    <apex:sectionHeader title="Riggoh Task List"/>
+
+    <apex:pageBlock >
+        <apex:form id="theForm">
+            <apex:pageMessages />
+            <apex:actionStatus id="reqStatus"
+                               onstart="rig.st_load();" onstop="rig.st_stop();"/>
+            <!-- paginator -->
+            <apex:panelGrid columns="2" width="100%" columnClasses="nav-panel-40, none">
+                <apex:panelGroup styleClass="nav-panel-buttons" layout="block">
+                    <apex:commandButton value="Complete" action="{!massComplete}"
+                                        rendered="{!!showSelected}" reRender="theForm"/>
+                    <apex:commandButton value="Defer" action="{!massDefer}"
+                                        rendered="{!!showSelected}" reRender="theForm"/>
+                    <apex:commandButton value="Delete" action="{!massDelete}"
+                                        rendered="{!!showSelected}" reRender="theForm"/>
+                    <apex:commandButton value="Confirm" action="{!confirm}"
+                                        rendered="{!showSelected}" reRender="theForm"/>
+                    <apex:commandButton value="Back" action="{!back}"
+                                        rendered="{!showSelected}" reRender="theForm"/>
+                </apex:panelGroup>
+
+                <apex:panelGroup styleClass="nav-panel-filters" layout="block">
+                    <apex:outputPanel layout="block" styleClass="nav-panel">Date from</apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:input value="{!fromDate}" type="date"/>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">to</apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:input value="{!toDate}" type="date"/>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="block" styleClass="nav-panel">Status</apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:selectList value="{!filterStatus}" size="1">
+                            <apex:selectOptions value="{!statuses}"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel layout="block" styleClass="nav-panel">Priority</apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:selectList value="{!filterPriority}" size="1">
+                            <apex:selectOptions value="{!priorities}"/>
+                        </apex:selectList>
+                    </apex:outputPanel>
+                    <apex:commandButton value="Apply" action="{!setFilter}" status="reqStatus"
+                                        rendered="{!!showSelected}" reRender="theForm"/>
+                </apex:panelGroup>
+
+            </apex:panelGrid>
+            <!-- paginator^ -->
+            <apex:pageBlockTable value="{!records}" var="record">
+
+                <apex:column width="25px">
+                    <apex:facet name="header">
+                        <apex:inputCheckbox id="pageSelected" value="{!pageSelected}" onclick="rig.selectAll(this,true);"/>
+                    </apex:facet>
+                    <apex:inputCheckbox id="recSelected" value="{!record.selected}" onclick="rig.checkSelectAll(this);"/>
+                </apex:column>
+                <apex:column width="50px">
+                    <apex:facet name="header">
+                        Action
+                    </apex:facet>
+                    <apex:outputPanel layout="block">
+                        <apex:commandLink value="Complete" action="{!setComplete}" reRender="theForm"
+                                          styleClass="row-action" status="reqStatus">
+                            <apex:param name="setComplete" assignTo="{!actionId}" value="{!record.obj.Id}"/>
+                        </apex:commandLink>
+                        <apex:commandLink value="Defer" action="{!setDefer}" reRender="theForm" styleClass="row-action"
+                                          status="reqStatus">
+                            <apex:param name="setDefer" assignTo="{!actionId}" value="{!record.obj.Id}"/>
+                        </apex:commandLink>
+                    </apex:outputPanel>
+                </apex:column>
+
+                <apex:column headerValue="Subject">
+                    <apex:outputLink target="_blank" value="/{!record.obj.Id}">{!record.obj.Subject}</apex:outputLink>
+                </apex:column>
+
+                <apex:column value="{!record.obj.Who.Name}" headerValue="Name"/>
+                <apex:column headerValue="Related To">
+                    <a target="_blank" id="{!record.obj.WhatId}"
+                                     onmouseover="LookupHoverDetail.getHover('{!record.obj.WhatId}', '/{!record.obj.WhatId}/m?retURL={!record.obj.WhatId}&isAjaxRequest=1').show();"
+                                     onmouseout="LookupHoverDetail.getHover('{!record.obj.WhatId}').hide();"
+                                     onfocus="LookupHoverDetail.getHover('{!record.obj.WhatId}', '/{!record.obj.WhatId}/m?retURL={!record.obj.WhatId}&isAjaxRequest=1').show();"
+                                     onblur="LookupHoverDetail.getHover('{!record.obj.WhatId}').hide();"
+                                     href="/{!record.obj.WhatId}">{!record.obj.What.Name}</a>
+                </apex:column>
+                <apex:column value="{!record.obj.ActivityDate}"/>
+                <apex:column value="{!record.obj.Status}"/>
+
+                <apex:column value="{!record.obj.Priority}"/>
+
+                <apex:column headerValue="Assigned To">
+                    <a target="_blank" id="{!record.obj.OwnerId}"
+                                     onmouseover="LookupHoverDetail.getHover('{!record.obj.OwnerId}', '/{!record.obj.OwnerId}/m?retURL={!record.obj.OwnerId}&isAjaxRequest=1').show();"
+                                     onmouseout="LookupHoverDetail.getHover('{!record.obj.OwnerId}').hide();"
+                                     onfocus="LookupHoverDetail.getHover('{!record.obj.OwnerId}', '/{!record.obj.OwnerId}/m?retURL={!record.obj.OwnerId}&isAjaxRequest=1').show();"
+                                     onblur="LookupHoverDetail.getHover('{!record.obj.OwnerId}').hide();"
+                                     href="/{!record.obj.OwnerId}">{!record.obj.Owner.Name}</a>
+                </apex:column>
+            </apex:pageBlockTable>
+            <!-- paginator -->
+            <apex:panelGrid columns="2" width="100%">
+                <apex:panelGroup >
+                    <apex:outputPanel layout="block">Total records: {!totalRecords}</apex:outputPanel>
+                </apex:panelGroup>
+                <apex:panelGroup >
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:commandLink action="{!first}" rendered="{!hasPrevious}" reRender="theForm"
+                                          status="reqStatus">First
+                        </apex:commandLink>
+                        <apex:outputPanel rendered="{!!hasPrevious}">First</apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:commandLink action="{!previous}" rendered="{!hasPrevious}" reRender="theForm"
+                                          status="reqStatus">Prev
+                        </apex:commandLink>
+                        <apex:outputPanel rendered="{!!hasPrevious}">Prev</apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        Page {!currentPage} of {!totalPages}
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:commandLink action="{!next}" rendered="{!hasNext}" reRender="theForm" status="reqStatus">
+                            Next
+                        </apex:commandLink>
+                        <apex:outputPanel rendered="{!!hasNext}">Next</apex:outputPanel>
+                    </apex:outputPanel>
+                    <apex:outputPanel layout="block" styleClass="nav-panel">
+                        <apex:commandLink action="{!last}" rendered="{!hasNext}" reRender="theForm" status="reqStatus">
+                            Last
+                        </apex:commandLink>
+                        <apex:outputPanel rendered="{!!hasNext}">Last</apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:panelGroup>
+
+            </apex:panelGrid>
+            <!-- paginator^ -->
+
+        </apex:form>
+    </apex:pageBlock>
+
+
+</apex:page>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>USD_Accounts</fullName>
+    <columns>NAME</columns>
+    <columns>Type_Name__c</columns>
+    <columns>MEMO__c</columns>
+    <columns>Field_Set_Name__c</columns>
+    <columns>Invert_Amount__c</columns>
+    <columns>ACCNT__c</columns>
+    <columns>INVITEM__c</columns>
+    <columns>AMOUNT__c</columns>
+    <columns>sObject__c</columns>
+    <columns>Order__c</columns>
+    <columns>NAME__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAME</field>
+        <operation>contains</operation>
+        <value>USD</value>
+    </filters>
+    <label>USD Accounts</label>
+</ListView>

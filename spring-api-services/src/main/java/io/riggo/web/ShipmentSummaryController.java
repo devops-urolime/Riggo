@@ -4,7 +4,7 @@ import io.riggo.data.domain.*;
 import io.riggo.data.exception.BadRequestException;
 import io.riggo.data.exception.ResourceNotFoundException;
 import io.riggo.data.services.FiscalPeriodService;
-import io.riggo.data.services.InvoiceLoadService;
+import io.riggo.data.services.QuoteLoadService;
 import io.riggo.web.response.BaseAPIResponse;
 import io.riggo.web.response.ShipmentVizData;
 import io.riggo.web.response.ShipmentVizDataContainer;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class ShipmentSummaryController {
 
     @Autowired
-    private InvoiceLoadService invoiceLoadService;
+    private QuoteLoadService quoteLoadService;
 
     @Autowired
     private AuthenticationFacade authenticationFacade;
@@ -48,16 +48,15 @@ public class ShipmentSummaryController {
         if(fiscalYear == 0){ fiscalYear = now.getYear(); }
         if(fiscalMonth == 0){ fiscalMonth = now.getMonthValue(); }
         if(fiscalWeek == 0){ fiscalWeek = (((now.getDayOfMonth()-1)%7)+1); }
-        Integer currentDayOfMonth = now.getDayOfMonth();
 
-        Optional<List<InvoiceLoad>> invoices = null;
-        List<Integer> invoiceStatusList = Arrays.asList(new Integer[]{InvoiceStatus.ACCEPTED.getColVal()});
+        Optional<List<QuoteLoad>> quotes = null;
+        List<Integer> quoteStatusList = Arrays.asList(new Integer[]{QuoteStatus.ACCEPTED.getColVal()});
         List<Integer> loadStatusList = Arrays.asList(new Integer[]{LoadSubStatus.DOCUMENTS_RECEIVED.getColVal(), LoadSubStatus.PENDING_DOCUMENTS.getColVal(), LoadSubStatus.INVOICED.getColVal()});
         LocalDateTime startDate = null;
         LocalDateTime endDate = null;
 
         Optional<FiscalPeriod> startFiscalPeriod = null;
-        Optional<FiscalPeriod> endFiscalPeriod = null;
+        Optional<FiscalPeriod> endFiscalPeriod;
         String vizTitle = "";
 
         if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.MONTHS.getDisplayName()))
@@ -92,10 +91,10 @@ public class ShipmentSummaryController {
         if(startDate != null && endDate != null)
         {
             if(authenticationFacade.isSuperAdmin() || authenticationFacade.isSiteAdmin() ) {
-                invoices = invoiceLoadService.findInvoicesBySite(authenticationFacade.getSiteId(), invoiceStatusList, loadStatusList, startDate, endDate);
+                quotes = quoteLoadService.findQuotesBySite(authenticationFacade.getSiteId(), quoteStatusList, loadStatusList, startDate, endDate);
             }
             else if(authenticationFacade.isShipperExecutive()) {
-                invoices = invoiceLoadService.findInvoicesBySiteUser(authenticationFacade.getSiteId(), authenticationFacade.getUsername(), invoiceStatusList, loadStatusList, startDate, endDate);
+                quotes = quoteLoadService.findQuotesBySiteUser(authenticationFacade.getSiteId(), authenticationFacade.getUsername(), quoteStatusList, loadStatusList, startDate, endDate);
             }
         }else{
             throw new BadRequestException();
@@ -103,7 +102,7 @@ public class ShipmentSummaryController {
 
 
 
-        if (invoices != null && invoices.isPresent()) {
+        if (quotes != null && quotes.isPresent()) {
             ShipmentVizDataContainer shipmentVizDataContainer = new ShipmentVizDataContainer();
             List<ShipmentVizData> shipmentVizDataList = new ArrayList<>();
             shipmentVizDataContainer.setTitle(vizTitle);
@@ -117,7 +116,7 @@ public class ShipmentSummaryController {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
                         shipmentVizData.setLabel(periodStartDate.getMonth().getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + " " + periodStartDate.getYear());
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, invoices, periodStartDate.getMonthValue(), 0, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, quotes, periodStartDate.getMonthValue(), 0, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
@@ -137,7 +136,7 @@ public class ShipmentSummaryController {
                         shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue());
                         shipmentVizData.setFiscalYear(periodStartDate.getYear());
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, invoices, periodStartDate.getMonthValue(), i+1, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, quotes, periodStartDate.getMonthValue(), i+1, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
@@ -150,7 +149,7 @@ public class ShipmentSummaryController {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
                         shipmentVizData.setLabel(periodStartDate.format(DateTimeFormatter.ofPattern("MM/dd/YYYY")));
 
-                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, invoices, periodStartDate.getMonthValue(), fiscalWeek, offset);
+                        populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, quotes, periodStartDate.getMonthValue(), fiscalWeek, offset);
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
@@ -163,29 +162,29 @@ public class ShipmentSummaryController {
         throw new ResourceNotFoundException(ResourceType.SHIPMENT_SUMMARY, 0);
     }
 
-    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<InvoiceLoad>> invoices, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
+    private void populateShipmentVizData(ShipmentVizData shipmentVizData, LocalDateTime periodStartDate, LocalDateTime periodEndDate, Optional<List<QuoteLoad>> quotes, Integer fiscalMonth, Integer fiscalWeek, Integer offset){
         shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue()+1);
         shipmentVizData.setFiscalYear(periodStartDate.getYear());
         shipmentVizData.setFiscalWeek(fiscalWeek);
         shipmentVizData.setOffset(offset);
 
-        Long shipments = invoices.get().stream()
-                .filter(invoice ->
-                        invoice.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
-                                invoice.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
+        Long shipments = quotes.get().stream()
+                .filter(quote ->
+                        quote.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
+                                quote.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
                 ).count();
 
-        Double totalFreightCharges = invoices.get().stream()
-                .filter(invoice ->
-                        invoice.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
-                                invoice.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
-                ).collect(Collectors.summingDouble(InvoiceLoad::getNetFreightChargesDoubleValue));
+        Double totalFreightCharges = quotes.get().stream()
+                .filter(quote ->
+                        quote.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
+                                quote.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
+                ).collect(Collectors.summingDouble(QuoteLoad::getNetFreightChargesDoubleValue));
 
-        Double totalMiles = invoices.get().stream()
-                .filter(invoice ->
-                        invoice.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
-                                invoice.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
-                ).collect(Collectors.summingDouble(InvoiceLoad::getDistanceMilesDoubleValue));
+        Double totalMiles = quotes.get().stream()
+                .filter(quote ->
+                        quote.getQuoteDate().isAfter(ChronoLocalDateTime.from(periodStartDate)) &&
+                                quote.getQuoteDate().isBefore(ChronoLocalDateTime.from(periodEndDate))
+                ).collect(Collectors.summingDouble(QuoteLoad::getDistanceMilesDoubleValue));
 
         shipmentVizData.setShipments(shipments.intValue());
         shipmentVizData.setTotalCost(new BigDecimal(totalFreightCharges));

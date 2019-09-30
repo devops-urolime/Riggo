@@ -452,7 +452,7 @@
 			"response": []
 		},
 		{
-			"name": "PUT /load/invoice",
+			"name": "PUT /load/quote",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -505,23 +505,23 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Invoice\": [{\"id\": \"{{invoiceId}}\",\"quote_date\": \"2019-03-25 00:00:00\",\"status\": \"Accepted\",\"comments\": \"null\",\"load_id\": \"{{loadId}}\",\"net_freight_charges\": \"1650.00\",\"fuel_surcharges\": \"null\",\"accessorial_charge\": \"null\",\"transportation_total\": \"1650.00\",\"customer_quote_total\": \"1650.00\"}]}"
+					"raw": "{\"Quote\": [{\"id\": \"{{invoiceId}}\",\"quote_date\": \"2019-04-15 00:00:00\",\"status\": \"Accepted\",\"comments\": \"null\",\"load_id\": \"{{loadId}}\",\"net_freight_charges\": \"13700.00\",\"fuel_surcharges\": \"null\",\"accessorial_charge\": \"null\",\"transportation_total\": \"13700.00\",\"customer_quote_total\": \"13700.00\"}]}"
 				},
 				"url": {
-					"raw": "{{GATEWAY_URL}}/load/invoice",
+					"raw": "{{GATEWAY_URL}}/load/quote",
 					"host": [
 						"{{GATEWAY_URL}}"
 					],
 					"path": [
 						"load",
-						"invoice"
+						"quote"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "PUT /load/{loadId}/invoice",
+			"name": "PUT /load/{loadId}/quote",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -569,17 +569,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Invoice\": [{\"id\": \"{{invoiceId}}\",\"quote_date\": \"2019-03-25 00:00:00\",\"status\": \"Accepted\",\"comments\": \"null\",\"load_id\": \"{{loadId}}\",\"net_freight_charges\": \"1650.00\",\"fuel_surcharges\": \"null\",\"accessorial_charge\": \"null\",\"transportation_total\": \"1650.00\",\"customer_quote_total\": \"1650.00\"}]}"
+					"raw": "{\"Quote\": [{\"id\": \"{{invoiceId}}\",\"quote_date\": \"2019-03-25 00:00:00\",\"status\": \"Accepted\",\"comments\": \"null\",\"load_id\": \"{{loadId}}\",\"net_freight_charges\": \"1650.00\",\"fuel_surcharges\": \"null\",\"accessorial_charge\": \"null\",\"transportation_total\": \"1650.00\",\"customer_quote_total\": \"1650.00\"}]}"
 				},
 				"url": {
-					"raw": "{{GATEWAY_URL}}/load/{{returnedLoadId}}/invoice",
+					"raw": "{{GATEWAY_URL}}/load/{{returnedLoadId}}/quote",
 					"host": [
 						"{{GATEWAY_URL}}"
 					],
 					"path": [
 						"load",
 						"{{returnedLoadId}}",
-						"invoice"
+						"quote"
 					]
 				}
 			},

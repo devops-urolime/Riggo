@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
+    <authorizeUrl>https://riggoh-shipper.auth0.com/authorize</authorizeUrl>
+    <consumerKey>l42EHmRV9xQmZ7uMKyY9ZASy6RUrjC3h</consumerKey>
+    <consumerSecret>rL+DHKUZUXk8S20EsLCPqKgtlBe3L/DVlqKrZy8uBJrYjqxcTKCjv2kv7RGQLoLApNW0FMpJH/vRrw5j4cr17XBBGPdiC2rX</consumerSecret>
+    <friendlyName>riggoh-shipper.auth0.com</friendlyName>
+    <includeOrgIdInIdentifier>false</includeOrgIdInIdentifier>
+    <providerType>OpenIdConnect</providerType>
+    <sendAccessTokenInHeader>true</sendAccessTokenInHeader>
+    <sendClientCredentialsInHeader>false</sendClientCredentialsInHeader>
+    <tokenUrl>https://riggoh-shipper.auth0.com/oauth/token</tokenUrl>
+    <userInfoUrl>https://riggoh-shipper.auth0.com/userinfo</userInfoUrl>
+</AuthProvider>
