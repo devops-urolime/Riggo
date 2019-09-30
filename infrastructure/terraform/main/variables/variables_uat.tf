@@ -193,3 +193,8 @@ authorizer_auth0_audience = "load-resource-api"
 authorizer_auth0_jwks_uri = "https://riggo-staging.auth0.com/.well-known/jwks.json"
 authorizer_auth0_token_issuer = "https://riggo-staging.auth0.com/"
 # basepath_apigateway = "v1"
+
+#SES variables
+
+SES_email_address = "support-uat@riggo.io"
+SES_smtp_user_domain = "riggostaging-net"

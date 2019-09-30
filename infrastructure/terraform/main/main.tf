@@ -317,6 +317,14 @@ module "codedeploy" {
 
 }
 
+module "ses" {
+  source = "../ses"
+  ses_email_address = "${var.SES_email_address}"
+  ses_smtp_user_domain = "${var.SES_smtp_user_domain}"
+  
+}
+
+
 # locals {
 #   source_output_dir = "${var.source_output_artifact_dir}"
 #   build_output_image_dir = "${var.build_output_image_artifact_dir}"

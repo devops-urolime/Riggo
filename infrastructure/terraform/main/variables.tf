@@ -819,3 +819,14 @@ variable "authorizer_auth0_token_issuer" {
 # variable "basepath_apigateway" {
 #   description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
 # }
+
+#variables for SES
+
+variable "SES_email_address" {
+  description = "email address to verify and used to send email via Amazon SES SMTP"
+  
+}
+
+variable "SES_smtp_user_domain" {
+  description = "environment based smtp domain to setup user"
+}
