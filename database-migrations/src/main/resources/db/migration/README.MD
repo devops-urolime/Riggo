@@ -23,4 +23,5 @@ delete from location;
 delete from address;
 delete from load_line_item;
 delete from load;
-delete from shipper where id > 2
+delete from shipper where id > 2;
+delete from quote;
