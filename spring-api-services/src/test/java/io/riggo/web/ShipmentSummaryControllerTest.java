@@ -100,6 +100,8 @@ public class ShipmentSummaryControllerTest {
         given(quoteLoadService.findQuotesBySite(100, quoteStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfQuarter().atStartOfDay(), endFiscalPeriod.getLastDayOfQuarter().atStartOfDay().plusDays(1))).willReturn(Optional.of(quoteList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY)
+                .param("fiscalYear", String.valueOf(fiscalYear))
+                .param("fiscalMonth", String.valueOf(fiscalMonth))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
@@ -166,6 +168,8 @@ public class ShipmentSummaryControllerTest {
         given(quoteLoadService.findQuotesBySite(100, quoteStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfMonth().atStartOfDay(), startFiscalPeriod.getLastDayOfMonth().atStartOfDay().plusDays(1))).willReturn(Optional.of(quoteList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY + "?units=weeks")
+                .param("fiscalYear", String.valueOf(fiscalYear))
+                .param("fiscalMonth", String.valueOf(fiscalMonth))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))
@@ -224,6 +228,8 @@ public class ShipmentSummaryControllerTest {
         given(quoteLoadService.findQuotesBySite(100, quoteStatusList, loadStatusList, startFiscalPeriod.getFirstDayOfWeek().atStartOfDay(), startFiscalPeriod.getLastDayOfWeek().atStartOfDay().plusDays(1))).willReturn(Optional.of(quoteList));
 
         MvcResult result = mvc.perform(get(Paths.API_VERSION + Paths.LOAD_SHIPMENT_SUMMARY + "?units=days&fiscalWeek=1")
+                .param("fiscalYear", String.valueOf(fiscalYear))
+                .param("fiscalMonth", String.valueOf(fiscalMonth))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data", hasSize(1)))

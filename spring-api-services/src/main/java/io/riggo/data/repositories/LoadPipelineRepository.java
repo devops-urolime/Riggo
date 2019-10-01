@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 public interface LoadPipelineRepository extends CrudRepository<LoadPipeline, Integer> {
 
-    @Query(nativeQuery = true, value = "SELECT load_status, count(*) as count FROM load WHERE site_id = :siteId GROUP BY load_status")
+    @Query(nativeQuery = true, value = "SELECT load_status, count(*) as count FROM load l " +
+            " JOIN shipper s on s.id = l.shipper_id " +
+            " WHERE l.site_id = :siteId AND s.site_id = :siteId GROUP BY l.load_status")
     Optional<List<LoadPipeline>> findPipelineSummaryBySiteId(@Param("siteId") Integer siteId);
 
     @Query(nativeQuery = true, value = "SELECT load_status, count(*) as count FROM load l JOIN shipper s ON s.id = l.shipper_id WHERE l.site_id = :siteId AND s.id = :shipperId AND s.site_id = :siteId GROUP BY l.load_status")
