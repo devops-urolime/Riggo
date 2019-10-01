@@ -30,6 +30,7 @@ export const AUTH_CONFIG = {
 export const APP_PATH_ROOT = "/";
 export const APP_PATH_LOAD = "/load";
 export const APP_PATH_LOGIN = "/login";
+export const APP_PATH_FORGOT_PASSWORD = "/forgot-password";
 export const APP_PATH_DASHBOARD = "/dashboard";
 export const APP_PATH_SHIPMENTS = "/shipments";
 export const APP_PATH_REPORTS = "/reports";
