@@ -45,7 +45,7 @@ public class QuoteController {
 
     @PutMapping(value = Paths.LOAD_QUOTE, produces = "application/json")
     @ResponseBody
-    @PreAuthorize("hasAuthority('write:load')")
+    @PreAuthorize("hasAuthority('write:quote')")
     public BaseAPIResponse<Quote> putQuote(@RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException{
         List<Quote> quoteList = processPutQuote(dataHashMap);
         BaseAPIResponse baseApiResponse = new BaseAPIResponse();
@@ -56,7 +56,7 @@ public class QuoteController {
 
     @PutMapping(value = Paths.LOAD_LOADID_PARAM_QUOTE, produces = "application/json")
     @ResponseBody
-    @PreAuthorize("hasAuthority('write:load')")
+    @PreAuthorize("hasAuthority('write:quote')")
     public BaseAPIResponse<Quote> putQuoteWithLoadId(@PathVariable final String loadId, @RequestBody Map<String, Object> dataHashMap) throws ResourceNotFoundException, BadRequestException{
         if(NumberUtils.isDigits(loadId)) {
             validateLoad(NumberUtils.toInt(loadId), authenticationFacade.getSiteId());

@@ -50,7 +50,7 @@ public class QuoteControllerTest {
     @MockBean
     private AuthenticationFacade authenticationFacade;
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putInsertQuoteHappyPath() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -100,7 +100,7 @@ public class QuoteControllerTest {
 
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putInsertQuoteUnrecognizedLoad() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -131,7 +131,7 @@ public class QuoteControllerTest {
     }
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putInsertQuoteWithParamHappyPath() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -189,7 +189,7 @@ public class QuoteControllerTest {
 
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putInsertQuoteWithParamUnrecognizedLoad() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -220,7 +220,7 @@ public class QuoteControllerTest {
 
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putQuoteHappyPath() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -268,7 +268,7 @@ public class QuoteControllerTest {
     }
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putQuoteUnrecognizedLoad() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -298,7 +298,7 @@ public class QuoteControllerTest {
     }
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putQuoteWithParamHappyPath() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -352,7 +352,7 @@ public class QuoteControllerTest {
     }
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putQuoteWithParamInvoiceNotFound() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
@@ -382,7 +382,7 @@ public class QuoteControllerTest {
     }
 
 
-    @WithMockUser(value = "spring", authorities = {"write:load"})
+    @WithMockUser(value = "spring", authorities = {"write:quote"})
     @Test
     public void putQuoteWithParamUnrecognizedLoad() throws Exception {
         List<Quote> quoteList = new ArrayList<>();
