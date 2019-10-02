@@ -61,8 +61,8 @@ public class ShipmentSummaryController {
 
         if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.MONTHS.getDisplayName()))
         {
-            startFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1).minusMonths(3));
-            endFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1));
+            startFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1).minusMonths(3*(offset+1)));
+            endFiscalPeriod = fiscalPeriodService.findByDateActual(LocalDate.of(fiscalYear, fiscalMonth, 1).minusMonths(3*offset));
             if(startFiscalPeriod.isPresent() && endFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfQuarter().atStartOfDay();
                 endDate = endFiscalPeriod.get().getLastDayOfQuarter().plusDays(1).atStartOfDay();
