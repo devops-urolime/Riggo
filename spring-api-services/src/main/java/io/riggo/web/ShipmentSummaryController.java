@@ -66,7 +66,7 @@ public class ShipmentSummaryController {
             if(startFiscalPeriod.isPresent() && endFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfQuarter().atStartOfDay();
                 endDate = endFiscalPeriod.get().getLastDayOfQuarter().plusDays(1).atStartOfDay();
-                vizTitle = startFiscalPeriod.get().getFiscalQuarter() + " - " + endFiscalPeriod.get().getFiscalQuarter();
+                vizTitle = StringUtils.trim(startFiscalPeriod.get().getFiscalQuarter()) + " - " + StringUtils.trim(endFiscalPeriod.get().getFiscalQuarter());
             }
         }
         else if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.WEEKS.getDisplayName()))
@@ -75,7 +75,7 @@ public class ShipmentSummaryController {
             if(startFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfMonth().atStartOfDay();
                 endDate = startFiscalPeriod.get().getLastDayOfMonth().plusDays(1).atStartOfDay();
-                vizTitle = startFiscalPeriod.get().getMonthName() + " " +  startFiscalPeriod.get().getYear_actual();
+                vizTitle = StringUtils.trim(startFiscalPeriod.get().getMonthName()) + " " +  StringUtils.trim(startFiscalPeriod.get().getYear_actual().toString());
             }
         }
         else if(StringUtils.equalsIgnoreCase(units, ShipmentVizPeriod.DAYS.getDisplayName()))
@@ -84,7 +84,7 @@ public class ShipmentSummaryController {
             if(startFiscalPeriod.isPresent()) {
                 startDate = startFiscalPeriod.get().getFirstDayOfWeek().atStartOfDay();
                 endDate = startFiscalPeriod.get().getLastDayOfWeek().plusDays(1).atStartOfDay();
-                vizTitle = startFiscalPeriod.get().getMonthName() + " " + startFiscalPeriod.get().getYear_actual() + " Week " + fiscalWeek;
+                vizTitle = StringUtils.trim(startFiscalPeriod.get().getMonthName()) + " " + StringUtils.trim(startFiscalPeriod.get().getYear_actual().toString()) + " Week " + fiscalWeek;
             }
         }
 
@@ -133,10 +133,10 @@ public class ShipmentSummaryController {
                     if(periodStartDate.isBefore(endDate)) {
                         ShipmentVizData shipmentVizData = new ShipmentVizData();
                         shipmentVizData.setLabel("Week " + (i+1));
-                        shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue());
                         shipmentVizData.setFiscalYear(periodStartDate.getYear());
 
                         populateShipmentVizData(shipmentVizData, periodStartDate.minusDays(1).plusHours(23).plusMinutes(59).plusSeconds(59).plusNanos(999999999), periodEndDate, quotes, periodStartDate.getMonthValue(), i+1, offset);
+                        shipmentVizData.setFiscalMonth(periodStartDate.getMonthValue());
                         shipmentVizDataList.add(shipmentVizData);
                     }
                 }
