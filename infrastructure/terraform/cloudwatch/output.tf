@@ -7,3 +7,10 @@ output "arn_alarm_sns" {
   description = "Email SNS topic ARN"
 }
 
+output "clientapp_loggroup" {
+  value = "${aws_cloudwatch_log_group.clientapp-codebuild.name}"
+}
+
+output "apiservice_loggroup" {
+  value = "${aws_cloudwatch_log_group.apiservice-codebuild.name}"
+}

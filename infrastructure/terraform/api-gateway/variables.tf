@@ -9,13 +9,13 @@
   
 # }
 
-variable "authorizerArn" {
+# variable "authorizerArn" {
   
-}
+# }
 
-variable "authorize_uri" {
+# variable "authorize_uri" {
   
-}
+# }
 
 variable "elb_endpoint" {
   

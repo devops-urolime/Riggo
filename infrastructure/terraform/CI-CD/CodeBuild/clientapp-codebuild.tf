@@ -80,7 +80,7 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
 
   logs_config {
     cloudwatch_logs {
-      group_name = "/ecs/codebuild/${terraform.workspace}-client-app-codebuild"
+      group_name = "${var.clientapp-loggroup}"
     }
    }
 

@@ -495,45 +495,45 @@ variable "service_discovery_ttl" {
 #variables for Lambda
 
 
-variable "lambda_handler" {
-  description = "handler used while running function"
-  # default = "index.handler"
+# variable "lambda_handler" {
+#   description = "handler used while running function"
+#   # default = "index.handler"
   
-}
+# }
 
 
-variable "lambda_env_audience" {
+# variable "lambda_env_audience" {
 
-  description = "Application env variable audience"
-  # default = "load-resource-api"
+#   description = "Application env variable audience"
+#   # default = "load-resource-api"
   
-}
+# }
 
-variable "lambda_env_auth0_JWKS_URI" {
-  description = "Application env variable JWKS URI"
-  # default = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+# variable "lambda_env_auth0_JWKS_URI" {
+#   description = "Application env variable JWKS URI"
+#   # default = "https://riggo-staging.auth0.com/.well-known/jwks.json"
   
-}
+# }
 
-variable "lambda_env_auth0_TOKEN_ISSUER" {
-  description = "Application env variable TOKEN ISSUER"
-  # default = "https://riggo-staging.auth0.com/"
+# variable "lambda_env_auth0_TOKEN_ISSUER" {
+#   description = "Application env variable TOKEN ISSUER"
+#   # default = "https://riggo-staging.auth0.com/"
   
-}
+# }
 
 
-variable "lambda_runtime" {
+# variable "lambda_runtime" {
 
-  description = "The runtime platform in lambda"
-  # default = "nodejs10.x"
+#   description = "The runtime platform in lambda"
+#   # default = "nodejs10.x"
   
-}
+# }
 
-variable "lambda_timeout" {
-  description = "timeout for the lambda function"
-  # default = "30"
+# variable "lambda_timeout" {
+#   description = "timeout for the lambda function"
+#   # default = "30"
   
-}
+# }
 
 
 #Variables for Cloudwatch Alarms ECS/CPU

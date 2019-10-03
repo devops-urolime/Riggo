@@ -98,8 +98,8 @@ module "api-gateway" {
   # env    = "${terraform.workspace}"
   # name = "${var.name}"
   # cloudwatchlogs-globalarn = "${module.iam.cloudwatch_APIGateway_Global_logs}"
-  authorizerArn = "${module.iam.lambda_invoke}"
-  authorize_uri         = "${module.lambda.authorize_uri}"    
+  # authorizerArn = "${module.iam.lambda_invoke}"
+  # authorize_uri         = "${module.lambda.authorize_uri}"    
   elb_endpoint = "${module.ecs-cluster.elb_endpoint}"
   rest_api_name = "${var.rest_api_name}"
   authorizer_auth0_audience = "${var.authorizer_auth0_audience}"
@@ -228,24 +228,24 @@ module "Route53" {
   # api_regional_zone_id = "${module.api-gateway.regional_zone_id}"
 }
 
-module "iam" {
-  source = "../iam"
+# module "iam" {
+#   source = "../iam"
 
   
-}
+# }
 
-module "lambda" {
-  source = "../lambda"
+# module "lambda" {
+#   source = "../lambda"
 
-  lambda_invoke_arn = "${module.iam.lambda_invoke}"
-  handler           = "${var.lambda_handler}"
-  env_audience      = "${var.lambda_env_audience}"
-  env_auth0_JWKS_URI = "${var.lambda_env_auth0_JWKS_URI}"
-  env_auth0_TOKEN_ISSUER = "${var.lambda_env_auth0_TOKEN_ISSUER}"
-  runtime_platform = "${var.lambda_runtime}"
-  timeout          = "${var.lambda_timeout}"
+#   lambda_invoke_arn = "${module.iam.lambda_invoke}"
+#   handler           = "${var.lambda_handler}"
+#   env_audience      = "${var.lambda_env_audience}"
+#   env_auth0_JWKS_URI = "${var.lambda_env_auth0_JWKS_URI}"
+#   env_auth0_TOKEN_ISSUER = "${var.lambda_env_auth0_TOKEN_ISSUER}"
+#   runtime_platform = "${var.lambda_runtime}"
+#   timeout          = "${var.lambda_timeout}"
   
-}
+# }
 
 module "codebuild" {
   source = "../CI-CD/CodeBuild"
@@ -253,6 +253,8 @@ module "codebuild" {
   # private_subnet1_arn = "${var.private_subnet1_arn}"
   # private_subnet2_arn = "${var.private_subnet2_arn}"
   # private_subnet1_id
+  clientapp-loggroup = "${module.CloudWatch.clientapp_loggroup}"
+  apiservice-loggroup = "${module.CloudWatch.apiservice_loggroup}"
   vpc_id = "${module.VPC.vpc_id}"
   client-app-s3-bucket = "${module.cloudfront.s3-bucket}"
   compute_type = "${var.compute_type}"
