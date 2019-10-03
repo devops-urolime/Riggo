@@ -444,9 +444,9 @@ variable "health_checkpath" {
 #   default     = "512"
 # }
 
-variable "TD_mem_soft_limit" {
+variable "TD_mem_hard_limit" {
 
-  description = "Soft limit memory set for the container in MB"
+  description = "Hard limit memory set for the container in MB"
   # default     = "256"
 
 }

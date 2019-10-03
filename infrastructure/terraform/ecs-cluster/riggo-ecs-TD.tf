@@ -6,7 +6,7 @@ data "template_file" "container-definition" {
     container_port      = "${var.container_port}"
     container_name      = "Riggo-resource-svr-${terraform.workspace}"
     # TD_Cpu_limit        = "${var.TD_Cpu_limit}"
-    TD_mem_soft_limit   = "${var.TD_mem_soft_limit}"
+    TD_mem_hard_limit   = "${var.TD_mem_hard_limit}"
     cloudwatch_logname  = "${var.cloudwatch_log}"
     spring_profile_key  = "${var.spring_profile_key}"
 

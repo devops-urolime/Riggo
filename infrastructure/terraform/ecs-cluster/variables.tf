@@ -81,7 +81,7 @@ variable "health_checkpath" {
 
 # }
 
-variable "TD_mem_soft_limit" {
+variable "TD_mem_hard_limit" {
 
 }
 
