@@ -93,12 +93,12 @@ service_discovery_ttl = "60"
 
 #variables for Lambda
 
-lambda_handler = "index.handler"
-lambda_env_audience = "load-resource-api"
-lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
-lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
-lambda_runtime = "nodejs10.x"
-lambda_timeout = "30"
+# lambda_handler = "index.handler"
+# lambda_env_audience = "load-resource-api"
+# lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+# lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
+# lambda_runtime = "nodejs10.x"
+# lambda_timeout = "30"
 
 #Variables for Cloudwatch Alarm ECS/CPU
 
@@ -193,3 +193,8 @@ authorizer_auth0_audience = "load-resource-api"
 authorizer_auth0_jwks_uri = "https://riggo-staging.auth0.com/.well-known/jwks.json"
 authorizer_auth0_token_issuer = "https://riggo-staging.auth0.com/"
 # basepath_apigateway = "v1"
+
+#SES variables
+
+SES_email_address = "support-uat@riggo.io"
+SES_smtp_user_domain = "riggostaging-net"

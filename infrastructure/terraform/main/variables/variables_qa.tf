@@ -1,51 +1,12 @@
-
 #Application variables
 spring_profile_env = "qa"
 
-#environment variables
 
-environment_variables ={
-      clientapp = [ 
-      {
-        name  = "REACT_APP_DOMAIN_AUTH_CONFIG"
-        value = "riggo-qa.auth0.com"
-      },
-      {
-        name  = "REACT_APP_CLIENT_ID_AUTH_CONFIG"
-        value = "7nAY4GVJGBXQQh0uu3Tf9a1YSPu5Twuv"
-      },
-      {
-        name = "REACT_APP_AUDIENCE_ID_AUTH_CONFIG"
-        value = "load-resource-api"
-
-      },
-      {
-        name = "REACT_APP_CALL_BACK_URL_AUTH_CONFIG"
-        value = "https://riggo.riggoqa.net/callback"
-      },
-      {
-        name = "REACT_APP_MOCK_ALL_DATA"
-        value = "true"
-      }
-],
-apiservices = [
-      {
-        name  = "REPOSITORY_URL"
-        value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
-      }
-]
-}
-
-# apiservice_environment_variables = [
-#       {
-#         name  = "REPOSITORY_URL"
-#         value = "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-qa"
-#       }
-#       ]
 
 #General Variables
 keyname = "RiggoKeyPair-qa"
 cidr_block = "0.0.0.0/0"
+hosted_zone_name = "riggoqa.net"
 
 
 #variables for RDS
@@ -74,7 +35,7 @@ allowed_methods = ["GET","HEAD"]
 cloudfront_root_object = "index.html"
 cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/155bca16-2b02-4a3e-bdec-f17da6f3b058"
 cloudfront_ssl_protocol_ver = "TLSv1.1_2016"
-cname_alias = "*.riggoqa.net"
+cname_alias = "riggo.riggoqa.net"
 error_caching_min_ttl = {
   403 = "300"
   404 = "300"
@@ -125,23 +86,24 @@ health_checkpath = "/favicon.ico"
 TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
+taskdef_path = "CI-CD/qa-taskdef.json"
 #Variables for route53
 service_discovery_ttl = "60"
 
 #variables for Lambda
 
-lambda_handler = "index.handler"
-lambda_env_audience = "load-resource-api"
-lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
-lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
-lambda_runtime = "nodejs10.x"
-lambda_timeout = "30"
+# lambda_handler = "index.handler"
+# lambda_env_audience = "load-resource-api"
+# lambda_env_auth0_JWKS_URI = "https://riggo-qa.auth0.com/.well-known/jwks.json"
+# lambda_env_auth0_TOKEN_ISSUER = "https://riggo-qa.auth0.com/"
+# lambda_runtime = "nodejs10.x"
+# lambda_timeout = "30"
 
 #Variables for Cloudwatch Alarm ECS/CPU
 
 cpu_utilization_high_threshold = "65"
 cpu_utilization_high_evaluation_periods = "1"
-cpu_utilization_high_period = "60"
+cpu_utilization_high_period = "120"
 
 
 
@@ -195,9 +157,9 @@ alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
 compute_type = "BUILD_GENERAL1_SMALL"
 codebuild_image = "aws/codebuild/standard:2.0"
 buildspec_path = {
-
-  clientapp  = "CI-CD/clientapp-buildspec.yaml"
-  apiservice = "CI-CD/apiservices-buildspec.yaml"
+#PATH is from root of the respository.
+  clientapp  = "CI-CD/qa-clientapp-buildspec.yaml"
+  apiservice = "CI-CD/qa-apiservices-buildspec.yaml"
 }
 
 #Variables for  Codedeploy
@@ -207,3 +169,30 @@ rollback_events = ["DEPLOYMENT_FAILURE"]
 action_on_timeout = "CONTINUE_DEPLOYMENT"
 action_on_blue_tasks = "TERMINATE"
 bluetask_termination_wait_minutes = 0
+#variables for codepipeline
+artifact = {
+source_output_artifact_dir = "Riggo-source"
+build_output_image_artifact_dir = "Riggo-image"
+build_output_deploy_artifact_dir = "Riggo-deploy"
+image_placeholder_text = "<IMAGE1_NAME>"
+  }
+github_organization_name = "rig-go"
+github_repository_name = "riggo"
+github_branch_name = {
+  clientapp = "qa-client-app"
+  apiservices = "qa-api-services"
+}
+
+#variables for api gateway
+
+rest_api_name = "Riggo Platform API"
+
+#stage variables for lambda authorizer
+authorizer_auth0_audience = "load-resource-api"
+authorizer_auth0_jwks_uri = "https://riggo-qa.auth0.com/.well-known/jwks.json"
+authorizer_auth0_token_issuer = "https://riggo-qa.auth0.com/"
+# basepath_apigateway = "v1"
+
+#SES variables
+SES_email_address = "support-qa@riggo.io"
+SES_smtp_user_domain = "riggoqa-net"

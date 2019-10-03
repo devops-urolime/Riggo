@@ -67,3 +67,12 @@ variable "ECS_securitygroup_ids" {
 variable "apigateway_invoke_url" {
   
 }
+
+variable "clientapp-loggroup" {
+  
+}
+
+variable "apiservice-loggroup" {
+  
+}
+

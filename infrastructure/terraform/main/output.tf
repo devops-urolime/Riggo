@@ -140,3 +140,12 @@ output "Invoke_Url" {
   value = "${module.api-gateway.invoke_url}"
 }
 
+#Output from SES
+
+output "smtp_username" {
+  value = "${module.ses.ses_smtp_user}"
+}
+
+output "smtp_password" {
+  value = "${module.ses.ses_smtp_user_password}"
+}

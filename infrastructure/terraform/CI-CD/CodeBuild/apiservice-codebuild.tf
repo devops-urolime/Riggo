@@ -94,7 +94,7 @@ resource "aws_codebuild_project" "apiservice-codebuild" {
 
   logs_config {
     cloudwatch_logs {
-      group_name = "/ecs/codebuild/${terraform.workspace}-api-service-codebuild"
+      group_name = "${var.apiservice-loggroup}"
     }
    }
 

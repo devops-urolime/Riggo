@@ -5,7 +5,7 @@ spring_profile_env = "uat"
 keyname = "RiggoKeyPair-test"
 cidr_block = "0.0.0.0/0"
 hosted_zone_name = "riggostaging.net"
-wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
+#wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
 
 #variables for RDS
 read_capacity  = "20"
@@ -93,12 +93,12 @@ service_discovery_ttl = "60"
 
 #variables for Lambda
 
-lambda_handler = "index.handler"
-lambda_env_audience = "load-resource-api"
-lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
-lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
-lambda_runtime = "nodejs10.x"
-lambda_timeout = "30"
+# lambda_handler = "index.handler"
+# lambda_env_audience = "load-resource-api"
+# lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+# lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
+# lambda_runtime = "nodejs10.x"
+# lambda_timeout = "30"
 
 #Variables for Cloudwatch Alarm ECS/CPU
 
@@ -187,4 +187,14 @@ github_branch_name = {
 #variables for api gateway
 
 rest_api_name = "Riggo Platform API"
-basepath_apigateway = "v1"
+
+#stage variables for lambda authorizer
+authorizer_auth0_audience = "load-resource-api"
+authorizer_auth0_jwks_uri = "https://riggo-staging.auth0.com/.well-known/jwks.json"
+authorizer_auth0_token_issuer = "https://riggo-staging.auth0.com/"
+# basepath_apigateway = "v1"
+
+#SES variables
+
+SES_email_address = "support-test@riggo.io"
+SES_smtp_user_domain = "riggotest-net"
