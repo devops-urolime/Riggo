@@ -12,11 +12,11 @@ public enum LoadSubStatus
     QUOTED( 1, "Quoted", LoadStatus.PENDING ),
     BOOKED( 2, "Booked", LoadStatus.PENDING ),
     DISPATCHED( 3, "Dispatched", LoadStatus.IN_TRANSIT ),
-    AT_PICKUP( 4, "@Pickup", LoadStatus.IN_TRANSIT ),
+    AT_PICKUP( 4, "At Pickup", LoadStatus.IN_TRANSIT ),
     IN_TRANSIT( 5, "In transit", LoadStatus.IN_TRANSIT ),
-    AT_DELIVERY( 6, "@Delivery", LoadStatus.IN_TRANSIT ),
-    PENDING_DOCUMENTS( 7, "Booked", LoadStatus.DELIVERED ),
-    DOCUMENTS_RECEIVED( 8, "Booked", LoadStatus.DELIVERED ),
+    AT_DELIVERY( 6, "At Delivery", LoadStatus.IN_TRANSIT ),
+    PENDING_DOCUMENTS( 7, "Pending Docs", LoadStatus.DELIVERED ),
+    DOCUMENTS_RECEIVED( 8, "Docs Received", LoadStatus.DELIVERED ),
     INVOICED( 9, "Invoiced", LoadStatus.DELIVERED ),
     ;
 
