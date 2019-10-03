@@ -95,9 +95,9 @@ const digestDataToMultiYAxes = (data) => {
           return {
             title: item.title,
             data: dataToVisualize,
-            totalCostPerMileInPeriod,
+            totalCostPerMileInPeriod: totalCostPerMileInPeriod.toFixed(2),
             totalShipmentsInPeriod,
-            totalCostInPeriod
+            totalCostInPeriod: totalCostInPeriod.toFixed(2)
           };
         })
   }
