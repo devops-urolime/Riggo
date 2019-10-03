@@ -8,7 +8,7 @@ import java.util.Map;
 @SuppressWarnings( "MagicNumber" )
 public enum LoadSubStatus
 {
-    NO_STATUS( 0, "Quoted", LoadStatus.NO_STATUS ),
+    NO_STATUS( 0, "No Status", LoadStatus.NO_STATUS ),
     QUOTED( 1, "Quoted", LoadStatus.PENDING ),
     BOOKED( 2, "Booked", LoadStatus.PENDING ),
     DISPATCHED( 3, "Dispatched", LoadStatus.IN_TRANSIT ),

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import './Login.scss';
 import { Button, TextField } from '@material-ui/core';
-import { AUTH_CONFIG_REALM } from '../config';
+import { APP_PATH_FORGOT_PASSWORD, AUTH_CONFIG_REALM } from '../config';
 import Icon, { LOGO_MAIN_LOGIN } from './Icon';
 import Grid from '@material-ui/core/Grid/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import Fade from '@material-ui/core/Fade';
 import Paper from '@material-ui/core/Paper';
 import { webAuth } from '../lib/auth';
+import { withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const gridWidth = 12;
 const gridConfig = {
@@ -83,23 +85,6 @@ class Login extends Component{
     }
   };
 
-  forgotPassword = (email) => {
-    if(email){
-      webAuth.changePassword({
-        connection: AUTH_CONFIG_REALM,
-        email
-      }, (err) => {
-        if (err) {
-          this.loginErrResult(err);
-        } else {
-          this.showMessage("We've just sent you an email to reset your password.");
-        }
-      });
-    } else {
-      this.showMessage("Please complete email to reset your password.");
-    }
-  };
-
   signUp = (email, password) => {
     if(email && password){
       webAuth.signup({
@@ -118,14 +103,9 @@ class Login extends Component{
     }
   };
 
-  toggleLogin = ()=> {
-    this.setState(prevState => ({
-      isSingUp: !prevState.isSingUp
-    }));
-  };
-
   render(){
-    const { isOpenMessage, message, email, isSingUp }= this.state;
+    const { isOpenMessage, message }= this.state;
+    const { history }= this.props;
     return(
       <div className="MainLoginOverlay">
           <Grid container spacing={0} {...gridConfig}>
@@ -169,18 +149,14 @@ class Login extends Component{
                     </div>
                   </Grid>
                   <Grid item xs={gridWidth}>
-                    <div onClick={() => this.forgotPassword(email)}  className="ForgotPassword" role="link" id="forgot-password">
+                    <div onClick={() => history.push(APP_PATH_FORGOT_PASSWORD)}  className="ForgotPassword" role="link" id="forgot-password">
                       Forgot Password ?
                     </div>
                   </Grid>
                   <Grid item xs={gridWidth}>
                     <div className="ButtonGroup">
                       <Button fullWidth className="Login-btn" type="submit" variant="contained" color="primary">
-                        {
-                          (!isSingUp) ?
-                            "Log In":
-                            "Sing Up"
-                        }
+                        Log In
                       </Button>
                     </div>
                   </Grid>
@@ -210,4 +186,8 @@ class Login extends Component{
   }
 }
 
-export default Login;
+Login.propTypes = {
+  history: PropTypes.object,
+};
+
+export default withRouter(Login);

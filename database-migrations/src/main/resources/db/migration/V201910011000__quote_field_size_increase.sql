@@ -1,0 +1,7 @@
+ALTER TABLE quote ALTER COLUMN comments TYPE VARCHAR(1024);
+ALTER TABLE quote ALTER COLUMN net_freight_charges TYPE NUMERIC(9,2);
+ALTER TABLE quote ALTER COLUMN fuel_surcharge TYPE NUMERIC(9,2);
+ALTER TABLE quote ALTER COLUMN accessorial_charges TYPE NUMERIC(9,2);
+ALTER TABLE quote ALTER COLUMN transportation_total TYPE NUMERIC(9,2);
+ALTER TABLE quote ALTER COLUMN customer_quote_total TYPE NUMERIC(9,2);
+
