@@ -27,7 +27,7 @@
         }
       ],
       "mountPoints": [],
-      "memory": 512,
+      "memory": 256,
       "readonlyRootFilesystem": false,
       "volumesFrom": []
     }
