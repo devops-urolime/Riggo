@@ -6,10 +6,10 @@ import Typography from '@material-ui/core/Typography/Typography';
 const TotalSummary = ({title, legend}) => {
   return(
     <div className="TotalSummary">
-      <Typography className="TotalSummary__Title" variant="body2" component="p">
+      <Typography className="TotalSummary__Title" component="h2" variant="h6"  gutterBottom>
         {title}
       </Typography>
-      <Typography className="TotalSummary__Legend" variant="h5" component="h2">
+      <Typography component="p" variant="h4">
         {legend}
       </Typography>
     </div>

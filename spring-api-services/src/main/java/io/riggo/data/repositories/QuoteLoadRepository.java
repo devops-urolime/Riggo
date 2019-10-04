@@ -45,6 +45,19 @@ public interface QuoteLoadRepository extends CrudRepository<QuoteLoad, Integer> 
             @Param("expectedDeliveryDateEnd") LocalDateTime expectedDeliveryDateEnd
     );
 
+
+//    SELECT i.id, l.distance_miles, count(*)
+//    FROM quote i
+//    JOIN load l ON l.id = i.load_id
+//    JOIN shipper s ON s.id = l.shipper_id
+//    JOIN site site ON l.site_id = site.id
+//    JOIN site_user site_user ON site_user.site_id = site.id
+//    JOIN users u ON u.id = site_user.user_id
+//    JOIN shipper_user su ON s.id = su.shipper_id AND su.user_id = u.id
+//    WHERE i.status IN (3) AND site.id = 100
+//    AND u.email = 'edward+bm@riggo.io' AND l.load_status IN (7,8,9)
+//    AND l.expected_delivery_date >= '2019-07-01' AND l.expected_delivery_date <= '2020-01-01'
+//    GROUP BY i.id, l.distance_miles
     @Query("SELECT NEW io.riggo.data.domain.QuoteLoad(i.id as id," +
             "i.extSysId as extSysId, i.loadId as loadId," +
             "i.quoteDate as quoteDate, i.status as status," +
