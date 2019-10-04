@@ -27,8 +27,8 @@
         }
       ],
       "mountPoints": [],
-      "memory": 256,
-      "memoryReservation": 512,
+      "memory": 512,
+      "memoryReservation": 256,
       "readonlyRootFilesystem": false,
       "volumesFrom": []
     }
