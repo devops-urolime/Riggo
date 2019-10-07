@@ -483,5 +483,5 @@ export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalY
       BASE_END_POINT +
       LOAD_SHIPMENT_SUMMARY_END_POINT +
       `?offset=${offset}&units=${units}&fiscalMonth=${fiscalMonth}&fiscalYear=${fiscalYear}&fiscalWeek=${fiscalWeek}`;
-    return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), true);
+    return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), false);
 };
