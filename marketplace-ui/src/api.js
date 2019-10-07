@@ -262,6 +262,7 @@ const shipmentsSummaryWeeklyMock = {
                "label":"Week 1",
                "shipments":30,
                "costPerMile":2.99,
+               "fiscalMonth":7,
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":1,
@@ -271,6 +272,7 @@ const shipmentsSummaryWeeklyMock = {
                "label":"Week 2",
                "shipments":40,
                "costPerMile":1.99,
+               "fiscalMonth":7,
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":2,
@@ -280,6 +282,7 @@ const shipmentsSummaryWeeklyMock = {
                "label":"Week 3",
                "shipments":50,
                "costPerMile":3.69,
+               "fiscalMonth":7,
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":3,
@@ -289,6 +292,7 @@ const shipmentsSummaryWeeklyMock = {
                "label":"Week 4",
                "shipments":20,
                "costPerMile":1.99,
+               "fiscalMonth":7,
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":4,
@@ -455,23 +459,23 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
 
 export const findLoadByIdApi = async (idLoad, JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_END_POINT + '/' + idLoad;
-    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, loadByIdMock, true);
 };
 
 export const loadPipeLineSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_PIPELINE_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryMock, true);
 };
 
 export const getMenuApi = async (JWT, menuTypePosition) => {
     const MENU_TYPE_POSITION = menuTypePosition || "";
     const END_POINT = BASE_END_POINT + MENU_END_POINT + "?type=" + MENU_TYPE_POSITION ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, menuMockData, true);
 };
 
 export const loadStopsSummaryApi = async (JWT) => {
     const END_POINT = BASE_END_POINT + LOAD_STOP_SUMMARY_END_POINT ;
-    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, summaryStopMock, true);
 };
 
 export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalYear, fiscalWeek, JWT) => {
@@ -479,5 +483,5 @@ export const loadShipmentSummaryApi = async (offset, units, fiscalMonth, fiscalY
       BASE_END_POINT +
       LOAD_SHIPMENT_SUMMARY_END_POINT +
       `?offset=${offset}&units=${units}&fiscalMonth=${fiscalMonth}&fiscalYear=${fiscalYear}&fiscalWeek=${fiscalWeek}`;
-    return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), false);
+    return consumeApi(END_POINT, METHOD_GET, JWT, getShipmentsSummaryMock(units), true);
 };
