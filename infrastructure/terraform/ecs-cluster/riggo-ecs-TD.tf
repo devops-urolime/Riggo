@@ -20,6 +20,7 @@ resource "aws_ecs_task_definition" "riggo-ecs-TD" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [container_definitions]
   }
 
   #depends_on = ["null_resource.efs_url_update"]

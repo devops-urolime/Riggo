@@ -178,6 +178,7 @@ module "CloudWatch" {
   cpu_utilization_high_evaluation_periods = "${var.cpu_utilization_high_evaluation_periods}"
   cpu_utilization_high_period = "${var.cpu_utilization_high_period}"
   memory_utilization_high_threshold = "${var.memory_utilization_high_threshold}"
+  memory_utilization_cluster_high_threshold = "${var.memory_utilization_cluster_high_threshold}"
   memory_utilization_high_evaluation_periods = "${var.memory_utilization_high_evaluation_periods}"
   memory_utilization_high_period = "${var.memory_utilization_high_period}"
   rds_cpu_utilization_high_threshold = "${var.rds_cpu_utilization_high_threshold}"

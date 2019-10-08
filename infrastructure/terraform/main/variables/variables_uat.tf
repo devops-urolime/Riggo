@@ -109,10 +109,10 @@ cpu_utilization_high_period = "120"
 
 #Variables for Cloudwatch ECS/Memory
 
-memory_utilization_high_threshold = "65"
+memory_utilization_high_threshold = "165"
 memory_utilization_high_evaluation_periods = "1"
 memory_utilization_high_period = "60"
-
+memory_utilization_cluster_high_threshold = "65"
 #Variables for Cloudwatch AWS/RDS"
 
 rds_cpu_utilization_high_threshold = "65"

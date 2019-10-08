@@ -560,6 +560,10 @@ variable "memory_utilization_high_threshold" {
   description = "The maximum percentage of Memory utilization average."
 }
 
+variable "memory_utilization_cluster_high_threshold" {
+  description = "The maximum percentage of memory utilization average"
+}
+
 variable "memory_utilization_high_evaluation_periods" {
   description = "Number of periods to evaluate for the alarmn"
 }

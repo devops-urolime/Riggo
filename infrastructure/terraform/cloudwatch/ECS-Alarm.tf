@@ -2,7 +2,8 @@
 locals {
   thresholds = {
     CPUUtilizationHighThreshold    = "${min(max(var.cpu_utilization_high_threshold, 0), 100)}"
-    MemoryUtilizationHighThreshold = "${min(max(var.memory_utilization_high_threshold, 0), 100)}"
+    MemoryUtilizationHighThreshold = "${min(max(var.memory_utilization_high_threshold, 0), 200)}"
+    MemoryUtilizationClusterHighThreshold = "${min(max(var.memory_utilization_cluster_high_threshold, 0), 100)}"
   }
   dimensions_map = {
     "service" = {
@@ -80,7 +81,7 @@ resource "aws_cloudwatch_metric_alarm" "ecs_cluster_memory" {
   namespace                 = "AWS/ECS"
   period                    = "${var.memory_utilization_high_period}"
   statistic                 = "Average"
-  threshold                 = "${local.thresholds["MemoryUtilizationHighThreshold"]}"
+  threshold                 = "${local.thresholds["MemoryUtilizationClusterHighThreshold"]}"
   alarm_description         = "This metric monitors ECS cluster memory utilization"
   # insufficient_data_actions = []
   alarm_actions = ["${aws_cloudformation_stack.sns_alert_topic.outputs["ARN"]}"]
