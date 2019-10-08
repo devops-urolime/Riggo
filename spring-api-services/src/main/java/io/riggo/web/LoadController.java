@@ -203,6 +203,7 @@ public class LoadController {
             if (checkFirstStopExists.isPresent()) {
                 BeanUtils.copyProperties(checkFirstStopExists.get(), loadStop, SalesforceRevenovaConstants.POST_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
             }
+            loadStop.setLoadId(loadId);
             loadStopService.save(loadStop);
         }
     }

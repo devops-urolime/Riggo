@@ -18,10 +18,11 @@ YYYYMMDDhhmm
 applies only to Rigo DB Migrations
 
 ## Clearing the database
-delete from load_stop;
-delete from location;
-delete from address;
-delete from load_line_item;
-delete from load;
-delete from shipper where id > 2;
-delete from quote;
+    delete from load_stop;
+    delete from location;
+    delete from address;
+    delete from load_line_item;
+    delete from load;
+    delete from shipper where id > 2;
+    delete from quote;
+    delete from shipper_user where shipper_id > 2;`
