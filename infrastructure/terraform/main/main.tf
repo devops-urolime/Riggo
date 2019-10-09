@@ -159,6 +159,7 @@ module "ecs-cluster" {
   health_checkpath                  = "${var.health_checkpath}"
   # TD_Cpu_limit                      = "${var.TD_Cpu_limit}"
   TD_mem_hard_limit                 = "${var.TD_mem_hard_limit}"
+  TD_mem_soft_limit                 = "${var.TD_mem_soft_limit}"
   workspace                         = "${terraform.workspace}"
   cloudwatch_log                    = "${module.CloudWatch.cloudwatch-log-GroupName}"
   service_discovery_arn             = "${module.Route53.service_discovery_arn}"

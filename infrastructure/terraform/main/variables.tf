@@ -451,6 +451,11 @@ variable "TD_mem_hard_limit" {
 
 }
 
+variable "TD_mem_soft_limit" {
+  description = "Soft limit memory set for the container in MB"
+}
+
+
 variable "health_check_grace_period_seconds" {
 
   description = "health check grace period for each ECS instance"

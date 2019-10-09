@@ -85,6 +85,10 @@ variable "TD_mem_hard_limit" {
 
 }
 
+variable "TD_mem_soft_limit" {
+
+}
+
 variable "workspace" {
 
 }

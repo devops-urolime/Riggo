@@ -1,5 +1,5 @@
 #Application variables
-spring_profile_env = "uat"
+spring_profile_env = "test"
 
 #General Variables
 keyname = "RiggoKeyPair-test"
@@ -81,6 +81,7 @@ deployment_minimum_healh_percent = "0"
 deployment_maximum_healh_percent = "100"
 container_port = 8088
 health_checkpath = "/favicon.ico"
+TD_mem_hard_limit = "512"
 TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
@@ -112,7 +113,7 @@ cpu_utilization_high_period = "120"
 memory_utilization_high_threshold = "65"
 memory_utilization_high_evaluation_periods = "1"
 memory_utilization_high_period = "60"
-
+memory_utilization_cluster_high_threshold = "65"
 #Variables for Cloudwatch AWS/RDS"
 
 rds_cpu_utilization_high_threshold = "65"
