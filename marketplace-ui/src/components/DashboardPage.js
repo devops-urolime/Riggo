@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import CardSummary from './CardSummary';
 import './DashboardPage.scss';
 import Grid from '@material-ui/core/Grid';
+import Chip from '@material-ui/core/Chip';
 import TitleSection from './TitleSection';
 import Grow from '@material-ui/core/Grow';
 import PieVisualization, {
@@ -141,10 +142,8 @@ class DashboardPage extends Component {
       fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
       fiscalYearShipment: SHIPMENT_FISCAL_YEAR_DEFAULT,
       weekShipment: SHIPMENT_FISCAL_WEEK_DEFAULT,
-      showNext: false,
-      showPrev: false,
-      historyNav:[],
-      historyNavIndex:0
+      navCursorOffset: SHIPMENT_OFFSET_DEFAULT,
+      itemBar: {}
     };
   }
 
@@ -162,41 +161,26 @@ class DashboardPage extends Component {
 
   nextViewType = (current, type) => {
     let idx = type.indexOf(current);
-    if (idx === type.length - 1) {
-      return type[0];
+    const lastViewTypeIndex = type.length - 1;
+    if (idx === lastViewTypeIndex) {
+      return type[lastViewTypeIndex];
     }
     return type[idx + 1];
   };
 
-  hasNextHistory = (historyNav, historyNavIndex) =>{
-    const size = historyNav.length;
-    return historyNavIndex < size;
+  prevViewType = (current, type) =>{
+    let idx = type.indexOf(current);
+    return (idx !== 0) ? type[idx - 1]: type[0];
   };
 
-  hasPrevHistory = (historyNav, historyNavIndex) => {
-    const size = historyNav.length;
-    return historyNavIndex <= size && historyNavIndex !== 0;
-  };
-
-  navigateToNextViewType = (item) => {
+  updateViewType = (item) =>{
     const { viewTypeShipment } = this.state;
-    if(item.payload){
-      const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
-      this.setState(prevState => {
-        const historyNavUpdate = (
-          prevState.historyNavIndex >= prevState.historyNav.length
-        ) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
-        const historyNavIndex = prevState.historyNavIndex + 1 ;
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
-        return ({
-          viewTypeShipment: nextView,
-          historyNav: historyNavUpdate,
-          historyNavIndex,
-          showNext: hasNextHistory,
-          showPrev: hasPrevHistory,
-        });
-      });
+    const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
+    this.setState({
+      viewTypeShipment: nextView,
+      itemBar: item.payload
+    });
+    if(nextView !== viewTypeShipment){
       this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
@@ -204,80 +188,65 @@ class DashboardPage extends Component {
         item.payload.fiscalYear,
         item.payload.fiscalWeek
       );
-    } else if (this.state.showNext){
-      const nextIndexItem = (
-        this.state.historyNav.length + 1 >= this.state.historyNavIndex &&
-        this.state.historyNavIndex !== (this.state.historyNav.length - 1)
-      ) ? this.state.historyNavIndex + 1 : this.state.historyNavIndex;
-      const item = this.state.historyNav[ nextIndexItem ];
-      if(item){
-        const nextItem = item.item;
-        this.setState(prevState => {
-          const historyNavUpdate = (prevState.historyNavIndex >= prevState.historyNav.length) ? [...prevState.historyNav, { viewTypeShipment, item }] : [...prevState.historyNav];
-          const hasNextHistory = this.hasNextHistory(historyNavUpdate, nextIndexItem +1);
-          const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, nextIndexItem +1);
-          return ({
-            viewTypeShipment: nextItem.payload.units,
-            historyNavIndex: nextIndexItem,
-            showNext: hasNextHistory,
-            showPrev: hasPrevHistory,
-          });
-        });
-        this.props.loadShipmentSummary(
-          nextItem.payload.offset,
-          nextItem.payload.units,
-          nextItem.payload.fiscalMonth,
-          nextItem.payload.fiscalYear,
-          nextItem.payload.fiscalWeek
-        );
-      }
     }
   };
 
-  navigateToPrevViewType = () => {
-    const { historyNav, historyNavIndex } = this.state;
-    const hasPrevHistory = this.hasPrevHistory(historyNav, historyNavIndex);
-    if(hasPrevHistory){
-      const prevIndexItem = historyNavIndex - 1;
-      const item = (historyNav[prevIndexItem]) ? historyNav[prevIndexItem].item: {};
-      this.setState(prevState => {
-        const historyNavUpdate = [...prevState.historyNav];
-        const historyNavIndex = (prevState.historyNavIndex > 0 ) ? prevState.historyNavIndex - 1 : prevState.historyNavIndex;
-        const hasNextHistory = this.hasNextHistory(historyNavUpdate, historyNavIndex);
-        const hasPrevHistory = this.hasPrevHistory(historyNavUpdate, historyNavIndex);
-        const prevItem = (
-          historyNavUpdate[prevIndexItem] &&
-          historyNavUpdate[prevIndexItem].item) ?  historyNavUpdate[prevIndexItem].item : {};
-        return ({
-          viewTypeShipment: (prevItem.units) ? prevItem.units : SHIPMENT_RESULT_BY_MONTH,
-          historyNav: historyNavUpdate,
-          historyNavIndex,
-          showNext: hasNextHistory,
-          showPrev: hasPrevHistory,
-        });
-      });
-      if (item.payload){
-        this.props.loadShipmentSummary(
-          item.payload.offset,
-          item.payload.units,
-          item.payload.fiscalMonth,
-          item.payload.fiscalYear,
-          item.payload.fiscalWeek
-        );
-      }
+  goToPrevViewType = () =>{
+    const { viewTypeShipment, itemBar } = this.state;
+    const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
+    this.setState({
+      viewTypeShipment: prevView,
+    });
+    if(prevView !== viewTypeShipment){
+      this.props.loadShipmentSummary(
+        itemBar.offset,
+        prevView,
+        itemBar.fiscalMonth,
+        itemBar.fiscalYear,
+        itemBar.fiscalWeek
+      );
     }
+  };
+
+  navigateToPrevOffset = (item) => {
+    this.setState(prevState => {
+      const prevOffset =  prevState.navCursorOffset + 1;
+      this.props.loadShipmentSummary(
+        prevOffset ,
+        this.state.viewTypeShipment,
+        this.state.fiscalMonthShipment,
+        this.state.fiscalYearShipment,
+        this.state.weekShipment
+      );
+      return ({
+        navCursorOffset: prevOffset,
+      });
+    });
+  };
+
+  navigateToNextOffset = (item) => {
+    this.setState(prevState => {
+      const nextOffset =  prevState.navCursorOffset - 1;
+      this.props.loadShipmentSummary(
+        nextOffset,
+        this.state.viewTypeShipment,
+        this.state.fiscalMonthShipment,
+        this.state.fiscalYearShipment,
+        this.state.weekShipment
+      );
+      return ({
+        navCursorOffset: nextOffset,
+      });
+    });
   };
 
   render(){
     const { pipeLineSummary, stopSummary, shipmentSummary } = this.props;
+    const { viewTypeShipment } = this.state;
     const pipeLineSummaryCard = digestDataToCardVisualization(pipeLineSummary);
     const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
-    const {
-      showNext,
-      showPrev,
-    } = this.state;
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
       return (
         <Grid
@@ -323,16 +292,25 @@ class DashboardPage extends Component {
                        direction="row"
                        alignItems="center"
                      >
-                        <Grid xs={8} item>
+                       <Grid xs={8} item>
+                         {
+                           (viewTypeShipment !== SHIPMENT_RESULT_BY_MONTH) &&
+                           <Chip
+                             label={`Back to ${this.prevViewType(viewTypeShipment, VIEW_TYPES)}`}
+                             onClick={this.goToPrevViewType}
+                           />
+                         }
+                       </Grid>
+                       <Grid xs={8} item>
                            <MultiYAxesVisualization
                              title={summaryItem.title}
                              data={summaryItem.data}
-                             onClickBar={this.navigateToNextViewType}
-                             onClickBack={this.navigateToPrevViewType}
-                             onClickNext={this.navigateToNextViewType}
+                             onClickBar={this.updateViewType}
+                             onClickBack={this.navigateToPrevOffset}
+                             onClickNext={this.navigateToNextOffset}
                              rootClass="ShipmentsVisualization"
-                             showNext={showNext}
-                             showPrev={showPrev}
+                             showNext={true}
+                             showPrev={true}
                            />
                         </Grid>
                         <Grid xs={1} item>
