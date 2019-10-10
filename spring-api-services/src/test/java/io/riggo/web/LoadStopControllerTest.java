@@ -1,13 +1,12 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.EquipmentType;
 import io.riggo.data.domain.Load;
 import io.riggo.data.domain.LoadStop;
-import io.riggo.data.domain.Shipper;
-import io.riggo.data.services.*;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadLoadLineItem;
+import io.riggo.data.services.AddressService;
+import io.riggo.data.services.LoadService;
+import io.riggo.data.services.LoadStopService;
+import io.riggo.data.services.LocationService;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
-import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserPostPutLoad;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -28,7 +27,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,6 +45,13 @@ public class LoadStopControllerTest {
 
     @MockBean
     private LoadStopService loadStopService;
+
+    @MockBean
+    private LocationService locationService;
+
+    @MockBean
+    private AddressService addressService;
+
 
     @MockBean
     private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
