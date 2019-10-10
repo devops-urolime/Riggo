@@ -1,11 +1,11 @@
 package io.riggo.web;
 
-import io.riggo.data.domain.Load;
-import io.riggo.data.domain.LoadStop;
-import io.riggo.data.domain.ResourceType;
+import io.riggo.data.domain.*;
 import io.riggo.data.exception.ResourceNotFoundException;
+import io.riggo.data.services.AddressService;
 import io.riggo.data.services.LoadService;
 import io.riggo.data.services.LoadStopService;
+import io.riggo.data.services.LocationService;
 import io.riggo.web.integration.SalesforceRevenovaConstants;
 import io.riggo.web.integration.parser.SalesforceRevenovaRequestBodyParserForPatchLoadStop;
 import io.riggo.web.response.BaseAPIResponse;
@@ -38,6 +38,12 @@ public class LoadStopController {
     private LoadStopService loadStopService;
 
     @Autowired
+    private LocationService locationService;
+
+    @Autowired
+    private AddressService addressService;
+
+    @Autowired
     private SalesforceRevenovaRequestBodyParserForPatchLoadStop salesforceRevenovaRequestBodyParserForPatchLoadStop;
 
     @Autowired
@@ -47,6 +53,7 @@ public class LoadStopController {
     @PutMapping(value = Paths.LOAD_STOP, produces = "application/json")
     @PreAuthorize("hasAuthority('write:load')")
     public NestedBaseAPIResponse<?> putLoadStop(@RequestBody Map<String, Object> dataHashMap){
+
         return saveLoadStop(dataHashMap, null);
     }
 
@@ -62,27 +69,55 @@ public class LoadStopController {
                 .stream()
                 .map(loadStop -> {
                     BaseAPIResponse<LoadStop> loadStopBaseAPIResponse = new BaseAPIResponse<>();
+                    Integer streamLoadId = loadId;
+
+                    Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
+                    if (optionalLoad.isPresent() && (loadId == null || loadId != optionalLoad.get().getId())){
+                        streamLoadId = optionalLoad.get().getId();
+                    }
+
                     if(StringUtils.isNotBlank(loadStop.getLoadExtSysId())) {
-                        Optional<Load> optionalLoad = loadService.findByExtSysId(loadStop.getLoadExtSysId(), authenticationFacade.getSiteId());
-                        if (optionalLoad.isPresent() && (loadId == null || optionalLoad.get().getId().intValue() == loadId.intValue())) {
-                            if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
-                                Optional<LoadStop> loadStopFromDb = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
-                                if (loadStopFromDb.isPresent()) {
-                                    BeanUtils.copyProperties(loadStopFromDb.get(), loadStop, SalesforceRevenovaConstants.PUT_LOAD_STOP_IGNORE_PROPERTIES);
+                        Location location = loadStop.getLocation();
+                        if(location != null) {
+                            Optional<Location> checkLocationExists = null;
+                            Optional<Address> checkAddressExists = null;
+                            if (StringUtils.isNotBlank(location.getExtSysId())) {
+                                checkLocationExists = locationService.findLocationByExtSysIdLoadStopExtSysIdLoadId(location.getExtSysId(), loadStop.getExtSysId(), streamLoadId);
+                                if (checkLocationExists.isPresent() && checkLocationExists.get().getAddressId() != null) {
+                                    checkAddressExists = addressService.findById(checkLocationExists.get().getAddressId());
                                 }
-                                if(loadStop.getLoadId() == null) {
-                                    if(loadId != null){ loadStop.setLoadId(loadId); }
-                                    if(optionalLoad.isPresent()) { loadStop.setLoadId(optionalLoad.get().getId()); }
-                                }
-                                loadStopService.save(loadStop);
-                                loadStopBaseAPIResponse.addData(loadStop);
-                                return loadStopBaseAPIResponse;
                             }
+
+                            Address address = location.getAddress();
+                            if(address != null) {
+                                if (checkAddressExists != null && checkAddressExists.isPresent()) {
+                                    BeanUtils.copyProperties(checkAddressExists.get(), address, SalesforceRevenovaConstants.POST_PUT_LOAD_STOP_LOCATION_ADDRESS_IGNORE_PROPERTIES);
+                                }
+                                addressService.save(address);
+                                location.setAddressId(address.getId());
+                            }
+
+                            if (checkLocationExists != null && checkLocationExists.isPresent()) {
+                                BeanUtils.copyProperties(checkLocationExists.get(), location, SalesforceRevenovaConstants.POST_PUT_LOAD_STOP_LOCATION_IGNORE_PROPERTIES);
+                            }
+                            locationService.save(location);
+                            loadStop.setLocationId(location.getId());
+                        }
+
+                        if (StringUtils.isNotBlank(loadStop.getExtSysId())) {
+                            Optional<LoadStop> checkFirstStopExists = loadStopService.findByExtSysId(loadStop.getExtSysId(), authenticationFacade.getSiteId());
+                            if (checkFirstStopExists.isPresent()) {
+                                BeanUtils.copyProperties(checkFirstStopExists.get(), loadStop, SalesforceRevenovaConstants.POST_LOAD_LOAD_STOP_IGNORE_PROPERTIES);
+                            }
+                            loadStop.setLoadId(streamLoadId);
+                            loadStopService.save(loadStop);
+                            loadStopBaseAPIResponse.addData(loadStop);
+                            return loadStopBaseAPIResponse;
                         }
                     }
 
                     loadStopBaseAPIResponse.setStatus(HttpStatus.NOT_FOUND.value());
-                    if(loadId != null) {
+                    if(streamLoadId != null) {
                         loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, 1).getMessage());
                     }else{
                         loadStopBaseAPIResponse.setMessage(new ResourceNotFoundException(ResourceType.LOAD, loadStop.getLoadExtSysId()).getMessage());
