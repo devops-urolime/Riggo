@@ -208,7 +208,7 @@ class DashboardPage extends Component {
     }
   };
 
-  navigateToPrevOffset = (item) => {
+  navigateToPrevOffset = () => {
     this.setState(prevState => {
       const prevOffset =  prevState.navCursorOffset + 1;
       this.props.loadShipmentSummary(
@@ -224,7 +224,7 @@ class DashboardPage extends Component {
     });
   };
 
-  navigateToNextOffset = (item) => {
+  navigateToNextOffset = () => {
     this.setState(prevState => {
       const nextOffset =  prevState.navCursorOffset - 1;
       this.props.loadShipmentSummary(
