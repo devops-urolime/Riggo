@@ -8,7 +8,8 @@ data "template_file" "container-definition" {
     # TD_Cpu_limit        = "${var.TD_Cpu_limit}"
     TD_mem_hard_limit   = "${var.TD_mem_hard_limit}"
     cloudwatch_logname  = "${var.cloudwatch_log}"
-    spring_profile_key  = "${var.spring_profile_key}"
+    spring_profile_key  = "${var.spring_profile_key}"  
+    TD_mem_soft_limit   = "${var.TD_mem_soft_limit}"
 
   }
 }
@@ -20,6 +21,7 @@ resource "aws_ecs_task_definition" "riggo-ecs-TD" {
 
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [container_definitions]
   }
 
   #depends_on = ["null_resource.efs_url_update"]

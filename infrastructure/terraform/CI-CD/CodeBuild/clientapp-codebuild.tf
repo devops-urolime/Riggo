@@ -109,4 +109,8 @@ resource "aws_codebuild_project" "clientapp-codebuild" {
   tags = {
     env = "${terraform.workspace}"
   }
+
+  lifecycle {
+    ignore_changes = [environment]
+  }
 }

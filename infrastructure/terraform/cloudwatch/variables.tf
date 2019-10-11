@@ -22,6 +22,10 @@ variable "memory_utilization_high_threshold" {
   
 }
 
+variable "memory_utilization_cluster_high_threshold" {
+  
+}
+
 variable "memory_utilization_high_evaluation_periods" {
   
 }

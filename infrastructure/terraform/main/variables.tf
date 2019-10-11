@@ -451,6 +451,11 @@ variable "TD_mem_hard_limit" {
 
 }
 
+variable "TD_mem_soft_limit" {
+  description = "Soft limit memory set for the container in MB"
+}
+
+
 variable "health_check_grace_period_seconds" {
 
   description = "health check grace period for each ECS instance"
@@ -558,6 +563,10 @@ variable "cpu_utilization_high_period" {
 
 variable "memory_utilization_high_threshold" {
   description = "The maximum percentage of Memory utilization average."
+}
+
+variable "memory_utilization_cluster_high_threshold" {
+  description = "The maximum percentage of memory utilization average"
 }
 
 variable "memory_utilization_high_evaluation_periods" {
