@@ -1,17 +1,18 @@
 #Application variables
-spring_profile_env = "uat"
+spring_profile_env = "prod"
+
+
 
 #General Variables
-keyname = "RiggoKeyPair-uat"
+keyname = "RiggoKeyPair-prod"
 cidr_block = "0.0.0.0/0"
-hosted_zone_name = "riggostaging.net"
-# wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/563bf243-b716-46e6-b22c-5660b59603b4"
+hosted_zone_name = "riggo.io"
+
 
 #variables for RDS
 read_capacity  = "20"
 write_capacity = "20"
 identifier =  "riggo-io"
-# iops = "1000"
 storage_type = "gp2"
 allocated_storage = "100"
 db_engine = "postgres"
@@ -32,9 +33,9 @@ origin_path = ""
 cached_methods = ["GET","HEAD"]
 allowed_methods = ["GET","HEAD"]
 cloudfront_root_object = "index.html"
-cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/c1f02af2-b09b-40ce-b010-4e0141f72c65"
+cloudfront_acm_arn = "arn:aws:acm:us-east-1:845657178663:certificate/cadcefe5-6ffb-4c27-9155-26ca8d96b5f0"
 cloudfront_ssl_protocol_ver = "TLSv1.1_2016"
-cname_alias = "riggo.riggostaging.net"
+cname_alias = "riggo.riggo.io"
 error_caching_min_ttl = {
   403 = "300"
   404 = "300"
@@ -75,9 +76,9 @@ name_ecs_ami = "amazon-ecs-optimized"
 ecs_instance_type = "t2.micro"
 ecs_volume_type = "standard"
 ecs_volume_size = "20"
-max_ecs_instance-size = "2"
-min_ecs_instance-size = "1"
-desired_ecs_instance-size = "1"
+max_ecs_instance-size = "3"
+min_ecs_instance-size = "2"
+desired_ecs_instance-size = "2"
 deployment_minimum_healh_percent = "0"
 deployment_maximum_healh_percent = "100"
 container_port = 8088
@@ -86,19 +87,16 @@ TD_mem_hard_limit = "512"
 TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
-taskdef_path = "CI-CD/uat-taskdef.json"
-
+taskdef_path = "CI-CD/prod-taskdef.json"
 #Variables for route53
 service_discovery_ttl = "60"
-
-
 
 #variables for Lambda
 
 # lambda_handler = "index.handler"
 # lambda_env_audience = "load-resource-api"
-# lambda_env_auth0_JWKS_URI = "https://riggo-staging.auth0.com/.well-known/jwks.json"
-# lambda_env_auth0_TOKEN_ISSUER = "https://riggo-staging.auth0.com/"
+# lambda_env_auth0_JWKS_URI = "https://riggo-qa.auth0.com/.well-known/jwks.json"
+# lambda_env_auth0_TOKEN_ISSUER = "https://riggo-qa.auth0.com/"
 # lambda_runtime = "nodejs10.x"
 # lambda_timeout = "30"
 
@@ -109,12 +107,14 @@ cpu_utilization_high_evaluation_periods = "1"
 cpu_utilization_high_period = "120"
 
 
+
 #Variables for Cloudwatch ECS/Memory
 
 memory_utilization_high_threshold = "165"
 memory_utilization_high_evaluation_periods = "1"
 memory_utilization_high_period = "60"
 memory_utilization_cluster_high_threshold = "65"
+
 #Variables for Cloudwatch AWS/RDS"
 
 rds_cpu_utilization_high_threshold = "65"
@@ -159,9 +159,9 @@ alarms_email = ["alerts@riggo.io", "muhasin.mohammed@urolime.com"]
 compute_type = "BUILD_GENERAL1_SMALL"
 codebuild_image = "aws/codebuild/standard:2.0"
 buildspec_path = {
-  #PATH is from root of the respository.
-  clientapp  = "CI-CD/uat-clientapp-buildspec.yaml"
-  apiservice = "CI-CD/uat-apiservices-buildspec.yaml"
+#PATH is from root of the respository.
+  clientapp  = "CI-CD/prod-clientapp-buildspec.yaml"
+  apiservice = "CI-CD/prod-apiservices-buildspec.yaml"
 }
 
 #Variables for  Codedeploy
@@ -171,7 +171,6 @@ rollback_events = ["DEPLOYMENT_FAILURE"]
 action_on_timeout = "CONTINUE_DEPLOYMENT"
 action_on_blue_tasks = "TERMINATE"
 bluetask_termination_wait_minutes = 0
-# taskdef_path = "CI-CD/taskdef.json"
 #variables for codepipeline
 artifact = {
 source_output_artifact_dir = "Riggo-source"
@@ -182,8 +181,8 @@ image_placeholder_text = "<IMAGE1_NAME>"
 github_organization_name = "rig-go"
 github_repository_name = "riggo"
 github_branch_name = {
-  clientapp = "uat-client-app"
-  apiservices = "uat-api-services"
+  clientapp = "prod-client-app"
+  apiservices = "prod-api-services"
 }
 
 #variables for api gateway
@@ -192,11 +191,10 @@ rest_api_name = "Riggo Platform API"
 
 #stage variables for lambda authorizer
 authorizer_auth0_audience = "load-resource-api"
-authorizer_auth0_jwks_uri = "https://riggo-staging.auth0.com/.well-known/jwks.json"
-authorizer_auth0_token_issuer = "https://riggo-staging.auth0.com/"
+authorizer_auth0_jwks_uri = "https://riggo.auth0.com/.well-known/jwks.json"
+authorizer_auth0_token_issuer = "https://riggo.auth0.com/"
 # basepath_apigateway = "v1"
 
 #SES variables
-
-SES_email_address = "support-uat@riggo.io"
-SES_smtp_user_domain = "riggostaging-net"
+SES_email_address = "support@riggo.io"
+SES_smtp_user_domain = "riggo-io"

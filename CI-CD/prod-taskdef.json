@@ -1,0 +1,59 @@
+{
+  "volumes": [],
+  "containerDefinitions": [
+    {
+      "mountPoints": [],
+      "volumesFrom": [],
+      "name": "Riggo-resource-svr-prod",
+      "memoryReservation": 256,
+      "memory": 512,
+      "essential": true,
+      "environment": [
+        {
+          "value": "prod",
+          "name": "SPRING_PROFILES_ACTIVE"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-stream-prefix": "ecs",
+          "awslogs-group": "/ecs/riggo-ecs-prod",
+          "awslogs-region": "us-west-2"
+        }
+      },
+      "image": "845657178663.dkr.ecr.us-west-2.amazonaws.com/riggo-ecs-prod:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "containerPort": 8088,
+          "hostPort": 0,
+          "protocol": "tcp"
+        }
+      ],
+      "readonlyRootFilesystem": false
+    }
+  ],
+  "revision": 1,
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    }
+  ],
+  "status": "ACTIVE",
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2"
+  ],
+  "family": "Riggo-ECS-prod-TD",
+  "taskDefinitionArn": "arn:aws:ecs:us-west-2:845657178663:task-definition/Riggo-ECS-prod-TD:1"
+}
