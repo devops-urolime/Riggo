@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "codebuild_caching_s3_bucket" {
-  bucket = "${terraform.workspace}-codebuild-caching-bucket"
+  bucket = "${terraform.workspace}-riggo-codebuild-caching-s3bucket"
   force_destroy = true
   acl    = "private"
   tags = {
