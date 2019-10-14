@@ -84,6 +84,8 @@ public class SalesforceRevenovaRequestBodyParserForPatchLoadStop implements Requ
             address.setCity(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LocationShippingCity", locationMap));
             address.setState(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LocationShippingState", locationMap));
             address.setPostalCode(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LocationShippingPostalCode", locationMap));
+            address.setCountry("United States");
+
             location.setAddress(address);
             loadStop.setLocation(location);
 
