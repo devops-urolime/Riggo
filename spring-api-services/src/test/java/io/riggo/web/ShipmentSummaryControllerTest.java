@@ -195,6 +195,7 @@ public class ShipmentSummaryControllerTest {
         startFiscalPeriod.setMonthActual(fiscalMonth);
         startFiscalPeriod.setFirstDayOfWeek(LocalDate.of(2019, 9 ,1));
         startFiscalPeriod.setLastDayOfWeek(LocalDate.of(2019, 9 ,7));
+        startFiscalPeriod.setFirstDayOfMonth(LocalDate.of(2019, 9 ,1));
         startFiscalPeriod.setMonthName("September");
 
         QuoteLoad quote = new QuoteLoad();
