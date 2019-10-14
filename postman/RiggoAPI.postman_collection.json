@@ -129,6 +129,131 @@
 			"response": []
 		},
 		{
+			"name": "PUT /load",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5e9bb708-e2f1-4b40-87de-06e4d0a0d06b",
+						"exec": [
+							"pm.environment.set('loadId', Date.now());"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a43bfc9-6971-4aa4-ada8-7109758e8df8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"returnedLoadId\", jsonData.data[0].id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"LoadDetails\": {\n    \"Id\": \"{{loadId}}\",\n    \"MarketplaceExposedId\": \"null\",\n    \"OwnerDetails\": {\n      \"OwnerId\": \"0056A000000cQFIQA2\",\n      \"OwnerName\": \"Admin Riggo\"\n    },\n    \"Name\": \"34883\",\n    \"CreatedDate\": \"2019-09-16 17:20:52\",\n    \"CustomerBillTo\": {\n      \"billToId\": \"null\",\n      \"BillToName\": \"null\",\n      \"billToTMSType\": \"null\",\n      \"billToShippingStreet\": \"null\",\n      \"billToShippingCity\": \"null\",\n      \"billToShippingPostalCode\": null,\n      \"billToShippingState\": \"null\",\n      \"billToShippingCountry\": \"null\"\n    },\n    \"rtms__Bill_of_Lading_Number__c\": \"billOfLading\",\n    \"rtms__Carrier_Invoice_Total__c\": 1,\n    \"rtms__Carrier_Load__c\": true,\n    \"rtms__Carrier_Payment_Total__c\": null,\n    \"rtms__Carrier_Quote_Total__c\": 2,\n    \"CarrierRemitTo\": {\n      \"CarrierRemitToId\": \"null\",\n      \"CarrierRemitToName\": \"null\",\n      \"CarrierRemitToTMSType\": \"null\",\n      \"CarrierRemitToShippingStreet\": \"null\",\n      \"CarrierRemitToShippingCity\": \"null\",\n      \"CarrierRemitToShippingPostalCode\": \"null\",\n      \"CarrierRemitToShippingState\": \"null\",\n      \"CarrierRemitToShippingCountry\": \"null\"\n    },\n    \"CarrierService\": {\n      \"CarrierServiceId\": \"null\",\n      \"CarrierServiceName\": \"null\"\n    },\n    \"rtms__Carrier_Uploads__c\": \"null\",\n    \"Carrier\": {\n      \"CarrierId\": \"null\",\n      \"CarrierName\": \"null\",\n      \"CarrierTMSType\": \"null\",\n      \"CarrierShippingStreet\": \"null\",\n      \"CarrierShippingCity\": \"null\",\n      \"CarrierShippingPostalCode\": \"null\",\n      \"CarrierShippingState\": \"null\",\n      \"CarrierShippingCountry\": \"null\"\n    },\n    \"rtms__City_Lane__c\": \"null, null:Indianapolis, IN\",\n    \"rtms__Country_Lane__c\": \"US:US\",\n    \"rtms__Customer_Check_Acceptable__c\": false,\n    \"rtms__Customer_Invoice_Tax_Amount__c\": null,\n    \"rtms__Customer_Invoice_Total__c\": 3,\n    \"rtms__Customer_Invoice_Transportation_Total__c\": 0,\n    \"rtms__Customer_Load__c\": true,\n    \"rtms__Customer_Quote_Tax_Amount__c\": null,\n    \"rtms__Customer_Quote_Total__c\": 4,\n    \"rtms__Customer_Quote_Transportation_Total__c\": 0,\n    \"Customer\": {\n      \"CustomerId\": \"0016A0000QAA\",\n      \"CustomerName\": \"OEC Group Chicago\",\n      \"CustomerTMSType\": \"null\",\n      \"CustomerShippingStreet\": \"555 Pierce Rd Suite 210\",\n      \"CustomerShippingCity\": \"Itasca\",\n      \"CustomerShippingPostalCode\": \"60143\",\n      \"CustomerShippingState\": \"Illinois\",\n      \"CustomerShippingCountry\": \"United States\"\n    },\n    \"rtms__Delivery_Status__c\": \"null\",\n    \"rtms__Destination__c\": \"Indianapolis, Indiana\",\n    \"rtms__Distance_Kilometers__c\": null,\n    \"rtms__Distance_Miles__c\": 800,\n    \"Driver\": {\n      \"DriverId\": \"null\",\n      \"DriverName\": \"null\",\n      \"DriverTransportationRole\": \"null\",\n      \"DriverPhone\": \"null\",\n      \"DriverMobilePhone\": \"null\",\n      \"DriverMailingStreet\": \"null\",\n      \"DriverMailingCity\": \"null\",\n      \"DriverMailingPostalCode\": \"null\",\n      \"DriverMailingState\": \"null\",\n      \"DriverMailingCountry\": \"null\"\n    },\n    \"rtms__EDI_Reference_Numbers__c\": \"EDIRefNumber001\",\n    \"rtms__EDI_Status__c\": \"null\",\n    \"EquipmentType\": {\n      \"EquipmentTypeId\": \"null\",\n      \"EquipmentTypeName\": \"null\",\n      \"EquipmentType_rtms__Category__c\": \"null\",\n      \"EquipmentType_rtms__Max_Volume__c\": \"null\",\n      \"EquipmentType_rtms__Volume_Units__c\": \"null\",\n      \"EquipmentType_rtms__Max_Pallets__c\": \"null\",\n      \"EquipmentType_rtms__Enabled__c\": \"false\",\n      \"EquipmentType_rig_Truckstop_Type__c\": \"null\",\n      \"EquipmentType_rtms__ISO_Type_Group__c\": \"null\",\n      \"EquipmentType_rtms__ISO_Size_Type__c\": \"null\",\n      \"EquipmentType_rtms__Tare_Weight__c\": \"null\",\n      \"EquipmentType_rtms__Max_Weight__c\": \"null\",\n      \"EquipmentType_rtms__Weight_Units__c\": \"null\"\n    },\n    \"rtms__Expected_Delivery_Date2__c\": \"2019-09-16 00:00:00\",\n    \"rtms__Expected_Ship_Date2__c\": \"2019-09-16 00:00:00\",\n    \"FirstStop\": {\n      \"FirstStopId\": \"a0t4B00000DUffkQAD\",\n      \"FirstStopName\": \"Stop 1\",\n      \"FirstStoprtms__P_D__c\": \"Pickup\",\n      \"FirstStoprig_Load_Customer_Name__c\": \"OEC Group Chicago\",\n      \"FirstStoprtms__Number__c\": \"1\",\n      \"FirstStoprtms__Instructions__c\": \"null\",\n      \"FirstStopLocation\": {\n        \"FirstStopLocationId\": \"0014B00000h1OwnQAE\",\n        \"FirstStopLocationName\": \"Riggo\",\n        \"FirstStopLocationShippingStreet\": \"LocationStreet\",\n        \"FirstStopLocationShippingShippingCity\": \"LocationCity\",\n        \"FirstStopLocationShippingShippingState\": \"New York\",\n        \"FirstStopLocationShippingShippingPostalCode\": \"11121\"\n      },\n      \"FirstStoprtms__Shipping_Receiving_Hours__c\": \"01:00 - 05:00\",\n      \"FirstStoprtms__Expected_Date__c\": \"2019-09-16 00:00:00\",\n      \"FirstStoprtms__Expected_Day__c\": \"Monday\",\n      \"FirstStoprtms__Appointment_Required__c\": \"true\",\n      \"FirstStoprtms__Appointment_Time__c\": \"05:00\",\n      \"FirstStoprtms__Stop_Status__c\": \"Arrived\",\n      \"FirstStoprtms__Carrier_Status2__c\": \"Delayed By Weather\"\n    },\n    \"rtms__Hazardous_Materials__c\": true,\n    \"rtms__Insurance_Amount__c\": \"10000000.00\",\n    \"rtms__Last_Reported_City__c\": \"null\",\n    \"rtms__Last_Reported_Country__c\": \"null\",\n    \"rtms__Last_Reported_Geolocation__c\": \"null\",\n    \"rtms__Last_Reported_Location2__c\": \",\",\n    \"rtms__Last_Reported_State_Province__c\": \"null\",\n    \"LastStop\": {\n      \"LastStopId\": \"a0t4B00000DUfflQAD\",\n      \"LastStopName\": \"Stop 2\",\n      \"LastStoprtms__P_D__c\": \"Delivery\",\n      \"LastStoprig_Load_Customer_Name__c\": \"OEC Group Chicago\",\n      \"LastStoprtms__Number__c\": \"2\",\n      \"LastStoprtms__Instructions__c\": \"null\",\n      \"LastStopLocation\": {\n        \"LastStopLocationId\": \"0016A00000qLt5JQAS\",\n        \"LastStopLocationName\": \"Tls by Design Customer Furniture LLC\",\n        \"LastStopLocationShippingStreet\": \"10737 Sand key Cir.\",\n        \"LastStopLocationShippingShippingCity\": \"Indianapolis\",\n        \"LastStopLocationShippingShippingState\": \"Indiana\",\n        \"LastStopLocationShippingShippingPostalCode\": \"46256\"\n      },\n      \"LastStoprtms__Shipping_Receiving_Hours__c\": \"null\",\n      \"LastStoprtms__Expected_Date__c\": \"2019-09-16 00:00:00\",\n      \"LastStoprtms__Expected_Day__c\": \"Monday\",\n      \"LastStoprtms__Appointment_Required__c\": \"false\",\n      \"LastStoprtms__Appointment_Time__c\": \"null\",\n      \"LastStoprtms__Stop_Status__c\": \"null\",\n      \"LastStoprtms__Carrier_Status2__c\": \"null\"\n    },\n    \"rtms__Load_Sequence_Number__c\": \"9644\",\n    \"rtms__Load_Status_Comments__c\": \"null\",\n    \"rtms__Load_Status_Requested__c\": false,\n    \"rtms__Load_Status__c\": \"Unassigned\",\n    \"rtms__Margin_Invoiced__c\": 0,\n    \"rtms__Margin_Paid__c\": 0,\n    \"rtms__Margin_Pct_Invoiced__c\": null,\n    \"rtms__Margin_Pct_Quoted__c\": null,\n    \"rtms__Margin_Quoted__c\": 0,\n    \"Mode\": {\n      \"ModeId\": \"a0k6A0000035SUxQAM\",\n      \"ModeName\": \"Truckload\",\n      \"ModeEnabled\": \"true\",\n      \"ModeLTL\": \"false\",\n      \"ModeOrder\": \"1\",\n      \"ModeRequiredApplication\": \"Completed W9 Tax Form;Certificate of Insurance;Operating Authority\"\n    },\n    \"rtms__OTD_Counter__c\": 0,\n    \"rtms__Order_Date__c\": \"2019-09-16 00:00:00\",\n    \"rtms__Order_Number__c\": \"null\",\n    \"rtms__Order_Total__c\": null,\n    \"rtms__Origin__c\": \", United States\",\n    \"rtms__Other_Instructions__c\": \"null\",\n    \"rtms__POD_Received__c\": false,\n    \"rtms__PO_Number__c\": \"null\",\n    \"rtms__PRO_Number__c\": \"null\",\n    \"rtms__Payment_Terms__c\": \"Third Party\",\n    \"rtms__Postal_Code_Lane__c\": \"null:46256\",\n    \"rtms__Sales_Status__c\": \"Pending\",\n    \"rtms__Schedule_Status__c\": \"null\",\n    \"rtms__Ship_From_Address__c\": \", ,\",\n    \"rtms__Ship_Status__c\": \"null\",\n    \"rtms__Ship_To_Address__c\": \"10737 Sand key Cir., Indianapolis, Indiana 46256\",\n    \"rtms__Site_URL__c\": \"null\",\n    \"rtms__State_Lane__c\": \"null:IN\",\n    \"rtms__Tax_Exempt__c\": false,\n    \"rtms__Tender_Accepted_Date__c\": \"null\",\n    \"rtms__Total_Weight__c\": 1222,\n    \"rtms__Tracking_Number__c\": \"null\",\n    \"rtms__Zip3_Lane__c\": \":462\",\n    \"rtms__Zip5_Lane__c\": \":46256\",\n    \"rtms__Weight_Units__c\": \"lbs\",\n    \"rtms__Mode_Name__c\": \"Truckload\",\n    \"rtms__Temperature_Controlled__c\": true,\n    \"rtms__Tracking_Provider__c\": \"null\",\n    \"Vendor\": {\n      \"VendorId\": \"null\",\n      \"VendorName\": \"null\",\n      \"VendorTMSType\": \"null\",\n      \"VendorShippingStreet\": \"null\",\n      \"VendorShippingCity\": \"null\",\n      \"VendorShippingPostalCode\": \"null\",\n      \"VendorShippingState\": \"null\",\n      \"VendorShippingCountry\": \"null\"\n    },\n    \"Posted_Notes__c\": \"null\",\n    \"Pickup_Delivery_Number__c\": \"null\",\n    \"Stop_Reference_Numbers__c\": \"null\",\n    \"Tractor_Number__c\": \"null\",\n    \"Trailer_Number__c\": \"null\",\n    \"Historical_Load__c\": false,\n    \"Legacy_Load_Number__c\": \"null\",\n    \"Pickup_Appointment_Time__c\": \"null\",\n    \"Delivery_Appointment_Time__c\": \"null\",\n    \"rig_riggoh_status__c\": \"Unassigned\",\n    \"EDI_Shipment_ID__c\": \"null\",\n    \"food_grade_trailer_required__c\": true,\n    \"riggoh_Formatted_Expected_Delivery_Date__c\": \"2019-09-16\",\n    \"riggoh_Formatted_Expected_Ship_Date__c\": \"2019-09-16\",\n    \"CarrierSalesRep\": {\n      \"CarrierSalesRepId\": \"null\",\n      \"CarrierSalesRepName\": \"null\",\n      \"CarrierSalesRepEmail\": \"null\"\n    },\n    \"rtms__Master_BOL_Option__c\": \"Shipper to Consignee\",\n    \"rig_Expected_TTT__c\": null,\n    \"rig_Previous_Cost__c\": null,\n    \"riggoh_Required_Temperature__c\": null,\n    \"rig_Lead_Source__c\": \"null\",\n    \"Pickup_Location__c\": \"null, null\",\n    \"Delivery_Location__c\": \"IndianapolisIN\",\n    \"rigPostedRate__c\": \"123\",\n    \"rig_Completed_Date__c\": \"null\",\n    \"rig_Load_URL__c\": \"https://carrier.riggo.io/carrier-quote-bid/a0j4B000001VsnD\",\n    \"rig_Team_Required__c\": true,\n    \"rtms__Pickup_Delivery_Status__c\": \"Stop 1 - Pickup --- No tracking updates available for this stop. Stop 2 - Delivery - No tracking updates available for this stop.\",\n    \"rtms__Carrier_Portal__c\": false,\n    \"rtms__EDI_Provider__c\": \"null\",\n    \"Send_Status_Updates__c\": false,\n    \"rig_Email_Automation__c\": true,\n    \"rig_Load_Board__c\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "{{GATEWAY_URL}}/load",
+					"host": [
+						"{{GATEWAY_URL}}"
+					],
+					"path": [
+						"load"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST /load 409",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5e9bb708-e2f1-4b40-87de-06e4d0a0d06b",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a43bfc9-6971-4aa4-ada8-7109758e8df8",
+						"exec": [
+							"pm.test(\"Send the same load returns 409\", function () {",
+							"    pm.response.to.have.status(409);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{JWT}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"LoadDetails\": {\n    \"Id\": \"{{loadId}}\",\n    \"MarketplaceExposedId\": \"null\",\n    \"OwnerDetails\": {\n      \"OwnerId\": \"0056A000000cQFIQA2\",\n      \"OwnerName\": \"Admin Riggo\"\n    },\n    \"Name\": \"34883\",\n    \"CreatedDate\": \"2019-09-16 17:20:52\",\n    \"CustomerBillTo\": {\n      \"billToId\": \"null\",\n      \"BillToName\": \"null\",\n      \"billToTMSType\": \"null\",\n      \"billToShippingStreet\": \"null\",\n      \"billToShippingCity\": \"null\",\n      \"billToShippingPostalCode\": null,\n      \"billToShippingState\": \"null\",\n      \"billToShippingCountry\": \"null\"\n    },\n    \"rtms__Bill_of_Lading_Number__c\": \"billOfLading\",\n    \"rtms__Carrier_Invoice_Total__c\": 1,\n    \"rtms__Carrier_Load__c\": true,\n    \"rtms__Carrier_Payment_Total__c\": null,\n    \"rtms__Carrier_Quote_Total__c\": 2,\n    \"CarrierRemitTo\": {\n      \"CarrierRemitToId\": \"null\",\n      \"CarrierRemitToName\": \"null\",\n      \"CarrierRemitToTMSType\": \"null\",\n      \"CarrierRemitToShippingStreet\": \"null\",\n      \"CarrierRemitToShippingCity\": \"null\",\n      \"CarrierRemitToShippingPostalCode\": \"null\",\n      \"CarrierRemitToShippingState\": \"null\",\n      \"CarrierRemitToShippingCountry\": \"null\"\n    },\n    \"CarrierService\": {\n      \"CarrierServiceId\": \"null\",\n      \"CarrierServiceName\": \"null\"\n    },\n    \"rtms__Carrier_Uploads__c\": \"null\",\n    \"Carrier\": {\n      \"CarrierId\": \"null\",\n      \"CarrierName\": \"null\",\n      \"CarrierTMSType\": \"null\",\n      \"CarrierShippingStreet\": \"null\",\n      \"CarrierShippingCity\": \"null\",\n      \"CarrierShippingPostalCode\": \"null\",\n      \"CarrierShippingState\": \"null\",\n      \"CarrierShippingCountry\": \"null\"\n    },\n    \"rtms__City_Lane__c\": \"null, null:Indianapolis, IN\",\n    \"rtms__Country_Lane__c\": \"US:US\",\n    \"rtms__Customer_Check_Acceptable__c\": false,\n    \"rtms__Customer_Invoice_Tax_Amount__c\": null,\n    \"rtms__Customer_Invoice_Total__c\": 3,\n    \"rtms__Customer_Invoice_Transportation_Total__c\": 0,\n    \"rtms__Customer_Load__c\": true,\n    \"rtms__Customer_Quote_Tax_Amount__c\": null,\n    \"rtms__Customer_Quote_Total__c\": 4,\n    \"rtms__Customer_Quote_Transportation_Total__c\": 0,\n    \"Customer\": {\n      \"CustomerId\": \"0016A0000QAA\",\n      \"CustomerName\": \"OEC Group Chicago\",\n      \"CustomerTMSType\": \"null\",\n      \"CustomerShippingStreet\": \"555 Pierce Rd Suite 210\",\n      \"CustomerShippingCity\": \"Itasca\",\n      \"CustomerShippingPostalCode\": \"60143\",\n      \"CustomerShippingState\": \"Illinois\",\n      \"CustomerShippingCountry\": \"United States\"\n    },\n    \"rtms__Delivery_Status__c\": \"null\",\n    \"rtms__Destination__c\": \"Indianapolis, Indiana\",\n    \"rtms__Distance_Kilometers__c\": null,\n    \"rtms__Distance_Miles__c\": 800,\n    \"Driver\": {\n      \"DriverId\": \"null\",\n      \"DriverName\": \"null\",\n      \"DriverTransportationRole\": \"null\",\n      \"DriverPhone\": \"null\",\n      \"DriverMobilePhone\": \"null\",\n      \"DriverMailingStreet\": \"null\",\n      \"DriverMailingCity\": \"null\",\n      \"DriverMailingPostalCode\": \"null\",\n      \"DriverMailingState\": \"null\",\n      \"DriverMailingCountry\": \"null\"\n    },\n    \"rtms__EDI_Reference_Numbers__c\": \"EDIRefNumber001\",\n    \"rtms__EDI_Status__c\": \"null\",\n    \"EquipmentType\": {\n      \"EquipmentTypeId\": \"null\",\n      \"EquipmentTypeName\": \"null\",\n      \"EquipmentType_rtms__Category__c\": \"null\",\n      \"EquipmentType_rtms__Max_Volume__c\": \"null\",\n      \"EquipmentType_rtms__Volume_Units__c\": \"null\",\n      \"EquipmentType_rtms__Max_Pallets__c\": \"null\",\n      \"EquipmentType_rtms__Enabled__c\": \"false\",\n      \"EquipmentType_rig_Truckstop_Type__c\": \"null\",\n      \"EquipmentType_rtms__ISO_Type_Group__c\": \"null\",\n      \"EquipmentType_rtms__ISO_Size_Type__c\": \"null\",\n      \"EquipmentType_rtms__Tare_Weight__c\": \"null\",\n      \"EquipmentType_rtms__Max_Weight__c\": \"null\",\n      \"EquipmentType_rtms__Weight_Units__c\": \"null\"\n    },\n    \"rtms__Expected_Delivery_Date2__c\": \"2019-09-16 00:00:00\",\n    \"rtms__Expected_Ship_Date2__c\": \"2019-09-16 00:00:00\",\n    \"FirstStop\": {\n      \"FirstStopId\": \"a0t4B00000DUffkQAD\",\n      \"FirstStopName\": \"Stop 1\",\n      \"FirstStoprtms__P_D__c\": \"Pickup\",\n      \"FirstStoprig_Load_Customer_Name__c\": \"OEC Group Chicago\",\n      \"FirstStoprtms__Number__c\": \"1\",\n      \"FirstStoprtms__Instructions__c\": \"null\",\n      \"FirstStopLocation\": {\n        \"FirstStopLocationId\": \"0014B00000h1OwnQAE\",\n        \"FirstStopLocationName\": \"Riggo\",\n        \"FirstStopLocationShippingStreet\": \"LocationStreet\",\n        \"FirstStopLocationShippingShippingCity\": \"LocationCity\",\n        \"FirstStopLocationShippingShippingState\": \"New York\",\n        \"FirstStopLocationShippingShippingPostalCode\": \"11121\"\n      },\n      \"FirstStoprtms__Shipping_Receiving_Hours__c\": \"01:00 - 05:00\",\n      \"FirstStoprtms__Expected_Date__c\": \"2019-09-16 00:00:00\",\n      \"FirstStoprtms__Expected_Day__c\": \"Monday\",\n      \"FirstStoprtms__Appointment_Required__c\": \"true\",\n      \"FirstStoprtms__Appointment_Time__c\": \"05:00\",\n      \"FirstStoprtms__Stop_Status__c\": \"Arrived\",\n      \"FirstStoprtms__Carrier_Status2__c\": \"Delayed By Weather\"\n    },\n    \"rtms__Hazardous_Materials__c\": true,\n    \"rtms__Insurance_Amount__c\": \"10000000.00\",\n    \"rtms__Last_Reported_City__c\": \"null\",\n    \"rtms__Last_Reported_Country__c\": \"null\",\n    \"rtms__Last_Reported_Geolocation__c\": \"null\",\n    \"rtms__Last_Reported_Location2__c\": \",\",\n    \"rtms__Last_Reported_State_Province__c\": \"null\",\n    \"LastStop\": {\n      \"LastStopId\": \"a0t4B00000DUfflQAD\",\n      \"LastStopName\": \"Stop 2\",\n      \"LastStoprtms__P_D__c\": \"Delivery\",\n      \"LastStoprig_Load_Customer_Name__c\": \"OEC Group Chicago\",\n      \"LastStoprtms__Number__c\": \"2\",\n      \"LastStoprtms__Instructions__c\": \"null\",\n      \"LastStopLocation\": {\n        \"LastStopLocationId\": \"0016A00000qLt5JQAS\",\n        \"LastStopLocationName\": \"Tls by Design Customer Furniture LLC\",\n        \"LastStopLocationShippingStreet\": \"10737 Sand key Cir.\",\n        \"LastStopLocationShippingShippingCity\": \"Indianapolis\",\n        \"LastStopLocationShippingShippingState\": \"Indiana\",\n        \"LastStopLocationShippingShippingPostalCode\": \"46256\"\n      },\n      \"LastStoprtms__Shipping_Receiving_Hours__c\": \"null\",\n      \"LastStoprtms__Expected_Date__c\": \"2019-09-16 00:00:00\",\n      \"LastStoprtms__Expected_Day__c\": \"Monday\",\n      \"LastStoprtms__Appointment_Required__c\": \"false\",\n      \"LastStoprtms__Appointment_Time__c\": \"null\",\n      \"LastStoprtms__Stop_Status__c\": \"null\",\n      \"LastStoprtms__Carrier_Status2__c\": \"null\"\n    },\n    \"rtms__Load_Sequence_Number__c\": \"9644\",\n    \"rtms__Load_Status_Comments__c\": \"null\",\n    \"rtms__Load_Status_Requested__c\": false,\n    \"rtms__Load_Status__c\": \"Unassigned\",\n    \"rtms__Margin_Invoiced__c\": 0,\n    \"rtms__Margin_Paid__c\": 0,\n    \"rtms__Margin_Pct_Invoiced__c\": null,\n    \"rtms__Margin_Pct_Quoted__c\": null,\n    \"rtms__Margin_Quoted__c\": 0,\n    \"Mode\": {\n      \"ModeId\": \"a0k6A0000035SUxQAM\",\n      \"ModeName\": \"Truckload\",\n      \"ModeEnabled\": \"true\",\n      \"ModeLTL\": \"false\",\n      \"ModeOrder\": \"1\",\n      \"ModeRequiredApplication\": \"Completed W9 Tax Form;Certificate of Insurance;Operating Authority\"\n    },\n    \"rtms__OTD_Counter__c\": 0,\n    \"rtms__Order_Date__c\": \"2019-09-16 00:00:00\",\n    \"rtms__Order_Number__c\": \"null\",\n    \"rtms__Order_Total__c\": null,\n    \"rtms__Origin__c\": \", United States\",\n    \"rtms__Other_Instructions__c\": \"null\",\n    \"rtms__POD_Received__c\": false,\n    \"rtms__PO_Number__c\": \"null\",\n    \"rtms__PRO_Number__c\": \"null\",\n    \"rtms__Payment_Terms__c\": \"Third Party\",\n    \"rtms__Postal_Code_Lane__c\": \"null:46256\",\n    \"rtms__Sales_Status__c\": \"Pending\",\n    \"rtms__Schedule_Status__c\": \"null\",\n    \"rtms__Ship_From_Address__c\": \", ,\",\n    \"rtms__Ship_Status__c\": \"null\",\n    \"rtms__Ship_To_Address__c\": \"10737 Sand key Cir., Indianapolis, Indiana 46256\",\n    \"rtms__Site_URL__c\": \"null\",\n    \"rtms__State_Lane__c\": \"null:IN\",\n    \"rtms__Tax_Exempt__c\": false,\n    \"rtms__Tender_Accepted_Date__c\": \"null\",\n    \"rtms__Total_Weight__c\": 1222,\n    \"rtms__Tracking_Number__c\": \"null\",\n    \"rtms__Zip3_Lane__c\": \":462\",\n    \"rtms__Zip5_Lane__c\": \":46256\",\n    \"rtms__Weight_Units__c\": \"lbs\",\n    \"rtms__Mode_Name__c\": \"Truckload\",\n    \"rtms__Temperature_Controlled__c\": true,\n    \"rtms__Tracking_Provider__c\": \"null\",\n    \"Vendor\": {\n      \"VendorId\": \"null\",\n      \"VendorName\": \"null\",\n      \"VendorTMSType\": \"null\",\n      \"VendorShippingStreet\": \"null\",\n      \"VendorShippingCity\": \"null\",\n      \"VendorShippingPostalCode\": \"null\",\n      \"VendorShippingState\": \"null\",\n      \"VendorShippingCountry\": \"null\"\n    },\n    \"Posted_Notes__c\": \"null\",\n    \"Pickup_Delivery_Number__c\": \"null\",\n    \"Stop_Reference_Numbers__c\": \"null\",\n    \"Tractor_Number__c\": \"null\",\n    \"Trailer_Number__c\": \"null\",\n    \"Historical_Load__c\": false,\n    \"Legacy_Load_Number__c\": \"null\",\n    \"Pickup_Appointment_Time__c\": \"null\",\n    \"Delivery_Appointment_Time__c\": \"null\",\n    \"rig_riggoh_status__c\": \"Unassigned\",\n    \"EDI_Shipment_ID__c\": \"null\",\n    \"food_grade_trailer_required__c\": true,\n    \"riggoh_Formatted_Expected_Delivery_Date__c\": \"2019-09-16\",\n    \"riggoh_Formatted_Expected_Ship_Date__c\": \"2019-09-16\",\n    \"CarrierSalesRep\": {\n      \"CarrierSalesRepId\": \"null\",\n      \"CarrierSalesRepName\": \"null\",\n      \"CarrierSalesRepEmail\": \"null\"\n    },\n    \"rtms__Master_BOL_Option__c\": \"Shipper to Consignee\",\n    \"rig_Expected_TTT__c\": null,\n    \"rig_Previous_Cost__c\": null,\n    \"riggoh_Required_Temperature__c\": null,\n    \"rig_Lead_Source__c\": \"null\",\n    \"Pickup_Location__c\": \"null, null\",\n    \"Delivery_Location__c\": \"IndianapolisIN\",\n    \"rigPostedRate__c\": \"123\",\n    \"rig_Completed_Date__c\": \"null\",\n    \"rig_Load_URL__c\": \"https://carrier.riggo.io/carrier-quote-bid/a0j4B000001VsnD\",\n    \"rig_Team_Required__c\": true,\n    \"rtms__Pickup_Delivery_Status__c\": \"Stop 1 - Pickup --- No tracking updates available for this stop. Stop 2 - Delivery - No tracking updates available for this stop.\",\n    \"rtms__Carrier_Portal__c\": false,\n    \"rtms__EDI_Provider__c\": \"null\",\n    \"Send_Status_Updates__c\": false,\n    \"rig_Email_Automation__c\": true,\n    \"rig_Load_Board__c\": true\n  }\n}"
+				},
+				"url": {
+					"raw": "{{GATEWAY_URL}}/load",
+					"host": [
+						"{{GATEWAY_URL}}"
+					],
+					"path": [
+						"load"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GET /load/{loadId}",
 			"event": [
 				{
@@ -691,7 +816,7 @@
 					"raw": "{\n\t\"LineItems\": [{\n\t\t\"Id\": \"a0g4B00000AgYtYQAV\",\n\t\t\"name\": \"a0g4B00000AgYtYQAV\",\n\t\t\"Lineitemrtms__Delivery_Stop__c\": \"a0t4B00000DUidBQAT\",\n\t\t\"Lineitemrtms__Dimension_Units__c\": \"in\",\n\t\t\"Lineitemrtms__Extended_Price__c\": \"1000.00\",\n\t\t\"Lineitemrtms__Handling_Units__c\": \"Coils\",\n\t\t\"Lineitemrtms__Hazardous_Materials__c\": \"true\",\n\t\t\"Lineitemrtms__HazMat_Class_Division__c\": \"6.1\",\n\t\t\"Lineitemrtms__HazMat_Contact__c\": \"null\",\n\t\t\"Lineitemrtms__HazMat_Number__c\": \"123T\",\n\t\t\"Lineitemrtms__HazMat_Number_Type__c\": \"UN\",\n\t\t\"Lineitemrtms__HazMat_Packaging_Group__c\": \"I\",\n\t\t\"Lineitemrtms__Height__c\": \"20.00\",\n\t\t\"Lineitemrtms__HS_Code__c\": \"191.90\",\n\t\t\"Lineitemrtms__HTS_Code__c\": \"0709.99.4500\",\n\t\t\"Lineitemrtms__Handling_Unit_Count__c\": \"12500\",\n\t\t\"Lineitemrtms__Item_Description__c\": \"Housewares\",\n\t\t\"Lineitemrtms__Length__c\": \"12.00\",\n\t\t\"Lineitemrtms__Linear_Feet__c\": \"252.00\",\n\t\t\"Lineitemrtms__Load__c\": \"{{loadId}}\",\n\t\t\"LineitemLoadMarketplaceExposedId\": \"null\",\n\t\t\"Lineitemrtms__NMFC_Class__c\": \"55\",\n\t\t\"Lineitemrtms__NMFC_Number__c\": \"21652-02\",\n\t\t\"Lineitemrtms__Original_Reference__c\": \"null\",\n\t\t\"Lineitemrtms__Packaging_Units__c\": \"Cylinders\",\n\t\t\"Lineitemrtms__Pickup_Stop__c\": \"a0t4B00000DUidAQAT\",\n\t\t\"Lineitemrtms__Packaging_Unit_Count__c\": \"100\",\n\t\t\"Lineitemrtms__Schedule_B_Code__c\": \"1005.90.4565\",\n\t\t\"Lineitemrtms__Stackable__c\": \"true\",\n\t\t\"Lineitemrtms__Volume__c\": \"5\",\n\t\t\"Lineitemrtms__Volume_Units__c\": \"Cubic Feet\",\n\t\t\"Lineitemrtms__Weight__c\": \"40000\",\n\t\t\"Lineitemrtms__Weight_Units__c\": \"lbs\",\n\t\t\"Lineitemrtms__Width__c\": \"50.00\"\n\t},\n\t{\n\t\t\"Id\": \"a0g4B00000AgYtYQAz\",\n\t\t\"name\": \"222222\",\n\t\t\"Lineitemrtms__Delivery_Stop__c\": \"a0t4B00000DUidBQAT\",\n\t\t\"Lineitemrtms__Dimension_Units__c\": \"in\",\n\t\t\"Lineitemrtms__Extended_Price__c\": \"1000.00\",\n\t\t\"Lineitemrtms__Handling_Units__c\": \"Coils\",\n\t\t\"Lineitemrtms__Hazardous_Materials__c\": \"true\",\n\t\t\"Lineitemrtms__HazMat_Class_Division__c\": \"6.1\",\n\t\t\"Lineitemrtms__HazMat_Contact__c\": \"null\",\n\t\t\"Lineitemrtms__HazMat_Number__c\": \"123T\",\n\t\t\"Lineitemrtms__HazMat_Number_Type__c\": \"UN\",\n\t\t\"Lineitemrtms__HazMat_Packaging_Group__c\": \"I\",\n\t\t\"Lineitemrtms__Height__c\": \"20.00\",\n\t\t\"Lineitemrtms__HS_Code__c\": \"191.90\",\n\t\t\"Lineitemrtms__HTS_Code__c\": \"0709.99.4500\",\n\t\t\"Lineitemrtms__Handling_Unit_Count__c\": \"12500\",\n\t\t\"Lineitemrtms__Item_Description__c\": \"Housewares\",\n\t\t\"Lineitemrtms__Length__c\": \"12.00\",\n\t\t\"Lineitemrtms__Linear_Feet__c\": \"252.00\",\n\t\t\"Lineitemrtms__Load__c\": \"{{loadId}}\",\n\t\t\"LineitemLoadMarketplaceExposedId\": \"null\",\n\t\t\"Lineitemrtms__NMFC_Class__c\": \"55\",\n\t\t\"Lineitemrtms__NMFC_Number__c\": \"21652-02\",\n\t\t\"Lineitemrtms__Original_Reference__c\": \"null\",\n\t\t\"Lineitemrtms__Packaging_Units__c\": \"Cylinders\",\n\t\t\"Lineitemrtms__Pickup_Stop__c\": \"a0t4B00000DUidAQAT\",\n\t\t\"Lineitemrtms__Packaging_Unit_Count__c\": \"100\",\n\t\t\"Lineitemrtms__Schedule_B_Code__c\": \"1005.90.4565\",\n\t\t\"Lineitemrtms__Stackable__c\": \"true\",\n\t\t\"Lineitemrtms__Volume__c\": \"5\",\n\t\t\"Lineitemrtms__Volume_Units__c\": \"Cubic Feet\",\n\t\t\"Lineitemrtms__Weight__c\": \"40000\",\n\t\t\"Lineitemrtms__Weight_Units__c\": \"lbs\",\n\t\t\"Lineitemrtms__Width__c\": \"50.00\"\n\t}]\n}"
 				},
 				"url": {
-					"raw": "{{GATEWAY_URL}}/load/shipments/summary?offset=80&units=weeks&fiscalMonth=8&fiscalYear=2019&fiscalWeek=0",
+					"raw": "{{GATEWAY_URL}}/load/shipments/summary?offset=0&units=weeks&fiscalMonth=8&fiscalYear=2019&fiscalWeek=0",
 					"host": [
 						"{{GATEWAY_URL}}"
 					],
@@ -703,7 +828,7 @@
 					"query": [
 						{
 							"key": "offset",
-							"value": "80"
+							"value": "0"
 						},
 						{
 							"key": "units",
@@ -720,6 +845,98 @@
 						{
 							"key": "fiscalWeek",
 							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET /load/shipments/summary Daily",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5e9bb708-e2f1-4b40-87de-06e4d0a0d06b",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a43bfc9-6971-4aa4-ada8-7109758e8df8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Units is days\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[0].units).to.eql(\"days\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{JWT}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"LineItems\": [{\n\t\t\"Id\": \"a0g4B00000AgYtYQAV\",\n\t\t\"name\": \"a0g4B00000AgYtYQAV\",\n\t\t\"Lineitemrtms__Delivery_Stop__c\": \"a0t4B00000DUidBQAT\",\n\t\t\"Lineitemrtms__Dimension_Units__c\": \"in\",\n\t\t\"Lineitemrtms__Extended_Price__c\": \"1000.00\",\n\t\t\"Lineitemrtms__Handling_Units__c\": \"Coils\",\n\t\t\"Lineitemrtms__Hazardous_Materials__c\": \"true\",\n\t\t\"Lineitemrtms__HazMat_Class_Division__c\": \"6.1\",\n\t\t\"Lineitemrtms__HazMat_Contact__c\": \"null\",\n\t\t\"Lineitemrtms__HazMat_Number__c\": \"123T\",\n\t\t\"Lineitemrtms__HazMat_Number_Type__c\": \"UN\",\n\t\t\"Lineitemrtms__HazMat_Packaging_Group__c\": \"I\",\n\t\t\"Lineitemrtms__Height__c\": \"20.00\",\n\t\t\"Lineitemrtms__HS_Code__c\": \"191.90\",\n\t\t\"Lineitemrtms__HTS_Code__c\": \"0709.99.4500\",\n\t\t\"Lineitemrtms__Handling_Unit_Count__c\": \"12500\",\n\t\t\"Lineitemrtms__Item_Description__c\": \"Housewares\",\n\t\t\"Lineitemrtms__Length__c\": \"12.00\",\n\t\t\"Lineitemrtms__Linear_Feet__c\": \"252.00\",\n\t\t\"Lineitemrtms__Load__c\": \"{{loadId}}\",\n\t\t\"LineitemLoadMarketplaceExposedId\": \"null\",\n\t\t\"Lineitemrtms__NMFC_Class__c\": \"55\",\n\t\t\"Lineitemrtms__NMFC_Number__c\": \"21652-02\",\n\t\t\"Lineitemrtms__Original_Reference__c\": \"null\",\n\t\t\"Lineitemrtms__Packaging_Units__c\": \"Cylinders\",\n\t\t\"Lineitemrtms__Pickup_Stop__c\": \"a0t4B00000DUidAQAT\",\n\t\t\"Lineitemrtms__Packaging_Unit_Count__c\": \"100\",\n\t\t\"Lineitemrtms__Schedule_B_Code__c\": \"1005.90.4565\",\n\t\t\"Lineitemrtms__Stackable__c\": \"true\",\n\t\t\"Lineitemrtms__Volume__c\": \"5\",\n\t\t\"Lineitemrtms__Volume_Units__c\": \"Cubic Feet\",\n\t\t\"Lineitemrtms__Weight__c\": \"40000\",\n\t\t\"Lineitemrtms__Weight_Units__c\": \"lbs\",\n\t\t\"Lineitemrtms__Width__c\": \"50.00\"\n\t},\n\t{\n\t\t\"Id\": \"a0g4B00000AgYtYQAz\",\n\t\t\"name\": \"222222\",\n\t\t\"Lineitemrtms__Delivery_Stop__c\": \"a0t4B00000DUidBQAT\",\n\t\t\"Lineitemrtms__Dimension_Units__c\": \"in\",\n\t\t\"Lineitemrtms__Extended_Price__c\": \"1000.00\",\n\t\t\"Lineitemrtms__Handling_Units__c\": \"Coils\",\n\t\t\"Lineitemrtms__Hazardous_Materials__c\": \"true\",\n\t\t\"Lineitemrtms__HazMat_Class_Division__c\": \"6.1\",\n\t\t\"Lineitemrtms__HazMat_Contact__c\": \"null\",\n\t\t\"Lineitemrtms__HazMat_Number__c\": \"123T\",\n\t\t\"Lineitemrtms__HazMat_Number_Type__c\": \"UN\",\n\t\t\"Lineitemrtms__HazMat_Packaging_Group__c\": \"I\",\n\t\t\"Lineitemrtms__Height__c\": \"20.00\",\n\t\t\"Lineitemrtms__HS_Code__c\": \"191.90\",\n\t\t\"Lineitemrtms__HTS_Code__c\": \"0709.99.4500\",\n\t\t\"Lineitemrtms__Handling_Unit_Count__c\": \"12500\",\n\t\t\"Lineitemrtms__Item_Description__c\": \"Housewares\",\n\t\t\"Lineitemrtms__Length__c\": \"12.00\",\n\t\t\"Lineitemrtms__Linear_Feet__c\": \"252.00\",\n\t\t\"Lineitemrtms__Load__c\": \"{{loadId}}\",\n\t\t\"LineitemLoadMarketplaceExposedId\": \"null\",\n\t\t\"Lineitemrtms__NMFC_Class__c\": \"55\",\n\t\t\"Lineitemrtms__NMFC_Number__c\": \"21652-02\",\n\t\t\"Lineitemrtms__Original_Reference__c\": \"null\",\n\t\t\"Lineitemrtms__Packaging_Units__c\": \"Cylinders\",\n\t\t\"Lineitemrtms__Pickup_Stop__c\": \"a0t4B00000DUidAQAT\",\n\t\t\"Lineitemrtms__Packaging_Unit_Count__c\": \"100\",\n\t\t\"Lineitemrtms__Schedule_B_Code__c\": \"1005.90.4565\",\n\t\t\"Lineitemrtms__Stackable__c\": \"true\",\n\t\t\"Lineitemrtms__Volume__c\": \"5\",\n\t\t\"Lineitemrtms__Volume_Units__c\": \"Cubic Feet\",\n\t\t\"Lineitemrtms__Weight__c\": \"40000\",\n\t\t\"Lineitemrtms__Weight_Units__c\": \"lbs\",\n\t\t\"Lineitemrtms__Width__c\": \"50.00\"\n\t}]\n}"
+				},
+				"url": {
+					"raw": "{{GATEWAY_URL}}/load/shipments/summary?offset=2&units=days&fiscalMonth=7&fiscalYear=2018&fiscalWeek=-1",
+					"host": [
+						"{{GATEWAY_URL}}"
+					],
+					"path": [
+						"load",
+						"shipments",
+						"summary"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "2"
+						},
+						{
+							"key": "units",
+							"value": "days"
+						},
+						{
+							"key": "fiscalMonth",
+							"value": "7"
+						},
+						{
+							"key": "fiscalYear",
+							"value": "2018"
+						},
+						{
+							"key": "fiscalWeek",
+							"value": "-1"
 						}
 					]
 				}
@@ -749,26 +966,21 @@
 							"});",
 							"",
 							"",
-							"pm.test(\"Size of data array is to be 3\", function () {",
+							"pm.test(\"Size of data array is to be 2\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data.length).to.eql(3);",
+							"    pm.expect(jsonData.data.length).to.eql(2);",
 							"});",
 							"",
 							"pm.test(\"Size of data[0].subStatuses array is to be 2\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data[0].subStatuses.length).to.eql(2);",
+							"    pm.expect(jsonData.data[0].data.length).to.eql(4);",
 							"});",
 							"",
 							"pm.test(\"Size of data[1].subStatuses array is to be 4\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data[1].subStatuses.length).to.eql(4);",
+							"    pm.expect(jsonData.data[1].data.length).to.eql(4);",
 							"});",
-							"",
-							"",
-							"pm.test(\"Size of data[2].subStatuses array is to be 3\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.data[2].subStatuses.length).to.eql(3);",
-							"});"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -800,13 +1012,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{GATEWAY_URL}}/load/pipeline/summary",
+					"raw": "{{GATEWAY_URL}}/load/stop/summary",
 					"host": [
 						"{{GATEWAY_URL}}"
 					],
 					"path": [
 						"load",
-						"pipeline",
+						"stop",
 						"summary"
 					]
 				}
@@ -1292,7 +1504,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"LoadStops\": [{\n\t\t\"Id\": \"a0t4B00000DUidFQAT\",\n\t\t\"StopName\": \"Stop 1\",\n\t\t\"Stoprtms__P_D__c\": \"Pickup\",\n\t\t\"Stoprig_Load_Customer_Name__c\": \"Customer Quotes\",\n\t\t\"Stoprtms__Number__c\": \"1\",\n\t\t\"Stoprtms__City__c\": \"Neosho\",\n\t\t\"Stoprtms__State_Province__c\": \"MO\",\n\t\t\"Stoprtms__Postal_Code__c\": \"64850\",\n\t\t\"Stoprtms__Country__c\": \"US\",\n\t\t\"Stoprtms__Address2__c\": \"Neosho, MO 64850\",\n\t\t\"Stoprtms__Shipping_Receiving_Hours__c\": \"09:00-11:00\",\n\t\t\"Stoprtms__Expected_Date__c\": \"2019-09-19 00:00:00\",\n\t\t\"Stoprtms__Expected_Day__c\": \"Thursday\",\n\t\t\"Stoprtms__Appointment_Required__c\": \"false\",\n\t\t\"Stoprtms__Appointment_Time__c\": \"null\",\n\t\t\"Stoprtms__Stop_Status__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status2__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Date__c\": \"null\",\n\t\t\"Stoprtms__Status__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Details__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n\t\t\"Stoprtms__Cumulative_Miles__c\": \"0.00\",\n\t\t\"Stoprtms__Departure_Date__c\": \"null\",\n\t\t\"Stoprtms__Departure_Time__c\": \"null\",\n\t\t\"Stoprtms__EDI_Provider__c\": \"null\",\n\t\t\"Stoprtms__Geolocation__c\": \"System.Location[getLatitude=36.86895;getLongitude=-94.368;]\",\n\t\t\"Stoprtms__Instructions__c\": \"null\",\n\t\t\"Stoprtms__Is_Dropoff__c\": \"false\",\n\t\t\"Stoprtms__Is_Pickup__c\": \"true\",\n\t\t\"Stoprtms__Kilometers_Away__c\": \"null\",\n\t\t\"Stoprtms__Load__c\": \"{{loadId}}\",\n\t\t\"stoptemLoadMarketplaceExposedId\": \"null\",\n\t\t\"StopLocation\": {\n\t\t\t\"LocationId\": \"null\",\n\t\t\t\"LocationName\": \"null\",\n\t\t\t\"LocationShippingStreet\": \"null\",\n\t\t\t\"LocationShippingCity\": \"null\",\n\t\t\t\"LocationShippingState\": \"null\",\n\t\t\t\"LocationShippingPostalCode\": \"null\"\n\t\t},\n\t\t\"Stoprtms__Location_Name__c\": \"null\",\n\t\t\"Stoprtms__Miles_Away__c\": \"null\",\n\t\t\"StopModify_Boolean__c\": \"false\",\n\t\t\"Stoprtms__OTD_Counter__c\": \"0\",\n\t\t\"Stoprtms__P_DAS__c\": \"On Time\",\n\t\t\"Stoprtms__Pickup_Delivery_Number__c\": \"null\",\n\t\t\"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n\t\t\"Stoprtms__References__c\": \"null\",\n\t\t\"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n\t\t\"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n\t}, {\n\t\t\"Id\": \"a0t4B00000DUidGQAT\",\n\t\t\"StopName\": \"Stop 2\",\n\t\t\"Stoprtms__P_D__c\": \"Delivery\",\n\t\t\"Stoprig_Load_Customer_Name__c\": \"Customer Quotes\",\n\t\t\"Stoprtms__Number__c\": \"2\",\n\t\t\"Stoprtms__City__c\": \"Solon\",\n\t\t\"Stoprtms__State_Province__c\": \"OH\",\n\t\t\"Stoprtms__Postal_Code__c\": \"null\",\n\t\t\"Stoprtms__Country__c\": \"US\",\n\t\t\"Stoprtms__Address2__c\": \"Solon, OH\",\n\t\t\"Stoprtms__Shipping_Receiving_Hours__c\": \"null\",\n\t\t\"Stoprtms__Expected_Date__c\": \"2019-09-21 00:00:00\",\n\t\t\"Stoprtms__Expected_Day__c\": \"Saturday\",\n\t\t\"Stoprtms__Appointment_Required__c\": \"false\",\n\t\t\"Stoprtms__Appointment_Time__c\": \"null\",\n\t\t\"Stoprtms__Stop_Status__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status2__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Date__c\": \"null\",\n\t\t\"Stoprtms__Status__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Details__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n\t\t\"Stoprtms__Cumulative_Miles__c\": \"855.621\",\n\t\t\"Stoprtms__Departure_Date__c\": \"null\",\n\t\t\"Stoprtms__Departure_Time__c\": \"null\",\n\t\t\"Stoprtms__EDI_Provider__c\": \"null\",\n\t\t\"Stoprtms__Geolocation__c\": \"System.Location[getLatitude=41.39345;getLongitude=-81.444056;]\",\n\t\t\"Stoprtms__Instructions__c\": \"null\",\n\t\t\"Stoprtms__Is_Dropoff__c\": \"true\",\n\t\t\"Stoprtms__Is_Pickup__c\": \"false\",\n\t\t\"Stoprtms__Kilometers_Away__c\": \"null\",\n\t\t\"Stoprtms__Load__c\": \"{{loadId}}\",\n\t\t\"stoptemLoadMarketplaceExposedId\": \"null\",\n\t\t\"StopLocation\": {\n\t\t\t\"LocationId\": \"null\",\n\t\t\t\"LocationName\": \"null\",\n\t\t\t\"LocationShippingStreet\": \"null\",\n\t\t\t\"LocationShippingCity\": \"null\",\n\t\t\t\"LocationShippingState\": \"null\",\n\t\t\t\"LocationShippingPostalCode\": \"null\"\n\t\t},\n\t\t\"Stoprtms__Location_Name__c\": \"null\",\n\t\t\"Stoprtms__Miles_Away__c\": \"null\",\n\t\t\"StopModify_Boolean__c\": \"false\",\n\t\t\"Stoprtms__OTD_Counter__c\": \"0\",\n\t\t\"Stoprtms__P_DAS__c\": \"On Time\",\n\t\t\"Stoprtms__Pickup_Delivery_Number__c\": \"null\",\n\t\t\"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n\t\t\"Stoprtms__References__c\": \"null\",\n\t\t\"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n\t\t\"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n\t}]\n}"
+					"raw": "{\n\t\"LoadStops\": [{\n\t\t\"Id\": \"a0t4B00000DUidFQAT\",\n\t\t\"StopName\": \"Stop 1\",\n\t\t\"Stoprtms__P_D__c\": \"Pickup\",\n\t\t\"Stoprig_Load_Customer_Name__c\": \"Customer Quotes\",\n\t\t\"Stoprtms__Number__c\": \"1\",\n\t\t\"Stoprtms__City__c\": \"Neosho\",\n\t\t\"Stoprtms__State_Province__c\": \"MO\",\n\t\t\"Stoprtms__Postal_Code__c\": \"64850\",\n\t\t\"Stoprtms__Country__c\": \"US\",\n\t\t\"Stoprtms__Address2__c\": \"Neosho, MO 64850\",\n\t\t\"Stoprtms__Shipping_Receiving_Hours__c\": \"09:00-11:00\",\n\t\t\"Stoprtms__Expected_Date__c\": \"2019-09-19 01:00:00\",\n\t\t\"Stoprtms__Expected_Day__c\": \"Thursday\",\n\t\t\"Stoprtms__Appointment_Required__c\": \"false\",\n\t\t\"Stoprtms__Appointment_Time__c\": \"null\",\n\t\t\"Stoprtms__Stop_Status__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status2__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Date__c\": \"null\",\n\t\t\"Stoprtms__Status__c\": \"Early\",\n\t\t\"Stoprtms__Arrival_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Details__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n\t\t\"Stoprtms__Cumulative_Miles__c\": \"0.00\",\n\t\t\"Stoprtms__Departure_Date__c\": \"null\",\n\t\t\"Stoprtms__Departure_Time__c\": \"null\",\n\t\t\"Stoprtms__EDI_Provider__c\": \"null\",\n\t\t\"Stoprtms__Geolocation__c\": \"System.Location[getLatitude=36.86895;getLongitude=-94.368;]\",\n\t\t\"Stoprtms__Instructions__c\": \"null\",\n\t\t\"Stoprtms__Is_Dropoff__c\": \"false\",\n\t\t\"Stoprtms__Is_Pickup__c\": \"true\",\n\t\t\"Stoprtms__Kilometers_Away__c\": \"null\",\n\t\t\"Stoprtms__Load__c\": \"{{loadId}}\",\n\t\t\"stoptemLoadMarketplaceExposedId\": \"null\",\n\t\t\"StopLocation\": {\n\t\t\t\"LocationId\": \"null\",\n\t\t\t\"LocationName\": \"null\",\n\t\t\t\"LocationShippingStreet\": \"null\",\n\t\t\t\"LocationShippingCity\": \"null\",\n\t\t\t\"LocationShippingState\": \"null\",\n\t\t\t\"LocationShippingPostalCode\": \"null\"\n\t\t},\n\t\t\"Stoprtms__Location_Name__c\": \"null\",\n\t\t\"Stoprtms__Miles_Away__c\": \"null\",\n\t\t\"StopModify_Boolean__c\": \"false\",\n\t\t\"Stoprtms__OTD_Counter__c\": \"0\",\n\t\t\"Stoprtms__P_DAS__c\": \"On Time\",\n\t\t\"Stoprtms__Pickup_Delivery_Number__c\": \"null\",\n\t\t\"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n\t\t\"Stoprtms__References__c\": \"null\",\n\t\t\"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n\t\t\"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n\t}, {\n\t\t\"Id\": \"a0t4B00000DUidGQAT\",\n\t\t\"StopName\": \"Stop 2\",\n\t\t\"Stoprtms__P_D__c\": \"Delivery\",\n\t\t\"Stoprig_Load_Customer_Name__c\": \"Customer Quotes\",\n\t\t\"Stoprtms__Number__c\": \"2\",\n\t\t\"Stoprtms__City__c\": \"Solon\",\n\t\t\"Stoprtms__State_Province__c\": \"OH\",\n\t\t\"Stoprtms__Postal_Code__c\": \"null\",\n\t\t\"Stoprtms__Country__c\": \"US\",\n\t\t\"Stoprtms__Address2__c\": \"Solon, OH\",\n\t\t\"Stoprtms__Shipping_Receiving_Hours__c\": \"null\",\n\t\t\"Stoprtms__Expected_Date__c\": \"2019-09-21 00:00:00\",\n\t\t\"Stoprtms__Expected_Day__c\": \"Saturday\",\n\t\t\"Stoprtms__Appointment_Required__c\": \"false\",\n\t\t\"Stoprtms__Appointment_Time__c\": \"null\",\n\t\t\"Stoprtms__Stop_Status__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status2__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Date__c\": \"null\",\n\t\t\"Stoprtms__Status__c\": \"null\",\n\t\t\"Stoprtms__Arrival_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n\t\t\"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Details__c\": \"null\",\n\t\t\"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n\t\t\"Stoprtms__Cumulative_Miles__c\": \"855.621\",\n\t\t\"Stoprtms__Departure_Date__c\": \"null\",\n\t\t\"Stoprtms__Departure_Time__c\": \"null\",\n\t\t\"Stoprtms__EDI_Provider__c\": \"null\",\n\t\t\"Stoprtms__Geolocation__c\": \"System.Location[getLatitude=41.39345;getLongitude=-81.444056;]\",\n\t\t\"Stoprtms__Instructions__c\": \"null\",\n\t\t\"Stoprtms__Is_Dropoff__c\": \"true\",\n\t\t\"Stoprtms__Is_Pickup__c\": \"false\",\n\t\t\"Stoprtms__Kilometers_Away__c\": \"null\",\n\t\t\"Stoprtms__Load__c\": \"{{loadId}}\",\n\t\t\"stoptemLoadMarketplaceExposedId\": \"null\",\n\t\t\"StopLocation\": {\n\t\t\t\"LocationId\": \"null\",\n\t\t\t\"LocationName\": \"null\",\n\t\t\t\"LocationShippingStreet\": \"null\",\n\t\t\t\"LocationShippingCity\": \"null\",\n\t\t\t\"LocationShippingState\": \"null\",\n\t\t\t\"LocationShippingPostalCode\": \"null\"\n\t\t},\n\t\t\"Stoprtms__Location_Name__c\": \"null\",\n\t\t\"Stoprtms__Miles_Away__c\": \"null\",\n\t\t\"StopModify_Boolean__c\": \"false\",\n\t\t\"Stoprtms__OTD_Counter__c\": \"0\",\n\t\t\"Stoprtms__P_DAS__c\": \"On Time\",\n\t\t\"Stoprtms__Pickup_Delivery_Number__c\": \"null\",\n\t\t\"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n\t\t\"Stoprtms__References__c\": \"null\",\n\t\t\"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n\t\t\"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n\t}]\n}"
 				},
 				"url": {
 					"raw": "{{GATEWAY_URL}}/load/{{returnedLoadId}}/stop",
@@ -1302,6 +1514,100 @@
 					"path": [
 						"load",
 						"{{returnedLoadId}}",
+						"stop"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT /load/stop Check Arrival Status",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5e9bb708-e2f1-4b40-87de-06e4d0a0d06b",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a43bfc9-6971-4aa4-ada8-7109758e8df8",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"4 Line Items created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(4);",
+							"    pm.expect(jsonData.data[0].status).to.eql(200);",
+							"    pm.expect(jsonData.data[1].status).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"4 Line Items created\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.success).to.eql(4);",
+							"    pm.expect(jsonData.data[1].status).to.eql(200);",
+							"});",
+							"",
+							"pm.test(\"Early Arrival Status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[0].data[0].arrivalStatus).to.eql(1);",
+							"});",
+							"",
+							"pm.test(\"On Time Arrival Status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[1].data[0].arrivalStatus).to.eql(2);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Late Arrival Status\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data[1].data[0].arrivalStatus).to.eql(2);",
+							"});",
+							"",
+							"    ",
+							"    "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{JWT}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"LoadStops\": [\n    {\n      \"Id\": \"a0te00000045jisAAA\",\n      \"StopName\": \"Stop 1\",\n      \"Stoprtms__P_D__c\": \"Pickup\",\n      \"Stoprig_Load_Customer_Name__c\": \"Time Inc\",\n      \"Stoprtms__Number__c\": \"1\",\n      \"Stoprtms__City__c\": \"null\",\n      \"Stoprtms__State_Province__c\": \"null\",\n      \"Stoprtms__Postal_Code__c\": \"null\",\n      \"Stoprtms__Country__c\": \"null\",\n      \"Stoprtms__Address2__c\": \"100 Duplainville Road PO Box 174, The Rock, Georgia 30285\",\n      \"Stoprtms__Shipping_Receiving_Hours__c\": \"04:00-09:00\",\n      \"Stoprtms__Expected_Date__c\": \"2019-10-08 00:00:00\",\n      \"Stoprtms__Expected_Day__c\": \"Tuesday\",\n      \"Stoprtms__Appointment_Required__c\": \"true\",\n      \"Stoprtms__Appointment_Time__c\": \"20:00\",\n      \"Stoprtms__Stop_Status__c\": \"Early\",\n      \"Stoprtms__Carrier_Status2__c\": \"null\",\n      \"Stoprtms__Arrival_Date__c\": \"null\",\n      \"Stoprtms__Status__c\": \"Early\",\n      \"Stoprtms__Arrival_Time__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n      \"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Details__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n      \"Stoprtms__Cumulative_Miles__c\": \"0.00\",\n      \"Stoprtms__Departure_Date__c\": \"null\",\n      \"Stoprtms__Departure_Time__c\": \"null\",\n      \"Stoprtms__EDI_Provider__c\": \"null\",\n      \"Stoprtms__Geolocation__c\": \"null\",\n      \"Stoprtms__Instructions__c\": \"*TRAILER REQUIRED TO BE CLEAN, DRY, NO ODOR, NO HOLES, NO DEBRIS, NO DUNNAGE *DRIVER MUST CHECK-IN WITH FACILITY AT OR PRIOR TO APPOINTMENT *MUST NOTIFY RIGGOH 30 MINUTES PRIOR TO DETENTION STARTING *DETENTION STARTS AFTER 2 HOURS, IN AND OUT TIMES MUST BE DOCUMENTED BY SHIPPER\",\n      \"Stoprtms__Is_Dropoff__c\": \"false\",\n      \"Stoprtms__Is_Pickup__c\": \"true\",\n      \"Stoprtms__Kilometers_Away__c\": \"null\",\n      \"Stoprtms__Load__c\": \"a0je000001BDqwJAAT\",\n      \"stopLoadMarketplaceExposedId\": \"325540b49cdf80bc5a0ca52073358ea6fb494c55f5598ffdba7606bff1681028\",\n      \"StopLocation\": {\n        \"LocationId\": \"0016A00000cghD0QAI\",\n        \"LocationName\": \"Quad Graphics The Rock\",\n        \"LocationShippingStreet\": \"100 Duplainville Road PO Box 174\",\n        \"LocationShippingCity\": \"The Rock\",\n        \"LocationShippingState\": \"Georgia\",\n        \"LocationShippingPostalCode\": \"30285\"\n      },\n      \"Stoprtms__Location_Name__c\": \"Quad Graphics The Rock\",\n      \"Stoprtms__Miles_Away__c\": \"null\",\n      \"StopModify_Boolean__c\": \"false\",\n      \"Stoprtms__OTD_Counter__c\": \"0\",\n      \"Stoprtms__P_DAS__c\": \"On Time\",\n      \"Stoprtms__Pickup_Delivery_Number__c\": \"Consignee Key:\",\n      \"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n      \"Stoprtms__References__c\": \"BOL 2031848\",\n      \"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n      \"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n    },\n    {\n      \"Id\": \"a0te00000045jitAAA\",\n      \"StopName\": \"Stop 2\",\n      \"Stoprtms__P_D__c\": \"Delivery\",\n      \"Stoprig_Load_Customer_Name__c\": \"Time Inc\",\n      \"Stoprtms__Number__c\": \"2\",\n      \"Stoprtms__City__c\": \"null\",\n      \"Stoprtms__State_Province__c\": \"null\",\n      \"Stoprtms__Postal_Code__c\": \"null\",\n      \"Stoprtms__Country__c\": \"null\",\n      \"Stoprtms__Address2__c\": \"1820 W POINTE DR STE A, CHARLOTTE, North Carolina 28214\",\n      \"Stoprtms__Shipping_Receiving_Hours__c\": \"09:00-17:00\",\n      \"Stoprtms__Expected_Date__c\": \"2019-10-09 00:00:00\",\n      \"Stoprtms__Expected_Day__c\": \"Wednesday\",\n      \"Stoprtms__Appointment_Required__c\": \"true\",\n      \"Stoprtms__Appointment_Time__c\": \"05:00\",\n      \"Stoprtms__Stop_Status__c\": \"Early\",\n      \"Stoprtms__Carrier_Status2__c\": \"null\",\n      \"Stoprtms__Arrival_Date__c\": \"null\",\n      \"Stoprtms__Status__c\": \"On Time\",\n      \"Stoprtms__Arrival_Time__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n      \"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Details__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n      \"Stoprtms__Cumulative_Miles__c\": \"298.492\",\n      \"Stoprtms__Departure_Date__c\": \"null\",\n      \"Stoprtms__Departure_Time__c\": \"null\",\n      \"Stoprtms__EDI_Provider__c\": \"null\",\n      \"Stoprtms__Geolocation__c\": \"null\",\n      \"Stoprtms__Instructions__c\": \"*DRIVER MUST CHECK-IN WITH FACILITY AT OR PRIOR TO APPOINTMENT *MUST NOTIFY RIGGOH ONE HOUR PRIOR TO DETENTION STARTING *DETENTION STARTS AFTER 2 HOURS, IN AND OUT TIMES MUST BE DOCUMENTED\",\n      \"Stoprtms__Is_Dropoff__c\": \"true\",\n      \"Stoprtms__Is_Pickup__c\": \"false\",\n      \"Stoprtms__Kilometers_Away__c\": \"null\",\n      \"Stoprtms__Load__c\": \"a0je000001BDqwJAAT\",\n      \"stopLoadMarketplaceExposedId\": \"325540b49cdf80bc5a0ca52073358ea6fb494c55f5598ffdba7606bff1681028\",\n      \"StopLocation\": {\n        \"LocationId\": \"0016A00000gcqmeQAA\",\n        \"LocationName\": \"USPS-CHARLOTTE 830097\",\n        \"LocationShippingStreet\": \"1820 W POINTE DR STE A\",\n        \"LocationShippingCity\": \"CHARLOTTE\",\n        \"LocationShippingState\": \"North Carolina\",\n        \"LocationShippingPostalCode\": \"28214\"\n      },\n      \"Stoprtms__Location_Name__c\": \"USPS-CHARLOTTE 830097\",\n      \"Stoprtms__Miles_Away__c\": \"null\",\n      \"StopModify_Boolean__c\": \"false\",\n      \"Stoprtms__OTD_Counter__c\": \"0\",\n      \"Stoprtms__P_DAS__c\": \"On Time\",\n      \"Stoprtms__Pickup_Delivery_Number__c\": \"830097\",\n      \"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n      \"Stoprtms__References__c\": \"124694148\",\n      \"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n      \"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n    },\n    {\n      \"Id\": \"a0te00000045jiuAAA\",\n      \"StopName\": \"Stop 3\",\n      \"Stoprtms__P_D__c\": \"Delivery\",\n      \"Stoprig_Load_Customer_Name__c\": \"Time Inc\",\n      \"Stoprtms__Number__c\": \"3\",\n      \"Stoprtms__City__c\": \"null\",\n      \"Stoprtms__State_Province__c\": \"null\",\n      \"Stoprtms__Postal_Code__c\": \"null\",\n      \"Stoprtms__Country__c\": \"null\",\n      \"Stoprtms__Address2__c\": \"3701 W Wendover Ave, Greensboro, North Carolina 27495\",\n      \"Stoprtms__Shipping_Receiving_Hours__c\": \"10:00-15:00\",\n      \"Stoprtms__Expected_Date__c\": \"2019-10-09 00:00:00\",\n      \"Stoprtms__Expected_Day__c\": \"Wednesday\",\n      \"Stoprtms__Appointment_Required__c\": \"true\",\n      \"Stoprtms__Appointment_Time__c\": \"09:00\",\n      \"Stoprtms__Stop_Status__c\": \"Early\",\n      \"Stoprtms__Carrier_Status2__c\": \"null\",\n      \"Stoprtms__Arrival_Date__c\": \"null\",\n      \"Stoprtms__Status__c\": \"Early\",\n      \"Stoprtms__Arrival_Time__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n      \"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Details__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n      \"Stoprtms__Cumulative_Miles__c\": \"398.351\",\n      \"Stoprtms__Departure_Date__c\": \"null\",\n      \"Stoprtms__Departure_Time__c\": \"null\",\n      \"Stoprtms__EDI_Provider__c\": \"null\",\n      \"Stoprtms__Geolocation__c\": \"null\",\n      \"Stoprtms__Instructions__c\": \"*DRIVER MUST CHECK-IN WITH FACILITY AT OR PRIOR TO APPOINTMENT *MUST NOTIFY RIGGOH ONE HOUR PRIOR TO DETENTION STARTING *DETENTION STARTS AFTER 2 HOURS, IN AND OUT TIMES MUST BE DOCUMENTED\",\n      \"Stoprtms__Is_Dropoff__c\": \"true\",\n      \"Stoprtms__Is_Pickup__c\": \"false\",\n      \"Stoprtms__Kilometers_Away__c\": \"null\",\n      \"Stoprtms__Load__c\": \"a0je000001BDqwJAAT\",\n      \"stopLoadMarketplaceExposedId\": \"325540b49cdf80bc5a0ca52073358ea6fb494c55f5598ffdba7606bff1681028\",\n      \"StopLocation\": {\n        \"LocationId\": \"0016A00000iQZEKQA4\",\n        \"LocationName\": \"USPS Greensboro\",\n        \"LocationShippingStreet\": \"3701 W Wendover Ave\",\n        \"LocationShippingCity\": \"Greensboro\",\n        \"LocationShippingState\": \"North Carolina\",\n        \"LocationShippingPostalCode\": \"27495\"\n      },\n      \"Stoprtms__Location_Name__c\": \"USPS Greensboro\",\n      \"Stoprtms__Miles_Away__c\": \"null\",\n      \"StopModify_Boolean__c\": \"false\",\n      \"Stoprtms__OTD_Counter__c\": \"0\",\n      \"Stoprtms__P_DAS__c\": \"On Time\",\n      \"Stoprtms__Pickup_Delivery_Number__c\": \"802740\",\n      \"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n      \"Stoprtms__References__c\": \"124694164\",\n      \"Stoprtms__Shipping_Receiving_Contact__c\": \"null\",\n      \"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n    },\n    {\n      \"Id\": \"a0te00000045kDGAAY\",\n      \"StopName\": \"Stop 4\",\n      \"Stoprtms__P_D__c\": \"Delivery\",\n      \"Stoprig_Load_Customer_Name__c\": \"Time Inc\",\n      \"Stoprtms__Number__c\": \"4\",\n      \"Stoprtms__City__c\": \"null\",\n      \"Stoprtms__State_Province__c\": \"null\",\n      \"Stoprtms__Postal_Code__c\": \"null\",\n      \"Stoprtms__Country__c\": \"null\",\n      \"Stoprtms__Address2__c\": \"5863 Graydon, Seven Hills, Ohio 44131\",\n      \"Stoprtms__Shipping_Receiving_Hours__c\": \"null\",\n      \"Stoprtms__Expected_Date__c\": \"2019-10-09 00:00:00\",\n      \"Stoprtms__Expected_Day__c\": \"Wednesday\",\n      \"Stoprtms__Appointment_Required__c\": \"false\",\n      \"Stoprtms__Appointment_Time__c\": \"null\",\n      \"Stoprtms__Stop_Status__c\": \"Early\",\n      \"Stoprtms__Carrier_Status2__c\": \"null\",\n      \"Stoprtms__Arrival_Date__c\": \"null\",\n      \"Stoprtms__Status__c\": \"Early\",\n      \"Stoprtms__Arrival_Time__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Date__c\": \"null\",\n      \"Stoprtms__Carrier_ETA_Time__c\": \"null\",\n      \"Stoprtms__Carrier_Status_as_of__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Details__c\": \"null\",\n      \"Stoprtms__Carrier_Status_Reason__c\": \"null\",\n      \"Stoprtms__Cumulative_Miles__c\": \"878.503\",\n      \"Stoprtms__Departure_Date__c\": \"null\",\n      \"Stoprtms__Departure_Time__c\": \"null\",\n      \"Stoprtms__EDI_Provider__c\": \"null\",\n      \"Stoprtms__Geolocation__c\": \"null\",\n      \"Stoprtms__Instructions__c\": \"null\",\n      \"Stoprtms__Is_Dropoff__c\": \"true\",\n      \"Stoprtms__Is_Pickup__c\": \"false\",\n      \"Stoprtms__Kilometers_Away__c\": \"null\",\n      \"Stoprtms__Load__c\": \"a0je000001BDqwJAAT\",\n      \"stopLoadMarketplaceExposedId\": \"325540b49cdf80bc5a0ca52073358ea6fb494c55f5598ffdba7606bff1681028\",\n      \"StopLocation\": {\n        \"LocationId\": \"0016A00000NKPJ2QAP\",\n        \"LocationName\": \"Graydon Transportation Inc\",\n        \"LocationShippingStreet\": \"5863 Graydon\",\n        \"LocationShippingCity\": \"Seven Hills\",\n        \"LocationShippingState\": \"Ohio\",\n        \"LocationShippingPostalCode\": \"44131\"\n      },\n      \"Stoprtms__Location_Name__c\": \"Graydon Transportation Inc\",\n      \"Stoprtms__Miles_Away__c\": \"null\",\n      \"StopModify_Boolean__c\": \"false\",\n      \"Stoprtms__OTD_Counter__c\": \"0\",\n      \"Stoprtms__P_DAS__c\": \"On Time\",\n      \"Stoprtms__Pickup_Delivery_Number__c\": \"null\",\n      \"Stoprtms__Pickup_Delivery_Status__c\": \"No tracking updates available for this stop.\",\n      \"Stoprtms__References__c\": \"null\",\n      \"Stoprtms__Shipping_Receiving_Contact__c\": \"0036A00000RYg6AQAT\",\n      \"Stoprtms__Tracking_Provider_Customer__c\": \"null\"\n    }\n  ]\n}"
+				},
+				"url": {
+					"raw": "{{GATEWAY_URL}}/load/38296/stop",
+					"host": [
+						"{{GATEWAY_URL}}"
+					],
+					"path": [
+						"load",
+						"38296",
 						"stop"
 					]
 				}
