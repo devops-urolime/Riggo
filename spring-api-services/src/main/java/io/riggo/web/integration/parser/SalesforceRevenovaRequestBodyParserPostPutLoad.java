@@ -36,6 +36,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         loadStop.setStopNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("FirstStoprtms__Number__c", firstStopMap));
         loadStop.setShippingReceivingHours(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Shipping_Receiving_Hours__c", firstStopMap));
         loadStop.setExpectedDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("FirstStoprtms__Expected_Date__c", firstStopMap));
+        loadStop.setDepartureDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("FirstStoprtms__Departure_Date__c", firstStopMap));
         loadStop.setAppointmentRequired(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("FirstStoprtms__Appointment_Required__c", firstStopMap));
         loadStop.setAppointmentTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Appointment_Time__c", firstStopMap));
         loadStop.setStopStatus(getFirstStopStopStatus(firstStopMap));
@@ -58,6 +59,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         address.setCity(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingCity", firstStopLocationMap));
         address.setState(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingState", firstStopLocationMap));
         address.setPostalCode(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStopLocationShippingShippingPostalCode", firstStopLocationMap));
+        address.setCountry("United States");
 
         location.setAddress(address);
         return location;
@@ -75,6 +77,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         loadStop.setStopNumber(salesforceRevenovaRequestBodyParserHelper.getMapValueAsInteger("LastStoprtms__Number__c", lastStopMap));
         loadStop.setShippingReceivingHours(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Shipping_Receiving_Hours__c", lastStopMap));
         loadStop.setExpectedDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("LastStoprtms__Expected_Date__c", lastStopMap));
+        loadStop.setDepartureDateTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsLocalDateTime("LastStoprtms__Departure_Date__c", lastStopMap));
         loadStop.setAppointmentRequired(salesforceRevenovaRequestBodyParserHelper.getMapValueAsBoolean("LastStoprtms__Appointment_Required__c", lastStopMap));
         loadStop.setAppointmentTime(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Appointment_Time__c", lastStopMap));
         loadStop.setStopStatus(getLastStopStopStatus(lastStopMap));
@@ -97,6 +100,7 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         address.setCity(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingCity", lastStopLocationMap));
         address.setState(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingState", lastStopLocationMap));
         address.setPostalCode(salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStopLocationShippingShippingPostalCode", lastStopLocationMap));
+        address.setCountry("United States");
 
         location.setAddress(address);
         return location;
