@@ -40,7 +40,7 @@ public class LoadAPICtrl {
                     
                     resMap = (Map<String, Object>)JSON.deserializeUntyped(response);
                     
-                    system.debug('---resMap---'+resMap);
+                    system.debug('---resMap----'+resMap);
                     
                     if( resMap != null && resMap.get('hashId') != null){
                         if(triggerAction == 'Insert' || triggerAction == 'Insert Batch'){
