@@ -11,6 +11,7 @@ import {
   STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
 import { isValidSession, renewToken } from './lib/auth';
+import { loginFail } from './redux/actions/auth';
 
 const METHOD_GET = 'get';
 

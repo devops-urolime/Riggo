@@ -65,13 +65,10 @@ export const isExpiredJWT = () =>{
 export const isValidSession = () => {
     let isValidSession = true;
     const token = localStorage.getItem( JWT_LOCAL_STORAGE );
-    const expirationDate = localStorage.getItem( EXPIRATION_DATE_IN_LOCAL_STORAGE );
     // if There is no access token present in local storage, meaning that you are not logged in.
     // or There is an expired access token in local storage.
     if (!token || isExpiredJWT()) {
         isValidSession = false;
-    } else {
-      console.log(`There is an access token in local storage, and it expires on ${new Date(expirationDate*1000)}.`);
     }
     return isValidSession;
 };
@@ -82,7 +79,8 @@ export const renewToken = () => {
     },  (err, result) =>  {
       if (err) {
           console.log(`Could not get a new token using silent authentication (${err.error}). Redirecting to login page...`);
-
+          loginFail({err});
+          window.location.reload();
       } else {
         // Pulled a new token
         const { accessToken, expiresIn} = result;
@@ -93,6 +91,7 @@ export const renewToken = () => {
             Date.now() + Number.parseInt(expiresIn) * 1000
           );
           loginSuccess(accessToken, expiresIn);
+          window.location.reload();
       }
   });
 };
