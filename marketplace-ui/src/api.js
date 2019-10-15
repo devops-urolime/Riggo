@@ -440,7 +440,6 @@ const handleStatus = (response) => {
       return " -- API message : " + response.message;
     };
     if(response && response.status === 401){
-     renewToken();
      throw new Error(STATUS_401_ERROR_MESSAGE + apiMessage(response));
     }
     if(response && response.status === 400){
