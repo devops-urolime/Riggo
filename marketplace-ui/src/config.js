@@ -17,6 +17,7 @@ export const LOAD_WRITE_INVOICE_SCOPE = "write:loadInvoice";
 export const LOAD_READ_MENU_SCOPE = "read:menu";
 export const PROFILE_SCOPE = "profile";
 export const OPENID_SCOPE = "openid";
+export const OFFLINE_ACCESS_SCOPE = "offline_access";
 export const AUTH_CONFIG_REALM = "Username-Password-Authentication";
 export const AUTH_CONFIG = {
   domain: process.env.REACT_APP_DOMAIN_AUTH_CONFIG,
@@ -24,7 +25,7 @@ export const AUTH_CONFIG = {
   audience: process.env.REACT_APP_AUDIENCE_ID_AUTH_CONFIG,
   callbackUrl: process.env.REACT_APP_CALL_BACK_URL_AUTH_CONFIG,
   responseType: 'token id_token',
-  scope: `${OPENID_SCOPE} ${PROFILE_SCOPE} ${LOAD_READ_SCOPE} ${LOAD_READ_PIPE_LINE_SCOPE} ${LOAD_WRITE_SCOPE} ${LOAD_WRITE_INVOICE_SCOPE} ${LOAD_READ_MENU_SCOPE}`
+  scope: `${OPENID_SCOPE} ${PROFILE_SCOPE} ${LOAD_READ_SCOPE} ${LOAD_READ_PIPE_LINE_SCOPE} ${LOAD_WRITE_SCOPE} ${LOAD_WRITE_INVOICE_SCOPE} ${LOAD_READ_MENU_SCOPE} ${OFFLINE_ACCESS_SCOPE}`
 };
 
 export const APP_PATH_ROOT = "/";

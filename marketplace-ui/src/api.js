@@ -10,6 +10,7 @@ import {
   STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
   STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
+import { isValidSession, renewToken } from './lib/auth';
 
 const METHOD_GET = 'get';
 
@@ -447,9 +448,15 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
     console.log(`MOCK_ALL_DATA active for endpoint: ${endPoint}`);
     json = mockData;
   } else {
-    response = await fetch(endPoint, buildRequestData(method, JWT));
-    json = await response.json();
-    handleStatus(response);
+    if(isValidSession()){
+      // Only call to api if we we have a valid session.
+      response = await fetch(endPoint, buildRequestData(method, JWT));
+      json = await response.json();
+      handleStatus(response);
+    } else {
+      // Invalid session so it will try to renew the token.
+      renewToken();
+    }
   }
   if(json && json.data){
     response = json.data;
