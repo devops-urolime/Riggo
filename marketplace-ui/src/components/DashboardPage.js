@@ -248,6 +248,7 @@ class DashboardPage extends Component {
     const stopSummaryDeliveryPie = stopSummary && digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
+    const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
       return (
         <Grid
           container
@@ -309,8 +310,8 @@ class DashboardPage extends Component {
                              onClickBack={this.navigateToPrevOffset}
                              onClickNext={this.navigateToNextOffset}
                              rootClass="ShipmentsVisualization"
-                             showNext={true}
-                             showPrev={true}
+                             showNext={isNavigation}
+                             showPrev={isNavigation}
                            />
                         </Grid>
                         <Grid xs={1} item>

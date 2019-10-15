@@ -36,20 +36,20 @@
 $navigate-arrow-size: 19px;
 
 .NavigateSection{
-    margin-top: 10px;
+
 }
 
 .NavigateBack{
     font-size: $navigate-arrow-size !important;
-    display: block;
-    margin: 0 auto;
+    margin-right: 30px;
+    line-height: 24px;
     cursor: pointer;
 }
 
 .NavigateNext{
     font-size: $navigate-arrow-size !important;
     transform: rotateY(180deg) !important;
-    display: block;
-    margin: 0 auto;
+    margin-left: 30px;
+    line-height: 24px;
     cursor: pointer;
 }

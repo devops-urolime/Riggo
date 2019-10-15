@@ -46,26 +46,18 @@ const MultiYAxesVisualization = ({
         alignItems="center"
         className="NavigateSection"
       >
-        <Grid xs={4} item>
-          {
-            showPrev &&
-            <Grow {...configGrow}>
-              <Icon className="NavigateBack" onClick={onClickBack}>arrow_back_ios</Icon>
-            </Grow>
-          }
-        </Grid>
-        <Grid xs={4} item>
+        <Grid xs={12} item>
           <Typography className="TitleVisualization">
-              {title}
-          </Typography>
-        </Grid>
-        <Grid xs={4} item>
-          {
-            showNext &&
-            <Grow {...configGrow}>
+            {
+              showPrev &&
+              <Icon className="NavigateBack" onClick={onClickBack}>arrow_back_ios</Icon>
+            }
+            {title}
+            {
+              showNext &&
               <Icon className="NavigateNext" onClick={onClickNext}>arrow_back_ios</Icon>
-            </Grow>
-          }
+            }
+          </Typography>
         </Grid>
       </Grid>
       <ResponsiveContainer>
