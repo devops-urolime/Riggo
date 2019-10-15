@@ -213,7 +213,8 @@ const shipmentsSummaryMonthlyMock = {
             "fiscalMonth":7,
             "fiscalYear":2019,
             "fiscalWeek":0,
-            "offset": 0
+            "offset": 0,
+            "totalCost": 3000.837565
           },
           {
            "label":"May 2019",
@@ -223,7 +224,8 @@ const shipmentsSummaryMonthlyMock = {
            "fiscalMonth":7,
            "fiscalYear":2019,
            "fiscalWeek":0,
-           "offset": 0
+           "offset": 0,
+           "totalCost": 3000.837565
           },
           {
              "label":"June 2019",
@@ -233,7 +235,8 @@ const shipmentsSummaryMonthlyMock = {
              "fiscalMonth":7,
              "fiscalYear":2019,
              "fiscalWeek":0,
-             "offset": 0
+             "offset": 0,
+             "totalCost": 3000.837565
           },
           {
              "label":"July 2019",
@@ -243,7 +246,8 @@ const shipmentsSummaryMonthlyMock = {
              "fiscalMonth":7,
              "fiscalYear":2019,
              "fiscalWeek":0,
-             "offset": 0
+             "offset": 0,
+             "totalCost": 3000.837565
           }
 
          ]
@@ -267,7 +271,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+              "totalCost": 3000.837565
             },
             {
                "label":"Week 2",
@@ -277,7 +282,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":2,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"Week 3",
@@ -287,7 +293,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":3,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"Week 4",
@@ -297,7 +304,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":4,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             }
          ]
       }
@@ -320,7 +328,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 2",
@@ -330,7 +339,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 3",
@@ -340,7 +350,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 4",
@@ -350,7 +361,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 5",
@@ -360,7 +372,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 6",
@@ -370,7 +383,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 7",
@@ -380,7 +394,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             }
          ]
       }
