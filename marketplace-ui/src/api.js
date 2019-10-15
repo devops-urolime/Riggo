@@ -10,6 +10,8 @@ import {
   STATUS_401_ERROR_MESSAGE, STATUS_403_ERROR_MESSAGE,
   STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
+import { isValidSession, renewToken } from './lib/auth';
+import { loginFail } from './redux/actions/auth';
 
 const METHOD_GET = 'get';
 
@@ -212,7 +214,8 @@ const shipmentsSummaryMonthlyMock = {
             "fiscalMonth":7,
             "fiscalYear":2019,
             "fiscalWeek":0,
-            "offset": 0
+            "offset": 0,
+            "totalCost": 3000.837565
           },
           {
            "label":"May 2019",
@@ -222,7 +225,8 @@ const shipmentsSummaryMonthlyMock = {
            "fiscalMonth":7,
            "fiscalYear":2019,
            "fiscalWeek":0,
-           "offset": 0
+           "offset": 0,
+           "totalCost": 3000.837565
           },
           {
              "label":"June 2019",
@@ -232,7 +236,8 @@ const shipmentsSummaryMonthlyMock = {
              "fiscalMonth":7,
              "fiscalYear":2019,
              "fiscalWeek":0,
-             "offset": 0
+             "offset": 0,
+             "totalCost": 3000.837565
           },
           {
              "label":"July 2019",
@@ -242,7 +247,8 @@ const shipmentsSummaryMonthlyMock = {
              "fiscalMonth":7,
              "fiscalYear":2019,
              "fiscalWeek":0,
-             "offset": 0
+             "offset": 0,
+             "totalCost": 3000.837565
           }
 
          ]
@@ -266,7 +272,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+              "totalCost": 3000.837565
             },
             {
                "label":"Week 2",
@@ -276,7 +283,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":2,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"Week 3",
@@ -286,7 +294,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":3,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"Week 4",
@@ -296,7 +305,8 @@ const shipmentsSummaryWeeklyMock = {
                "totalMiles": 25,
                "fiscalYear":2019,
                "fiscalWeek":4,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             }
          ]
       }
@@ -319,7 +329,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 2",
@@ -329,7 +340,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 3",
@@ -339,7 +351,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 4",
@@ -349,7 +362,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 5",
@@ -359,7 +373,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 6",
@@ -369,7 +384,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             },
             {
                "label":"July 7",
@@ -379,7 +395,8 @@ const shipmentsSummaryDailyMock = {
                "fiscalMonth":7,
                "fiscalYear":2019,
                "fiscalWeek":1,
-               "offset": 0
+               "offset": 0,
+               "totalCost": 3000.837565
             }
          ]
       }
@@ -447,9 +464,15 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
     console.log(`MOCK_ALL_DATA active for endpoint: ${endPoint}`);
     json = mockData;
   } else {
-    response = await fetch(endPoint, buildRequestData(method, JWT));
-    json = await response.json();
-    handleStatus(response);
+    if(isValidSession()){
+      // Only call to api if we we have a valid session.
+      response = await fetch(endPoint, buildRequestData(method, JWT));
+      json = await response.json();
+      handleStatus(response);
+    } else {
+      // Invalid session so it will try to renew the token.
+      renewToken();
+    }
   }
   if(json && json.data){
     response = json.data;

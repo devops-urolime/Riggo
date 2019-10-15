@@ -243,9 +243,9 @@ class DashboardPage extends Component {
   render(){
     const { pipeLineSummary, stopSummary, shipmentSummary } = this.props;
     const { viewTypeShipment } = this.state;
-    const pipeLineSummaryCard = digestDataToCardVisualization(pipeLineSummary);
-    const stopSummaryPickUpPie = digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
-    const stopSummaryDeliveryPie = digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
+    const pipeLineSummaryCard = pipeLineSummary && digestDataToCardVisualization(pipeLineSummary);
+    const stopSummaryPickUpPie = stopSummary && digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
+    const stopSummaryDeliveryPie = stopSummary && digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
       return (
