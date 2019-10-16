@@ -45,6 +45,7 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-redis:2.1.5.RELEASE'
     compile 'com.jayway.jsonpath:json-path:2.4.0'
     compile 'org.hashids:hashids:1.0.1'
+    compile 'com.vladmihalcea:hibernate-types-52:2.4.3'
     runtime 'org.postgresql:postgresql:42.2.5'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.1.5.RELEASE'
     testCompile 'com.h2database:h2:1.4.199'

@@ -1,5 +1,10 @@
 package io.riggo.data.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -7,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "load")
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Load implements Serializable {
 
     private static final long serialVersionUID = -4133343645808769934L;
@@ -118,6 +124,10 @@ public class Load implements Serializable {
     @Column(name = "distance_miles")
     private BigDecimal distanceMiles;
 
+    @JsonIgnore
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    private LoadDataJson data;
 
     public Integer getId() {
         return id;
@@ -365,5 +375,13 @@ public class Load implements Serializable {
 
     public void setDistanceMiles(BigDecimal distanceMiles) {
         this.distanceMiles = distanceMiles;
+    }
+
+    public LoadDataJson getData() {
+        return data;
+    }
+
+    public void setData(LoadDataJson data) {
+        this.data = data;
     }
 }
