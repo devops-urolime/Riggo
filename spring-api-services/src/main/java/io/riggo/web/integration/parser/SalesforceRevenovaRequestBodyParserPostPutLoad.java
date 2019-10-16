@@ -125,6 +125,11 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.FIRST_STOP_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("FirstStoprtms__Stop_Status__c", firstStopMap));
         loadStatusMaps.put(SalesforceRevenovaLoadStatusResolver.LAST_STOP_STATUS, salesforceRevenovaRequestBodyParserHelper.getMapValueAsString("LastStoprtms__Stop_Status__c", lastStopMap));
 
+        LoadDataJson loadDataJson = new LoadDataJson();
+        loadDataJson.setSalesStatus((String)loadStatusMaps.get(SalesforceRevenovaLoadStatusResolver.SALES_STATUS));
+        loadDataJson.setLoadStatus((String)loadStatusMaps.get(SalesforceRevenovaLoadStatusResolver.LOAD_STATUS));
+        load.setData(loadDataJson);
+
         SalesforceRevenovaLoadStatusResolver salesforceRevenovaLoadStatusResolver = new SalesforceRevenovaLoadStatusResolver();
         LoadSubStatus loadSubStatus = salesforceRevenovaLoadStatusResolver.resolveLoadStatus(loadStatusMaps);
         load.setLoadStatus(loadSubStatus.getColVal());
