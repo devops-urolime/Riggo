@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography/Typography';
 import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid/Grid';
-import Grow from '@material-ui/core/Grow';
 
 const getTimingEffect = (index) => {
   const GROW_TIMING_EFFECT = [ 600, 800, 1000 ];
