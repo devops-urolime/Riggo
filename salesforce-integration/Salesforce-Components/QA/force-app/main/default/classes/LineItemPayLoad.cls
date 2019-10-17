@@ -1,0 +1,115 @@
+public class LineItemPayLoad {
+   public string getSavePayload(set<Id> LineItemSet,String triggerAction){ 
+        system.debug('LineItemSet'+LineItemSet);   
+        List<rtms__LineItem__c> ListOfLineItem = null;
+        String payload  = '';
+        if(triggerAction == 'Insert' || triggerAction == 'Update'  || triggerAction == 'Update Batch' ){
+            List<rtms__LineItem__c> ListOfLineItemList =[Select Id,rtms__Load__r.Id FROM rtms__LineItem__c where Id IN :LineItemSet];
+            Set<Id> loadId = new Set<Id>();
+            for(rtms__LineItem__c li : ListOfLineItemList){  
+                loadId.add(li.rtms__Load__r.Id);
+            }
+            
+            ListOfLineItem =[Select Id,rtms__Delivery_Stop__c,rtms__Dimension_Units__c,rtms__Extended_Price__c,
+                                                     rtms__Handling_Units__c,rtms__Hazardous_Materials__c,rtms__HazMat_Class_Division__c,
+                                                     rtms__HazMat_Contact__c,rtms__HazMat_Number__c,rtms__HazMat_Number_Type__c,rtms__HazMat_Packaging_Group__c,
+                                                     rtms__Height__c,rtms__HS_Code__c,rtms__HTS_Code__c,rtms__Handling_Unit_Count__c,
+                                                     rtms__Item_Description__c,rtms__Length__c,rtms__Linear_Feet__c,rtms__Load__c,rtms__Load__r.Id,
+                                                     rtms__NMFC_Class__c,rtms__NMFC_Number__c,rtms__Original_Reference__c,rtms__Packaging_Units__c,
+                                                     rtms__Pickup_Stop__c,rtms__Packaging_Unit_Count__c,rtms__Schedule_B_Code__c,rtms__Stackable__c,
+                                                     rtms__Volume__c,rtms__Volume_Units__c,rtms__Weight__c,rtms__Weight_Units__c,rtms__Width__c
+                                                     FROM rtms__LineItem__c where rtms__Load__r.Id IN :loadId]; 
+            
+            
+           
+           
+          Map<Id,String> loadExposIdMap = new Map<Id,String>(); 
+          if(loadId.size() > 0){
+            List<Marketplace_Exposed_Data__c> marketPlaceExpList = [select id,Load__c,Load__r.Id,Marketplace_Exposed_Id__c from Marketplace_Exposed_Data__c where Load__c IN :loadId]; 
+              if(marketPlaceExpList != null && marketPlaceExpList.size() > 0){
+                  for(Marketplace_Exposed_Data__c mkp : marketPlaceExpList){
+                    loadExposIdMap.put(mkp.Load__r.Id,mkp.Marketplace_Exposed_Id__c);    
+                  }
+                  
+              }
+           }
+            
+            Integer lineItemRecords = 1;    
+            payload = '{"LineItems": [';
+            for(rtms__LineItem__c li : ListOfLineItem){  
+                payLoad = payLoad + '{"Id": "'+li.Id+'",'+
+                    '"Lineitemrtms__Delivery_Stop__c": "'+li.rtms__Delivery_Stop__c+ '",'+
+                    '"Lineitemrtms__Dimension_Units__c": "'+li.rtms__Dimension_Units__c+ '",'+
+                    '"Lineitemrtms__Extended_Price__c": "'+li.rtms__Extended_Price__c+ '",'+
+                    '"Lineitemrtms__Handling_Units__c": "'+li.rtms__Handling_Units__c+ '",'+
+                    '"Lineitemrtms__Hazardous_Materials__c": "'+li.rtms__Hazardous_Materials__c+ '",'+
+                    '"Lineitemrtms__HazMat_Class_Division__c": "'+li.rtms__HazMat_Class_Division__c+ '",'+
+                    '"Lineitemrtms__HazMat_Contact__c": "'+li.rtms__HazMat_Contact__c+ '",'+
+                    '"Lineitemrtms__HazMat_Number__c": "'+convertedString(li.rtms__HazMat_Number__c)+ '",'+
+                    '"Lineitemrtms__HazMat_Number_Type__c": "'+li.rtms__HazMat_Number_Type__c+ '",'+
+                    '"Lineitemrtms__HazMat_Packaging_Group__c": "'+li.rtms__HazMat_Packaging_Group__c+ '",'+
+                    '"Lineitemrtms__Height__c": "'+li.rtms__Height__c+ '",'+
+                    '"Lineitemrtms__HS_Code__c": "'+convertedString(li.rtms__HS_Code__c)+ '",'+
+                    '"Lineitemrtms__HTS_Code__c": "'+convertedString(li.rtms__HTS_Code__c)+ '",'+
+                    '"Lineitemrtms__Handling_Unit_Count__c": "'+li.rtms__Handling_Unit_Count__c+ '",'+
+                    '"Lineitemrtms__Item_Description__c": "'+convertedString(li.rtms__Item_Description__c)+ '",'+
+                    '"Lineitemrtms__Length__c": "'+li.rtms__Length__c+ '",'+
+                    '"Lineitemrtms__Linear_Feet__c": "'+li.rtms__Linear_Feet__c+ '",'+
+                    '"Lineitemrtms__Load__c": "'+li.rtms__Load__c+ '",';
+                    if(loadExposIdMap.containskey(li.rtms__Load__r.Id)){
+                        payLoad = payLoad +'"LineitemLoadMarketplaceExposedId": "'+loadExposIdMap.get(li.rtms__Load__r.Id)+'",';
+                    }else{
+                        payLoad = payLoad +'"LineitemLoadMarketplaceExposedId": "null",';
+                    }
+                    payLoad = payLoad +'"Lineitemrtms__NMFC_Class__c": "'+li.rtms__NMFC_Class__c+ '",'+
+                    '"Lineitemrtms__NMFC_Number__c": "'+convertedString(li.rtms__NMFC_Number__c)+ '",'+
+                    '"Lineitemrtms__Original_Reference__c": "'+li.rtms__Original_Reference__c+ '",'+
+                    '"Lineitemrtms__Packaging_Units__c": "'+li.rtms__Packaging_Units__c+ '",'+
+                    '"Lineitemrtms__Pickup_Stop__c": "'+li.rtms__Pickup_Stop__c+ '",'+
+                    '"Lineitemrtms__Packaging_Unit_Count__c": "'+li.rtms__Packaging_Unit_Count__c+ '",'+
+                    '"Lineitemrtms__Schedule_B_Code__c": "'+convertedString(li.rtms__Schedule_B_Code__c)+ '",'+
+                    '"Lineitemrtms__Stackable__c": "'+li.rtms__Stackable__c+ '",'+
+                    '"Lineitemrtms__Volume__c": "'+li.rtms__Volume__c+ '",'+
+                    '"Lineitemrtms__Volume_Units__c": "'+li.rtms__Volume_Units__c+ '",'+
+                    '"Lineitemrtms__Weight__c": "'+li.rtms__Weight__c+ '",'+
+                    '"Lineitemrtms__Weight_Units__c": "'+li.rtms__Weight_Units__c+ '",'+
+                    '"Lineitemrtms__Width__c": "'+li.rtms__Width__c+ '"'+
+                    '}';
+                if(ListOfLineItem.size() != lineItemRecords){
+                    payLoad = payLoad + ',';
+                }
+                lineItemRecords++;
+            } 
+            payLoad = payLoad +']}';    
+                        
+        }
+    /*    if(triggerAction == 'Delete'){
+            system.debug('--delete--');
+            Integer lineItemRecords = 1;    
+            payload = '{"LineItem": [';
+            for(String li : LineItemSet){  
+                payLoad = payLoad + '{"Id": "'+li+'",'+
+                    '}';
+                if(LineItemSet.size() != lineItemRecords){
+                    payLoad = payLoad + ',';
+                }
+                lineItemRecords++;
+            } 
+            payLoad = payLoad +']}';
+            
+        }*/
+        return payload;
+    }
+    
+    
+    private string convertedString(String LoadFildName){
+        if(LoadFildName != null){
+            LoadFildName = LoadFildName.replace('\\n\\r', ' '); // remove CRLF
+            LoadFildName = LoadFildName.replace('\\n', ' ');        // remove LF    
+            LoadFildName = LoadFildName.replace('\\r', ' ');        // remove CR
+            LoadFildName = LoadFildName.replace('\\', ' ');     // remove slashes       
+            LoadFildName = LoadFildName.normalizeSpace();   // Remove all repeating white space
+        }
+        return LoadFildName;
+    }
+}
