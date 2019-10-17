@@ -18,6 +18,8 @@ allocated_storage = "100"
 db_engine = "postgres"
 engine_version = "11.2"
 instance_class = "db.t2.micro"
+log_statements = "all"
+log_min_duration_statement = "1000"
 
 #variables for bastion
 name_regex = "ami-068a5e9c87370be8b"

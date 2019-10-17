@@ -17,6 +17,23 @@ resource "aws_db_subnet_group" "db_sub_gr" {
   }
 }
 
+resource "aws_db_parameter_group" "postgress" {
+  name_prefix   = "${terraform.workspace}-postgres11"
+  description = "DB Parameter group for database ${var.identifier}-${terraform.workspace}"
+  family = "postgres11"
+
+  parameter {
+    name  = "log_statement"
+    value = "${var.log_statements}"
+  }
+
+  parameter {
+    name  = "log_min_duration_statement"
+    value = "${var.log_min_duration_statement}"
+  }
+}
+
+
 #data "aws_vpc" "select" {
 #  id = "${var.vpc_id}"
 #}
@@ -83,6 +100,7 @@ resource "aws_db_instance" "db" {
   engine_version    = "${var.engine_version}"
   instance_class    = "${var.instance_class}"
   name              = "${terraform.workspace}_postgress"
+  parameter_group_name = "${aws_db_parameter_group.postgress.name}"
   username          = "${data.external.rds_db_credentials.result.username}"
   password          = "${data.external.rds_db_credentials.result.password}"
   vpc_security_group_ids = [
@@ -95,6 +113,8 @@ resource "aws_db_instance" "db" {
   skip_final_snapshot  = true
   publicly_accessible  = false
   multi_az             = false
+  backup_retention_period = "${terraform.workspace == "prod" ? 7 : 0}"
+  enabled_cloudwatch_logs_exports = ["postgresql","upgrade"]
   apply_immediately    = true
 
   tags = {

@@ -54,6 +54,15 @@ variable "db_engine" {
 }
 
 
+variable "log_statements" {
+  description ="PostgreSQL statements to log"
+}
+
+
+variable "log_min_duration_statement" {
+  description = "PostgreSQL statements minimum duration to log"
+}
+
 variable "engine_version" {
   description = "DB engine version"
   # default     = "11.2"
