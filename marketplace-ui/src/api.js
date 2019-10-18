@@ -11,7 +11,6 @@ import {
   STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
 import { isValidSession, renewToken } from './lib/auth';
-import { loginFail } from './redux/actions/auth';
 
 const METHOD_GET = 'get';
 
@@ -465,10 +464,15 @@ const consumeApi = async (endPoint, method, JWT, mockData, mockOverride) =>{
     json = mockData;
   } else {
     if(isValidSession()){
-      // Only call to api if we we have a valid session.
-      response = await fetch(endPoint, buildRequestData(method, JWT));
-      json = await response.json();
-      handleStatus(response);
+      try{
+        // Only call to api if we we have a valid session.
+        response = await fetch(endPoint, buildRequestData(method, JWT));
+        handleStatus(response);
+        json = await response.json();
+      } catch (e) {
+        // Invalid JWT so it will try to renew the token.
+        renewToken();
+      }
     } else {
       // Invalid session so it will try to renew the token.
       renewToken();

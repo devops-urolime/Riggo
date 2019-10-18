@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import CardSummary from './CardSummary';
 import './DashboardPage.scss';
 import Grid from '@material-ui/core/Grid';
-import Chip from '@material-ui/core/Chip';
 import TitleSection from './TitleSection';
 import Grow from '@material-ui/core/Grow';
 import PieVisualization, {
@@ -248,6 +247,7 @@ class DashboardPage extends Component {
     const stopSummaryDeliveryPie = stopSummary && digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
+    const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
       return (
         <Grid
           container
@@ -291,27 +291,30 @@ class DashboardPage extends Component {
                        spacing={0}
                        direction="row"
                        alignItems="center"
+                       justify="center"
                      >
                        <Grid xs={8} item>
-                         {
-                           (viewTypeShipment !== SHIPMENT_RESULT_BY_MONTH) &&
-                           <Chip
-                             label={`Back to ${this.prevViewType(viewTypeShipment, VIEW_TYPES)}`}
-                             onClick={this.goToPrevViewType}
-                           />
-                         }
-                       </Grid>
-                       <Grid xs={8} item>
-                           <MultiYAxesVisualization
+                         <Grid
+                            container
+                            spacing={0}
+                            direction="row"
+                            alignItems="center"
+                            justify="center"
+                          >
+                           </Grid>
+                            <MultiYAxesVisualization
                              title={summaryItem.title}
                              data={summaryItem.data}
                              onClickBar={this.updateViewType}
                              onClickBack={this.navigateToPrevOffset}
                              onClickNext={this.navigateToNextOffset}
                              rootClass="ShipmentsVisualization"
-                             showNext={true}
-                             showPrev={true}
-                           />
+                             showNext={isNavigation}
+                             showPrev={isNavigation}
+                             viewTypeShipment={viewTypeShipment}
+                             onClickSubTitle={this.goToPrevViewType}
+                             labelBtnSubTitle={`Back to ${this.prevViewType(viewTypeShipment, VIEW_TYPES)}`}
+                            />
                         </Grid>
                         <Grid xs={1} item>
                           <LineDivider orientation={VERTICAL_LINE}/>

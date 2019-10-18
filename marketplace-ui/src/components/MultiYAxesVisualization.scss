@@ -28,28 +28,40 @@
 }
 
 .TitleVisualization{
-  font-size: 12px !important;
+  font-size: 16px !important;
   text-align: center;
-  line-height: 12px;
+  line-height: 16px;
+  color: $neutralDark !important;
+}
+
+.BackToView{
+    background-color: $primaryLight !important;
+    margin-left: 45%;
+    visibility: hidden;
+    font-size: 16px !important;
+    line-height: 16px;
+    &--visible{
+        visibility: visible;
+    }
 }
 
 $navigate-arrow-size: 19px;
 
 .NavigateSection{
-    margin-top: 10px;
+
 }
 
 .NavigateBack{
     font-size: $navigate-arrow-size !important;
-    display: block;
-    margin: 0 auto;
+    margin-right: 30px;
+    line-height: 24px;
     cursor: pointer;
 }
 
 .NavigateNext{
     font-size: $navigate-arrow-size !important;
     transform: rotateY(180deg) !important;
-    display: block;
-    margin: 0 auto;
+    margin-left: 30px;
+    line-height: 24px;
     cursor: pointer;
 }
