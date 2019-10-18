@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "load")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Load implements Serializable {
 
     private static final long serialVersionUID = -4133343645808769934L;
@@ -125,9 +124,8 @@ public class Load implements Serializable {
     private BigDecimal distanceMiles;
 
     @JsonIgnore
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    private LoadDataJson data;
+    @Column(name = "data")
+    private String data;
 
     public Integer getId() {
         return id;
@@ -377,11 +375,11 @@ public class Load implements Serializable {
         this.distanceMiles = distanceMiles;
     }
 
-    public LoadDataJson getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(LoadDataJson data) {
+    public void setData(String data) {
         this.data = data;
     }
 }
