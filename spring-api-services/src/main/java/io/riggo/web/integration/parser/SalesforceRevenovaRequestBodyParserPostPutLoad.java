@@ -1,5 +1,6 @@
 package io.riggo.web.integration.parser;
 
+import com.google.gson.Gson;
 import io.riggo.data.domain.*;
 import io.riggo.web.integration.exception.PayloadParseException;
 import io.riggo.web.integration.resolver.SalesforceRevenovaLoadStatusResolver;
@@ -128,7 +129,8 @@ public class SalesforceRevenovaRequestBodyParserPostPutLoad implements RequestBo
         LoadDataJson loadDataJson = new LoadDataJson();
         loadDataJson.setSalesStatus((String)loadStatusMaps.get(SalesforceRevenovaLoadStatusResolver.SALES_STATUS));
         loadDataJson.setLoadStatus((String)loadStatusMaps.get(SalesforceRevenovaLoadStatusResolver.LOAD_STATUS));
-        load.setData(loadDataJson);
+        Gson gson = new Gson();
+        load.setData(gson.toJson(loadDataJson));
 
         SalesforceRevenovaLoadStatusResolver salesforceRevenovaLoadStatusResolver = new SalesforceRevenovaLoadStatusResolver();
         LoadSubStatus loadSubStatus = salesforceRevenovaLoadStatusResolver.resolveLoadStatus(loadStatusMaps);
