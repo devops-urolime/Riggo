@@ -7,24 +7,9 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography/Typography';
 import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid/Grid';
+import { SHIPMENT_RESULT_BY_MONTH } from '../api';
+import Chip from '@material-ui/core/Chip';
 
-const getTimingEffect = (index) => {
-  const GROW_TIMING_EFFECT = [ 600, 800, 1000 ];
-  return ( index < GROW_TIMING_EFFECT.length ) ? GROW_TIMING_EFFECT[index] : 500;
-};
-
-const getConfigGrow = (index) => {
-  const configGrow = {
-    in:true
-  };
-  if (index > 0){
-    configGrow['timeout'] = getTimingEffect(index);
-    configGrow['style'] = { transformOrigin: '0 0 0' };
-  }
-  return configGrow;
-};
-
-const configGrow =  getConfigGrow(1) ;
 const MultiYAxesVisualization = ({
    onClickBar,
    data,
@@ -33,7 +18,10 @@ const MultiYAxesVisualization = ({
    onClickBack,
    onClickNext,
    showNext,
-   showPrev
+   showPrev,
+   viewTypeShipment,
+   onClickSubTitle,
+   labelBtnSubTitle
 }) => {
   return (
     <div className={"MultiYAxesVisualization "+rootClass}>
@@ -46,7 +34,7 @@ const MultiYAxesVisualization = ({
         className="NavigateSection"
       >
         <Grid xs={12} item>
-          <Typography className="TitleVisualization">
+          <Typography className="TitleVisualization" component="h2" variant="h6"  gutterBottom>
             {
               showPrev &&
               <Icon className="NavigateBack" onClick={onClickBack}>arrow_back_ios</Icon>
@@ -57,6 +45,11 @@ const MultiYAxesVisualization = ({
               <Icon className="NavigateNext" onClick={onClickNext}>arrow_back_ios</Icon>
             }
           </Typography>
+          <Chip
+             className={(viewTypeShipment !== SHIPMENT_RESULT_BY_MONTH) ? "BackToView BackToView--visible":"BackToView"}
+             label={labelBtnSubTitle}
+             onClick={onClickSubTitle}
+           />
         </Grid>
       </Grid>
       <ResponsiveContainer>
@@ -97,8 +90,11 @@ MultiYAxesVisualization.propTypes = {
   onClickBar: PropTypes.func,
   onClickBack: PropTypes.func,
   onClickNext: PropTypes.func,
+  onClickSubTitle: PropTypes.func,
   title: PropTypes.string,
   rootClass: PropTypes.string,
+  viewTypeShipment: PropTypes.string,
+  labelBtnSubTitle: PropTypes.string,
   data: PropTypes.array,
   showNext: PropTypes.bool,
   showPrev: PropTypes.bool,

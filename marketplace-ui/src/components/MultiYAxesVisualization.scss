@@ -28,9 +28,21 @@
 }
 
 .TitleVisualization{
-  font-size: 12px !important;
+  font-size: 16px !important;
   text-align: center;
-  line-height: 12px;
+  line-height: 16px;
+  color: $neutralDark !important;
+}
+
+.BackToView{
+    background-color: $primaryLight !important;
+    margin-left: 45%;
+    visibility: hidden;
+    font-size: 16px !important;
+    line-height: 16px;
+    &--visible{
+        visibility: visible;
+    }
 }
 
 $navigate-arrow-size: 19px;

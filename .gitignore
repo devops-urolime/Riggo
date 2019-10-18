@@ -124,3 +124,37 @@ gradle-app.setting
 # gradle/wrapper/gradle-wrapper.properties
 
 # End of https://www.gitignore.io/api/intellij+iml,gradle,maven,macos
+marketplace-ui/src/components/Login.css
+authorization-auth0-provider/DefaultRoleNewUserRule.js
+marketplace-ui/.env
+marketplace-ui/.idea/.gitignore
+marketplace-ui/.idea/compiler.xml
+marketplace-ui/.idea/misc.xml
+marketplace-ui/.idea/vcs.xml
+marketplace-ui/.idea/watcherTasks.xml
+marketplace-ui/.idea/codeStyles/codeStyleConfig.xml
+marketplace-ui/.idea/codeStyles/Project.xml
+marketplace-ui/.idea/copyright/brinqa.xml
+marketplace-ui/.idea/copyright/profiles_settings.xml
+marketplace-ui/.idea/dictionaries/amad.xml
+marketplace-ui/.idea/inspectionProfiles/Project_Default.xml
+marketplace-ui/src/components/App.css
+marketplace-ui/src/components/BarVisualization.css
+marketplace-ui/src/components/CardSummary.css
+marketplace-ui/src/components/DashboardPage.css
+marketplace-ui/src/components/ForgotPasswordPage.css
+marketplace-ui/src/components/Icon.css
+marketplace-ui/src/components/LineDivider.css
+marketplace-ui/src/components/MenuContent.css
+marketplace-ui/src/components/MultiYAxesVisualization.css
+marketplace-ui/src/components/PieVisualization.css
+marketplace-ui/src/components/SankeyVisualization.css
+marketplace-ui/src/components/Section.css
+marketplace-ui/src/components/SideBar.css
+marketplace-ui/src/components/StackVisualization.css
+marketplace-ui/src/components/TitleSection.css
+marketplace-ui/src/components/TopBar.css
+marketplace-ui/src/components/TotalSummary.css
+spring-api-services/src/main/resources/application.properties
+marketplace-ui/.env
+spring-api-services/src/main/resources/application.properties
