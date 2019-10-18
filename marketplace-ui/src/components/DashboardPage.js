@@ -162,7 +162,7 @@ class DashboardPage extends Component {
     let idx = type.indexOf(current);
     const lastViewTypeIndex = type.length - 1;
     if (idx === lastViewTypeIndex) {
-      return type[lastViewTypeIndex];
+      return type[0];
     }
     return type[idx + 1];
   };
@@ -311,9 +311,6 @@ class DashboardPage extends Component {
                              rootClass="ShipmentsVisualization"
                              showNext={isNavigation}
                              showPrev={isNavigation}
-                             viewTypeShipment={viewTypeShipment}
-                             onClickSubTitle={this.goToPrevViewType}
-                             labelBtnSubTitle={`Back to ${this.prevViewType(viewTypeShipment, VIEW_TYPES)}`}
                             />
                         </Grid>
                         <Grid xs={1} item>

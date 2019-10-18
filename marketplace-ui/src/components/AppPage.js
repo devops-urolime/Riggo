@@ -47,7 +47,7 @@ class AppPage extends Component{
          <Grid
            container
            spacing={0}
-           justify="flex-end"
+           justify="center"
          >
             <Hidden xsDown implementation="js">
               <Grid item xs={12}>
@@ -66,7 +66,7 @@ class AppPage extends Component{
               </Grid>
             </Hidden>
            <Hidden smDown implementation="js">
-             <Grid item xs={2}>
+             <Grid item xs={1}>
                 <SideBar
                   menu={menu}
                   defaultMenu={defaultMenu}
@@ -79,7 +79,7 @@ class AppPage extends Component{
              </Grid>
            </Hidden>
            <Hidden xsDown implementation="js">
-            <Grid item xs={10}>
+            <Grid item xs={11}>
               <MainContentWrapper/>
             </Grid>
            </Hidden>
