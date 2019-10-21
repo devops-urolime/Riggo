@@ -46,7 +46,6 @@ public class LoadPayload {
                                         rtms__First_Stop__r.rtms__Shipping_Receiving_Hours__c,rtms__First_Stop__r.rtms__Expected_Date__c,
                                         rtms__First_Stop__r.rtms__Expected_Day__c,rtms__First_Stop__r.rtms__Appointment_Required__c,
                                         rtms__First_Stop__r.rtms__Appointment_Time__c,rtms__First_Stop__r.rtms__Stop_Status__c,
-                                        rtms__First_Stop__r.rtms__Departure_Date__c,rtms__First_Stop__r.rtms__Departure_Time__c,
                                         rtms__First_Stop__r.rtms__Carrier_Status2__c,rtms__Hazardous_Materials__c, rtms__Insurance_Amount__c, rtms__Last_Reported_City__c, rtms__Last_Reported_Country__c, rtms__Last_Reported_Geolocation__Latitude__s, rtms__Last_Reported_Geolocation__Longitude__s, rtms__Last_Reported_Geolocation__c, rtms__Last_Reported_Location2__c, rtms__Last_Reported_State_Province__c, 
                                         rtms__Last_Stop__c, 
                                         rtms__Last_Stop__r.rtms__Instructions__c,
@@ -70,7 +69,6 @@ public class LoadPayload {
                                         rtms__Last_Stop__r.rtms__Appointment_Required__c,
                                         rtms__Last_Stop__r.rtms__Appointment_Time__c,
                                         rtms__Last_Stop__r.rtms__Stop_Status__c,
-                                        rtms__Last_Stop__r.rtms__Departure_Date__c,rtms__Last_Stop__r.rtms__Departure_Time__c,
                                         rtms__Last_Stop__r.rtms__Carrier_Status2__c,
                                         rtms__Load_Sequence_Number__c, rtms__Load_Status_Comments__c, rtms__Load_Status_Requested__c, rtms__Load_Status__c, rtms__Margin_Invoiced__c, rtms__Margin_Paid__c, rtms__Margin_Pct_Invoiced__c,rtms__Margin_Pct_Quoted__c, rtms__Margin_Quoted__c, 
                                           rtms__Mode__c,rtms__Mode__r.Id,rtms__Mode__r.Name,rtms__Mode__r.rtms__Enabled__c,rtms__Mode__r.rtms__LTL__c,rtms__Mode__r.rtms__Order__c,rtms__Mode__r.rtms__Required_Application_Documents__c,
@@ -215,8 +213,7 @@ public class LoadPayload {
                             '"FirstStoprtms__Appointment_Required__c": "'+ld.rtms__First_Stop__r.rtms__Appointment_Required__c+ '",'+
                             '"FirstStoprtms__Appointment_Time__c": "'+convertedString(ld.rtms__First_Stop__r.rtms__Appointment_Time__c)+ '",'+
                             '"FirstStoprtms__Stop_Status__c": "'+convertedString(ld.rtms__First_Stop__r.rtms__Stop_Status__c)+ '",'+
-                            '"FirstStoprtms__Carrier_Status2__c": "'+convertedString(ld.rtms__First_Stop__r.rtms__Carrier_Status2__c)+'",'+
-                            '"FirstStoprtms__Departure_Date": "' + ld.rtms__First_Stop__r.rtms__Departure_Date__c + ' ' + ld.rtms__First_Stop__r.rtms__Departure_Time__c + '"' +
+                            '"FirstStoprtms__Carrier_Status2__c": "'+convertedString(ld.rtms__First_Stop__r.rtms__Carrier_Status2__c)+'"'+
                         '},'+ 
                         '"rtms__Hazardous_Materials__c": '+ld.rtms__Hazardous_Materials__c+','+
                         '"rtms__Insurance_Amount__c": '+ld.rtms__Insurance_Amount__c+','+
@@ -246,8 +243,7 @@ public class LoadPayload {
                             '"LastStoprtms__Appointment_Required__c": "'+ld.rtms__Last_Stop__r.rtms__Appointment_Required__c+ '",'+
                             '"LastStoprtms__Appointment_Time__c": "'+ld.rtms__Last_Stop__r.rtms__Appointment_Time__c+ '",'+
                             '"LastStoprtms__Stop_Status__c": "'+convertedString(ld.rtms__Last_Stop__r.rtms__Stop_Status__c)+ '",'+
-                            '"LastStoprtms__Carrier_Status2__c": "'+convertedString(ld.rtms__Last_Stop__r.rtms__Carrier_Status2__c)+'",'+
-                            '"LastStoprtms__Departure_Date": "' + ld.rtms__Last_Stop__r.rtms__Departure_Date__c + ' ' + ld.rtms__Last_Stop__r.rtms__Departure_Time__c + '"' +
+                            '"LastStoprtms__Carrier_Status2__c": "'+convertedString(ld.rtms__Last_Stop__r.rtms__Carrier_Status2__c)+'"'+
                         '},'+                         
                         '"rtms__Load_Sequence_Number__c": "'+ld.rtms__Load_Sequence_Number__c+'",'+
                         '"rtms__Load_Status_Comments__c": "'+convertedString(ld.rtms__Load_Status_Comments__c)+'",'+
@@ -268,7 +264,7 @@ public class LoadPayload {
                          '},'+  
                         '"rtms__OTD_Counter__c": '+ld.rtms__OTD_Counter__c+','+
                         '"rtms__Order_Date__c": "'+ld.rtms__Order_Date__c+'",'+
-                        '"rtms__Order_Number__c": "'+ld.rtms__Order_Number__c+'",'+
+                        '"rtms__Order_Number__c": "'+convertedString(ld.rtms__Order_Number__c)+'",'+
                         '"rtms__Order_Total__c": '+ld.rtms__Order_Total__c+','+
                         '"rtms__Origin__c": "'+ld.rtms__Origin__c+'",'+
                         '"rtms__Other_Instructions__c": "'+convertedString(ld.rtms__Other_Instructions__c)+'",'+
