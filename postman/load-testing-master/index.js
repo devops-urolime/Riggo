@@ -1,6 +1,14 @@
 // index file for Lambda
-let filePathName = './ExampleEchoRequestMethodsCollection.json';
+// let filePathName = './ExampleEchoRequestMethodsCollection.json';
+// let CollectionFileName = process.env.CollectionFileName;
+// let EnvironmentFileName = process.env.EnvironmentFileName;
+
+// require("dotenv").config();
+
+let filePathName = process.env.CollectionFileName;
+let envFilePathName = process.env.EnvironmentFileName;
 console.log('Loading function from ' + filePathName);
+console.log('Loading environment variables from ' + envFilePathName);
 
 exports.handler = (event, context, callback) => {
 
@@ -12,7 +20,9 @@ exports.handler = (event, context, callback) => {
         newman = require('newman'),
         // options for the parallel collection runs
         options = {
-            collection: path.join(__dirname, filePathName)
+            collection: path.join(__dirname, filePathName),
+            environment: path.join(__dirname, envFilePathName),
+            reporters: ['cli']
         },
         // callback function that marks the end of the current collection run, when called
         parallelCollectionRun = function (done) {
@@ -20,12 +30,13 @@ exports.handler = (event, context, callback) => {
         };
     
     // Run the Postman sample collection thrice, in parallel.
-    collections = [parallelCollectionRun, parallelCollectionRun],
+    collections = [parallelCollectionRun],
     recursiveCallBack = function (err, results) {
         console.info("Done test for " + collections.length + " concurrent collections.");
         err && console.error(err);
         var fail = false;
         if (results) {
+            
             results.forEach(function (result) {
                 var failures = result.run.failures;
                 if (failures.length) {
@@ -37,7 +48,6 @@ exports.handler = (event, context, callback) => {
         } 
         //keep increasing the number of concurrent calls until something fails
         if (fail || err) {
-            
             console.error("Error when attempting " + collections.length + " calls.");
             console.error(err);
             callback('Newman test run encountered an error.', null)
@@ -48,6 +58,7 @@ exports.handler = (event, context, callback) => {
             // console.info("Launching test for " + collections.length + " concurrent collections.");
             // async.parallel(collections, recursiveCallBack);
             // console.info("completed");
+            // console.info(results.run.stats);
             callback(null, 'Test run passed!');
             // callback("Newman test run completed successfully")
         }

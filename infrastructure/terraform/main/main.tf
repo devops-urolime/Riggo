@@ -43,6 +43,8 @@ module "RDS" {
   # iops    = "${var.iops}"
   subnet1 = "${module.VPC.private_subnet_id1}"
   subnet2 = "${module.VPC.private_subnet_id2}"
+  log_statements = "${var.log_statements}"
+  log_min_duration_statement = "${var.log_min_duration_statement}"
 }
 
 module "bastion" {

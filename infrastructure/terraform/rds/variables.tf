@@ -32,3 +32,12 @@ variable "vpc_id" {}
 # variable "env" {}
 
 # variable "iops" {}
+
+variable "log_statements" {
+  
+}
+
+
+variable "log_min_duration_statement" {
+  
+}
