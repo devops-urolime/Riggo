@@ -29,7 +29,7 @@ class AppPage extends Component{
   }
   render(){
     const { menu, defaultMenu, isLogin, currentMenu} = this.props;
-    const {openMenu} = this.state;
+    const { openMenu } = this.state;
     const TopBarWrapper = ({positionAppBar}) => <TopBar positionAppBar={positionAppBar} title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>;
     const MainContentWrapper = () =>
         <MainContent>
@@ -44,46 +44,52 @@ class AppPage extends Component{
     ;
     return (
      <div className="App-layout">
-         <Grid
-           container
-           spacing={0}
-           justify="flex-end"
-         >
-            <Hidden xsDown implementation="js">
-              <Grid item xs={12}>
-                 <TopBarWrapper positionAppBar="fixed"/>
-              </Grid>
-            </Hidden>
-            <Hidden smUp implementation="js">
-              <Grid item xs={1}>
-                 <SideBar
-                   menu={menu}
-                   defaultMenu={defaultMenu}
-                   isOpen={openMenu}
-                   handleClose={()=> this.closeMenu()}
-                   variant="persistent"
-                 />
-              </Grid>
-            </Hidden>
-           <Hidden smDown implementation="js">
-             <Grid item xs={2}>
-                <SideBar
-                  menu={menu}
-                  defaultMenu={defaultMenu}
-                  isOpen={true}
-                  handleClose={()=> this.closeMenu()}
-                  onClickMenuItem={(item) => this.onClickMenuItem(item)}
-                  variant="permanent"
-                  currentMenu={currentMenu}
-                />
-             </Grid>
-           </Hidden>
-           <Hidden xsDown implementation="js">
-            <Grid item xs={10}>
-              <MainContentWrapper/>
-            </Grid>
-           </Hidden>
-         </Grid>
+       <Hidden mdDown implementation="js">
+         <SideBar
+            menu={menu}
+            defaultMenu={defaultMenu}
+            isOpen={true}
+            handleClose={()=> this.closeMenu()}
+            onClickMenuItem={(item) => this.onClickMenuItem(item)}
+            variant="permanent"
+            currentMenu={currentMenu}
+            swipe={true}
+          />
+       </Hidden>
+       <Hidden mdUp implementation="js">
+         {
+           openMenu &&
+           <SideBar
+             menu={menu}
+             defaultMenu={defaultMenu}
+             isOpen={true}
+             handleClose={()=> this.closeMenu()}
+             onClickMenuItem={(item) => this.onClickMenuItem(item)}
+             variant="permanent"
+             currentMenu={currentMenu}
+             swipe={false}
+           />
+         }
+       </Hidden>
+       <Grid
+         container
+         spacing={0}
+         justify="flex-end"
+       >
+          <Grid item xs={12}>
+             <TopBarWrapper positionAppBar="fixed"/>
+          </Grid>
+         <Hidden mdDown implementation="js">
+          <Grid item xs={10}>
+            <MainContentWrapper/>
+          </Grid>
+         </Hidden>
+         <Hidden mdUp implementation="js">
+           <Grid item xs={12}>
+             <MainContentWrapper/>
+           </Grid>
+          </Hidden>
+       </Grid>
      </div>
     );
   }

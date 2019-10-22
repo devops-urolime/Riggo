@@ -13,9 +13,10 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { VERTICAL_LINE } from './LineDivider';
+import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
+import Hidden from '@material-ui/core/Hidden';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
@@ -162,14 +163,9 @@ class DashboardPage extends Component {
     let idx = type.indexOf(current);
     const lastViewTypeIndex = type.length - 1;
     if (idx === lastViewTypeIndex) {
-      return type[lastViewTypeIndex];
+      return type[0];
     }
     return type[idx + 1];
-  };
-
-  prevViewType = (current, type) =>{
-    let idx = type.indexOf(current);
-    return (idx !== 0) ? type[idx - 1]: type[0];
   };
 
   updateViewType = (item) =>{
@@ -186,23 +182,6 @@ class DashboardPage extends Component {
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
         item.payload.fiscalWeek
-      );
-    }
-  };
-
-  goToPrevViewType = () =>{
-    const { viewTypeShipment, itemBar } = this.state;
-    const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
-    this.setState({
-      viewTypeShipment: prevView,
-    });
-    if(prevView !== viewTypeShipment){
-      this.props.loadShipmentSummary(
-        itemBar.offset,
-        prevView,
-        itemBar.fiscalMonth,
-        itemBar.fiscalYear,
-        itemBar.fiscalWeek
       );
     }
   };
@@ -248,6 +227,60 @@ class DashboardPage extends Component {
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
     const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
+    const ShipperVizWrapper = ({summaryItem}) =>
+      <MultiYAxesVisualization
+       title={summaryItem.title}
+       data={summaryItem.data}
+       onClickBar={this.updateViewType}
+       onClickBack={this.navigateToPrevOffset}
+       onClickNext={this.navigateToNextOffset}
+       rootClass="ShipmentsVisualization"
+       showNext={isNavigation}
+       showPrev={isNavigation}
+      />;
+    const SummaryWrapper = ({summaryItem, center}) => <>
+        <TotalSummary
+        title="Total Shipments In Period"
+        legend={`${summaryItem.totalShipmentsInPeriod}`}
+        center={center}
+        />
+        <TotalSummary
+        title="Total Cost In Period"
+        legend={`$${summaryItem.totalCostInPeriod}`}
+        center={center}
+        />
+        <TotalSummary
+        title="Cost/ml In Period"
+        legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+        center={center}
+        />
+      </>;
+    const PickupWrapper = () =>
+      <Section
+        top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
+        content={()=>
+          <Grid item xs={12}>
+            <PieVisualization
+              data={stopSummaryPickUpPie}
+              rootClass="PerformancePickUpVisualization"
+              colorsScheme={NIVO}
+            />
+          </Grid>
+        }
+      />;
+    const DeliveryWrapper = () =>
+      <Section
+        top={()=> <TitleSection label="On Time Performance - Delivery"/> }
+        content={() =>
+          <Grid item xs={12}>
+            <PieVisualization
+              data={stopSummaryDeliveryPie}
+              rootClass="PerformancePickUpVisualization"
+              colorsScheme={DARK2}
+            />
+          </Grid>
+        }
+      />;
       return (
         <Grid
           container
@@ -293,46 +326,36 @@ class DashboardPage extends Component {
                        alignItems="center"
                        justify="center"
                      >
-                       <Grid xs={8} item>
-                         <Grid
-                            container
-                            spacing={0}
-                            direction="row"
-                            alignItems="center"
-                            justify="center"
-                          >
-                           </Grid>
-                            <MultiYAxesVisualization
-                             title={summaryItem.title}
-                             data={summaryItem.data}
-                             onClickBar={this.updateViewType}
-                             onClickBack={this.navigateToPrevOffset}
-                             onClickNext={this.navigateToNextOffset}
-                             rootClass="ShipmentsVisualization"
-                             showNext={isNavigation}
-                             showPrev={isNavigation}
-                             viewTypeShipment={viewTypeShipment}
-                             onClickSubTitle={this.goToPrevViewType}
-                             labelBtnSubTitle={`Back to ${this.prevViewType(viewTypeShipment, VIEW_TYPES)}`}
-                            />
-                        </Grid>
+                       <Hidden mdUp implementation="js">
+                         <Grid xs={12} item>
+                           <ShipperVizWrapper summaryItem={summaryItem} />
+                         </Grid>
+                       </Hidden>
+                       <Hidden mdDown implementation="js">
+                         <Grid xs={8} item>
+                           <ShipperVizWrapper summaryItem={summaryItem} />
+                         </Grid>
+                        </Hidden>
+                       <Hidden mdDown implementation="js">
                         <Grid xs={1} item>
                           <LineDivider orientation={VERTICAL_LINE}/>
                         </Grid>
+                       </Hidden>
+                       <Hidden mdUp implementation="js">
+                         <Grid xs={12} item>
+                           <LineDivider orientation={HORIZONTAL_LINE}/>
+                         </Grid>
+                       </Hidden>
+                       <Hidden mdDown implementation="js">
                         <Grid xs={3} item>
-                            <TotalSummary
-                            title="Total Shipments In Period"
-                            legend={`${summaryItem.totalShipmentsInPeriod}`}
-                            />
-                            <TotalSummary
-                            title="Total Cost In Period"
-                            legend={`$${summaryItem.totalCostInPeriod}`}
-                            />
-                            <TotalSummary
-                            title="Cost/ml In Period"
-                            legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-                            />
+                          <SummaryWrapper summaryItem={summaryItem} center={false}/>
                         </Grid>
+                       </Hidden>
+                       <Hidden mdUp implementation="js">
+                          <Grid xs={12} item>
+                            <SummaryWrapper summaryItem={summaryItem} center={true}/>
+                          </Grid>
+                       </Hidden>
                     </Grid>
                   </Grid>
                 )
@@ -340,34 +363,26 @@ class DashboardPage extends Component {
               }
             }
           />
-          <Grid item xs={6}>
-            <Section
-              top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
-              content={()=>
-                <Grid item xs={12}>
-                  <PieVisualization
-                    data={stopSummaryPickUpPie}
-                    rootClass="PerformancePickUpVisualization"
-                    colorsScheme={NIVO}
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Section
-              top={()=> <TitleSection label="On Time Performance - Delivery"/> }
-              content={() =>
-                <Grid item xs={12}>
-                  <PieVisualization
-                    data={stopSummaryDeliveryPie}
-                    rootClass="PerformancePickUpVisualization"
-                    colorsScheme={DARK2}
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
+          <Hidden mdDown implementation="js">
+            <Grid item xs={6}>
+              <PickupWrapper />
+            </Grid>
+          </Hidden>
+          <Hidden mdUp implementation="js">
+             <Grid xs={12} item>
+               <PickupWrapper />
+             </Grid>
+          </Hidden>
+          <Hidden mdDown implementation="js">
+            <Grid item xs={6}>
+              <DeliveryWrapper />
+            </Grid>
+          </Hidden>
+          <Hidden mdUp implementation="js">
+             <Grid xs={12} item>
+               <DeliveryWrapper />
+             </Grid>
+          </Hidden>
         </Grid>
       );
   }
