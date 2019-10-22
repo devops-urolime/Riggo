@@ -53,6 +53,7 @@ class AppPage extends Component{
             onClickMenuItem={(item) => this.onClickMenuItem(item)}
             variant="permanent"
             currentMenu={currentMenu}
+            swipe={true}
           />
        </Hidden>
        <Hidden mdUp implementation="js">
@@ -66,6 +67,7 @@ class AppPage extends Component{
              onClickMenuItem={(item) => this.onClickMenuItem(item)}
              variant="permanent"
              currentMenu={currentMenu}
+             swipe={false}
            />
          }
        </Hidden>

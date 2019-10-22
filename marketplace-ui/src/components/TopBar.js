@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   title: {
     flexGrow: 1,
@@ -40,7 +41,7 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick, positionAppBar}
           </Typography>
           {isLogin &&
             <IconButton onClick={()=>logout()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">
-              <Icon>exit</Icon>
+              <Icon>exit_to_app</Icon>
             </IconButton>
           }
           {!isLogin &&
