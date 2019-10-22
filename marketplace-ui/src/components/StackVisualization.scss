@@ -14,6 +14,9 @@
     padding: 5px 5px 5px 15px;
     &__label{
         font-size: 14px;
+        @media (max-width: $md-min-width) {
+            font-size: 10px !important;
+        }
     }
 }
 .SubStatus1{

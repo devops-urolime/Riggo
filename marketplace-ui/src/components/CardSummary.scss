@@ -8,10 +8,16 @@
     &__number {
       font-weight: bolder !important;
       font-size: 28px !important;
+      @media (max-width: $md-min-width) {
+        font-size: 18px !important;
+      }
     }
     &__label{
         text-transform: lowercase;
         font-size: 18px !important;
+        @media (max-width: $md-min-width) {
+            font-size: 13px !important;
+        }
         &:first-letter{
             text-transform: uppercase;
         }
