@@ -168,11 +168,6 @@ class DashboardPage extends Component {
     return type[idx + 1];
   };
 
-  prevViewType = (current, type) =>{
-    let idx = type.indexOf(current);
-    return (idx !== 0) ? type[idx - 1]: type[0];
-  };
-
   updateViewType = (item) =>{
     const { viewTypeShipment } = this.state;
     const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
@@ -187,23 +182,6 @@ class DashboardPage extends Component {
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
         item.payload.fiscalWeek
-      );
-    }
-  };
-
-  goToPrevViewType = () =>{
-    const { viewTypeShipment, itemBar } = this.state;
-    const prevView = this.prevViewType(viewTypeShipment, VIEW_TYPES);
-    this.setState({
-      viewTypeShipment: prevView,
-    });
-    if(prevView !== viewTypeShipment){
-      this.props.loadShipmentSummary(
-        itemBar.offset,
-        prevView,
-        itemBar.fiscalMonth,
-        itemBar.fiscalYear,
-        itemBar.fiscalWeek
       );
     }
   };
@@ -261,22 +239,48 @@ class DashboardPage extends Component {
        showPrev={isNavigation}
       />;
     const SummaryWrapper = ({summaryItem, center}) => <>
-      <TotalSummary
-      title="Total Shipments In Period"
-      legend={`${summaryItem.totalShipmentsInPeriod}`}
-      center={center}
-      />
-      <TotalSummary
-      title="Total Cost In Period"
-      legend={`$${summaryItem.totalCostInPeriod}`}
-      center={center}
-      />
-      <TotalSummary
-      title="Cost/ml In Period"
-      legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-      center={center}
-      />
-    </>
+        <TotalSummary
+        title="Total Shipments In Period"
+        legend={`${summaryItem.totalShipmentsInPeriod}`}
+        center={center}
+        />
+        <TotalSummary
+        title="Total Cost In Period"
+        legend={`$${summaryItem.totalCostInPeriod}`}
+        center={center}
+        />
+        <TotalSummary
+        title="Cost/ml In Period"
+        legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+        center={center}
+        />
+      </>;
+    const PickupWrapper = () =>
+      <Section
+        top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
+        content={()=>
+          <Grid item xs={12}>
+            <PieVisualization
+              data={stopSummaryPickUpPie}
+              rootClass="PerformancePickUpVisualization"
+              colorsScheme={NIVO}
+            />
+          </Grid>
+        }
+      />;
+    const DeliveryWrapper = () =>
+      <Section
+        top={()=> <TitleSection label="On Time Performance - Delivery"/> }
+        content={() =>
+          <Grid item xs={12}>
+            <PieVisualization
+              data={stopSummaryDeliveryPie}
+              rootClass="PerformancePickUpVisualization"
+              colorsScheme={DARK2}
+            />
+          </Grid>
+        }
+      />;
       return (
         <Grid
           container
@@ -359,34 +363,26 @@ class DashboardPage extends Component {
               }
             }
           />
-          <Grid item xs={6}>
-            <Section
-              top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
-              content={()=>
-                <Grid item xs={12}>
-                  <PieVisualization
-                    data={stopSummaryPickUpPie}
-                    rootClass="PerformancePickUpVisualization"
-                    colorsScheme={NIVO}
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Section
-              top={()=> <TitleSection label="On Time Performance - Delivery"/> }
-              content={() =>
-                <Grid item xs={12}>
-                  <PieVisualization
-                    data={stopSummaryDeliveryPie}
-                    rootClass="PerformancePickUpVisualization"
-                    colorsScheme={DARK2}
-                  />
-                </Grid>
-              }
-            />
-          </Grid>
+          <Hidden mdDown implementation="js">
+            <Grid item xs={6}>
+              <PickupWrapper />
+            </Grid>
+          </Hidden>
+          <Hidden mdUp implementation="js">
+             <Grid xs={12} item>
+               <PickupWrapper />
+             </Grid>
+          </Hidden>
+          <Hidden mdDown implementation="js">
+            <Grid item xs={6}>
+              <DeliveryWrapper />
+            </Grid>
+          </Hidden>
+          <Hidden mdUp implementation="js">
+             <Grid xs={12} item>
+               <DeliveryWrapper />
+             </Grid>
+          </Hidden>
         </Grid>
       );
   }
