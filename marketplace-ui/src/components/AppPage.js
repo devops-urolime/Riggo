@@ -29,7 +29,7 @@ class AppPage extends Component{
   }
   render(){
     const { menu, defaultMenu, isLogin, currentMenu} = this.props;
-    const {openMenu} = this.state;
+    const { openMenu } = this.state;
     const TopBarWrapper = ({positionAppBar}) => <TopBar positionAppBar={positionAppBar} title="Dashboard" onMenuClick={() => this.openMenu()} isLogin={isLogin}/>;
     const MainContentWrapper = () =>
         <MainContent>
@@ -44,31 +44,43 @@ class AppPage extends Component{
     ;
     return (
      <div className="App-layout">
-       <Hidden xsDown implementation="js">
-         <aside>
-           <SideBar
-                    menu={menu}
-                    defaultMenu={defaultMenu}
-                    isOpen={true}
-                    handleClose={()=> this.closeMenu()}
-                    onClickMenuItem={(item) => this.onClickMenuItem(item)}
-                    variant="permanent"
-                    currentMenu={currentMenu}
-                  />
-         </aside>
+       <Hidden mdDown implementation="js">
+         <SideBar
+            menu={menu}
+            defaultMenu={defaultMenu}
+            isOpen={true}
+            handleClose={()=> this.closeMenu()}
+            onClickMenuItem={(item) => this.onClickMenuItem(item)}
+            variant="permanent"
+            currentMenu={currentMenu}
+          />
        </Hidden>
-         <Grid
-           container
-           spacing={0}
-           justify="flex-end"
-         >
-            <Grid item xs={12}>
-               <TopBarWrapper positionAppBar="fixed"/>
-            </Grid>
-            <Grid item xs={12}>
-              <MainContentWrapper/>
-            </Grid>
-         </Grid>
+       <Hidden mdUp implementation="js">
+         {
+           openMenu &&
+           <SideBar
+             menu={menu}
+             defaultMenu={defaultMenu}
+             isOpen={true}
+             handleClose={()=> this.closeMenu()}
+             onClickMenuItem={(item) => this.onClickMenuItem(item)}
+             variant="permanent"
+             currentMenu={currentMenu}
+           />
+         }
+       </Hidden>
+       <Grid
+         container
+         spacing={0}
+         justify="flex-end"
+       >
+          <Grid item xs={12}>
+             <TopBarWrapper positionAppBar="fixed"/>
+          </Grid>
+          <Grid item xs={12}>
+            <MainContentWrapper/>
+          </Grid>
+       </Grid>
      </div>
     );
   }

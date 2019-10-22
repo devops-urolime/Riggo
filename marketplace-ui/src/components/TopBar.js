@@ -5,7 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Icon, { EXIT_ICON, USER_ACCOUNT_ICON } from './Icon';
+import Icon from '@material-ui/core/Icon';
 import './TopBar.scss';
 import { withRouter } from 'react-router-dom';
 import { APP_PATH_LOGIN } from '../config';
@@ -28,17 +28,24 @@ const MenuAppBar = ({isLogin, login, logout, title, onMenuClick, positionAppBar}
     <div className={classes.root}>
       <AppBar className="TopBar" position={positionAppBar}>
         <Toolbar>
+          {
+            isLogin &&
+           <IconButton onClick={onMenuClick} edge="start" className={classes.menuButton}
+                       color="inherit" aria-label="Menu">
+             <Icon>menu</Icon>
+           </IconButton>
+          }
           <Typography variant="h6" className={classes.title}>
             {isLogin && title}
           </Typography>
           {isLogin &&
             <IconButton onClick={()=>logout()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">
-              <Icon name={EXIT_ICON}/>
+              <Icon>exit</Icon>
             </IconButton>
           }
           {!isLogin &&
             <IconButton onClick={()=>login()} edge="end" className={classes.menuButton} color="inherit" aria-label="Menu">
-              <Icon name={USER_ACCOUNT_ICON}/>
+              <Icon>user</Icon>
             </IconButton>
           }
         </Toolbar>
