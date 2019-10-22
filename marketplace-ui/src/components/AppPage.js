@@ -57,7 +57,6 @@ class AppPage extends Component{
                   />
          </aside>
        </Hidden>
-       <section>
          <Grid
            container
            spacing={0}
@@ -70,7 +69,6 @@ class AppPage extends Component{
               <MainContentWrapper/>
             </Grid>
          </Grid>
-       </section>
      </div>
     );
   }
