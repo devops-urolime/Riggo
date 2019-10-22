@@ -13,9 +13,10 @@ import PieVisualization, {
 import MultiYAxesVisualization from './MultiYAxesVisualization';
 import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
-import LineDivider, { VERTICAL_LINE } from './LineDivider';
+import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
+import Hidden from '@material-ui/core/Hidden';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
@@ -248,6 +249,34 @@ class DashboardPage extends Component {
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
     const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
+    const ShipperVizWrapper = ({summaryItem}) =>
+      <MultiYAxesVisualization
+       title={summaryItem.title}
+       data={summaryItem.data}
+       onClickBar={this.updateViewType}
+       onClickBack={this.navigateToPrevOffset}
+       onClickNext={this.navigateToNextOffset}
+       rootClass="ShipmentsVisualization"
+       showNext={isNavigation}
+       showPrev={isNavigation}
+      />;
+    const SummaryWrapper = ({summaryItem, center}) => <>
+      <TotalSummary
+      title="Total Shipments In Period"
+      legend={`${summaryItem.totalShipmentsInPeriod}`}
+      center={center}
+      />
+      <TotalSummary
+      title="Total Cost In Period"
+      legend={`$${summaryItem.totalCostInPeriod}`}
+      center={center}
+      />
+      <TotalSummary
+      title="Cost/ml In Period"
+      legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+      center={center}
+      />
+    </>
       return (
         <Grid
           container
@@ -293,43 +322,36 @@ class DashboardPage extends Component {
                        alignItems="center"
                        justify="center"
                      >
-                       <Grid xs={8} item>
-                         <Grid
-                            container
-                            spacing={0}
-                            direction="row"
-                            alignItems="center"
-                            justify="center"
-                          >
-                           </Grid>
-                            <MultiYAxesVisualization
-                             title={summaryItem.title}
-                             data={summaryItem.data}
-                             onClickBar={this.updateViewType}
-                             onClickBack={this.navigateToPrevOffset}
-                             onClickNext={this.navigateToNextOffset}
-                             rootClass="ShipmentsVisualization"
-                             showNext={isNavigation}
-                             showPrev={isNavigation}
-                            />
-                        </Grid>
+                       <Hidden mdUp implementation="js">
+                         <Grid xs={12} item>
+                           <ShipperVizWrapper summaryItem={summaryItem} />
+                         </Grid>
+                       </Hidden>
+                       <Hidden mdDown implementation="js">
+                         <Grid xs={8} item>
+                           <ShipperVizWrapper summaryItem={summaryItem} />
+                         </Grid>
+                        </Hidden>
+                       <Hidden mdDown implementation="js">
                         <Grid xs={1} item>
                           <LineDivider orientation={VERTICAL_LINE}/>
                         </Grid>
+                       </Hidden>
+                       <Hidden mdUp implementation="js">
+                         <Grid xs={12} item>
+                           <LineDivider orientation={HORIZONTAL_LINE}/>
+                         </Grid>
+                       </Hidden>
+                       <Hidden mdDown implementation="js">
                         <Grid xs={3} item>
-                            <TotalSummary
-                            title="Total Shipments In Period"
-                            legend={`${summaryItem.totalShipmentsInPeriod}`}
-                            />
-                            <TotalSummary
-                            title="Total Cost In Period"
-                            legend={`$${summaryItem.totalCostInPeriod}`}
-                            />
-                            <TotalSummary
-                            title="Cost/ml In Period"
-                            legend={`$${summaryItem.totalCostPerMileInPeriod}`}
-                            />
+                          <SummaryWrapper summaryItem={summaryItem} center={false}/>
                         </Grid>
+                       </Hidden>
+                       <Hidden mdUp implementation="js">
+                          <Grid xs={12} item>
+                            <SummaryWrapper summaryItem={summaryItem} center={true}/>
+                          </Grid>
+                       </Hidden>
                     </Grid>
                   </Grid>
                 )
