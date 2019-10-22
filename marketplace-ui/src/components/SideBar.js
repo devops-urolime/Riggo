@@ -10,16 +10,16 @@ class SideBar extends Component {
   render(){
     const {isOpen, handleClose, onClickMenuItem, menu, defaultMenu, variant, currentMenu} = this.props;
     return (
-        <div>
+        <nav>
           <Drawer
             variant={variant}
             anchor="left"
             open={isOpen}
             className="SideBar-menu"
           >
-            <nav className="SideBar-menu__Header" onClick={handleClose} >
+            <div className="SideBar-menu__Header" onClick={handleClose} >
               <Icon name={MENU_ICON}/>
-            </nav>
+            </div>
             <Divider />
             <MenuContent
               menu={menu}
@@ -31,7 +31,7 @@ class SideBar extends Component {
               currentMenu={currentMenu}
             />
           </Drawer>
-        </div>
+        </nav>
       );
   };
 }

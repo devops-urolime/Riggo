@@ -13,7 +13,7 @@ import { logout } from '../lib/auth';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 8,
   },
   menuButton: {
     marginRight: theme.spacing(2),
