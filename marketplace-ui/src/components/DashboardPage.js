@@ -17,6 +17,7 @@ import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 import Hidden from '@material-ui/core/Hidden';
+import Typography from '@material-ui/core/Typography';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
@@ -260,11 +261,20 @@ class DashboardPage extends Component {
         top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
         content={()=>
           <Grid item xs={12}>
-            <PieVisualization
-              data={stopSummaryPickUpPie}
-              rootClass="PerformancePickUpVisualization"
-              colorsScheme={NIVO}
-            />
+            {
+              stopSummaryPickUpPie.length > 0 &&
+             <PieVisualization
+                data={stopSummaryPickUpPie}
+                rootClass="PerformancePickUpVisualization"
+                colorsScheme={NIVO}
+              />
+            }
+            {
+              !(stopSummaryPickUpPie.length > 0) &&
+              <Typography variant="body2" component="p">
+                No PickUp data.
+              </Typography>
+            }
           </Grid>
         }
       />;
@@ -273,11 +283,20 @@ class DashboardPage extends Component {
         top={()=> <TitleSection label="On Time Performance - Delivery"/> }
         content={() =>
           <Grid item xs={12}>
-            <PieVisualization
-              data={stopSummaryDeliveryPie}
-              rootClass="PerformancePickUpVisualization"
-              colorsScheme={DARK2}
-            />
+            {
+              stopSummaryDeliveryPie.length > 0 &&
+              <PieVisualization
+                 data={stopSummaryDeliveryPie}
+                 rootClass="PerformancePickUpVisualization"
+                 colorsScheme={DARK2}
+               />
+            }
+            {
+              !(stopSummaryDeliveryPie.length > 0) &&
+              <Typography variant="body2" component="p">
+                No delivery data.
+              </Typography>
+            }
           </Grid>
         }
       />;
