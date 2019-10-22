@@ -79,9 +79,16 @@ class AppPage extends Component{
           <Grid item xs={12}>
              <TopBarWrapper positionAppBar="fixed"/>
           </Grid>
-          <Grid item xs={12}>
+         <Hidden mdDown implementation="js">
+          <Grid item xs={10}>
             <MainContentWrapper/>
           </Grid>
+         </Hidden>
+         <Hidden mdUp implementation="js">
+           <Grid item xs={12}>
+             <MainContentWrapper/>
+           </Grid>
+          </Hidden>
        </Grid>
      </div>
     );
