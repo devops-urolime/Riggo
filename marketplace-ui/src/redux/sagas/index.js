@@ -12,7 +12,7 @@ import {
   GET_LOAD_STOP_SUMMARY,
   GET_LOAD_STOP_SUMMARY_FAIL,
   GET_LOAD_STOP_SUMMARY_SUCCESS,
-  GET_LOAD_SUCCESS
+  GET_LOAD_SUCCESS, UPDATE_NAVIGATION_SHIPMENT_SUMMARY
 } from '../actions/load';
 import {
   findLoadByIdApi,
@@ -87,6 +87,13 @@ function* getLoadShipmentSummarySaga(action) {
         action.fiscalWeek,
         JWT
       );
+      console.log(action);
+      yield put({
+        type: UPDATE_NAVIGATION_SHIPMENT_SUMMARY,
+        viewTypeShipment: action.viewTypeShipment,
+        itemVizBar: action.itemVizBar,
+        navCursorOffset: action.navCursorOffset
+      });
       yield put({type: GET_LOAD_SHIPMENT_SUMMARY_SUCCESS, shipmentSummary: result});
     } catch (e) {
       yield put({type: GET_LOAD_SHIPMENT_SUMMARY_FAIL});

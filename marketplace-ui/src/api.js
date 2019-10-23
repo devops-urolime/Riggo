@@ -11,6 +11,11 @@ import {
   STATUS_500_ERROR_MESSAGE, STATUS_504_ERROR_MESSAGE
 } from './config';
 import { isValidSession, renewToken } from './lib/auth';
+import {
+  SHIPMENT_RESULT_BY_DAY,
+  SHIPMENT_RESULT_BY_MONTH,
+  SHIPMENT_RESULT_BY_WEEK
+} from './redux/reducers/load';
 
 const METHOD_GET = 'get';
 
@@ -401,10 +406,6 @@ const shipmentsSummaryDailyMock = {
       }
    ]
 };
-
-export const SHIPMENT_RESULT_BY_MONTH = "months";
-export const SHIPMENT_RESULT_BY_WEEK = "weeks";
-export const SHIPMENT_RESULT_BY_DAY = "days";
 
 const getShipmentsSummaryMock = (resultType) => {
   let mockData = [];
