@@ -248,8 +248,6 @@ class DashboardPage extends Component {
         });
         return hasDeliveryInfo;
     };
-    console.log(stopSummaryDeliveryPie);
-    console.log(hasStopSummaryDeliveryInfo(stopSummaryDeliveryPie));
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
     const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
