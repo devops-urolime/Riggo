@@ -87,7 +87,6 @@ function* getLoadShipmentSummarySaga(action) {
         action.fiscalWeek,
         JWT
       );
-      console.log(action);
       yield put({
         type: UPDATE_NAVIGATION_SHIPMENT_SUMMARY,
         viewTypeShipment: action.viewTypeShipment,
