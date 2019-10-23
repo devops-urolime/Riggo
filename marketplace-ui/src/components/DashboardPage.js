@@ -262,6 +262,10 @@ class DashboardPage extends Component {
        showNext={isNavigation}
        showPrev={isNavigation}
       />;
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
     const SummaryWrapper = ({summaryItem, center}) => <>
         <TotalSummary
         title="Total Shipments In Period"
@@ -270,12 +274,12 @@ class DashboardPage extends Component {
         />
         <TotalSummary
         title="Total Cost In Period"
-        legend={`$${(summaryItem.totalCostInPeriod) ? summaryItem.totalCostInPeriod.toString().replace(".",","): "0"}`}
+        legend={`${(summaryItem.totalCostInPeriod) ? formatter.format(summaryItem.totalCostInPeriod): "0"}`}
         center={center}
         />
         <TotalSummary
         title="Cost/ml In Period"
-        legend={`$${(summaryItem.totalCostPerMileInPeriod)? summaryItem.totalCostPerMileInPeriod.toString().replace(".",","): "0"}`}
+        legend={`${(summaryItem.totalCostPerMileInPeriod)? formatter.format(summaryItem.totalCostPerMileInPeriod): "0"}`}
         center={center}
         />
       </>;
