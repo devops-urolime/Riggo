@@ -229,7 +229,25 @@ class DashboardPage extends Component {
     const { pipeLineSummary, stopSummary, shipmentSummary, viewTypeShipment } = this.props;
     const pipeLineSummaryCard = pipeLineSummary && digestDataToCardVisualization(pipeLineSummary);
     const stopSummaryPickUpPie = stopSummary && digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
+    const hasStopSummaryPickUpInfo = (pickUpInfo) => {
+        let hasPickUpInfo = false;
+        pickUpInfo && pickUpInfo.forEach((item) => {
+           if(item.value !== 0){
+             hasPickUpInfo = true;
+           }
+        });
+        return hasPickUpInfo;
+    };
     const stopSummaryDeliveryPie = stopSummary && digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
+    const hasStopSummaryDeliveryInfo = (deliveryInfo) => {
+        let hasDeliveryInfo = false;
+        deliveryInfo && deliveryInfo.forEach((item) => {
+           if(item.value !== 0){
+             hasDeliveryInfo = true;
+           }
+        });
+        return hasDeliveryInfo;
+    };
     const shipmentSummaryMultiYAxes = digestDataToMultiYAxes(shipmentSummary);
     const isShipmentData = shipmentSummaryMultiYAxes && shipmentSummaryMultiYAxes.length > 0;
     const isNavigation = (viewTypeShipment === SHIPMENT_RESULT_BY_MONTH);
@@ -267,7 +285,7 @@ class DashboardPage extends Component {
         content={()=>
           <Grid item xs={12}>
             {
-              stopSummaryPickUpPie.length > 0 &&
+              hasStopSummaryPickUpInfo(stopSummaryPickUpPie) &&
              <PieVisualization
                 data={stopSummaryPickUpPie}
                 rootClass="PerformancePickUpVisualization"
@@ -275,9 +293,9 @@ class DashboardPage extends Component {
               />
             }
             {
-              !(stopSummaryPickUpPie.length > 0) &&
+              !hasStopSummaryPickUpInfo(stopSummaryPickUpPie) &&
               <Typography variant="body2" component="p">
-                No PickUp data.
+                No pickup data.
               </Typography>
             }
           </Grid>
@@ -289,7 +307,7 @@ class DashboardPage extends Component {
         content={() =>
           <Grid item xs={12}>
             {
-              stopSummaryDeliveryPie.length > 0 &&
+              hasStopSummaryDeliveryInfo(stopSummaryDeliveryPie) &&
               <PieVisualization
                  data={stopSummaryDeliveryPie}
                  rootClass="PerformancePickUpVisualization"
@@ -297,7 +315,7 @@ class DashboardPage extends Component {
                />
             }
             {
-              !(stopSummaryDeliveryPie.length > 0) &&
+              !hasStopSummaryDeliveryInfo(stopSummaryDeliveryPie) &&
               <Typography variant="body2" component="p">
                 No delivery data.
               </Typography>

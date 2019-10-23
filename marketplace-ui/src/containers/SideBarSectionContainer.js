@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
-import AppPage from '../components/AppPage';
+import SideBarSection from '../components/SideBarSection';
 import { loadMenu, setCurrentMenu, setOpenMenu } from '../redux/actions/menu';
-import { getMenu, getDefaultMenu, getCurrentMenu } from '../redux/reducers/menu';
-import { isLogin } from '../redux/reducers/auth';
+import { getMenu, getDefaultMenu, getCurrentMenu, getOpenMenu } from '../redux/reducers/menu';
 import { MENU_TYPE_POSITION_LEFT } from '../config';
 
 const mapStateToProps = state => {
@@ -10,7 +9,7 @@ const mapStateToProps = state => {
     menu: getMenu(state),
     defaultMenu: getDefaultMenu(state),
     currentMenu: getCurrentMenu(state),
-    isLogin: isLogin(state)
+    openMenu: getOpenMenu(state),
   }
 };
 
@@ -31,5 +30,5 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AppPage);
+)(SideBarSection);
 

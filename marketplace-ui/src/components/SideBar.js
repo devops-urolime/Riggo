@@ -42,6 +42,7 @@ class SideBar extends Component {
          open={isOpen}
          className="SideBar-menu SideBar-menu--transparent"
          onClose={handleClose}
+         onOpen={()=>{}}
       >
         <ContentWrapper />
       </SwipeableDrawer>
