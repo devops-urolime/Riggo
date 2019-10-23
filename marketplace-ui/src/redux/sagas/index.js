@@ -12,7 +12,7 @@ import {
   GET_LOAD_STOP_SUMMARY,
   GET_LOAD_STOP_SUMMARY_FAIL,
   GET_LOAD_STOP_SUMMARY_SUCCESS,
-  GET_LOAD_SUCCESS
+  GET_LOAD_SUCCESS, UPDATE_NAVIGATION_SHIPMENT_SUMMARY
 } from '../actions/load';
 import {
   findLoadByIdApi,
@@ -22,6 +22,7 @@ import {
 } from '../../api';
 import { GET_MENU, GET_MENU_FAIL, GET_MENU_SUCCESS, SET_DEFAULT_MENU } from '../actions/menu';
 import { getToken } from '../reducers/auth';
+import { takeLatest } from '@redux-saga/core/effects';
 
 const getDefaultMenu = (menuList) => {
    if(menuList){
@@ -87,6 +88,12 @@ function* getLoadShipmentSummarySaga(action) {
         action.fiscalWeek,
         JWT
       );
+      yield put({
+        type: UPDATE_NAVIGATION_SHIPMENT_SUMMARY,
+        viewTypeShipment: action.viewTypeShipment,
+        itemVizBar: action.itemVizBar,
+        navCursorOffset: action.navCursorOffset
+      });
       yield put({type: GET_LOAD_SHIPMENT_SUMMARY_SUCCESS, shipmentSummary: result});
     } catch (e) {
       yield put({type: GET_LOAD_SHIPMENT_SUMMARY_FAIL});
@@ -119,19 +126,19 @@ export function* watchGetLoad() {
 }
 
 export function* watchGetLoadStopSummary() {
-    yield takeEvery(GET_LOAD_STOP_SUMMARY, getLoadStopSummarySaga);
+    yield takeLatest(GET_LOAD_STOP_SUMMARY, getLoadStopSummarySaga);
 }
 
 export function* watchGetLoadPipeLineSummary() {
-    yield takeEvery(GET_LOAD_PIPE_LINE_SUMMARY, getLoadPipeLineSummarySaga);
+    yield takeLatest(GET_LOAD_PIPE_LINE_SUMMARY, getLoadPipeLineSummarySaga);
 }
 
 export function* watchGetLoadShipmentSummary() {
-    yield takeEvery(GET_LOAD_SHIPMENT_SUMMARY, getLoadShipmentSummarySaga);
+    yield takeLatest(GET_LOAD_SHIPMENT_SUMMARY, getLoadShipmentSummarySaga);
 }
 
 export function* watchGetMenu() {
-    yield takeEvery(GET_MENU, getMenuSaga);
+    yield takeLatest(GET_MENU, getMenuSaga);
 }
 
 export default function* rootSaga() {

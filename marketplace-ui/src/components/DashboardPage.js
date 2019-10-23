@@ -11,12 +11,17 @@ import PieVisualization, {
   NIVO
 } from './PieVisualization';
 import MultiYAxesVisualization from './MultiYAxesVisualization';
-import { SHIPMENT_RESULT_BY_DAY, SHIPMENT_RESULT_BY_MONTH, SHIPMENT_RESULT_BY_WEEK } from '../api';
 import TotalSummary from './TotalSummary';
 import LineDivider, { HORIZONTAL_LINE, VERTICAL_LINE } from './LineDivider';
 import Section from './Section';
 import StackVisualization from './StackVisualization';
 import Hidden from '@material-ui/core/Hidden';
+import Typography from '@material-ui/core/Typography';
+import {
+  SHIPMENT_RESULT_BY_DAY,
+  SHIPMENT_RESULT_BY_MONTH,
+  SHIPMENT_RESULT_BY_WEEK
+} from '../redux/reducers/load';
 
 const PICKUP_ROOT_PROP = "Pickup";
 const DELIVERY_ROOT_PROP = "Delivery";
@@ -137,25 +142,27 @@ class DashboardPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewTypeShipment: SHIPMENT_RESULT_BY_MONTH,
       offsetShipment: SHIPMENT_OFFSET_DEFAULT,
       fiscalMonthShipment: SHIPMENT_FISCAL_MONTH_DEFAULT,
       fiscalYearShipment: SHIPMENT_FISCAL_YEAR_DEFAULT,
       weekShipment: SHIPMENT_FISCAL_WEEK_DEFAULT,
       navCursorOffset: SHIPMENT_OFFSET_DEFAULT,
-      itemBar: {}
     };
   }
 
   componentDidMount() {
+    const { viewTypeShipment, itemVizBar, navCursorOffset} = this.props;
     this.props.loadPipeLineSummary();
     this.props.loadStopSummary();
     this.props.loadShipmentSummary(
       this.state.offsetShipment ,
-      this.state.viewTypeShipment,
+      this.props.viewTypeShipment,
       this.state.fiscalMonthShipment,
       this.state.fiscalYearShipment,
-      this.state.weekShipment
+      this.state.weekShipment,
+      viewTypeShipment,
+      itemVizBar,
+      navCursorOffset
     );
   }
 
@@ -169,58 +176,57 @@ class DashboardPage extends Component {
   };
 
   updateViewType = (item) =>{
-    const { viewTypeShipment } = this.state;
-    const nextView = this.nextViewType(viewTypeShipment, VIEW_TYPES);
-    this.setState({
-      viewTypeShipment: nextView,
-      itemBar: item.payload
-    });
+    const { viewTypeShipment, navCursorOffset} = this.props;
+    const nextView = this.nextViewType(
+      viewTypeShipment,
+      VIEW_TYPES
+    );
     if(nextView !== viewTypeShipment){
       this.props.loadShipmentSummary(
         item.payload.offset,
         nextView,
         item.payload.fiscalMonth,
         item.payload.fiscalYear,
-        item.payload.fiscalWeek
+        item.payload.fiscalWeek,
+        nextView,
+        item.payload,
+        navCursorOffset
       );
     }
   };
 
   navigateToPrevOffset = () => {
-    this.setState(prevState => {
-      const prevOffset =  prevState.navCursorOffset + 1;
-      this.props.loadShipmentSummary(
-        prevOffset ,
-        this.state.viewTypeShipment,
-        this.state.fiscalMonthShipment,
-        this.state.fiscalYearShipment,
-        this.state.weekShipment
-      );
-      return ({
-        navCursorOffset: prevOffset,
-      });
-    });
+    const { navCursorOffset, viewTypeShipment, itemVizBar } = this.props;
+    const prevOffset =  navCursorOffset + 1;
+    this.props.loadShipmentSummary(
+      prevOffset,
+      viewTypeShipment,
+      this.state.fiscalMonthShipment,
+      this.state.fiscalYearShipment,
+      this.state.weekShipment,
+      viewTypeShipment,
+      itemVizBar,
+      prevOffset
+    );
   };
 
   navigateToNextOffset = () => {
-    this.setState(prevState => {
-      const nextOffset =  prevState.navCursorOffset - 1;
-      this.props.loadShipmentSummary(
-        nextOffset,
-        this.state.viewTypeShipment,
-        this.state.fiscalMonthShipment,
-        this.state.fiscalYearShipment,
-        this.state.weekShipment
-      );
-      return ({
-        navCursorOffset: nextOffset,
-      });
-    });
+    const { navCursorOffset, viewTypeShipment, itemVizBar } = this.props;
+    const nextOffset =  navCursorOffset - 1;
+    this.props.loadShipmentSummary(
+      nextOffset,
+      viewTypeShipment,
+      this.state.fiscalMonthShipment,
+      this.state.fiscalYearShipment,
+      this.state.weekShipment,
+      viewTypeShipment,
+      itemVizBar,
+      nextOffset
+    );
   };
 
   render(){
-    const { pipeLineSummary, stopSummary, shipmentSummary } = this.props;
-    const { viewTypeShipment } = this.state;
+    const { pipeLineSummary, stopSummary, shipmentSummary, viewTypeShipment } = this.props;
     const pipeLineSummaryCard = pipeLineSummary && digestDataToCardVisualization(pipeLineSummary);
     const stopSummaryPickUpPie = stopSummary && digestDataToPieVisualization(stopSummary, PICKUP_ROOT_PROP);
     const stopSummaryDeliveryPie = stopSummary && digestDataToPieVisualization(stopSummary, DELIVERY_ROOT_PROP);
@@ -246,12 +252,12 @@ class DashboardPage extends Component {
         />
         <TotalSummary
         title="Total Cost In Period"
-        legend={`$${summaryItem.totalCostInPeriod}`}
+        legend={`$${(summaryItem.totalCostInPeriod) ? summaryItem.totalCostInPeriod.toString().replace(".",","): "0"}`}
         center={center}
         />
         <TotalSummary
         title="Cost/ml In Period"
-        legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+        legend={`$${(summaryItem.totalCostPerMileInPeriod)? summaryItem.totalCostPerMileInPeriod.toString().replace(".",","): "0"}`}
         center={center}
         />
       </>;
@@ -260,11 +266,20 @@ class DashboardPage extends Component {
         top={() =>  <TitleSection label="On Time Performance - Pickup"/> }
         content={()=>
           <Grid item xs={12}>
-            <PieVisualization
-              data={stopSummaryPickUpPie}
-              rootClass="PerformancePickUpVisualization"
-              colorsScheme={NIVO}
-            />
+            {
+              stopSummaryPickUpPie.length > 0 &&
+             <PieVisualization
+                data={stopSummaryPickUpPie}
+                rootClass="PerformancePickUpVisualization"
+                colorsScheme={NIVO}
+              />
+            }
+            {
+              !(stopSummaryPickUpPie.length > 0) &&
+              <Typography variant="body2" component="p">
+                No PickUp data.
+              </Typography>
+            }
           </Grid>
         }
       />;
@@ -273,11 +288,20 @@ class DashboardPage extends Component {
         top={()=> <TitleSection label="On Time Performance - Delivery"/> }
         content={() =>
           <Grid item xs={12}>
-            <PieVisualization
-              data={stopSummaryDeliveryPie}
-              rootClass="PerformancePickUpVisualization"
-              colorsScheme={DARK2}
-            />
+            {
+              stopSummaryDeliveryPie.length > 0 &&
+              <PieVisualization
+                 data={stopSummaryDeliveryPie}
+                 rootClass="PerformancePickUpVisualization"
+                 colorsScheme={DARK2}
+               />
+            }
+            {
+              !(stopSummaryDeliveryPie.length > 0) &&
+              <Typography variant="body2" component="p">
+                No delivery data.
+              </Typography>
+            }
           </Grid>
         }
       />;
@@ -395,6 +419,9 @@ DashboardPage.propTypes = {
   loadPipeLineSummary: PropTypes.func,
   loadStopSummary: PropTypes.func,
   loadShipmentSummary: PropTypes.func,
+  viewTypeShipment: PropTypes.string,
+  navCursorOffset: PropTypes.number,
+  itemVizBar: PropTypes.object,
 };
 
 DashboardPage.defaultProps = {
