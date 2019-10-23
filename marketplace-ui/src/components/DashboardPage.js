@@ -247,12 +247,12 @@ class DashboardPage extends Component {
         />
         <TotalSummary
         title="Total Cost In Period"
-        legend={`$${summaryItem.totalCostInPeriod}`}
+        legend={`$${(summaryItem.totalCostInPeriod) ? summaryItem.totalCostInPeriod.toString().replace(".",","): "0"}`}
         center={center}
         />
         <TotalSummary
         title="Cost/ml In Period"
-        legend={`$${summaryItem.totalCostPerMileInPeriod}`}
+        legend={`$${(summaryItem.totalCostPerMileInPeriod)? summaryItem.totalCostPerMileInPeriod.toString().replace(".",","): "0"}`}
         center={center}
         />
       </>;
