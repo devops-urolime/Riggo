@@ -36,7 +36,7 @@ const AppPage = ({
         <Grid item xs={12}>
            <TopBarWrapper positionAppBar="fixed"/>
         </Grid>
-       <Hidden mdDown implementation="js">
+       <Hidden smDown implementation="js">
         <Grid item xs={10}>
           <MainContentWrapper/>
         </Grid>

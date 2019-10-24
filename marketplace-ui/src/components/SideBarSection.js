@@ -5,10 +5,6 @@ import SideBar from './SideBar';
 
 class SideBarSection extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
       this.props.loadMenu();
   }
@@ -29,7 +25,7 @@ class SideBarSection extends Component {
     const { menu, defaultMenu, currentMenu, openMenu} = this.props;
     return(
       <>
-        <Hidden mdDown implementation="js">
+        <Hidden smDown implementation="js">
            <SideBar
               menu={menu}
               defaultMenu={defaultMenu}
