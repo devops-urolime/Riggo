@@ -2,7 +2,8 @@ version: 0.2
 env:
   variables:
     APPSPEC_PATH: "CI-CD/appspec_template.yaml"
-    TASKDEF_PATH: "CI-CD/test-taskdef.json"
+    TASKDEF_PATH: "CI-CD/testing-taskdef.json"
+    # TASKDEF_NAME: 
     REPOSITORY_URL: "845657178663.dkr.ecr.us-west-2.amazonaws.com/test-cluster-repo"
     SPRING_PROFILES_ACTIVE: "prod"
 phases:
