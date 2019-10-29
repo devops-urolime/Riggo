@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Drawer from '@material-ui/core/Drawer';
 import Divider from '@material-ui/core/Divider';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import PropTypes from 'prop-types';
 import MenuContent from './MenuContent';
 import './SideBar.scss';
@@ -8,31 +9,44 @@ import Icon, { MENU_ICON } from './Icon';
 
 class SideBar extends Component {
   render(){
-    const {isOpen, handleClose, onClickMenuItem, menu, defaultMenu, variant, currentMenu} = this.props;
-    return (
-        <div>
+    const {isOpen, handleClose, onClickMenuItem, menu, defaultMenu, variant, currentMenu, swipe} = this.props;
+    const ContentWrapper = () =>
+      <>
+        <div className="SideBar-menu__Header" onClick={handleClose} >
+          <Icon name={MENU_ICON}/>
+        </div>
+        <Divider />
+        <MenuContent
+          menu={menu}
+          defaultMenu={defaultMenu}
+          onClickMenuItem={(menuItem)=>{
+            handleClose();
+            onClickMenuItem(menuItem);
+          }}
+          currentMenu={currentMenu}
+        />
+      </>;
+    return (swipe) ? (
           <Drawer
             variant={variant}
             anchor="left"
             open={isOpen}
             className="SideBar-menu"
+            onClose={handleClose}
           >
-            <nav className="SideBar-menu__Header" onClick={handleClose} >
-              <Icon name={MENU_ICON}/>
-            </nav>
-            <Divider />
-            <MenuContent
-              menu={menu}
-              defaultMenu={defaultMenu}
-              onClickMenuItem={(menuItem)=>{
-                handleClose();
-                onClickMenuItem(menuItem);
-              }}
-              currentMenu={currentMenu}
-            />
+           <ContentWrapper />
           </Drawer>
-        </div>
-      );
+      ):(
+      <SwipeableDrawer
+         anchor="left"
+         open={isOpen}
+         className="SideBar-menu SideBar-menu--transparent"
+         onClose={handleClose}
+         onOpen={()=>{}}
+      >
+        <ContentWrapper />
+      </SwipeableDrawer>
+    );
   };
 }
 

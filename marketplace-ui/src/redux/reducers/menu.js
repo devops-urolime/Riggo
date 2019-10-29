@@ -1,10 +1,16 @@
-import { GET_MENU_SUCCESS, SET_CURRENT_MENU, SET_DEFAULT_MENU } from '../actions/menu';
+import {
+  GET_MENU_SUCCESS,
+  SET_CURRENT_MENU,
+  SET_DEFAULT_MENU,
+  SET_OPEN_MENU
+} from '../actions/menu';
 import { createSelector } from 'reselect';
 
 const initState = {
   current: null,
   list:[],
   defaultMenu: null,
+  openMenu: false,
 };
 
 export default function(state = initState, action) {
@@ -25,6 +31,11 @@ export default function(state = initState, action) {
         ...state,
         current: action.menu
       };
+    case SET_OPEN_MENU:
+      return {
+        ...state,
+        openMenu: action.openMenu
+      };
     default:
       return state;
   }
@@ -33,6 +44,7 @@ export default function(state = initState, action) {
 const currentMenuSelector = state => state.menu.current;
 const listMenuSelector = state => state.menu.list;
 const defaultMenuSelector = state => state.menu.defaultMenu;
+const openMenuSelector = state => state.menu.openMenu;
 
 export const getDefaultMenu = createSelector(
   defaultMenuSelector,
@@ -46,5 +58,9 @@ export const getCurrentMenu = createSelector(
 
 export const getMenu = createSelector(
   listMenuSelector,
+  list => list
+);
+export const getOpenMenu = createSelector(
+  openMenuSelector,
   list => list
 );

@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography/Typography';
 import Icon from '@material-ui/core/Icon';
 import Grid from '@material-ui/core/Grid/Grid';
-import { SHIPMENT_RESULT_BY_MONTH } from '../api';
-import Chip from '@material-ui/core/Chip';
 
 const MultiYAxesVisualization = ({
    onClickBar,
@@ -19,9 +17,6 @@ const MultiYAxesVisualization = ({
    onClickNext,
    showNext,
    showPrev,
-   viewTypeShipment,
-   onClickSubTitle,
-   labelBtnSubTitle
 }) => {
   return (
     <div className={"MultiYAxesVisualization "+rootClass}>
@@ -45,11 +40,6 @@ const MultiYAxesVisualization = ({
               <Icon className="NavigateNext" onClick={onClickNext}>arrow_back_ios</Icon>
             }
           </Typography>
-          <Chip
-             className={(viewTypeShipment !== SHIPMENT_RESULT_BY_MONTH) ? "BackToView BackToView--visible":"BackToView"}
-             label={labelBtnSubTitle}
-             onClick={onClickSubTitle}
-           />
         </Grid>
       </Grid>
       <ResponsiveContainer>
@@ -90,11 +80,8 @@ MultiYAxesVisualization.propTypes = {
   onClickBar: PropTypes.func,
   onClickBack: PropTypes.func,
   onClickNext: PropTypes.func,
-  onClickSubTitle: PropTypes.func,
   title: PropTypes.string,
   rootClass: PropTypes.string,
-  viewTypeShipment: PropTypes.string,
-  labelBtnSubTitle: PropTypes.string,
   data: PropTypes.array,
   showNext: PropTypes.bool,
   showPrev: PropTypes.bool,

@@ -9,6 +9,7 @@ export const GET_LOAD_STOP_SUMMARY = "GET_LOAD_STOP_SUMMARY";
 export const GET_LOAD_STOP_SUMMARY_SUCCESS = "GET_LOAD_STOP_SUMMARY_SUCCESS";
 export const GET_LOAD_STOP_SUMMARY_FAIL = "GET_LOAD_STOP_SUMMARY_FAIL";
 export const GET_LOAD_SHIPMENT_SUMMARY = "GET_LOAD_SHIPMENT_SUMMARY";
+export const UPDATE_NAVIGATION_SHIPMENT_SUMMARY = "UPDATE_NAVIGATION_SHIPMENT_SUMMARY";
 export const GET_LOAD_SHIPMENT_SUMMARY_SUCCESS = "GET_LOAD_SHIPMENT_SUMMARY_SUCCESS";
 export const GET_LOAD_SHIPMENT_SUMMARY_FAIL = "GET_LOAD_SHIPMENT_SUMMARY_FAIL";
 
@@ -31,13 +32,25 @@ export function loadStopSummary() {
   };
 }
 
-export function loadShipmentSummary(offset, units, fiscalMonth, fiscalYear, fiscalWeek) {
+export function loadShipmentSummary(
+  offset,
+  units,
+  fiscalMonth,
+  fiscalYear,
+  fiscalWeek,
+  viewTypeShipment,
+  itemVizBar,
+  navCursorOffset
+  ) {
   return {
     type: GET_LOAD_SHIPMENT_SUMMARY,
     offset,
     units,
     fiscalMonth,
     fiscalYear,
-    fiscalWeek
+    fiscalWeek,
+    viewTypeShipment,
+    itemVizBar,
+    navCursorOffset
   };
 }
