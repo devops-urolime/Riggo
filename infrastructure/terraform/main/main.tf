@@ -107,9 +107,10 @@ module "api-gateway" {
   authorizer_auth0_audience = "${var.authorizer_auth0_audience}"
   authorizer_auth0_jwks_uri = "${var.authorizer_auth0_jwks_uri}"
   authorizer_auth0_token_issuer = "${var.authorizer_auth0_token_issuer}"
-  # custom_name_cert = "${var.wildcard_hostedzone_cert_arn}"
-  # hosted_zone_name = "${var.hosted_zone_name}"
-  # basepath_apigateway = "${var.basepath_apigateway}"
+  elb_arn                       =    "${module.ecs-cluster.elb_arn}"
+  custom_name_cert = "${var.wildcard_hostedzone_cert_arn}"
+  hosted_zone_name = "${var.hosted_zone_name}"
+  basepath_apigateway = "${var.basepath_apigateway}"
 } 
 
 
@@ -169,6 +170,8 @@ module "ecs-cluster" {
   ec2_health_check_period = "${var.ec2_health_check_period}"
   spring_profile_key            =    "${var.spring_profile_env}"
   taskdef_path                  =    "${var.taskdef_path}"
+  enable_proxy_protocol         =    "${var.enable_proxy_protocol}"
+  target_deregistration_delay   =    "${var.target_deregistration_delay}"
   # alb_acm_cert                  =    "${var.wildcard_hostedzone_cert_arn}"
 }
 
@@ -227,9 +230,9 @@ module "Route53" {
   cloudfront_zone_id = "${module.cloudfront.cloudfront_hosted_zone_id}"
   # elb_dns_name          = "${module.ecs-cluster.elb_endpoint}"
   # elb_dns_zone_id       = "${module.ecs-cluster.elb_hosted_zone_id}"
-  # api_custom_domain_name = "${module.api-gateway.custom_domain_name}"
-  # api_regional_domain_name = "${module.api-gateway.regional_domain_name}"
-  # api_regional_zone_id = "${module.api-gateway.regional_zone_id}"
+  api_custom_domain_name = "${module.api-gateway.custom_domain_name}"
+  api_regional_domain_name = "${module.api-gateway.regional_domain_name}"
+  api_regional_zone_id = "${module.api-gateway.regional_zone_id}"
 }
 
 # module "iam" {

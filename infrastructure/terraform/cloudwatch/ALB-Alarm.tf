@@ -1,11 +1,11 @@
 
 
-resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-PROD" {
+resource "aws_cloudwatch_metric_alarm" "elb-unhealthyhost-count-PROD" {
   alarm_name          = "${terraform.workspace}-ALB-unhealthy-count-ProdTG-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "${var.alb_unhealthy_host_evaluation_period}"
   metric_name         = "UnHealthyHostCount"
-  namespace           = "AWS/ApplicationELB"
+  namespace           = "AWS/NetworkELB"
   period              = "${var.alb_unhealthy_host_period}"
   statistic           = "Maximum"
   threshold           = "${var.alb_unhealthy_host_count_threshold}"
@@ -23,12 +23,12 @@ resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-PROD" {
 
 
 
-resource "aws_cloudwatch_metric_alarm" "alb-unhealthyhost-count-TEST" {
+resource "aws_cloudwatch_metric_alarm" "elb-unhealthyhost-count-TEST" {
   alarm_name          = "${terraform.workspace}-ALB-unhealthy-count-TestTG-alarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = "${var.alb_unhealthy_host_evaluation_period}"
   metric_name         = "UnHealthyHostCount"
-  namespace           = "AWS/ApplicationELB"
+  namespace           = "AWS/NetworkELB"
   period              = "${var.alb_unhealthy_host_period}"
   statistic           = "Maximum"
   threshold           = "${var.alb_unhealthy_host_count_threshold}"

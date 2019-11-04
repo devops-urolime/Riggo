@@ -1,5 +1,6 @@
 provider "aws" {
   # alias   = "local"
+  #version = "~> 2.28"
   region                  = "us-west-2"
   shared_credentials_file = "~/.aws/credentials"
   # profile  = "${var.aws_profile}"

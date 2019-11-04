@@ -5,10 +5,10 @@
 
 #General variables
 
-# variable "wildcard_hostedzone_cert_arn" {
-#   description = "ARN of the certificate for the the hosted zone"
+variable "wildcard_hostedzone_cert_arn" {
+  description = "ARN of the certificate for the the hosted zone"
   
-# }
+}
 
 variable "hosted_zone_name" {
   description = "The hosted zone name created for each environment"
@@ -484,6 +484,18 @@ variable "spring_profile_env" {
   
 }
 
+variable "enable_proxy_protocol" {
+  description = "Enable/Disable Proxy protection v2 for target group"
+}
+
+variable "target_deregistration_delay" {
+  description = "deregistration delay for instances in target group"
+}
+
+# variable "elb_arn" {
+#   description = "ARN of the ELB"
+# }
+
 
 
 
@@ -834,9 +846,9 @@ variable "authorizer_auth0_token_issuer" {
 }
 
 
-# variable "basepath_apigateway" {
-#   description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
-# }
+variable "basepath_apigateway" {
+  description = "basePath for the api gateway which will be the landing for the api gateway: eg: v1,v2. so it will be api.example.com/v1"
+}
 
 #variables for SES
 

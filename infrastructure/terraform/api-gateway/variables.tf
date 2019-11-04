@@ -38,16 +38,19 @@ variable "authorizer_auth0_token_issuer" {
   
 }
 
-
-
-# variable "custom_name_cert" {
+variable "elb_arn" {
   
-# }
+}
 
-# variable "hosted_zone_name" {
-  
-# }
 
-# variable "basepath_apigateway" {
+variable "custom_name_cert" {
   
-# }
+}
+
+variable "hosted_zone_name" {
+  
+}
+
+variable "basepath_apigateway" {
+  
+}

@@ -57,6 +57,7 @@ resource "aws_api_gateway_stage" "stage" {
      "AUTH0_JWKS_URI" = "${var.authorizer_auth0_jwks_uri}"
      "AUTH0_TOKEN_ISSUER" = "${var.authorizer_auth0_token_issuer}"
      "ENV" = "${terraform.workspace}"
+     "vpclink_id" = "${aws_api_gateway_vpc_link.api-gateway-ELB.id}"
   }
 
   lifecycle {

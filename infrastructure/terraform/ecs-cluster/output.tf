@@ -13,6 +13,10 @@ output "ApplicationELB_Id" {
   value = "${aws_lb.ecs-lb.arn_suffix}"
 }
 
+output "elb_arn" {
+  value = "${aws_lb.ecs-lb.arn}"
+}
+
 
 output "production_targetgroup_suffix" {
   value = "${aws_lb_target_group.ecs-lb-targetgroup.arn_suffix}"
@@ -65,3 +69,4 @@ output "ECS_instance_SG" {
 output "elb_hosted_zone_id" {
   value = "${aws_lb.ecs-lb.zone_id}"
 }
+

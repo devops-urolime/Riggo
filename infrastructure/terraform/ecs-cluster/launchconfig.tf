@@ -1,3 +1,28 @@
+locals {                                                            
+  subnet_ids_string = join(",", aws_lb.ecs-lb.subnets)
+  subnet_list = split(",", local.subnet_ids_string)             
+}    
+
+data "aws_network_interface" "ecs-nlb" {
+  count = "${length(aws_lb.ecs-lb.subnets)}"
+
+  filter {
+    name   = "description"
+    values = ["ELB ${aws_lb.ecs-lb.arn_suffix}"]
+  }
+
+  filter {
+  
+    name   = "subnet-id"
+    # values = "${element([aws_lb.ecs-lb.subnets], count.index)}"
+    values = [local.subnet_list[count.index]]
+  }
+}
+
+
+
+
+
 resource "aws_security_group_rule" "ingress_ecs_instance" {
   description = "Incoming traffic to ECS instances"
   type        = "ingress"
@@ -6,7 +31,8 @@ resource "aws_security_group_rule" "ingress_ecs_instance" {
   protocol    = "TCP"
 
   security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
-  source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+  cidr_blocks = "${formatlist("%s/32",flatten(data.aws_network_interface.ecs-nlb.*.private_ips))}"
+  # source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
 }
 
 resource "aws_security_group_rule" "ingress_ecs_dynamicPort1" {
@@ -17,7 +43,8 @@ resource "aws_security_group_rule" "ingress_ecs_dynamicPort1" {
   protocol    = "TCP"
 
   security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
-  source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+  # source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+  cidr_blocks = "${formatlist("%s/32",flatten(data.aws_network_interface.ecs-nlb.*.private_ips))}"
 }
 
 resource "aws_security_group_rule" "ingress_ecs_dynamicPort2" {
@@ -28,7 +55,8 @@ resource "aws_security_group_rule" "ingress_ecs_dynamicPort2" {
   protocol    = "TCP"
 
   security_group_id        = "${aws_security_group.ecs-instance-SG.id}"
-  source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+  # source_security_group_id = "${aws_security_group.lb_securitygroup.id}"
+  cidr_blocks = "${formatlist("%s/32",flatten(data.aws_network_interface.ecs-nlb.*.private_ips))}"
 }
 resource "aws_security_group_rule" "egress_ecs_instance" {
   description = "Outgoing traffic from ECS instances"
