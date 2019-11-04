@@ -118,6 +118,16 @@ variable "taskdef_path" {
   
 }
 
+variable "target_deregistration_delay" {
+  
+}
+
+
+variable "enable_proxy_protocol" {
+  
+}
+
+
 # variable "alb_acm_cert" {
   
 # }

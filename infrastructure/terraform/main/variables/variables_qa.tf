@@ -6,6 +6,7 @@ spring_profile_env = "qa"
 #General Variables
 keyname = "RiggoKeyPair-qa"
 cidr_block = "0.0.0.0/0"
+wildcard_hostedzone_cert_arn = "arn:aws:acm:us-west-2:845657178663:certificate/811b75bf-a28b-4e61-899d-04a49dc60d0e"
 hosted_zone_name = "riggoqa.net"
 
 
@@ -90,6 +91,8 @@ TD_mem_soft_limit = "256"
 health_check_grace_period_seconds = "300"
 ec2_health_check_period = "30"
 taskdef_path = "CI-CD/qa-taskdef.json"
+enable_proxy_protocol = false
+target_deregistration_delay = 30
 #Variables for route53
 service_discovery_ttl = "60"
 
@@ -195,7 +198,7 @@ rest_api_name = "Riggo Platform API"
 authorizer_auth0_audience = "load-resource-api"
 authorizer_auth0_jwks_uri = "https://riggo-qa.auth0.com/.well-known/jwks.json"
 authorizer_auth0_token_issuer = "https://riggo-qa.auth0.com/"
-# basepath_apigateway = "v1"
+basepath_apigateway = "v1"
 
 #SES variables
 SES_email_address = "support-qa@riggo.io"

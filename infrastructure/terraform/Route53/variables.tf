@@ -38,15 +38,15 @@ variable "cloudfront_zone_id" {
   
 # }
 
-# variable "api_custom_domain_name" {
+variable "api_custom_domain_name" {
   
-# }
+}
 
-# variable "api_regional_domain_name" {
+variable "api_regional_domain_name" {
   
-# }
+}
 
 
-# variable "api_regional_zone_id" {
+variable "api_regional_zone_id" {
   
-# }
+}
